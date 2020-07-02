@@ -1,0 +1,18 @@
+<nav>
+
+	<div class="container d-flex mt-5 mb-5">
+		{%load static%}
+		<div class="row">
+			<div class="col-12 text-center photo"><img src="{% static 'img/avatar.png'%}" alt=""></div>
+			<div class="col-12 text-center label-photo">titre photo</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+		<div class=" col-12 text-center button-verti mb-3 d-flex align-items-center justify-content-center"><a class="no-a" href="{% url 'dashboard:index' %}">Tableau de board</a></div>
+		<div class=" col-12 text-center button-verti mb-3 d-flex align-items-center justify-content-center "><a class="no-a" href="{% url 'sheet:index' %}">Fiche</a></div>
+		<div class=" col-12 text-center button-verti mb-3 d-flex align-items-center justify-content-center "><a class="no-a" href="{% url 'mail:index' %}">Mail</a></div>
+		<div class=" col-12 text-center button-verti mb-5 d-flex align-items-center justify-content-center "><a class="no-a" href="{% url 'info:index' %}">Informations</a>	</div>
+		</div>
+	</div>
+</nav>

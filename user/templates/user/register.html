@@ -1,0 +1,43 @@
+{% extends 'spa-conf/base.html' %}
+
+{% block content %}
+<h1>page enregistrement</h1>
+<div>
+	<form class="opac-white-background" action="" method="POST">
+		{% csrf_token %}
+		{% for msg in messages%}     
+			<div class="col-lg-12 text-center text-warning-red" id="id_feed_back_register">{{msg}}</div >  
+		{% endfor%}    
+		<div class="form-row pt-5">
+			<div class="col-lg-3 text-center">Pseudo</div >     
+			<div class="col-lg-9 text-center">{{ us_form.username}}</div > 
+		</div>
+		<div class="form-row pt-5">
+			<div class="col-lg-3 text-center">Mot de passe </div >
+			<div class="col-lg-9 text-center">{{us_form.password}}</div >
+		</div>
+		<div class="row mt-5">
+			<div class="col-lg-2"></div>
+			<div class="col-lg-8 text-center">
+				<input type="submit" id="id_submit" class="btn btn-primary big-btn" value="M'inscrire">
+			</div>
+			<div class="col-lg-2"></div>
+			<!-- nouvelle ligne -->
+			<div class="col-lg-2"></div>
+			<div class="col-lg-8 text-center">
+				<p class="mini-legend">J'ai déjà un compte : <a href="{% url 'user:connection' %}">Me connecter</a></p>
+			</p>
+		</div>
+	</div>
+	<div class="col-lg-2"></div>
+</form>
+</div>
+
+<script>
+	//Query All input fields
+	var form_fields = document.getElementsByTagName('input')
+	form_fields[1].placeholder='Pseudo...';
+	form_fields[2].placeholder='Mot de passe...';
+
+</script>
+{% endblock %}

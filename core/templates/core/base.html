@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>SPA suivi stérilisation</title>
+  {% load static %}
+	<link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet" type="text/css" >
+	<link rel="stylesheet" href="{% static 'css/change.css'%}">
+
+</head>
+<body class="d-flex">
+	<div class="left-part">
+		{% include "core/nav.html" %}
+	</div>
+	
+	<div class="right-part">
+		<div class="top-right-part">
+			{% include "core/search.html" %}
+		</div>
+		<div class="bottom-right-part">
+		{% block content %}{% endblock %}
+		</div>
+	</div>
+</body>
+</html>

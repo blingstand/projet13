@@ -1,0 +1,40 @@
+/* change.css */
+.right-part{
+	background: blue;
+	width:  80%;	
+}
+.top-right-part{
+	background: green;
+}
+article{
+	background-color: yellow;
+}
+#graph{
+	width: 30rem;
+	height: auto;
+}
+.curs-pointer{
+	cursor: pointer; }
+
+
+/*---------------------------------*/
+
+/*left part*/
+.left-part{
+	width:  20%;	
+	background: red;	
+}
+.photo > img{
+	width:  10rem;
+	height: auto;
+}
+.button-verti{
+	height:  3rem;
+	width: 	10rem;
+	background-color: white;
+}
+.no-a{
+	color: black;
+}
+.no-a:hover{
+	text-decoration : none;}
