@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+<section>
+	<h2 class="mt-5 pl-5">Bienvenu {{name}} sur le dashboard</h2>
+	<article class="mt-5 container">
+		{% csrf_token %} 
+		<div class="row">
+			<div class="col-2"></div>
+			{% for elem in button_value %}
+			<div class="col-2 bg-primary text-center">
+				<button >{{elem}}</button>
+			</div>
+			{% endfor %}
+			<div class="col-2"></div>
+			<div class="col-12 mb-5 text-center">
+				<button>imprimer</button>
+			</div>
+			
+		</div>
+	</article>
+</article>
+</section>
+{% endblock  %}
+

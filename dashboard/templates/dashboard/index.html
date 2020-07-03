@@ -2,8 +2,9 @@
 {% block content %}
 {% load static %}
 <section>
-	<h2 class="mt-5 pl-5">Bienvenu /prénom/ sur le dashboard</h2>
-	<article class="m-5 p-5 container"> 
+	<h2 class="mt-5 pl-5">Bienvenu {{name}} sur le dashboard</h2>
+	<article class="m-5 p-5 container">
+	{% csrf_token %} 
 		<div class="row">
 			<div class="graphe col-7 bg-primary text-center">
 				<img id='graph' src="{%static 'img/graphique.jpg' %}" alt="graf nb de proprio à contacter(rouge) et ceux déjà contacté (bleu) en fonction du temps">

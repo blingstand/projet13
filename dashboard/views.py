@@ -6,6 +6,7 @@ from django.views import View
 class DashboardView(View):
 	def get(self, request):
 		"""display dashboard"""
-		# if request.user.is_authenticated:
-		return render(request, "dashboard/index.html")
-		# return redirect('user:connection')
+		if request.user.is_authenticated:
+			context={'name': request.user.username}
+			return render(request, "dashboard/index.html", context)
+		return redirect('user:connection')

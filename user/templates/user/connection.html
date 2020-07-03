@@ -1,34 +1,57 @@
-{% extends 'spa-conf/base.html' %}
-{% block content %}
-<h1>page connexion</h1>
-<div>
-	<form class="opac-white-background" action="" method="POST">
-		{% csrf_token %}
-		<div class="form-row pt-5">
-			<div class="col-lg-3 text-center">Pseudo</div >     
-			<div class="col-lg-9 text-center">{{ us_form.username}}</div >      
-		</div>
-		<div class="form-row pt-5">
-			<div class="col-lg-3 text-center">Mot de passe </div >
-			<div class="col-lg-9 text-center">{{us_form.password}}</div >
-		</div>
-		<div class="row mt-5">
-			<div class="col-lg-2"></div>
-			<div class="col-lg-8 text-center">
-				<input type="submit" id="id_submit" class="btn btn-primary big-btn" value="Se connecter">
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>SPA suivi stérilisation</title>
+	{% load static %}
+	<link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet" type="text/css" >
+	<link rel="stylesheet" href="{% static 'css/change.css'%}">
+
+</head>
+<body>
+	
+	<section class="section-connection">
+		<div class="container">
+			<div class="row">
+				<div class="col-3"></div>
+				<div class="col-6 cont-form">
+					<h1 class="text-center mt-4">page connexion</h1>
+					<form class="opac-white-background" action="" method="POST">
+						{% csrf_token %}
+						<div class="form-row pt-5">
+							<div class="col-lg-3 text-center">Pseudo</div >     
+							<div class="col-lg-9 text-center">{{ us_form.username}}</div >      
+						</div>
+						<div class="form-row pt-5">
+							<div class="col-lg-3 text-center">Mot de passe </div >
+							<div class="col-lg-9 text-center">{{us_form.password}}</div >
+						</div>
+						<div class="row mt-5">
+							<div class="col-lg-2"></div>
+							<div class="col-lg-8 text-center">
+								<input type="submit" id="id_submit" class="btn btn-primary big-btn mb-4" value="Se connecter">
+							</div>
+							<div class="col-lg-2"></div>
+							<!-- nouvelle ligne -->
+							<div class="col-lg-2"></div>
+							<div class="col-lg-8 text-center">
+								{% if error %}
+								<p><strong>Utilisateur inconnu ou mauvais de mot de passe.</strong></p>
+								{% endif %}
+							</div>
+							<div class="col-lg-2"></div>
+						</div>
+					</form>
+				</div>
+				<div class="col-3"></div>
 			</div>
-			<div class="col-lg-2"></div>
-			<!-- nouvelle ligne -->
-			<div class="col-lg-2"></div>
-			<div class="col-lg-8 text-center">
-				{% if error %}
-				<p><strong>Utilisateur inconnu ou mauvais de mot de passe.</strong></p>
-				{% endif %}
-				<p class="mini-legend">Je n'ai pas encore de compte : <a class="text-bold "href="{% url 'user:register' %}">M'inscrire</a>
-				</p>
-			</div>
-			<div class="col-lg-2"></div>
 		</div>
-	</form>
-</div>
-{% endblock %}
+	</section>
+</body>
+</html>

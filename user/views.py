@@ -23,37 +23,6 @@ from .utils import add_new_user
 #     def get(self, request, **kwargs):
 #         return render(request, self.template_name)
 
-class RegisterView(View):
-    """ This class deals with registration
-        get > loads a registration page
-        post > analyses datas to try to create a new user and profile
-    """
-
-    def get(self, request):
-        """ manages the get request for the register page """
-        if request.user.is_authenticated:
-            return redirect('dashboard:index') #if auth user comes to register page
-        us_form = UserForm()
-        context = {'us_form': us_form}
-        return render(request, 'user/register.html', context)
-
-    def post(self, request):
-        """
-        manages the post request for the register page :
-            get datas in order to try to create a new user
-
-        """
-        us_form = UserForm(request.POST)
-        if us_form.is_valid():
-            name, password = us_form.cleaned_data['username'], us_form.cleaned_data['password']
-            success, message = add_new_user(name, password)
-            messages.info(request, message)
-            if success:
-                return redirect('user:connection')
-            return redirect('user:register')
-        return HttpResponse("Problème dans le formulaire !")
-
-
 class ConnectionView(View):
     """ This class deals with login
         get > loads a connection page
@@ -64,7 +33,7 @@ class ConnectionView(View):
         if request.user.is_authenticated:
             return redirect('dashboard:index')
         us_form = UserForm()
-        context = {'us_form' : us_form}
+        context = {'us_form': us_form}
         return render(request, 'user/connection.html', context)
 
     def post(self, request):
@@ -80,14 +49,13 @@ class ConnectionView(View):
 
             if new_user is not None:
                 login(request, new_user)
-                return HttpResponse('Vous êtes co')
                 return redirect('dashboard:index')
             messages.info(request, 'Pseudo ou mot de passe incorrect')
             return redirect('user:connection')
         return HttpResponse("Problème dans le formulaire !")
 
 
-class LogoutUser(View):
+class LogoutView(View):
     """ manages the sign out function"""
     def get(self, request):
         """ manages the get request for the logout page"""

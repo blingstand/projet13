@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'dashboard.apps.DashboardConfig',
     'user.apps.UserConfig',
     'core.apps.CoreConfig',
+    'sheet.apps.SheetConfig',
+    'mail.apps.MailConfig', 
+    'info.apps.InfoConfig'
 ]
 
 MIDDLEWARE = [
