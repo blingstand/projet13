@@ -22,7 +22,7 @@ class AdminData(models.Model):
     chip = models.IntegerField(unique=True, null=True, blank=True, verbose_name="Numéro de puce")
     tatoo = models.IntegerField(unique=True, null=True, blank=True, verbose_name="Numéro de tatouage")
     is_neutered = models.BooleanField(default=False, verbose_name="Stérilisé")
-    can_be_neutered = models.BooleanField(default=False, verbose_name="Doit être stérilisé")
+    can_be_neutered = models.BooleanField(default=False, verbose_name="Peut être stérilisé")
     def __str__(self):
         return f"dossier {self.admin_data_id}"
 

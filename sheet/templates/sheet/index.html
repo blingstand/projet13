@@ -2,7 +2,7 @@
 {% block content %}
 {% load static %}
 <section>
-	<h2 class="mt-5 pl-5">Bienvenu {{name}} sur le dashboard</h2>
+	<h2 class="mt-5 pl-5">Page Fiches</h2>
 	<article class="mt-5 container">
 		{% csrf_token %} 
 		<div class="row">
@@ -16,7 +16,42 @@
 			<div class="col-12 mb-5 text-center">
 				<button>imprimer</button>
 			</div>
-			
+			<table>
+				<form action="">
+					<tr>
+    					<td>&nbsp;</td>
+    					<td>nom</td>
+    					<td>statut animal</td>
+    					<td>nature</td>
+    					<td>race</td>
+    					<td>propriétaire</td>
+    					<td>statut propriétaire</td>
+    					<td>tel</td>
+    					<td>num dossier</td>
+    					<td>num tatouage</td>
+    					<td>num puce</td>
+    				</tr>
+					{% for animal in animals %}
+					
+					<tr class="col-12  {% cycle 'row1' 'row2' %}">
+			<!-- nom sexe/espece status propriétaire num-dossier num-tatoo num-puce -->
+						<td><input type="checkbox" id='{{animal.id}}'></td>
+						<td>{{animal.name}}</td>
+						<td>{{animal.status}}</td>
+						<td>{{animal.nature}}</td>
+						<td>{{animal.race}}</td>
+						<td>{{animal.owner}} </td>
+						<td>{{animal.owner_status}}</td>
+						<td>{{animal.owner_id.telephone}}</td>
+						<td>{{animal.admin_data_id.file}}</td>
+						<td>{{animal.admin_data_id.tatoo}}</td>
+						<td>{{animal.admin_data_id.chip}}</td>
+
+						
+					</tr>
+				{% endfor %}
+				</form>
+			</table>
 		</div>
 	</article>
 </article>

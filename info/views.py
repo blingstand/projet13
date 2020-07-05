@@ -6,4 +6,4 @@ from django.views import View
 # Create your views here.
 class InfosView(View):
 	def get(self, request):
-		return HttpResponse('page info')
+		return render(request, 'info/index.html')
