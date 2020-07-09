@@ -63,6 +63,16 @@
 	.row2{
 		background-color: grey; }
 
+/* add sheet */
+
+	.bg-yellow{ 
+		background-color: yellow;
+		}
+	.bg-green{ 
+		background-color: green;
+		}
+    .w-10rem{
+    	width: 10rem;}
 /* mail */ 
 	.mail-but{
 		height: 5rem; 
