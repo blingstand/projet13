@@ -1,0 +1,63 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<section>
+	<h2 class="mt-5 pl-5">Page Fiches</h2>
+	<article class="mt-5 bg-blue">
+		<form class="sheet" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+			<div class="container">
+				<div class="row">
+					<div class="col-8 bg-yellow container">
+						<div class="row">
+							<div class="col-3 text-center">{{form.name}}</div>
+							<div class="col-3 text-center">{{form.date_of_birth}}</div>
+							<div class="col-3 text-center">{{form.date_of_adoption}}</div>
+							<div class="col-3 text-center">{{form.date_of_neuter}}</div>
+						</div>
+						<div class="row">
+							<div class="col-6" >
+								<div class="row">
+									<div class="col-6 bg-primary" >{{form.species}}</div>
+									<div class="col-6 bg-primary" >{{form.is_neutered.label}} {{form.is_neutered}}</div>
+								</div>
+							</div>
+							<div class="col-6 bg-secondary text-center">
+								<p>{{form.race}}</p>
+								<p>{{form.color}}</p>
+								<p>{{form.observation}}</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-4">{{form.file}}</div>
+							<div class="col-4">{{form.tatoo}}</div>
+							<div class="col-4">{{form.chip}}</div>
+						</div>
+						<div class="row">
+							<div class="col-4">{{form.caution}}</div>
+							<div class="col-4">{{form.mail_reminder}}</div>
+							<div class="col-4">{{form.tel_reminder}}</div>
+						</div>
+						<div class="row">
+							<div class="col-4">{{form.owner}}</div>
+							<div class="col-4">{{form.tel}}</div>
+							<div class="col-4">{{form.mail}}</div>
+						</div>
+					</div>			
+					<div class="col-4 bg-green">
+						<div class="container">
+							<div class="row">
+								<div class="col-12 text-center">{{form.status}}</div>
+								<div class="col-8"></div>
+								<div class="col-4">
+									<input type="submit"class="btn btn-primary big-btn" value="Enregistrer">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>			
+			</div>
+		</form>
+	</article>
+	<script type="text/javascript">
+	</script>
+	{% endblock  %}
+
