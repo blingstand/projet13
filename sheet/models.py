@@ -19,14 +19,14 @@ class Animal(models.Model):
         return self.name
 
 class AdminData(models.Model):
-    file = models.IntegerField(null=True, blank=True, verbose_name="Numéro de dossier")
-    chip = models.IntegerField(null=True, blank=True, verbose_name="Numéro de puce")
-    tatoo = models.IntegerField(null=True, blank=True, verbose_name="Numéro de tatouage")
+    admin_data_id = models.AutoField(primary_key=True)
+    file = models.CharField(max_length=15, null=True, blank=True, verbose_name="Numéro de dossier")
+    chip = models.CharField(max_length=15, null=True, blank=True, verbose_name="Numéro de puce")
+    tatoo = models.CharField(max_length=15, null=True, blank=True, verbose_name="Numéro de tatouage")
     is_neutered = models.BooleanField(default=False, verbose_name="Stérilisé")
     date_of_neuter = models.DateField(default=timezone.now, null=True, blank=True, verbose_name="Date de stérilisation")
     status = models.TextField(null=True, blank=True, max_length=200, 
         verbose_name="Explication concernant la stérilisation")
-    admin_data_id = models.AutoField(primary_key=True)
     def __str__(self):
         return f"dossier {self.admin_data_id}"
 
