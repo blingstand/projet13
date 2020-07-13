@@ -50,6 +50,11 @@
 								<div class="col-4">
 									<input type="submit"class="btn btn-primary big-btn" value="Enregistrer">
 								</div>
+								<div class="col-12">
+									{% if error %}
+									<p> {{error}}</p>
+									{% endif %}
+								</div>
 							</div>
 						</div>
 					</div>
@@ -58,6 +63,11 @@
 		</form>
 	</article>
 	<script type="text/javascript">
+		let true_radio = document.getElementById("id_is_neutered_0")
+		true_radio.checked = true
+		let species0 = document.getElementById("id_species_0")
+		species0.checked = true
+		
 	</script>
 	{% endblock  %}
 

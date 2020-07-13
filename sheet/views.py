@@ -1,6 +1,7 @@
 #rajouter un ordre dans ma list animals
 
 from django.contrib.auth.models import User
+from django.db.utils import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
@@ -21,7 +22,7 @@ class SheetView(View):
         {'name' : 'supprimer',  'id' : 'supprimer'}],
         'animals': animals
         }
-
+        print(animals)
         return render(request, 'sheet/index.html', context)
 
 class AddSheetView(View): 
@@ -41,9 +42,14 @@ class AddSheetView(View):
             print("affichage,")
             print(f">{dict_values}")
             print('enregistrement des données')
-            form.save_data(dict_values)
-            print("\n\n***")
-            return HttpResponse("<a href='http://127.0.0.1:8000/spa/admin/sheet/animal/'> animal créé </a>")
+            status_operation = form.save_data(dict_values)
+            if status_operation == 'tout va bien':
+                return redirect("sheet:index")
+            else:
+                error = status_operation
+                context = {'form' : form, 'error' : error}
+                raise error
+                return render(request, 'sheet/add.html', context)
         else:
             context = {'form' : form}
             context['errors'] = form.errors.items()
