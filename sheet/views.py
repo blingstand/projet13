@@ -13,16 +13,16 @@ from .utils import get_animals_for_template
 class SheetView(View):
     def get(self, request):
         #get the data from database
-        animals = get_animals_for_template()
+        sheets = get_animals_for_template()
         context={
         'button_value':[
         {'name' : 'trier par',  'id' :'trier'},
         {'name' : 'ajouter',    'id' : 'ajouter'}, 
         {'name' : 'modifier',   'id' : 'modifier'},
         {'name' : 'supprimer',  'id' : 'supprimer'}],
-        'animals': animals
+        'sheets': sheets
         }
-        print(animals)
+        print(sheets)
         return render(request, 'sheet/index.html', context)
 
 class AddSheetView(View): 

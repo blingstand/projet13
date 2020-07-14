@@ -1,4 +1,11 @@
 /* change.css */
+.very-center{
+	display: flex; 
+	-ms-flex-align: center !important;
+	align-items: center !important;
+	-ms-flex-pack: center !important;
+	justify-content: center !important;
+	}
 /* dashboard */
 	.right-part{
 		background: blue;
@@ -33,6 +40,11 @@
 		height:  3rem;
 		width: 	10rem;
 		background-color: white;
+	}
+	.button-verti:hover{
+		border : 0.2rem black dashed;
+		cursor: pointer; 
+		font-weight: bold; 
 	}
 	.no-a{
 		color: black;
@@ -77,8 +89,15 @@
 	.mail-but{
 		height: 5rem; 
 	}
-	.very-center{
-		display: flex; 
-		justify-content: center; 
-		align-content: center; 
-		}
+	
+	/* cns */
+	.cns-choice{	
+		height : 5rem;
+		border : 0.2rem black solid;
+		vertical-align: middle;
+	}
+	.cns-choice:hover{
+		border : 0.2rem black dashed;
+		cursor: pointer; 
+		font-weight: bold; 
+	}

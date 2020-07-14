@@ -35,20 +35,20 @@
 						<td>num tatouage</td>
 						<td>num puce</td>
 					</tr>
-					{% for animal in animals %}
-					<tr class="col-12  {% cycle 'row1' 'row2' %}">
+					{% for sheet in sheets %}
+					<tr class="col-12 text-center {% cycle 'row1' 'row2' %}">
 						<!-- nom sexe/espece status propriétaire num-dossier num-tatoo num-puce -->
-						<td><input type="checkbox" id='{{animal.id}}'></td>
-						<td>{{animal.name}}</a></td>
-						<td>{{animal.status}}</td>
-						<td>{{animal.species}}</td>
-						<td>{{animal.race}}</td>
-						<td>{{animal.owner}} </td>
-						<td>{{animal.owner_status}}</td>
-						<td>{{animal.owner_id.telephone}}</td>
-						<td>{{animal.admin_data_id.file}}</td>
-						<td>{{animal.admin_data_id.tatoo}}</td>
-						<td>{{animal.admin_data_id.chip}}</td>						
+						<td><input type="checkbox" id='{{sheet.id}}'></td>
+						<td>{{sheet.name}}</a></td>
+						<td>{{sheet.status}}</td>
+						<td>{{sheet.species}}</td>
+						<td>{{sheet.race}}</td>
+						<td>{{sheet.owner}} </td>
+						<td>{{sheet.owner_status}}</td>
+						<td>{{sheet.owner.phone}}</td>
+						<td>{{sheet.admin_data.file}}</td>
+						<td>{{sheet.admin_data.tatoo}}</td>
+						<td>{{sheet.admin_data.chip}}</td>						
 					</tr>
 					{% endfor %}
 				</form>

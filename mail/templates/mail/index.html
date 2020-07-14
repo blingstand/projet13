@@ -9,7 +9,7 @@
 			<div class="col-2"></div>
 			{% for elem in button_value %}
 			<div class="col-2 mt-3 mb-3  bg-primary text-center">
-				<button >{{elem}}</button>
+				<button id={{elem}}>{{elem}}</button>
 			</div>
 			{% endfor %}
 			<div class="col-2"></div>
@@ -31,5 +31,11 @@
 
 		</div>
 	</article>
+	<script type="text/javascript">
+		ajouter = document.getElementById('ajouter')
+		ajouter.addEventListener('click', function(){
+			window.location.href="{% url 'mail:cns'%}"
+		})
+	</script>
 </section>
 {%endblock%}

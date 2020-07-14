@@ -1,0 +1,26 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<section>
+	<h2 class="mt-5 pl-5">Contenus et règles</h2>
+	<article class="mt-5 container">
+		<div class="row">
+			<div class="col-3 bg-secondary"></div>
+			<div class="col-6">
+				<div class="w-100 mt-5 text-center bg-primary very-center cns-choice" id="content">Contenu du mail </div>
+				<div class="w-100 mb-5 mt-5 text-center bg-primary cns-choice very-center" id="settings">Règle d'envoi </div>
+			</div>
+			<div class="col-3 bg-secondary"></div>
+
+		</div>
+	</article>
+	<script type="text/javascript">
+		content = document.getElementById('content')
+		settings = document.getElementById('settings')
+
+		content.addEventListener('click', function(){
+			window.location.href = "{% url 'mail:content'%}"})
+		settings.addEventListener('click', function(){
+			window.location.href = "{% url 'mail:settings'%}"})
+	</script>
+</section>
+{% endblock%}
