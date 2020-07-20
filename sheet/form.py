@@ -21,12 +21,12 @@ class SheetForm(forms.Form):
     chip = forms.CharField(required=False,  
         widget=forms.TextInput(attrs={ 'title' : 'num de la puce',
             'placeholder' : "num de la puce"}))
-    date_of_adoption = forms.DateField(required=False, 
+    date_of_adoption = forms.DateField(required=True, 
         widget=forms.TextInput(attrs={ 
             'placeholder' : "date d'adoption ",
              "class":"w-10rem", 
              'title':"date d'adoption (jj/mm/aaa)"}))
-    date_of_birth = forms.DateField(required=False, 
+    date_of_birth = forms.DateField(required=True, 
         widget=forms.TextInput(attrs={ 
             'placeholder' : "date de naissance ",
              "class":"w-10rem", 
@@ -76,14 +76,13 @@ class SheetForm(forms.Form):
             'placeholder' : "téléphone"}))
     tel_reminder = forms.IntegerField(required=False, 
         widget=forms.NumberInput(attrs={ 'title' : "nb rappel téléphonique",
-            'placeholder' : "nb rappel tel",'min':0}))
+            'placeholder' : "nb rappel tel",'min':0, "values":0}))
 
     def from_form(self):
         """ returns values to fill row in tables """
         animal = ('name', 'date_of_birth', 'race', 'species', 'color', 'date_of_adoption')
         admin = ('file', 'chip', 'tatoo', 'is_neutered', 'date_of_neuter', 'status')
         owner = ('owner', 'tel', 'mail', 'tel_reminder', 'mail_reminder', 'caution')
-        
         dict_values=self.cleaned_data
 
         animal = [None] + [dict_values[elem] for elem in animal]
@@ -111,7 +110,7 @@ class SheetForm(forms.Form):
         owner_name = list_owner[1]
         print(f"> owner_name : {owner_name}")
         found_owner = Owner.objects.filter(owner=owner_name)
-        if len(found_owner) is not 0:
+        if len(found_owner) != 0:
             print(f"existe déjà : {type(found_owner[0])} ")
             animal.owner = found_owner[0]
         else:
@@ -119,13 +118,15 @@ class SheetForm(forms.Form):
             try: 
                 owner.save()
             except IntegrityError as ie: 
-                print(IntegrityError)
+                raise (IntegrityError)
                 if "owner" in str(ie):
                     return "Ce nom de propriétaire existe déjà dans la base ! "
                 elif "tel" in str(ie):
                     return "ce téléphone est existe déjà dans la base ! "
                 elif "mail" in str(ie):
                     return "ce mail existe déjà dans la base ! "
+            except Exception as e: 
+                raise e
 
         #save classes
         try : 

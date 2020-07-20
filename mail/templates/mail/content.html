@@ -4,23 +4,26 @@
 	<h2 class="mt-5 pl-5">Contenu du mail </h2>
 	<article class="mt-5 container">
 		<div class="row">
-			<div class="col-3 bg-secondary"></div>
-			<div class="col-6">
-				<div class="w-100 mt-5 text-center bg-primary very-center cns-choice" id="content">Contenu du mail </div>
-				<div class="w-100 mb-5 mt-5 text-center bg-primary cns-choice very-center" id="settings">Règle d'envoi </div>
+			<div class="col-1 bg-secondary"></div>
+			<div class="col-10">
+				<form action="" method='post'>
+					<div class="row">
+						<div class="col-12">titre </div>
+						<div class="col-12">contenu</div>
+					</div>
+				</form>
+				<div class="col-1 bg-secondary"></div>
+
 			</div>
-			<div class="col-3 bg-secondary"></div>
+		</article>
+		<script type="text/javascript">
+			content = document.getElementById('content')
+			settings = document.getElementById('settings')
 
-		</div>
-	</article>
-	<script type="text/javascript">
-		content = document.getElementById('content')
-		settings = document.getElementById('settings')
-
-		content.addEventListener('click', function(){
-			window.href.location = "{% url 'mail:content'%}"})
-		settings.addEventListener('click', function(){
-			window.href.location = "{% url 'mail:settings'%}"})
-	</script>
-</section>
-{% endblock%}
+			content.addEventListener('click', function(){
+				window.href.location = "{% url 'mail:content'%}"})
+			settings.addEventListener('click', function(){
+				window.href.location = "{% url 'mail:settings'%}"})
+			</script>
+		</section>
+		{% endblock%}

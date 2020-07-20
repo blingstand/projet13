@@ -32,7 +32,7 @@ class AddSheetView(View):
         return render(request, 'sheet/add.html', context)
 
     def post(self, request):
-        form = SheetForm(request.POST, request.FILES)
+        form = SheetForm(request.POST)
         print("\n\n***")
 
         if form.is_valid():
