@@ -15,13 +15,18 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 class SettingsMail(forms.Form):
     """form to add a new mail rule"""
-    frequency = forms.ChoiceField(widget=forms.RadioSelect, 
-        choices=CHOICES)
+    frequency = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
     age = forms.IntegerField(required=False)
     date = forms.DateField(required=False)
 
 class ContentMail(forms.Form):
 	"""form to add a new mail content"""
-	title = forms.CharField(max_length=30)
-	resume = forms.CharField(max_length=100)
-	content = forms.CharField(widget=forms.Textarea,max_length=2000)
+	titre = forms.CharField(max_length=30, 
+		widget=forms.TextInput(attrs={ 'class' : "w-100 text-center",
+            'placeholder' : "objet du mail"}))
+	resume = forms.CharField(max_length=100, 
+		widget=forms.TextInput(attrs={ 'class' : "w-100 text-center",
+            'placeholder' : "résumé du mail en quelques mots"}))
+	content = forms.CharField(max_length=2000, 
+		widget=forms.Textarea(attrs={ 'class' : "w-100",
+            'placeholder' : "contenu du mail, pensez à utiliser les touches sur les côtés"}))

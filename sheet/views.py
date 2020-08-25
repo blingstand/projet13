@@ -16,10 +16,10 @@ class SheetView(View):
         sheets = get_animals_for_template()
         context={
         'button_value':[
-        {'name' : 'trier par',  'id' :'trier'},
-        {'name' : 'ajouter',    'id' : 'ajouter'}, 
-        {'name' : 'modifier',   'id' : 'modifier'},
-        {'name' : 'supprimer',  'id' : 'supprimer'}],
+        {'name' : 'ajouter',    'id' : 'ajouter', 'function' : 'add()'}, 
+        {'name' : 'modifier',   'id' : 'modifier', 'function' : 'alter()'},
+        {'name' : 'trier par',  'id' :'trier', 'function' : 'classify()'},
+        {'name' : 'supprimer',  'id' : 'supprimer', 'function' : 'drop()'}],
         'sheets': sheets
         }
         print(sheets)
@@ -58,3 +58,9 @@ class AddSheetView(View):
             print("\n*** E N D ***\n\n")
             print(request.POST, 'et', request.FILES)
             return render(request, 'sheet/add.html', context)
+
+class AlterSheetView(View): 
+    def get(self, request):
+        form = SheetForm()
+        context = {'form' : form}
+        return render(request, 'sheet/alter.html', context)

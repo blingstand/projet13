@@ -1,29 +1,35 @@
 {% extends 'core/base.html' %}
 {% block content %}
 <section>
+	<h4><a href="{% url 'mail:cns'%}">< Retour</a></h4>
 	<h2 class="mt-5 pl-5">Contenu du mail </h2>
 	<article class="mt-5 container">
 		<div class="row">
 			<div class="col-1 bg-secondary"></div>
-			<div class="col-10">
-				<form action="" method='post'>
+			<div class="col-7">
+				<form action="" method='post'>{% csrf_token %}
 					<div class="row">
-						<div class="col-12">titre </div>
-						<div class="col-12">contenu</div>
+						<div class="col-12">{{form.titre}} </div>
+						<div class="col-12">{{form.resume}} </div>
+						<div class="col-12">{{form.content}} </div>
 					</div>
 				</form>
-				<div class="col-1 bg-secondary"></div>
+			</div>
+			<div class="col-3">
+				<div class="h-100 p-4 row d-flex justify-content-around bg-green">
+					<div class="col-6 button-inclusion very-center">Propriétaire</div>
+					<div class="col-6 button-inclusion very-center">Nom animal</div>
+					<div class="col-6 button-inclusion very-center">Caution</div>
+					<div class="col-6 button-inclusion very-center">Date de stérilisation</div> 
+
+				</div>
+			</div>
+			<div class="col-1 bg-secondary"></div>
 
 			</div>
 		</article>
 		<script type="text/javascript">
-			content = document.getElementById('content')
-			settings = document.getElementById('settings')
-
-			content.addEventListener('click', function(){
-				window.href.location = "{% url 'mail:content'%}"})
-			settings.addEventListener('click', function(){
-				window.href.location = "{% url 'mail:settings'%}"})
-			</script>
-		</section>
-		{% endblock%}
+			
+		</script>
+	</section>
+	{% endblock%}

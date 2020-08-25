@@ -7,4 +7,5 @@ app_name = 'dashboard'
 urlpatterns = [
     path('', SheetView.as_view(), name='index'),
     path('add', AddSheetView.as_view(), name='add'),
+    path('alter', AlterSheetView.as_view(), name='alter'),
 ]

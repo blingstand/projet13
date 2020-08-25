@@ -27,13 +27,16 @@ class ContentView(View):
         form = ContentMail()
         context = {
             'form' : form}
-        return render(request, 'mail/content.html')
+        return render(request, 'mail/content.html', context)
+
     def post(self, request):
         """ this function deals with the datas from the form"""
-        form = ContentMail()
+        form = ContentMail(request.POST)
+        if form.is_valid():
+            pass
         context = {
             'form' : form}
-        return render(request, 'mail/content.html')
+        return render(request, 'mail/content.html', context)
 
 
 class SettingsView(View):

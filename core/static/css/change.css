@@ -101,7 +101,20 @@
 		cursor: pointer; 
 		font-weight: bold; 
 	}
-	/* mailsettings*/ 
+	/* mailsettings */ 
 	.bg-tomato{
 		background-color: tomato;
+	}
+
+	/* mailcontent */
+	.button-inclusion{
+		width : auto; 
+		height: 3rem;
+		background-color: white; 
+		border: 1px black solid;
+	}
+	.button-inclusion:hover{
+		border : 0.2rem black dashed;
+		cursor: pointer; 
+		font-weight: bold;
 	}
