@@ -118,3 +118,13 @@
 		cursor: pointer; 
 		font-weight: bold;
 	}
+	.li-oneline{
+		white-space:nowrap;
+		padding-left: 0;
+		margin-bottom: 0; 
+		margin-top: 0.4rem;
+	}
+	.li-oneline li{ 
+		display:inline;
+		margin: 1rem; 
+	} 

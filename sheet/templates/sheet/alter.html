@@ -1,7 +1,7 @@
 {% extends 'core/base.html' %}
 {% block content %}
-<section>
-	<h2 class="mt-5 pl-5">Page Modification Fiche</h2>
+<section id="alter">
+	<h2 class="mt-5 pl-5">Page Modification Fiche {{animal.name}}</h2>
 	<article class="mt-5 bg-blue">
 		<form class="sheet" action="" method="post" enctype="multipart/form-data">
 			{% csrf_token %}
@@ -64,11 +64,48 @@
 		</form>
 	</article>
 	<script type="text/javascript">
-		let true_radio = document.getElementById("id_is_neutered_0")
-		true_radio.checked = true
-		let species0 = document.getElementById("id_species_0")
-		species0.checked = true
+		let true_radio = document.getElementById("id_is_neutered_0");
+		true_radio.checked = true;
+		let species0 = document.getElementById("id_species_0");
+		species0.checked = true;
 		
+		//complete the blank
+		//1 select inputs
+
+		function GetInputToFill(){
+			const inputsNodes = document.querySelectorAll("section#alter input"); 
+			const inputs = Array.from(inputsNodes);			
+			let inputsToFill = new Array()
+			for (input of inputs){
+				let count = 0 
+				for (elem of ['id_species_0','id_species_1','id_species_2','id_species_3', 'id_is_neutered_0', 'id_is_neutered_1']){
+					if (input.id == elem){
+						indof = inputs.indexOf(input)
+						count ++
+					}
+				}
+				if (count == 0){
+					inputsToFill.push(input);
+				}
+			}
+			inputsToFill.splice(0, 1);
+			console.log("GetInputToFill gives : ", inputsToFill)
+		return inputsToFill;
+		}
+		let inputs = GetInputToFill() //gives the void inputs in order to fill them  
+
+		//fills the inputs
+		function FillTheInputs(inputs){
+			// this functions fills the inputs with the given data from animal
+			values = ['{{animal.name}}','{{animal.date_of_birth}}','{{animal.date_of_adoption}}','{{animal.date_of_neuter}}',
+			'{{animal.race}}', '{{animal.color}}', '{{animal.status}}'  ]
+			for (i=0; i <= values.length; i++){
+				inputs[i].value = values[i]
+			}
+
+		}
+		FillTheInputs(inputs)
+
 	</script>
 	{% endblock  %}
 

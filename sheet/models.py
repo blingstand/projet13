@@ -4,7 +4,7 @@ from django.utils import timezone
 
 class Animal(models.Model):
     animal_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=30, verbose_name="Nom")
+    name = models.CharField(max_length=30, verbose_name="Nom") #2 animaux peuvent avoir le même nom  
     date_of_birth = models.DateField(verbose_name="Date de naissance")
     race = models.CharField(max_length=50)
     species = models.CharField(max_length=7, default='chat', verbose_name="chat/chatte/chien/chienne")
@@ -16,7 +16,16 @@ class Animal(models.Model):
     owner = models.ForeignKey('Owner', on_delete=models.PROTECT, 
         verbose_name="Propriétaire", null=True, blank=True)
     def __str__(self):
-        return self.name
+        try :
+            if self.owner.file is not None: 
+                return f'{self.name} (dossier : {self.owner.file})'
+            if self.owner.chip is not None: 
+                return f'{self.name} (puce : {self.owner.chip})'
+            if self.owner.tatoo is not None: 
+                return f'{self.name} (tatouage : {self.owner.tatoo})'
+        except:
+            return self.name
+
 
 class AdminData(models.Model):
     admin_data_id = models.AutoField(primary_key=True)
@@ -31,7 +40,9 @@ class AdminData(models.Model):
         return f"dossier {self.admin_data_id}"
 
 class Owner(models.Model):
-    owner = models.CharField(unique=True, max_length=50, null=True, blank=False, verbose_name="Idt du proprio")
+    owner_name = models.CharField(max_length=50, null=True, blank=False, verbose_name="Prénom propriétaire")#1 owner can have same name
+    owner_surname = models.CharField(max_length=50, null=True, blank=False, verbose_name="Nom propriétaire")#1 owner can have same surname
+    owner_sexe = models.CharField(max_length=1, null=True, blank=False, verbose_name="Sexe propriétaire (H/F)")
     phone = models.CharField(unique=True, max_length=30, verbose_name="Téléphone")
     mail = models.EmailField(unique=True, verbose_name="Mail")
     tel_reminder = models.SmallIntegerField(default=0, verbose_name="Nombre d'appel passés")
@@ -41,7 +52,7 @@ class Owner(models.Model):
     contact_id = models.ForeignKey('Contact', on_delete=models.CASCADE, verbose_name="Gestion des contacts", 
         null=True, blank=True)
     def __str__(self):
-        return self.owner
+        return f'{self.owner_name} {self.owner_surname}'
 
 class Contact(models.Model):
 

@@ -8,7 +8,7 @@ from django.views import View
 
 from .models import *
 from .form import *
-from .utils import get_animals_for_template
+from .utils import get_animals_for_template, get_animal_from_given_id
 # Create your views here.
 class SheetView(View):
     def get(self, request):
@@ -37,18 +37,21 @@ class AddSheetView(View):
 
         if form.is_valid():
             print("---")
-            print("récupération des données,")
+            print("1/ récupération des données ...")
             dict_values = form.from_form()
-            print("affichage,")
-            print(f">{dict_values}")
-            print('enregistrement des données')
+            print("2/ affichage des données récupérées ...")
+            print(f"\t>{dict_values}")
+            print("3/ Tentative d'enregistrement des données ...")
             status_operation = form.save_data(dict_values)
-            if status_operation == 'tout va bien':
+            if status_operation == 1:
+                print('Réussite')
+                print("4/ Fin de la transaction, retour sur la page sheet.")
                 return redirect("sheet:index")
             else:
-                error = status_operation
-                context = {'form' : form, 'error' : error}
-                raise error
+                print('Echec, raison :')
+                print("***\n",status_operation,"\n***")
+                context = {'form' : form, 'error' : status_operation}
+                
                 return render(request, 'sheet/add.html', context)
         else:
             context = {'form' : form}
@@ -60,7 +63,10 @@ class AddSheetView(View):
             return render(request, 'sheet/add.html', context)
 
 class AlterSheetView(View): 
-    def get(self, request):
+    def get(self, request, given_id):
         form = SheetForm()
-        context = {'form' : form}
+        #I need to get the concerned animal corresponding this given_id
+        animal = get_animal_from_given_id(given_id)[0]
+        print(animal)
+        context = {'form' : form, 'animal' : animal}
         return render(request, 'sheet/alter.html', context)
