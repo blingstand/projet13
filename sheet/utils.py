@@ -15,8 +15,9 @@ def get_animals_for_template():
                 a.status = f'peut être stérilisé(e)'
             else: 
                 a.status = f'ne peut pas encore être stérilisé(e)'
+        a.owner.owner_surname, a.owner.owner_name = a.owner.owner_surname.upper(), a.owner.owner_name.upper()
+
         try:
-            a.owner_name = f"{a.owner.owner.upper()}"
             a.admin_data.file = a.admin_data.file or "vide"
             a.admin_data.chip = a.admin_data.chip or "vide"
             a.admin_data.tatoo = a.admin_data.tatoo or "vide"

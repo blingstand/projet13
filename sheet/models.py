@@ -17,12 +17,12 @@ class Animal(models.Model):
         verbose_name="Propriétaire", null=True, blank=True)
     def __str__(self):
         try :
-            if self.owner.file is not None: 
-                return f'{self.name} (dossier : {self.owner.file})'
-            if self.owner.chip is not None: 
-                return f'{self.name} (puce : {self.owner.chip})'
-            if self.owner.tatoo is not None: 
-                return f'{self.name} (tatouage : {self.owner.tatoo})'
+            if self.admin_data.file is not None: 
+                return f'{self.name} (dossier : {self.admin_data.file})'
+            if self.admin_data.chip is not None: 
+                return f'{self.name} (puce : {self.admin_data.chip})'
+            if self.admin_data.tatoo is not None: 
+                return f'{self.name} (tatouage : {self.admin_data.tatoo})'
         except:
             return self.name
 
@@ -52,7 +52,10 @@ class Owner(models.Model):
     contact_id = models.ForeignKey('Contact', on_delete=models.CASCADE, verbose_name="Gestion des contacts", 
         null=True, blank=True)
     def __str__(self):
-        return f'{self.owner_name} {self.owner_surname}'
+        if self.owner_sexe == 'H':
+            return f'Monsieur {self.owner_surname} {self.owner_name}'
+        else:
+            return f'Madame {self.owner_surname} {self.owner_name}'
 
 class Contact(models.Model):
 
