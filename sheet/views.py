@@ -22,7 +22,7 @@ class SheetView(View):
         {'name' : 'supprimer',  'id' : 'supprimer', 'function' : 'drop()'}],
         'sheets': sheets
         }
-        print(sheets)
+        # print(sheets)
         return render(request, 'sheet/index.html', context)
 
 class AddSheetView(View): 
@@ -37,18 +37,18 @@ class AddSheetView(View):
 
         if form.is_valid():
             print("---")
-            print("1/ récupération des données ...")
+            print("\t1/ récupération des données ...")
             dict_values = form.from_form()
-            print("2/ affichage des données récupérées ...")
-            print(f"\t>{dict_values}")
-            print("3/ Tentative d'enregistrement des données ...")
+            print("\t2/ affichage des données récupérées ...")
+            print(f">{dict_values}")
+            print("\t3/ Tentative d'enregistrement des données ...")
             status_operation = form.save_data(dict_values)
             if status_operation == 1:
                 print('Réussite')
-                print("4/ Fin de la transaction, retour sur la page sheet.")
+                print("\t4/ Fin de la transaction, retour sur la page sheet.")
                 return redirect("sheet:index")
             else:
-                print('Echec, raison :')
+                print('\tEchec, raison :')
                 print("***\n",status_operation,"\n***")
                 context = {'form' : form, 'error' : status_operation}
                 

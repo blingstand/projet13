@@ -9,6 +9,7 @@ from .models import *
 
 CHOICES = (
     ("1", "chat"),("2", "chatte"), ("3", "chien"), ("4", "chienne"))
+CHOICE_STERIL = (1,"stérile"), (2,"stérilisable"), (3,"non stérilisable")
 
 class PersonalErrorMsg(Exception):
     def __init__(self, m):
@@ -47,11 +48,12 @@ class SheetForm(forms.Form):
         widget=forms.TextInput(attrs={ 'title' : "num du dossier",
             'placeholder' : "num du dossier"}))
     is_neutered = forms.ChoiceField(label="Stérile ? ", required=True, 
-        widget=forms.RadioSelect, choices=((True,"oui"), (False,"non")))
+        widget=forms.RadioSelect(attrs={"class" : "lst-none pl-0"}), 
+        choices=(CHOICE_STERIL))
     mail = forms.EmailField(required=True, max_length=30, 
         widget=forms.TextInput(attrs={ 'title' : 'mail' ,
             'placeholder' : "mail"}))
-    mail_reminder = forms.IntegerField(required=False, 
+    mail_reminder = forms.IntegerField(required=True, 
         widget=forms.NumberInput(attrs={ 'title' : 'nb rappel mail' ,
             'placeholder' : "nb rappel mail",'min':0}))
     name = forms.CharField(required=True, label="Nom de l'animal", max_length=30, 
@@ -78,21 +80,27 @@ class SheetForm(forms.Form):
     race = forms.CharField(required=True, label="Race", max_length=30,
         widget=forms.TextInput(attrs={ 'title' : "race de l'animal" ,
             'placeholder' : "race de l'animal"}))
-    species = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
+    species = forms.ChoiceField(widget=forms.RadioSelect(attrs={"class" : "lst-none pl-0"}), choices=CHOICES)
     tatoo = forms.CharField(required=False, 
         widget=forms.TextInput(attrs={ 'title' : "num de tatouage" ,
             'placeholder' : "num de tatouage"}))
     phone = forms.CharField(required=True, max_length=15,
         widget=forms.TextInput(attrs={ 'title' : "téléphone",
             'placeholder' : "téléphone"}))
-    tel_reminder = forms.IntegerField(required=False, 
+    tel_reminder = forms.IntegerField(required=True, 
         widget=forms.NumberInput(attrs={ 'title' : "nb rappel téléphonique",
             'placeholder' : "nb rappel tel",'min':0, "values":0}))
 
     def _handle_animal_class(self, dict_values):
         #create and save animal classe
+        #animal already exists
         list_ani = dict_values['animal']
         animal = Animal(*list_ani)  
+        same_in_base = Animal.objects.filter(name=animal.name)
+        if len(same_in_base) > 0:
+            print(type(same_in_base))
+            print(f'comparaison : {same_in_base == animal}')
+            print('*'*20)
         animal.save()   
         return animal
 
@@ -100,36 +108,34 @@ class SheetForm(forms.Form):
         #create and save admin classe
         list_admin = dict_values['admin']
         admin = AdminData(*list_admin)
-        found_file = AdminData.objects.filter(file=admin.file)
-        found_chip = AdminData.objects.filter(chip=admin.chip)
-        found_tatoo = AdminData.objects.filter(tatoo=admin.tatoo)
-        for elem in [found_file, found_chip, found_tatoo]:
-            if len(elem) > 0:
-                PersonalErrorMsg(f"{elem} existe déjà dans la base, risque de doublon, procédure annulée !")
+        queryset = AdminData.objects.filter(chip=admin.chip,file=admin.file, tatoo=admin.tatoo)
+        same_in_db = len(AdminData.objects.filter(chip=admin.chip,file=admin.file, tatoo=admin.tatoo)) > 0
+        if same_in_db:
+            return False, (f"Erreur : ce dossier admin existe déjà dans la base, risque de doublon, procédure annulée !")
         admin.save()
-        return admin
+        return True, admin
 
     def _handle_owner_class(self, dict_values):
         #create and save owner classe
         #already exists ? 
         list_owner = dict_values['owner']
-        owner = Owner.objects.filter(owner_name=list_owner[1], owner_surname=list_owner[2])
-        if len(owner) is not 0:
-            print("Cet utilisateur existe déjà !")
+        owner_in_db = Owner.objects.filter(owner_name=list_owner[1], owner_surname=list_owner[2])
+        if len(owner_in_db) != 0:
+            owner = owner_in_db[0]
+            return owner
         else:
-            print("Cet utilisateur est nouveau !")
-        owner = Owner(*list_owner)
-        try: 
-            owner.save()
-        except IntegrityError as ie: 
-            raise ie
-            if "tel" in str(ie):
-                PersonalErrorMsg("Ce téléphone est existe déjà dans la base ! Procédure annulée ...")
-            elif "mail" in str(ie):
-                PersonalErrorMsg("Ce mail existe déjà dans la base ! Procédure annulée ... ")
-        except Exception as e: 
-            raise e
-        return owner
+            owner = Owner(*list_owner)
+            try: 
+                owner.save()
+            except IntegrityError as ie: 
+                raise ie
+                if "tel" in str(ie):
+                    PersonalErrorMsg("Ce téléphone existe déjà dans la base ! Procédure annulée ...")
+                elif "mail" in str(ie):
+                    PersonalErrorMsg("Ce mail existe déjà dans la base ! Procédure annulée ... ")
+            except Exception as e: 
+                raise e
+            return owner
 
     def from_form(self):
         """ returns values to fill row in tables """
@@ -154,29 +160,30 @@ class SheetForm(forms.Form):
         """ save the data in database and return """
 
         #transaction : one fails all fail
-        try : 
-            animal = self._handle_animal_class(dict_values)
-            print('ani ok ')
-        except Exception as e:
-            raise e
+        succes, output = self._handle_admin_class(dict_values)
+        if succes:
+            print('- données pour admin ok ')
+            admin = output
+        else:
+            error_msg = output
+            return error_msg
         try:
-            admin = self._handle_admin_class(dict_values)
-            print('admin ok ')
-        except Exception as e:
-            animal.delete()
-            raise e
-            
-        try:    
             owner = self._handle_owner_class(dict_values)
-            print('owner ok ')
+            print('- données pour owner ok ')
+        except Exception as e:
+            admin.delete()
+            raise PersonalErrorMsg("Problème avec les données concernant owner, effacement données admin.")
+        try:    
+            animal = self._handle_animal_class(dict_values)
             animal.admin_data = admin
             animal.owner = owner
             animal.save()
-            print('ani2 ok ')
+            print('- données pour animal ok ')
             return 1
         except Exception as e:
             animal.delete()
             admin.delete()
+            print('\t- erreur pour owner, effacement données admin et owner.')
             raise e
         
 

@@ -37,7 +37,12 @@ class AdminData(models.Model):
     status = models.TextField(null=True, blank=True, max_length=200, 
         verbose_name="Explication concernant la stérilisation")
     def __str__(self):
-        return f"dossier {self.admin_data_id}"
+        if self.file:
+            return f"dossier {self.file}"
+        elif self.chip:
+            return f"puce {self.chip}"
+        else:
+            return f"tatoo {self.tatoo}"
 
 class Owner(models.Model):
     owner_name = models.CharField(max_length=50, null=True, blank=False, verbose_name="Prénom propriétaire")#1 owner can have same name

@@ -52,6 +52,21 @@
 	</article>
 </article>
 <script type="text/javascript">
+
+	//click on line means checkbox checked
+	let allTr = Array.from(document.querySelectorAll('tr')).slice(1); 
+	for (tr of allTr){
+		tr.style.cursor = 'pointer'; 
+		tr.addEventListener('click', function(e){
+			console.log(e.target.parentElement.children[0].firstChild.checked)
+			if (e.target.parentElement.children[0].firstChild.checked){
+				e.target.parentElement.children[0].firstChild.checked=false; 
+			}else{
+				e.target.parentElement.children[0].firstChild.checked=true;
+			}
+		});
+	}
+
 	function add(){
 		add_page = window.location + "add"
 		window.location.href = add_page; 

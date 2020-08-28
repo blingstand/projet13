@@ -128,3 +128,5 @@
 		display:inline;
 		margin: 1rem; 
 	} 
+	.lst-none{
+		list-style-type: none;}

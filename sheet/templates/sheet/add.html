@@ -18,7 +18,7 @@
 							<div class="col-6" >
 								<div class="row">
 									<div class="col-6 bg-primary" >{{form.species}}</div>
-									<div class="col-6 bg-primary" >{{form.is_neutered.label}} {{form.is_neutered}}</div>
+									<div class="col-6 bg-primary" >{{form.is_neutered}}</div>
 								</div>
 							</div>
 							<div class="col-6 bg-secondary text-center">
@@ -68,10 +68,12 @@
 		</form>
 	</article>
 	<script type="text/javascript">
-		let true_radio = document.getElementById("id_is_neutered_0")
-		true_radio.checked = true
-		let species0 = document.getElementById("id_species_0")
+		let is_neutered_button = document.getElementById("id_is_neutered_0")
+		is_neutered_button.checked = true
+		let species0_button = document.getElementById("id_species_0")
 		species0.checked = true
+		let owner_sex_button = document.getElementById("id_owner_sexe")
+		owner_sex_button.checked = true
 		
 	</script>
 	{% endblock  %}
