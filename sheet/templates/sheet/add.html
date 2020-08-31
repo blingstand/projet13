@@ -9,42 +9,43 @@
 				<div class="row">
 					<div class="col-8 bg-yellow container">
 						<div class="row">
-							<div class="col-3 text-center">{{form.name}}</div>
-							<div class="col-3 text-center">{{form.date_of_birth}}</div>
-							<div class="col-3 text-center">{{form.date_of_adoption}}</div>
-							<div class="col-3 text-center">{{form.date_of_neuter}}</div>
+							<div class="col-3 text-center">{{form.name.label}} {{form.name}}</div>
+							<div class="col-3 text-center">{{form.date_of_birth.label}}{{form.date_of_birth}}</div>
+							<div class="col-3 text-center">{{form.date_of_adoption.label}}{{form.date_of_adoption}}</div>
+							<div class="col-3 text-center">{{form.date_of_neuter.label}}{{form.date_of_neuter}}</div>
 						</div>
 						<div class="row">
 							<div class="col-6" >
 								<div class="row">
-									<div class="col-6 bg-primary" >{{form.species}}</div>
-									<div class="col-6 bg-primary" >{{form.is_neutered}}</div>
+									<div class="col-6 bg-primary"> {{form.species}}</div>
+									<div class="col-6 bg-primary" id='inputDateZone' > {{form.is_neutered}}</div>
 								</div>
 							</div>
 							<div class="col-6 bg-secondary text-center">
-								<p>{{form.race}}</p>
-								<p>{{form.color}}</p>
-								<p>{{form.observation}}</p>
+								<p>{{form.race.label}} {{form.race}}</p>
+								<p>{{form.color.label}}  {{form.color}}</p>
+								<p>{{form.observation.label}} {{form.observation}}</p>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-4">{{form.file}}</div>
-							<div class="col-4">{{form.tatoo}}</div>
-							<div class="col-4">{{form.chip}}</div>
+							<div class="col-4 text-center">{{form.file.label}}<br/> {{form.file}}</div>
+							<div class="col-4 text-center">{{form.tatoo.label}}<br/> {{form.tatoo}}</div>
+							<div class="col-4 text-center">{{form.chip.label}}<br/> {{form.chip}}</div>
 						</div>
 						<div class="row">
-							<div class="col-4">{{form.caution}}</div>
-							<div class="col-4">{{form.mail_reminder}}</div>
-							<div class="col-4">{{form.tel_reminder}}</div>
+							<div class="col-4 text-center">{{form.caution.label}}<br/> {{form.caution}}</div>
+							<div class="col-4 text-center">{{form.mail_reminder.label}}<br/> {{form.mail_reminder}}</div>
+							<div class="col-4 text-center">{{form.tel_reminder.label}}<br/> {{form.tel_reminder}}</div>
 						</div>
 						<div class="row">
-							<div class="col-4">{{form.owner_name}}</div>
-							<div class="col-4">{{form.owner_surname}}</div>
-							<div class="col-4">{{form.owner_sexe}}</div>
+							<div class="col-4 text-center">{{form.owner_name.label}}<br/> {{form.owner_name}}</div>
+							<div class="col-4 text-center">{{form.owner_surname.label}}<br/> {{form.owner_surname}}</div>
+							<div class="col-4 text-center">{{form.owner_sex}}</div>
 						</div>
 						<div class="row">
-							<div class="col-4">{{form.phone}}</div>
-							<div class="col-4">{{form.mail}}</div>
+							<div class="col-1"></div>
+							<div class="col-4 text-center">{{form.phone.label}}<br/> {{form.phone}}</div>
+							<div class="col-7 mb-2 text-center">{{form.mail.label}}<br/> {{form.mail}}</div>
 						</div>
 					</div>			
 					<div class="col-4 bg-green">
@@ -70,11 +71,24 @@
 	<script type="text/javascript">
 		let is_neutered_button = document.getElementById("id_is_neutered_0")
 		is_neutered_button.checked = true
-		let species0_button = document.getElementById("id_species_0")
-		species0.checked = true
-		let owner_sex_button = document.getElementById("id_owner_sexe")
+		let species0_button = document.getElementById('id_species_0')
+		species0_button.checked = true
+		let owner_sex_button = document.getElementById("id_owner_sex_0")
 		owner_sex_button.checked = true
 		
+		function appearNewInput(){
+			//create an input date
+			let divDate = document.createElement("div");
+			divDate.innerHTML = '{{form.futur_date_of_neuter}}'
+			document.getElementById('inputDateZone').appendChild(divDate);
+
+		}
+		document.getElementById("id_is_neutered_2").addEventListener('click', function(e){
+			if(e.target.checked){
+				appearNewInput()
+			}
+		
+		})
 	</script>
 	{% endblock  %}
 

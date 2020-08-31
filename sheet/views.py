@@ -9,8 +9,11 @@ from django.views import View
 from .models import *
 from .form import *
 from .utils import get_animals_for_template, get_animal_from_given_id
+
 # Create your views here.
+
 class SheetView(View):
+    #the sheet view page
     def get(self, request):
         #get the data from database
         sheets = get_animals_for_template()
@@ -26,12 +29,15 @@ class SheetView(View):
         return render(request, 'sheet/index.html', context)
 
 class AddSheetView(View): 
+    #the add sheet page
     def get(self, request):
+        #displays the page
         form = SheetForm()
         context = {'form' : form}
         return render(request, 'sheet/add.html', context)
 
     def post(self, request):
+        #handles the form and the errors
         form = SheetForm(request.POST)
         print("\n\n***")
 
@@ -63,10 +69,11 @@ class AddSheetView(View):
             return render(request, 'sheet/add.html', context)
 
 class AlterSheetView(View): 
+    #the sheet alter page
     def get(self, request, given_id):
         form = SheetForm()
         #I need to get the concerned animal corresponding this given_id
         animal = get_animal_from_given_id(given_id)[0]
-        print(animal)
+        print(">>>", animal.race)
         context = {'form' : form, 'animal' : animal}
         return render(request, 'sheet/alter.html', context)

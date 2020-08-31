@@ -9,38 +9,43 @@
 				<div class="row">
 					<div class="col-8 bg-yellow container">
 						<div class="row">
-							<div class="col-3 text-center">{{form.name}}</div>
-							<div class="col-3 text-center">{{form.date_of_birth}}</div>
-							<div class="col-3 text-center">{{form.date_of_adoption}}</div>
-							<div class="col-3 text-center">{{form.date_of_neuter}}</div>
+							<div class="col-3 text-center">{{form.name.label}} {{form.name}}</div>
+							<div class="col-3 text-center">{{form.date_of_birth.label}}{{form.date_of_birth}}</div>
+							<div class="col-3 text-center">{{form.date_of_adoption.label}}{{form.date_of_adoption}}</div>
+							<div class="col-3 text-center">{{form.date_of_neuter.label}}{{form.date_of_neuter}}</div>
 						</div>
 						<div class="row">
 							<div class="col-6" >
 								<div class="row">
-									<div class="col-6 bg-primary" >{{form.species}}</div>
-									<div class="col-6 bg-primary" >{{form.is_neutered.label}} {{form.is_neutered}}</div>
+									<div class="col-6 bg-primary"> {{form.species}}</div>
+									<div class="col-6 bg-primary" id='inputDateZone'> {{form.is_neutered}}</div>
 								</div>
 							</div>
 							<div class="col-6 bg-secondary text-center">
-								<p>{{form.race}}</p>
-								<p>{{form.color}}</p>
-								<p>{{form.observation}}</p>
+								<p>{{form.race.label}} {{form.race}}</p>
+								<p>{{form.color.label}}  {{form.color}}</p>
+								<p>{{form.observation.label}} {{form.observation}}</p>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-4">{{form.file}}</div>
-							<div class="col-4">{{form.tatoo}}</div>
-							<div class="col-4">{{form.chip}}</div>
+							<div class="col-4 text-center">{{form.file.label}}<br/> {{form.file}}</div>
+							<div class="col-4 text-center">{{form.tatoo.label}}<br/> {{form.tatoo}}</div>
+							<div class="col-4 text-center">{{form.chip.label}}<br/> {{form.chip}}</div>
 						</div>
 						<div class="row">
-							<div class="col-4">{{form.caution}}</div>
-							<div class="col-4">{{form.mail_reminder}}</div>
-							<div class="col-4">{{form.tel_reminder}}</div>
+							<div class="col-4 text-center">{{form.caution.label}}<br/> {{form.caution}}</div>
+							<div class="col-4 text-center">{{form.mail_reminder.label}}<br/> {{form.mail_reminder}}</div>
+							<div class="col-4 text-center">{{form.tel_reminder.label}}<br/> {{form.tel_reminder}}</div>
 						</div>
 						<div class="row">
-							<div class="col-4">{{form.owner}}</div>
-							<div class="col-4">{{form.tel}}</div>
-							<div class="col-4">{{form.mail}}</div>
+							<div class="col-4 text-center">{{form.owner_name.label}}<br/> {{form.owner_name}}</div>
+							<div class="col-4 text-center">{{form.owner_surname.label}}<br/> {{form.owner_surname}}</div>
+							<div class="col-4 text-center">{{form.owner_sex}}</div>
+						</div>
+						<div class="row">
+							<div class="col-1"></div>
+							<div class="col-4 text-center">{{form.phone.label}}<br/> {{form.phone}}</div>
+							<div class="col-7 mb-2 text-center">{{form.mail.label}}<br/> {{form.mail}}</div>
 						</div>
 					</div>			
 					<div class="col-4 bg-green">
@@ -71,16 +76,29 @@
 		
 		//complete the blank
 		//1 select inputs
+		function appearNewInput(){
+			//create an input date
+			let divDate = document.createElement("div");
+			divDate.innerHTML = '{{form.futur_date_of_neuter}}'
+			document.getElementById('inputDateZone').appendChild(divDate);
 
-		function GetInputToFill(){
+		}
+		document.getElementById("id_is_neutered_2").addEventListener('click', function(e){
+			if(e.target.checked){
+				appearNewInput();
+			}
+		})
+
+		function GetTheBlank(){
 			const inputsNodes = document.querySelectorAll("section#alter input"); 
 			const inputs = Array.from(inputsNodes);			
 			let inputsToFill = new Array()
+			let choicesToMake = new Array()
 			for (input of inputs){
 				let count = 0 
-				for (elem of ['id_species_0','id_species_1','id_species_2','id_species_3', 'id_is_neutered_0', 'id_is_neutered_1']){
+				for (elem of ['id_species_0','id_species_1','id_species_2','id_species_3', 'id_is_neutered_0', 'id_is_neutered_1', 'id_is_neutered_2', 'id_owner_sex_0', 'id_owner_sex_1']){
 					if (input.id == elem){
-						indof = inputs.indexOf(input)
+						choicesToMake.push(input);
 						count ++
 					}
 				}
@@ -89,22 +107,51 @@
 				}
 			}
 			inputsToFill.splice(0, 1);
-			console.log("GetInputToFill gives : ", inputsToFill)
-		return inputsToFill;
+		return [inputsToFill, choicesToMake];
 		}
-		let inputs = GetInputToFill() //gives the void inputs in order to fill them  
 
 		//fills the inputs
 		function FillTheInputs(inputs){
 			// this functions fills the inputs with the given data from animal
-			values = ['{{animal.name}}','{{animal.date_of_birth}}','{{animal.date_of_adoption}}','{{animal.date_of_neuter}}',
-			'{{animal.race}}', '{{animal.color}}', '{{animal.status}}'  ]
+			values = ['{{animal.name}}','{{animal.date_of_birth}}','{{animal.date_of_adoption}}','{{animal.admin_data.date_of_neuter}}',
+			'{{animal.race}}', '{{animal.color}}', '{{animal.observation}}', "{{animal.admin_data.file}}", "{{animal.admin_data.chip}}", "{{animal.admin_data.tatoo}}", "{{animal.owner.caution}}", "{{animal.owner.tel_reminder}}","{{animal.owner.mail_reminder}}", "{{animal.owner.owner_name}}", "{{animal.owner.owner_surname}}", "{{animal.owner.phone}}", "{{animal.owner.mail}}" ]
 			for (i=0; i <= values.length; i++){
-				inputs[i].value = values[i]
+				inputs[i].value = values[i];
 			}
-
 		}
-		FillTheInputs(inputs)
+		//make choices
+		function CheckCHoices(checkboxes){
+			// this function checks the concerned checkbox according to the given datas for db
+			let choice1 = ('id_species_' + '{{animal.species}}')
+			let choice2 = ('id_is_neutered_' + '{{animal.admin_data.is_neutered}}')
+			if ('{{animal.owner.owner_sex}}' == 'H'){
+				sex = 0;
+			}else{
+				sex = 1;
+			}
+			let choice3 = ('id_owner_sex_' + sex)
+
+			for (let choice of [choice1, choice2, choice3]){
+				for (let checkbox of checkboxes){
+					if (choice == checkbox.id){
+
+						a = checkbox
+						checkbox.checked = true;
+						if (checkbox.id == "id_is_neutered_2" ){
+							appearNewInput();
+							let newInput = document.getElementById('id_futur_date_of_neuter'); 
+							newInput.value ='{{animal.admin_data.futur_date_of_neuter}}'; 
+						}
+						break; 
+					}
+				}
+			}
+		}
+
+		let my_form  = GetTheBlank() //gives the void inputs in order to fill them  
+
+		FillTheInputs(my_form[0])
+		CheckCHoices(my_form[1])
 
 	</script>
 	{% endblock  %}
