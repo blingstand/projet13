@@ -8,8 +8,8 @@ from django.db.utils import IntegrityError
 from .models import *
 
 CHOICES = (
-    ("1", "chat"),("2", "chatte"), ("3", "chien"), ("4", "chienne"))
-CHOICE_STERIL = (1,"stérile"), (2,"stérilisable"), (3,"sera stérilisable")
+    ("0", "chat"),("1", "chatte"), ("2", "chien"), ("3", "chienne"))
+CHOICE_STERIL = (0,"stérile"), (2,"stérilisable"), (3,"sera stérilisable")
 CHOICE_SEX = (('H',"Homme"), ('F',"Femme"))
 class PersonalErrorMsg(Exception):
     def __init__(self, m):
@@ -20,7 +20,7 @@ class PersonalErrorMsg(Exception):
 class DateInput(forms.DateInput):
     input_type = 'date'
 class SheetForm(forms.Form):
-    """form to add a new sheet """
+    """form to add a new sheet """   
     caution = forms.CharField(required=True, max_length=30, label='caution', 
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 
             'title' : 'montant de la caution',
@@ -94,7 +94,6 @@ class SheetForm(forms.Form):
         widget=forms.NumberInput(attrs={ 'class' : 'input-reduced', 'title' : "nb rappel téléphonique",
             'placeholder' : "nb rappel tel",'min':0, "values":0}))
 
-
     def _handle_admin_class(self, dict_values):
         #create and save admin classe
         list_admin = dict_values['admin']
@@ -116,16 +115,16 @@ class SheetForm(forms.Form):
             owner.id = owner_in_db[0].id #have to give because auto increment is on for id
             for elem in ('id','owner_name', 'owner_surname','owner_sex',  'phone', 'mail', 'tel_reminder', 'mail_reminder', 'caution'):
                 if getattr(owner, elem) != getattr(owner_in_db[0], elem):
-                    print('diff')
+                    # print('diff')
                     owner.id == None
-            print('Cet utilisateur existe déjà je récupère sa fiche.')
+            # print('Cet utilisateur existe déjà je récupère sa fiche.')
             return True, owner
 
         else:
-            print("Création d'un nouvel utilisateur ...")
+            # print("Création d'un nouvel utilisateur ...")
             try: 
                 owner.save()
-                print('je retourne :', owner)
+                # print('je retourne :', owner)
                 return True, owner
             except IntegrityError as ie: 
                 if "tel" in str(ie):
@@ -169,21 +168,21 @@ class SheetForm(forms.Form):
             }
         return dict_values
 
-    def save_data(self, dict_values):
+    def save_new_datas(self, dict_values):
         """ save the data in database and return """
 
         #transaction : one fails all fail
         succes1, output = self._handle_admin_class(dict_values)
         if succes1:
             admin = output
-            print('- données pour admin ok ')
+            # print('- données pour admin ok ')
         else:
             error_msg = output
             return error_msg
         succes2, output = self._handle_owner_class(dict_values)
         if succes2: 
             owner = output
-            print('- données pour owner ok ')
+            # print('- données pour owner ok ')
         else:
             admin.delete()
             print("deleted")
@@ -194,9 +193,8 @@ class SheetForm(forms.Form):
             animal = output
             animal.admin_data = admin
             animal.owner = owner
-            print('vérification : ad/ow ||',animal.admin_data, animal.owner )
             animal.save()
-            print('- données pour animal ok ')
+            # print('- données pour animal ok ')
             return 1
         else:
             animal.delete()
@@ -206,7 +204,41 @@ class SheetForm(forms.Form):
             return error_msg 
         
 
+    def modify_datas(self, given_id):
+        """ this function attemps to modify the db 
+            1/ find the concerned tables
+            2/ try a modification
+            3/ save the change
+        """
+        # 1/  finds the concerned tables
+        dict_values = self.cleaned_data
+        animal = Animal.objects.get(animal_id=given_id)
+        admin = animal.admin_data
+        owner = animal.owner
 
-    """
-        name_col = ('name','date_of_birth','race','species','color','date_of_adoption', 'picture')
-    """
+        #2/ finds difference between former and new datas
+        loop_animal = ('name', 'date_of_birth', 'race', 'species', 'color', 'date_of_adoption', 'observation'), animal
+        loop_admin = ('file', 'chip', 'tatoo', 'is_neutered', 'date_of_neuter', 'futur_date_of_neuter', 'status'), admin
+        loop_owner = ('owner_name', 'owner_surname','owner_sex',  'phone', 'mail', 'tel_reminder', 'mail_reminder', 'caution'), owner
+        loop = [loop_animal, loop_admin, loop_owner]
+        allchanges = []
+        changes = []
+        for elem in loop:
+            for key in elem[0]: 
+                # print(elem[1], key)
+                if getattr(elem[1], key) != dict_values[key]:
+                    # print('-> changement :  ', getattr(elem[1], key) != dict_values[key], getattr(elem[1], key), dict_values[key])
+                    print(f'\tchangement ici {key}')
+                    changes.append(key)
+            # print(changes)
+
+            for change in changes:
+                # print(f'avant : {key}, {getattr(elem[1], change)} ')
+                setattr(elem[1], change, dict_values[change])
+                # print(f'\taprès : {getattr(elem[1], change)}.')
+                elem[1].save()
+            allchanges += changes
+            changes = []
+                
+
+        return(f'> {len(allchanges)} changement(s) détectés et effectués : {allchanges}' or 'echec')
