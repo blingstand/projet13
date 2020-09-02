@@ -8,25 +8,46 @@ from django.views import View
 
 from .models import *
 from .form import *
-from .utils import get_animals_for_template, get_animal_from_given_id
+from .utils import Utils
 
 # Create your views here.
-
+ut = Utils()
 class SheetView(View):
     #the sheet view page
-    def get(self, request):
-        #get the data from database
-        sheets = get_animals_for_template()
-        context={
-        'button_value':[
+    context={
+    'button_value':[
         {'name' : 'ajouter',    'id' : 'ajouter', 'function' : 'add()'}, 
         {'name' : 'modifier',   'id' : 'modifier', 'function' : 'alter()'},
         {'name' : 'trier par',  'id' :'trier', 'function' : 'classify()'},
-        {'name' : 'supprimer',  'id' : 'supprimer', 'function' : 'drop()'}],
-        'sheets': sheets
-        }
+        {'name' : 'supprimer',  'id' : 'supprimer', 'function' : 'drop()'}]}
+    def get(self, request):
+        #get the data from database
+        print('-- get --')
+        sheets = ut.get_animals_for_template()
+        self.context['sheets'] = sheets
         # print(sheets)
-        return render(request, 'sheet/index.html', context)
+        return render(request, 'sheet/index.html', self.context)
+    def post(self, request):
+        """receives data to pass to deals with the dropSheet function"""
+        if request.POST['checkbox']: 
+
+            print('*******')   
+            print(request.POST['checkbox'])
+            print('*******')    
+            given_id = request.POST['checkbox'],
+            print(type(given_id))
+            print('Avant supression :')
+            print(f'\t{len(Animal.objects.all())} animaux.')
+            print(f'\t{len(AdminData.objects.all())} admin.')
+            print(f'\t{len(Owner.objects.all())} owner.')
+            ut.drop_sheet(given_id)
+            print('Après supression :')
+            print(f'\t{len(Animal.objects.all())} animaux.')
+            print(f'\t{len(AdminData.objects.all())} admin.')
+            print(f'\t{len(Owner.objects.all())} owner.')
+            return redirect("sheet:index")
+
+        return render(request, 'sheet/index.html', self.context)
 
 class AddSheetView(View): 
     #the add sheet page
@@ -74,7 +95,7 @@ class AlterSheetView(View):
         """ display informations and form """
         form = SheetForm()
         #I need to get the concerned animal corresponding this given_id
-        animal = get_animal_from_given_id(given_id)[0]
+        animal = ut.get_animal_from_given_id(given_id)[0]
 
         context = {'form' : form, 'animal' : animal}
         return render(request, 'sheet/alter.html', context)
@@ -102,3 +123,4 @@ class AlterSheetView(View):
             print("\n*** E N D ***\n\n")
             print(request.POST, 'et', request.FILES)
             return render(request, 'sheet/add.html', context)
+
