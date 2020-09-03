@@ -35,21 +35,19 @@ class Utils():
             3/ checks whether the owner is connected to others animals
             4/ yes > doesn't drop it || no > drops it 
         """
-        if len(given_id) == 1:
-            animal = Animal.objects.get(animal_id=given_id[0])
+        for elem in given_id:
+            print(f">> {elem}")
+            animal = Animal.objects.get(animal_id=elem)
             admin = animal.admin_data
             owner = animal.owner
             print(animal, ' || ', admin, ' || ', owner)
             other_animal = Animal.objects.filter(owner=owner)
-            if len(other_animal) > 1:
-                print(other_animal)
-                print(f"/!\ Atention ce propriétaire a plusieurs animaux, seuls les fiches {animal} et {admin}"\
-                    "seront effacées")
-            print(f"Suppression de : {animal}, {admin} et {owner}")
+            print(len(other_animal) , other_animal)
             animal.delete()
-            owner.delete()
             admin.delete()
-
-
-        else:
-            print("trop d'id pour l'instant")
+            if len(other_animal) - 1 == 0 :
+                owner.delete()
+                print(f"Suppression de : {animal}, {admin} et {owner}")
+                continue
+            print(f"/!\ Atention ce propriétaire a plusieurs animaux, seuls les fiches {animal} et {admin}"\
+                    " seront effacées.")

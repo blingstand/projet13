@@ -8,7 +8,7 @@ from django.db.utils import IntegrityError
 from .models import *
 
 CHOICES = (
-    ("0", "chat"),("1", "chatte"), ("2", "chien"), ("3", "chienne"))
+    (0, "chat"),(1, "chatte"), (2, "chien"), (3, "chienne"))
 CHOICE_STERIL = (0,"stérile"), (2,"stérilisable"), (3,"sera stérilisable")
 CHOICE_SEX = (('H',"Homme"), ('F',"Femme"))
 class PersonalErrorMsg(Exception):

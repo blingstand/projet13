@@ -8,14 +8,15 @@ from django.test import TestCase
 from django.urls import reverse
 
 #from apps
-from .utils import get_animals_for_template, get_animal_from_given_id
+from .utils import Utils #get_animals_for_template, get_animal_from_given_id
 from .models import Animal, Owner, AdminData
 from .form import SheetForm
 #-- unit test --
 def get_one_entry():
     """ create one sheet in db and return """
     admin = AdminData(
-        is_neutered = 0)
+        is_neutered = 0, 
+        file='123') #charfield
     admin.save()
     owner = Owner(
         owner_name = 'name',
@@ -29,7 +30,7 @@ def get_one_entry():
         name = "a",
         date_of_birth = datetime(2020,1,2).date(),
         race = 'bâtard',
-        species = 'chat',
+        species = 0,
         color = 'grey',
         date_of_adoption = datetime.now())
     animal.save()
@@ -38,7 +39,32 @@ def get_one_entry():
     animal.save()
     return (animal, admin, owner)
 
-@skip
+def get_many_entries(number): 
+    for n in range(1, number + 1):
+        admin = AdminData(
+            is_neutered = 0, 
+            file='123'+str(n))
+        admin.save()
+        owner = Owner(
+            owner_name = 'name'+str(n), 
+            owner_surname = 'surname',
+            owner_sex = 'M',
+            phone = '123456789'+str(n),
+            mail = f'my{str(n)}@mail.com',
+            caution = '0e')
+        owner.save()
+        animal = Animal(
+            name = f"a{str(n)}",
+            date_of_birth = datetime(2020,1,2).date(),
+            race = 'bâtard',
+            species = 0,
+            color = 'grey',
+            date_of_adoption = datetime.now())
+        animal.save()
+        animal.admin_data = admin
+        animal.owner = owner
+        animal.save()
+
 class UnitTest(TestCase):
     def setUp(self):
         self.admin = AdminData(
@@ -56,22 +82,23 @@ class UnitTest(TestCase):
             name = "a",
             date_of_birth = datetime(2020,1,2).date(),
             race = 'bâtard',
-            species = 'chat',
+            species = 0,
             color = 'grey',
             date_of_adoption = datetime.now())
         self.animal.save()
         self.animal.admin_data = self.admin
         self.animal.owner = self.owner
         self.animal.save()
+        self.utils = Utils()
         
     def test_get_animal_for_template(self):
         ''' tests if the function returns a list of animal objects '''
-        list_animals = get_animals_for_template()
+        list_animals = self.utils.get_animals_for_template()
         self.assertEqual(list_animals[0], self.animal)
 
     def test_get_animal_from_given_id(self):
         ''' tests if the function returns a list of animal objects using a given id '''
-        list_animals = get_animal_from_given_id(1)
+        list_animals = self.utils.get_animal_from_given_id(1)
         self.assertEqual(list_animals[0], self.animal)
 
 
@@ -87,7 +114,7 @@ class TestSheetForm(TestCase):
         'owner_name': 'Miley', 'owner_surname': 'Krofon', 'owner_sex': 'H', 'observation': 'porte des lunettes', \
         'color': 'noir', 'race': 'gros batard', 'species': '1', 'tatoo': '777', 'phone': '0302010607', 'tel_reminder': 0}
         self.dict_values = self.sf.from_form()
-    @skip
+    
     def test_from_form(self):
         """ test if the function returns a dictionary of values to fill rows in tables,
         then test the key of each list_values"""
@@ -97,7 +124,7 @@ class TestSheetForm(TestCase):
             list_keys.append(key)
         self.assertTrue(isinstance(dict_to_test, dict))
         self.assertEqual(['animal', 'admin', 'owner'], list_keys)
-    @skip
+    
     def test_save_new_datas(self):
         """ tests if the function can save given classes in the db"""
         all_entries = Animal.objects.all()
@@ -106,7 +133,7 @@ class TestSheetForm(TestCase):
         all_entries2 = Animal.objects.all()
         nb_entries2 = len(all_entries2)
         self.assertTrue(nb_entries < nb_entries2)
-    @skip
+    
     def test_2nd_same_sheet_added(self): 
         """ test if the base will not be changed when 2nd same sheet tries to be add"""
         output = self.sf.save_new_datas(self.dict_values)
@@ -183,7 +210,59 @@ class TestSheetForm(TestCase):
         self.assertTrue(second_animal.admin_data.futur_date_of_neuter == datetime(2020,1,12).date())
         self.assertIn(output2[0:3], '> 3')
 
-@skip
+class TestSheetViews(TestCase):
+    """ test the class SheetViews for index.html """
+    def setUp(self):
+        self.animal, self.admin, self.owner = get_one_entry()
+        get_many_entries(3)
+        self.u = Utils()
+
+    def test_get_access_page(self):
+        """tests if user can access index.html from url"""
+        response = self.client.get(reverse("sheet:index"), follow=True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_post_access_datas(self):
+        """tests if server can access POST data from index.html"""
+        response = self.client.post(reverse("sheet:index"), data={"checkbox":['1']}) #data = returned data from form
+        self.assertRedirects(response, reverse("sheet:index"))
+
+    def test_drop_1_data_unique_owner(self):
+        before = len(Animal.objects.all())
+        self.u.drop_sheet((1,))
+        after = len(Animal.objects.all())
+
+        self.assertTrue(before == after + 1)
+
+    def test_drop_1_data_not_unique_owner(self):
+        """test if 1 animalsheet will be droped and owner remain 
+        in base because he is not unique""" 
+        a1, a2 = Animal.objects.all()[0:2]
+        same_owner = a1.owner
+
+        a2.owner = same_owner
+        a2.save()
+        self.assertTrue(a1.owner == a2.owner) #they have same owner
+        before_a = len(Animal.objects.all())
+        before = len(Owner.objects.all())
+        self.u.drop_sheet((a1.animal_id, ))
+        after_a = len(Animal.objects.all())
+        after = len(Owner.objects.all())
+
+        self.assertTrue(before == after)
+        self.assertTrue(before_a == after_a + 1)
+
+    def test_drop_many_data_unique_owner(self):
+        before = len(Animal.objects.all())
+        self.u.drop_sheet((1,2,3))
+        after = len(Animal.objects.all())
+        print("before", before)
+        print("after", after)
+        self.assertTrue(before == after + 3)
+
+
+
+
 class TestAddSheetViews(TestCase):
 
     def setUp(self):
@@ -211,7 +290,8 @@ class TestAddSheetViews(TestCase):
         response = self.client.post(reverse("sheet:add"), follow=True)
         self.assertEqual(response.status_code, 200)
 
-@skip
+
+
 class TestAlterSheetViews(TestCase): 
 
     def setUp(self):
@@ -219,6 +299,6 @@ class TestAlterSheetViews(TestCase):
     def test_get_access_page(self):
         """ tests if user can access get page """
         response = self.client.get(reverse("sheet:alter", kwargs={'given_id':1}), follow=True)
-        print(self.animal.animal_id)
+
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.animal.name)

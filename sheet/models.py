@@ -7,7 +7,7 @@ class Animal(models.Model):
     name = models.CharField(max_length=30, verbose_name="Nom") #2 animaux peuvent avoir le même nom  
     date_of_birth = models.DateField(verbose_name="Date de naissance")
     race = models.CharField(max_length=50)
-    species = models.CharField(max_length=7, default='chat', verbose_name="chat/chatte/chien/chienne")
+    species = models.SmallIntegerField(verbose_name="chat/chatte/chien/chienne")
     color = models.CharField(max_length=30, blank=True, verbose_name="Couleur")
     date_of_adoption = models.DateField(verbose_name="Date d'adoption",)
     observation = models.CharField(max_length=50, blank=True)
@@ -24,6 +24,8 @@ class Animal(models.Model):
                 return f'{self.name} (puce : {self.admin_data.chip})'
             if self.admin_data.tatoo is not None: 
                 return f'{self.name} (tatouage : {self.admin_data.tatoo})'
+            else:
+                return self.name
         except:
             return self.name
 

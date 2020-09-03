@@ -29,25 +29,21 @@ class SheetView(View):
         return render(request, 'sheet/index.html', self.context)
     def post(self, request):
         """receives data to pass to deals with the dropSheet function"""
-        if request.POST['checkbox']: 
+        print('*******')   
+        print(request.POST.getlist('checkbox'))
+        print('*******')    
+        given_id = request.POST.getlist('checkbox')
+        print('Avant supression :') #affichage de vérification
+        print(f'\t{len(Animal.objects.all())} animaux.')
+        print(f'\t{len(AdminData.objects.all())} admin.')
+        print(f'\t{len(Owner.objects.all())} owner.')
+        ut.drop_sheet(given_id)
+        print('Après supression :')
+        print(f'\t{len(Animal.objects.all())} animaux.')
+        print(f'\t{len(AdminData.objects.all())} admin.')
+        print(f'\t{len(Owner.objects.all())} owner.')
+        return redirect("sheet:index")
 
-            print('*******')   
-            print(request.POST['checkbox'])
-            print('*******')    
-            given_id = request.POST['checkbox'],
-            print(type(given_id))
-            print('Avant supression :')
-            print(f'\t{len(Animal.objects.all())} animaux.')
-            print(f'\t{len(AdminData.objects.all())} admin.')
-            print(f'\t{len(Owner.objects.all())} owner.')
-            ut.drop_sheet(given_id)
-            print('Après supression :')
-            print(f'\t{len(Animal.objects.all())} animaux.')
-            print(f'\t{len(AdminData.objects.all())} admin.')
-            print(f'\t{len(Owner.objects.all())} owner.')
-            return redirect("sheet:index")
-
-        return render(request, 'sheet/index.html', self.context)
 
 class AddSheetView(View): 
     #the add sheet page
