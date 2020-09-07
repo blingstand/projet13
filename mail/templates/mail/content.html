@@ -1,35 +1,111 @@
 {% extends 'core/base.html' %}
 {% block content %}
 <section>
-	<h4><a href="{% url 'mail:cns'%}">< Retour</a></h4>
-	<h2 class="mt-5 pl-5">Contenu du mail </h2>
-	<article class="mt-5 container">
-		<div class="row">
-			<div class="col-1 bg-secondary"></div>
-			<div class="col-7">
-				<form action="" method='post'>{% csrf_token %}
-					<div class="row">
-						<div class="col-12">{{form.titre}} </div>
-						<div class="col-12">{{form.resume}} </div>
-						<div class="col-12">{{form.content}} </div>
-					</div>
-				</form>
-			</div>
-			<div class="col-3">
-				<div class="h-100 p-4 row d-flex justify-content-around bg-green">
-					<div class="col-6 button-inclusion very-center">Propriétaire</div>
-					<div class="col-6 button-inclusion very-center">Nom animal</div>
-					<div class="col-6 button-inclusion very-center">Caution</div>
-					<div class="col-6 button-inclusion very-center">Date de stérilisation</div> 
+    <h4><a href="{% url 'mail:cns'%}">< Retour</a></h4>
+    <h2 class="mt-5 pl-5">Contenu du mail </h2>
 
-				</div>
-			</div>
-			<div class="col-1 bg-secondary"></div>
+    <article class="mt-5 container">
+        <div class="row">
+            <div class="col-1 bg-secondary"></div>
+            <div class="col-7">
+                <form id="form_mail_skull" action="" method='post'>{% csrf_token %}
+                    <div class="row">
+                        {%for field in form%}
+                        {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{field.label}} {{ error|escape }}</strong>
+                        </div>
+                        {% endfor %}
+                        <div class="col-12">{{field}} </div>
+                        {% endfor %}
+                    </div>
+                </form>
+            </div>
+            <div class="col-3">
+                <div class="h-100 p-4 row d-flex justify-content-around bg-green">
+                    <button class="button-mail-content" onclick='add_in_mail(this.value)' value="**owner_sex** **owner_surname**">Nom Propriétaire</button>
+                    <button class="button-mail-content" onclick='add_in_mail(this.value)' value="**name**">Nom Animal</button>
+                    <button class="button-mail-content" onclick='add_in_mail(this.value)' value="**species**">Espèce Animal</button>
+                    <button class="button-mail-content" onclick='add_in_mail(this.value)' value="**race**">Race Animal</button>
+                    <button class="button-mail-content" onclick='add_in_mail(this.value)' value="**date_of_adoption**">Date d'adoption</button>
+                    <button class="button-mail-content" onclick='add_in_mail(this.value)' value="**is_neutered**">Etat de la stérilisation</button>
+                    <button class="button-mail-content" onclick='add_in_mail(this.value)' value="**futur_date_of_neuter**">futur date stérilisation</button>
+                    <button class="button-mail-content" onclick='add_in_mail(this.value)' value="**color**">couleur</button>
+                    <button class="button-mail-content" onclick='send_data(0)'>Aperçu</button>
+                    <button class="button-mail-content" onclick='send_data(1)'>Enregistrer</button>
 
-			</div>
-		</article>
-		<script type="text/javascript">
-			
-		</script>
-	</section>
-	{% endblock%}
+
+                </div>
+            </div>
+            <div class="col-1 bg-secondary"></div>
+
+        </div>
+    </article>
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        let add_in_mail = function (givenValue){
+            // this function adds the value of a button in the mail
+            let body_mail = document.getElementById('body_mail');
+            const startPos = body_mail.selectionStart;
+            const endPos = body_mail.selectionEnd; 
+            body_mail.value = body_mail.value.substring(0, startPos)
+            + givenValue
+            + body_mail.value.substring(endPos, body_mail.value.length)
+            body_mail.focus()
+            console.log(body_mail.value)
+            }
+        // using jQuery get csrftoken from your HTML
+        var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        const get_data = function(bool){
+            return {
+                'title': document.getElementById('id_title').value, 
+                'resume': document.getElementById('id_resume').value, 
+                'full_text': document.getElementById('body_mail').value.replaceAll("\n", "\\n"), 
+                'overview': bool,
+            }
+        }
+        const send_data = function(bool){
+            receivedData = get_data(bool)
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    // if not safe, set csrftoken
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+            $.ajax( 
+            { 
+                type:"POST", 
+                url: "{% url 'mail:content'%}", 
+                dataType: 'json',
+                data: receivedData,
+                success: function (res) {
+                    if (bool == 0){
+                        id_mail = res['id_mail'];
+                        console.log('>> '+id_mail)
+                        const width  = document.body.clientWidth;
+                        const height = document.body.clientHeight;
+                        let wanted_width = (width * 50)/100
+                        let wanted_height = (height * 80)/100
+                        let spec =  "toolbar=yes,scrollbars=yes,resizable=yes,top=100,left=200,width="
+                        spec += wanted_width+",height="+wanted_height
+                        window.open("{% url 'mail:overview'%}"+id_mail, "_blank", spec);
+                    }else{
+                        alert("j'enregistre le mail")
+                    }
+
+                },
+                error: function (res) {
+                    console.log("erreur")
+                    alert(res.status);                                                                                                                          
+                }
+            });   
+        }
+        </script>
+    </section>
+    {% endblock%}

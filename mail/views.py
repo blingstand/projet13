@@ -1,10 +1,13 @@
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 
 from .models import Mail
 from .form import SettingsMail, ContentMail
+from .utils import Utils
+
+from sheet.models import Animal
 # Create your views here.
 class MailView(View):
     def get(self, request):
@@ -32,12 +35,31 @@ class ContentView(View):
     def post(self, request):
         """ this function deals with the datas from the form"""
         form = ContentMail(request.POST)
-        if form.is_valid():
-            pass
+        ut = Utils()
+        dict_values = request.POST.dict()
+        print(f'ajax envoie : {dict_values}')
+        if dict_values['overview'] == '0': 
+            print("juste un aperçu")
+            id_mail = ut.save_datas(dict_values)
+            return JsonResponse({"id_mail" : id_mail}, safe=False)
+        elif dict_values['overview'] == '1':
+            print('save then redirect')
+            ut.save_datas(dict_values)
+            return HttpResponse('mail:index')
+        else:
+            return HttpResponse(('Il y a une erreur :/'))
+class OverviewView(View):
+    """ this class handles the views for overview.html """
+    def get(self, request, id_mail):
+        form = ContentMail()
+        ut = Utils()
+        animal = Animal.objects.all()[0]
+        print(request.GET)
+        mail = ut.get_mail_from_id(id_mail)
+        mail.full_text = ut.modify_text(mail.full_text)
         context = {
-            'form' : form}
-        return render(request, 'mail/content.html', context)
-
+            'form' : form, 'mail' : mail }
+        return render(request, 'mail/overview.html', context)
 
 class SettingsView(View):
     def get(self, request):
@@ -72,4 +94,5 @@ class SettingsView(View):
         context = {
             'form' : form}
         return render(request, 'mail/settings.html', context)
+
 

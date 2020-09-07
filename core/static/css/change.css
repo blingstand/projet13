@@ -133,3 +133,12 @@
 
 	.input-reduced{
 		width: 9rem;}
+
+	.button-mail-content{
+		width:	6rem;
+		height: 3rem;
+		font-weight: bold;
+		background-color: #ececec;
+		}
+	.button-mail-content:hover{
+		background-color: #00b4b5;}

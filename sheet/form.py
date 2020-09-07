@@ -9,7 +9,7 @@ from .models import *
 
 CHOICES = (
     (0, "chat"),(1, "chatte"), (2, "chien"), (3, "chienne"))
-CHOICE_STERIL = (0,"stérile"), (2,"stérilisable"), (3,"sera stérilisable")
+CHOICE_STERIL = (0,"stérile"), (1,"stérilisable"), (2,"sera stérilisable")
 CHOICE_SEX = (('H',"Homme"), ('F',"Femme"))
 class PersonalErrorMsg(Exception):
     def __init__(self, m):
@@ -227,6 +227,7 @@ class SheetForm(forms.Form):
             for key in elem[0]: 
                 # print(elem[1], key)
                 if getattr(elem[1], key) != dict_values[key]:
+                    print(elem[1], key, dict_values[key])
                     # print('-> changement :  ', getattr(elem[1], key) != dict_values[key], getattr(elem[1], key), dict_values[key])
                     print(f'\tchangement ici {key}')
                     changes.append(key)

@@ -7,10 +7,17 @@ class Utils():
         animals = [animal for animal in Animal.objects.all()]
         all_sheets = []
         species = ("0", "chat"),("1", "chatte"), ("2", "chien"), ("3", "chienne")
+        ststatus = (0,"stérile"), (2,"stérilisable"), (3,"sera stérilisable")
+
         species_name = lambda x : species[int(x)][1]
+        steril_status = lambda x : ststatus[int(x)][1]
         for a in animals:
             a.species = species_name(a.species)
             a.owner.owner_surname, a.owner.owner_name = a.owner.owner_surname.upper(), a.owner.owner_name.upper()
+            a.admin_data.is_neutered = steril_status(a.admin_data.is_neutered)
+            if a.admin_data.is_neutered == 'sera stérilisable': 
+                a.admin_data.is_neutered = f'sera stérilisable le {a.admin_data.futur_date_of_neuter}'
+            print(a.name, a.admin_data.is_neutered)
             try:
                 a.admin_data.file = a.admin_data.file or "vide"
                 a.admin_data.chip = a.admin_data.chip or "vide"
