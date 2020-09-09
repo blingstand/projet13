@@ -8,6 +8,8 @@ from .form import SettingsMail, ContentMail
 from .utils import Utils
 
 from sheet.models import Animal
+
+ut = Utils()
 # Create your views here.
 class MailView(View):
     def get(self, request):
@@ -25,11 +27,16 @@ class CNSView(View):
 
 class ContentView(View):
     """ this class handles the content of an automatic mail"""
-    def get(self, request):
+    def get(self, request, id_mail=None):
         """ this function displays the form"""
         form = ContentMail()
         context = {
             'form' : form}
+        if id_mail: 
+            mail = ut.get_mail_from_id(id_mail)
+            mail.full_text = ut.modify_text(mail.full_text)[0]
+            print(mail.full_text)
+            context["mail"] = mail 
         return render(request, 'mail/content.html', context)
 
     def post(self, request):
@@ -43,9 +50,16 @@ class ContentView(View):
             id_mail = ut.save_datas(dict_values)
             return JsonResponse({"id_mail" : id_mail}, safe=False)
         elif dict_values['overview'] == '1':
-            print('save then redirect')
-            ut.save_datas(dict_values)
-            return HttpResponse('mail:index')
+            if dict_values['mail_id'] != 0:
+                print('alter db then redirect')
+                mail = ut.alter_db(dict_values)
+            else:
+                print('save then redirect')
+                id_mail = ut.save_datas(dict_values)
+                mail = ut.get_mail_from_id(id_mail)
+            print( "redirect")
+            context = {'mail' : mail}
+            return render(request, 'mail/cns.html', context)
         else:
             return HttpResponse(('Il y a une erreur :/'))
 class OverviewView(View):
@@ -56,9 +70,9 @@ class OverviewView(View):
         animal = Animal.objects.all()[0]
         print(request.GET)
         mail = ut.get_mail_from_id(id_mail)
-        mail.full_text = ut.modify_text(mail.full_text)
+        mail.full_text = ut.modify_text(mail.full_text)[1]
         context = {
-            'form' : form, 'mail' : mail }
+            'form' : form, 'mail' : mail, 'animal' : animal}
         return render(request, 'mail/overview.html', context)
 
 class SettingsView(View):

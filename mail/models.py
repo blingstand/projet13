@@ -12,4 +12,4 @@ class Mail(models.Model):
     send_at_this_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
-        return f'mail (titre: {self.title})'
+        return f'mail{self.mail_id} (titre: {self.title})'

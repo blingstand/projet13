@@ -1,7 +1,11 @@
 {% extends 'core/base.html' %}
 {% block content %}
 <section>
-	<h2 class="mt-5 pl-5">Contenus et règles</h2>
+	{% if mail %}
+		<h2 class="mt-5 pl-5">Contenus et règles pour {{mail}}</h2>
+	{% else %}
+		<h2 class="mt-5 pl-5">Contenus et règles </h2>
+	{% endif %}
 	<article class="mt-5 container">
 		<div class="row">
 			<div class="col-3 bg-secondary"></div>
@@ -18,7 +22,11 @@
 		settings = document.getElementById('settings')
 
 		content.addEventListener('click', function(){
+			{% if mail %}
+			window.location.href = "{% url 'mail:content'%}"+"/{{mail.mail_id}}"})
+			{% else%}
 			window.location.href = "{% url 'mail:content'%}"})
+			{%endif%}
 		settings.addEventListener('click', function(){
 			window.location.href = "{% url 'mail:settings'%}"})
 	</script>

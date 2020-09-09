@@ -16,9 +16,9 @@
 </head>
 <body>
 	<article>
-		<p onclick="close()">< Retour</a></p>
+		<p id="close" onclick="close_window(this)">< Retour</a></p>
 		{%if animal%} 
-		<h3>aperçu de {{mail}} pour la première fiche 'animal' : {{animal.name}}. </h3>
+		<h3>aperçu de {{mail}} <br>pour la première fiche animal : {{animal}}. </h3>
 		{% else%}
 		<h3>rentrer une fiche animal avant pour avoir un aperçu.</h3>
 		{%endif%} 
@@ -35,6 +35,10 @@
 			</div>
 	</article>
 	<script type="text/javascript">
+		document.getElementById('close').style.cursor = 'pointer'
+		let close_window = function(t){
+				close(); 
+			}
 		let get_field = function(){
 			//returns the 3 blanks to fill
 			const blanks = document.getElementsByClassName('blank')
@@ -42,8 +46,11 @@
 			console.log(blanks)
 			console.log(content)
 			console.log('{{mail}}')
-			for (let i = 0 ; i < blanks.length ; i++){
-				blanks[i].innerHTML = content[i]}
+			for (let i = 0 ; i < blanks.length - 1 ; i++){
+				console.log(blanks[i], content[i])
+				blanks[i].value = content[i]}
+			blanks[2].innerHTML = content[2]
+
 		}
 		get_field()
 	</script>

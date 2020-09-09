@@ -1,3 +1,7 @@
+<!-- in this page we can find : 
+    - AJAX for overview, 
+    - JS for input checking -->
+
 {% extends 'core/base.html' %}
 {% block content %}
 <section>
@@ -32,7 +36,7 @@
                     <button class="button-mail-content" onclick='add_in_mail(this.value)' value="**futur_date_of_neuter**">futur date stérilisation</button>
                     <button class="button-mail-content" onclick='add_in_mail(this.value)' value="**color**">couleur</button>
                     <button class="button-mail-content" onclick='send_data(0)'>Aperçu</button>
-                    <button class="button-mail-content" onclick='send_data(1)'>Enregistrer</button>
+                    <button class="button-mail-content" onclick='submit_datas()'>Enregistrer</button>
 
 
                 </div>
@@ -43,6 +47,10 @@
     </article>
     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <script type="text/javascript">
+
+        const fullPath = window.location.href
+        let tabFullPath = fullPath.split('/')
+        let param = tabFullPath[tabFullPath.length-1]
         let add_in_mail = function (givenValue){
             // this function adds the value of a button in the mail
             let body_mail = document.getElementById('body_mail');
@@ -52,10 +60,9 @@
             + givenValue
             + body_mail.value.substring(endPos, body_mail.value.length)
             body_mail.focus()
-            console.log(body_mail.value)
             }
         // using jQuery get csrftoken from your HTML
-        var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+        let csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
         function csrfSafeMethod(method) {
             // these HTTP methods do not require CSRF protection
             return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -68,44 +75,95 @@
                 'overview': bool,
             }
         }
-        const send_data = function(bool){
-            receivedData = get_data(bool)
-            $.ajaxSetup({
-                beforeSend: function (xhr, settings) {
-                    // if not safe, set csrftoken
-                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                    }
-                }
-            });
-            $.ajax( 
-            { 
-                type:"POST", 
-                url: "{% url 'mail:content'%}", 
-                dataType: 'json',
-                data: receivedData,
-                success: function (res) {
-                    if (bool == 0){
-                        id_mail = res['id_mail'];
-                        console.log('>> '+id_mail)
-                        const width  = document.body.clientWidth;
-                        const height = document.body.clientHeight;
-                        let wanted_width = (width * 50)/100
-                        let wanted_height = (height * 80)/100
-                        let spec =  "toolbar=yes,scrollbars=yes,resizable=yes,top=100,left=200,width="
-                        spec += wanted_width+",height="+wanted_height
-                        window.open("{% url 'mail:overview'%}"+id_mail, "_blank", spec);
-                    }else{
-                        alert("j'enregistre le mail")
-                    }
-
-                },
-                error: function (res) {
-                    console.log("erreur")
-                    alert(res.status);                                                                                                                          
-                }
-            });   
+        let getOverview = function(id_mail){
+            const width  = document.body.clientWidth;
+            const height = document.body.clientHeight;
+            let wanted_width = (width * 50)/100
+            let wanted_height = (height * 80)/100
+            let spec =  "toolbar=yes,scrollbars=yes,resizable=yes,top=100,left=200,width="
+            spec += wanted_width+",height="+wanted_height
+            window.open("{% url 'mail:overview'%}"+id_mail, "_blank", spec);
         }
+        const send_data = function(bool){
+            if (param != 'content'){
+                getOverview(Number(param))
+            }else
+            {
+                receivedData = get_data(bool)
+                $.ajaxSetup({
+                    beforeSend: function (xhr, settings) {
+                        // if not safe, set csrftoken
+                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                        }
+                    }
+                });
+                $.ajax( 
+                { 
+                    type:"POST", 
+                    url: "{% url 'mail:content'%}", 
+                    dataType: 'json',
+                    data: receivedData,
+                    success: function (res) {
+                        if (bool == 0){
+                            id_mail = res['id_mail'];
+                            getOverview(id_mail)
+                        }else if (bool == 1){
+                            alert("j'enregistre le mail")
+                        }
+
+                    },
+                    error: function (res) {
+                        console.log("erreur")
+                        alert(res.status);                                                                                                                          
+                    }
+                });   
+            }
+        }
+        const submit_datas = function(){
+            //check if fields are empty
+            const datas = get_data()
+            let canSave = true
+            const keys = ['title', 'resume', 'full_text']
+            const frenchKeys = ['titre', 'objet', 'message']
+            for (let i in keys){
+                if (datas[keys[i]].length == 0 ){
+                    alert('le champ '+ frenchKeys[i] +" est vide ! ")
+                    canSave = false; 
+                }
+            }
+            if (canSave){
+                form = document.getElementById('form_mail_skull');
+                overview = document.createElement('input'); 
+                overview.value = "1"
+                overview.style.display = "none"
+                overview.name = "overview"
+                form.appendChild(overview)
+                mail_id = document.createElement('input'); 
+                mail_id.value = Number(param)
+                mail_id.style.display = "none"
+                mail_id.name = "mail_id"
+                form.appendChild(mail_id)
+                form.setAttribute('action', "{% url 'mail:content'%}");
+                form.setAttribute('method', "POST");
+                form.submit()
+            }
+
+        }
+        {% if mail %}
+            let get_field = function(){
+                //returns the 3 blanks to fill
+                const blanks = document.getElementsByClassName('blank')
+                const content = ['{{mail.title}}', '{{mail.resume}}', '{{mail.full_text}}', ] 
+                for (let i = 0 ; i < blanks.length - 1 ; i++){
+                    blanks[i].value = content[i]}
+                blanks[2].innerHTML = content[2]
+
+            }
+            get_field()
+        {% endif %}
+            
         </script>
+        }
     </section>
     {% endblock%}
