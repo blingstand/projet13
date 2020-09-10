@@ -16,7 +16,7 @@
 </head>
 <body>
 	<article>
-		<p id="close" onclick="close_window(this)">< Retour</a></p>
+		<p id="close" onclick="close_window()">< Retour</a></p>
 		{%if animal%} 
 		<h3>aperçu de {{mail}} <br>pour la première fiche animal : {{animal}}. </h3>
 		{% else%}
@@ -36,7 +36,7 @@
 	</article>
 	<script type="text/javascript">
 		document.getElementById('close').style.cursor = 'pointer'
-		let close_window = function(t){
+		let close_window = function(){
 				close(); 
 			}
 		let get_field = function(){

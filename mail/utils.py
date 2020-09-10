@@ -1,5 +1,5 @@
-# from .models import Mail
-
+# script full of useful functions for views.py
+import json
 from sheet.models import Animal, Owner, AdminData
 from .models import Mail
 import locale
@@ -62,3 +62,21 @@ class Utils():
             plain_text = plain_text.replace('\r\n', '\\n')
             return plain_text, new_text
 
+    def change_auto_send(self, mail, num):
+        if num == '0': 
+            self.auto_send_false(mail)
+            mail.auto_send=False
+            mail.save()
+        else:
+            mail.auto_send=True
+            mail.save()
+        print(f"changement auto_send pour {mail.auto_send}")
+
+    def auto_send_false(self, mail):
+        keys = 'send_after_creation','send_after_modif',
+        for key in keys:
+            setattr(mail, key, False)
+
+        keys = 'send_when_x_month','send_at_this_date'
+        for key in keys:
+            setattr(mail, key, None)

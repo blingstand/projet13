@@ -5,7 +5,7 @@
 {% extends 'core/base.html' %}
 {% block content %}
 <section>
-    <h4><a href="{% url 'mail:cns'%}">< Retour</a></h4>
+    <h4 onclick="backCNS()" class="curs-pointer">< index/CNS</h4>
     <h2 class="mt-5 pl-5">Contenu du mail </h2>
 
     <article class="mt-5 container">
@@ -51,6 +51,12 @@
         const fullPath = window.location.href
         let tabFullPath = fullPath.split('/')
         let param = tabFullPath[tabFullPath.length-1]
+        const backCNS = function (){
+            local = window.location.href;
+            url = local.substr(0, local.length- (9 + param.length)) + '/cns/'+param;
+            window.location.href = url;
+           
+        }
         let add_in_mail = function (givenValue){
             // this function adds the value of a button in the mail
             let body_mail = document.getElementById('body_mail');
@@ -60,7 +66,8 @@
             + givenValue
             + body_mail.value.substring(endPos, body_mail.value.length)
             body_mail.focus()
-            }
+        }
+
         // using jQuery get csrftoken from your HTML
         let csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
         function csrfSafeMethod(method) {
@@ -75,14 +82,14 @@
                 'overview': bool,
             }
         }
-        let getOverview = function(id_mail){
+        let getOverview = function(mail_id){
             const width  = document.body.clientWidth;
             const height = document.body.clientHeight;
             let wanted_width = (width * 50)/100
             let wanted_height = (height * 80)/100
             let spec =  "toolbar=yes,scrollbars=yes,resizable=yes,top=100,left=200,width="
             spec += wanted_width+",height="+wanted_height
-            window.open("{% url 'mail:overview'%}"+id_mail, "_blank", spec);
+            window.open("{% url 'mail:overview'%}"+mail_id, "_blank", spec);
         }
         const send_data = function(bool){
             if (param != 'content'){
@@ -106,8 +113,8 @@
                     data: receivedData,
                     success: function (res) {
                         if (bool == 0){
-                            id_mail = res['id_mail'];
-                            getOverview(id_mail)
+                            mail_id = res['mail_id'];
+                            getOverview(mail_id)
                         }else if (bool == 1){
                             alert("j'enregistre le mail")
                         }

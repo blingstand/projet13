@@ -6,6 +6,7 @@ class Mail(models.Model):
     title = models.CharField(max_length=50)
     resume = models.CharField(blank=True, max_length=120)
     full_text = models.TextField(blank=True)
+    auto_send = models.BooleanField(blank=True,default=False)
     send_after_creation = models.BooleanField(blank=True,default=False)
     send_after_modif = models.BooleanField(blank=True,default=False)
     send_when_x_month = models.IntegerField(blank=True,default=None, null=True)

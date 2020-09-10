@@ -22,18 +22,22 @@ class MailView(View):
 
 class CNSView(View):
     """this class organize the choices """
-    def get(self, request):
-        return render(request, 'mail/cns.html')
+    def get(self, request,mail_id=None):
+        context = {}
+        if mail_id is not None: 
+            mail = ut.get_mail_from_id(mail_id)
+            context['mail'] = mail
+        return render(request, 'mail/cns.html', context)
 
 class ContentView(View):
     """ this class handles the content of an automatic mail"""
-    def get(self, request, id_mail=None):
+    def get(self, request, mail_id=None):
         """ this function displays the form"""
         form = ContentMail()
         context = {
             'form' : form}
-        if id_mail: 
-            mail = ut.get_mail_from_id(id_mail)
+        if mail_id: 
+            mail = ut.get_mail_from_id(mail_id)
             mail.full_text = ut.modify_text(mail.full_text)[0]
             print(mail.full_text)
             context["mail"] = mail 
@@ -47,16 +51,16 @@ class ContentView(View):
         print(f'ajax envoie : {dict_values}')
         if dict_values['overview'] == '0': 
             print("juste un aperçu")
-            id_mail = ut.save_datas(dict_values)
-            return JsonResponse({"id_mail" : id_mail}, safe=False)
+            mail_id = ut.save_datas(dict_values)
+            return JsonResponse({"mail_id" : mail_id}, safe=False)
         elif dict_values['overview'] == '1':
             if dict_values['mail_id'] != 0:
                 print('alter db then redirect')
                 mail = ut.alter_db(dict_values)
             else:
                 print('save then redirect')
-                id_mail = ut.save_datas(dict_values)
-                mail = ut.get_mail_from_id(id_mail)
+                mail_id = ut.save_datas(dict_values)
+                mail = ut.get_mail_from_id(mail_id)
             print( "redirect")
             context = {'mail' : mail}
             return render(request, 'mail/cns.html', context)
@@ -64,44 +68,61 @@ class ContentView(View):
             return HttpResponse(('Il y a une erreur :/'))
 class OverviewView(View):
     """ this class handles the views for overview.html """
-    def get(self, request, id_mail):
+    def get(self, request, mail_id):
         form = ContentMail()
         ut = Utils()
         animal = Animal.objects.all()[0]
         print(request.GET)
-        mail = ut.get_mail_from_id(id_mail)
+        mail = ut.get_mail_from_id(mail_id)
         mail.full_text = ut.modify_text(mail.full_text)[1]
         context = {
             'form' : form, 'mail' : mail, 'animal' : animal}
         return render(request, 'mail/overview.html', context)
 
 class SettingsView(View):
-    def get(self, request):
+    def get(self, request, mail_id=None):
         form = SettingsMail()
         context = {
             'form' : form}
+        if mail_id: 
+            mail = ut.get_mail_from_id(mail_id)
+            print(mail.send_at_this_date)
+            context["mail"] = mail 
         return render(request, 'mail/settings.html', context)
 
-    def post(self, request):
+    def post(self, request, mail_id=None):
         form = SettingsMail(request.POST)
-        if form.is_valid():
-            age, date= form.cleaned_data["age"], form.cleaned_data["date"]
-            print("***********")
-            print(f"\nreçu : {request.POST}")
-            print(form.cleaned_data["frequency"])
-            print("***********")
-            if form.cleaned_data["frequency"] == "1": 
-                print("1")
-            elif form.cleaned_data["frequency"] == "2": 
-                print("2")
-            elif form.cleaned_data["frequency"] == "3": 
-                print(f"3 > {age} ")
-                pass
-            elif form.cleaned_data["frequency"] == "4": 
-                print(f"4 > {date} ")
-                pass
+        dict_values = {'ajax':'0'}
+        dict_values.update(request.POST.dict())
 
-        return HttpResponse('bravo')
+        if dict_values['ajax'] == "1": 
+            mail = ut.get_mail_from_id(dict_values['mail_id'])
+            print(mail)
+            ut.change_auto_send(mail, (dict_values['auto_send']))
+            return JsonResponse({"chgt" : "saved"}, safe=False)
+        if form.is_valid():
+            mail = ut.get_mail_from_id(mail_id)
+            ut.change_auto_send(mail, True)
+            ut.auto_send_false(mail)
+            age, date= form.cleaned_data["age"], form.cleaned_data["date"]
+            if form.cleaned_data["frequency"] == "1": 
+                mail.send_after_creation = True
+                print("1 > Un mail sera envoyé à la création de la fiche.")
+            elif form.cleaned_data["frequency"] == "2": 
+                mail.send_after_modif = True
+                print("2 > Un mail sera envoyé à chaque modification de la fiche.")
+            elif form.cleaned_data["frequency"] == "3": 
+                mail.send_when_x_month = age
+                print(f"3 > un mail sera envoyé quand l'animal aura {mail.send_when_x_month} mois")
+            elif form.cleaned_data["frequency"] == "4": 
+                mail.send_at_this_date = date
+                print(f"4 > un mail auto sera envoyé à cette date : {mail.send_at_this_date} ")
+            
+            mail.save()
+            context = {'mail' : mail}
+            return render(request, 'mail/cns.html', context)
+        context = {'form' : form}
+        return render(request, 'mail/settings.html', context)
         print("error")
         print(form.errors.items())
         print(f"\ndebug : {request.POST}")
