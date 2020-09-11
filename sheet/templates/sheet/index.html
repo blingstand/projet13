@@ -83,6 +83,7 @@
             console.log(count)
             if (checkbox[i].checked){
                 id_selected = checkbox[i].id
+                alert(checkbox[i].id)
                 count ++;}
             }
             if (count == 0){
@@ -98,7 +99,7 @@
         function classify(){
             alert('classify') 
         }
-    function drop(){
+    function remove(){
         const checkbox = document.querySelectorAll('input[type=checkbox]');
         let count = 0; 
         let toDelete = []

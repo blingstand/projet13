@@ -19,7 +19,7 @@ class SheetView(View):
         {'name' : 'ajouter',    'id' : 'ajouter', 'function' : 'add()'}, 
         {'name' : 'modifier',   'id' : 'modifier', 'function' : 'alter()'},
         {'name' : 'trier par',  'id' :'trier', 'function' : 'classify()'},
-        {'name' : 'supprimer',  'id' : 'supprimer', 'function' : 'drop()'}]}
+        {'name' : 'supprimer',  'id' : 'supprimer', 'function' : 'remove()'}]}
     def get(self, request):
         #get the data from database
         print('-- get --')

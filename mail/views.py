@@ -16,9 +16,28 @@ class MailView(View):
         mails = Mail.objects.all()
         mails = [mail for mail in mails]
         context={
-            'button_value': ['imprimer', 'ajouter', 'supprimer', 'modifier'], 
+            'button_value':[
+        {'name' : 'imprimer',  'id' :'print', 'function' : 'print()'},
+        {'name' : 'ajouter',    'id' : 'add', 'function' : 'add()'}, 
+        {'name' : 'modifier',   'id' : 'alter', 'function' : 'alter()'},
+        {'name' : 'supprimer',  'id' : 'remove', 'function' : 'remove()'}],
             'mails' : mails}
         return render(request, 'mail/index.html', context)
+
+    def post(self, request):
+        """receives data to pass to deals with the dropSheet function"""
+        print('*******')   
+        print(request.POST)
+        print('*******')    
+        given_id = request.POST.getlist('checkbox')
+        print('Avant supression :') #affichage de vérification
+        print(f'\t{len(Mail.objects.all())} mails dans la base.')
+        ut.drop_mail(given_id)
+        print('Après supression :')
+        print(f'\t{len(Mail.objects.all())} mails dans la base.')
+        return redirect("mail:index")
+
+
 
 class CNSView(View):
     """this class organize the choices """
@@ -28,7 +47,6 @@ class CNSView(View):
             mail = ut.get_mail_from_id(mail_id)
             context['mail'] = mail
         return render(request, 'mail/cns.html', context)
-
 class ContentView(View):
     """ this class handles the content of an automatic mail"""
     def get(self, request, mail_id=None):
@@ -47,23 +65,37 @@ class ContentView(View):
         """ this function deals with the datas from the form"""
         form = ContentMail(request.POST)
         ut = Utils()
-        dict_values = request.POST.dict()
-        print(f'ajax envoie : {dict_values}')
-        if dict_values['overview'] == '0': 
-            print("juste un aperçu")
+        dict_values = {'overview':'0', 'mail_id':None}
+        print("- - - - - ")
+        print(dict_values, type(dict_values))
+        print(dict_values.keys())
+        print(dict_values['overview'] == '0')
+        dict_values.update(request.POST.dict())
+        print("- - - - - ")
+        print(dict_values, type(dict_values))
+        print(dict_values.keys())
+        print(dict_values['overview'] == '0')
+        print("- - - - - ")
+        #Django form ...
+        if dict_values['mail_id'] != None:
+            mail_id = dict_values['mail_id']
+            #with mail_id -> mail exists -> alter db 
+            print('alter db then redirect')
+            print(dict_values['overview'] == '0')
+            mail = ut.alter_db(dict_values)
+        else:
+            #no mail_id -> create a new mail
+            print('save then redirect')
             mail_id = ut.save_datas(dict_values)
-            return JsonResponse({"mail_id" : mail_id}, safe=False)
-        elif dict_values['overview'] == '1':
-            if dict_values['mail_id'] != 0:
-                print('alter db then redirect')
-                mail = ut.alter_db(dict_values)
-            else:
-                print('save then redirect')
-                mail_id = ut.save_datas(dict_values)
-                mail = ut.get_mail_from_id(mail_id)
-            print( "redirect")
+            mail = ut.get_mail_from_id(mail_id)
+        print(dict_values['overview'] == '0')
+        if dict_values['overview'] == '0':
             context = {'mail' : mail}
             return render(request, 'mail/cns.html', context)
+        elif dict_values['overview'] == '1': 
+            #AJAX request before overview
+            print("juste un aperçu")
+            return JsonResponse({"mail_id" : mail_id}, safe=False)
         else:
             return HttpResponse(('Il y a une erreur :/'))
 class OverviewView(View):
@@ -78,7 +110,6 @@ class OverviewView(View):
         context = {
             'form' : form, 'mail' : mail, 'animal' : animal}
         return render(request, 'mail/overview.html', context)
-
 class SettingsView(View):
     def get(self, request, mail_id=None):
         form = SettingsMail()

@@ -17,11 +17,12 @@ class Utils():
         return new_mail.mail_id
 
     def alter_db(self, dict_values): 
-        dict_values.pop('overview', None)
-        dict_values.pop('csrfmiddlewaretoken', None)
-        mail = Mail.objects.get(mail_id=dict_values['mail_id'])
-        for key in dict_values: 
-            setattr(mail, key, dict_values[key])
+        dv2 = dict_values.copy()
+        dv2.pop('overview', None)
+        dv2.pop('csrfmiddlewaretoken', None)
+        mail = Mail.objects.get(mail_id=dv2['mail_id'])
+        for key in dv2: 
+            setattr(mail, key, dv2[key])
             print(key, getattr(mail, key))
             print("********")
         mail.save()
@@ -80,3 +81,18 @@ class Utils():
         keys = 'send_when_x_month','send_at_this_date'
         for key in keys:
             setattr(mail, key, None)
+
+    def drop_mail(self, given_id):
+        """ this functions drops sheets in the db
+            1/ find animal with given_id
+            2/ drop animal and his AdminData (because it is unique)
+            3/ checks whether the owner is connected to others animals
+            4/ yes > doesn't drop it || no > drops it 
+        """
+        for elem in given_id:
+            print(f"Utils.drop_mail >> {elem}")
+            mail = Mail.objects.get(mail_id=elem)
+            print(f"\tMail trouvé : {mail}")
+            mail.delete()
+            print(f"\tMail supprimé.")
+            
