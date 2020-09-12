@@ -85,6 +85,8 @@
 		}
     .w-10rem{
     	width: 10rem;}
+	.w-7rem{
+	width: 7rem;}
 /* mail */ 
 	.mail-but{
 		height: 5rem; 
@@ -142,3 +144,7 @@
 		}
 	.button-mail-content:hover{
 		background-color: #00b4b5;}
+
+	.text-blue{
+		color: blue; 
+	}

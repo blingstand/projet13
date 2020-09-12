@@ -9,10 +9,10 @@ class Mail(models.Model):
     resume = models.CharField(blank=True, max_length=120)
     full_text = models.TextField(blank=True)
     auto_send = models.BooleanField(blank=True,default=False)
-    send_after_creation = models.BooleanField(blank=True,default=None)
-    send_after_modif = models.BooleanField(blank=True,default=None)
+    send_after_creation = models.BooleanField(blank=True,default=False)
+    send_after_modif = models.BooleanField(blank=True,default=False)
     send_when_x_month = models.IntegerField(blank=True,default=None, null=True)
-    send_at_this_date = models.DateField(null=True, blank=True, default=None)
+    send_at_this_date = models.DateField(blank=True, default=None, null=True)
 
     def __str__(self):
         if self.mail_id is not None: 

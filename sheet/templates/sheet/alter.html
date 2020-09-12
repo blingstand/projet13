@@ -54,7 +54,7 @@
 								<div class="col-12 text-center">{{form.status}}</div>
 								<div class="col-8"></div>
 								<div class="col-4">
-									<input type="submit"class="btn btn-primary big-btn" value="Enregistrer">
+									<input type="submit" class="btn btn-primary big-btn" value="Enregistrer">
 								</div>
 								<div class="col-12">
 									{% if error %}
@@ -92,7 +92,7 @@
 
 		function GetTheBlank(){
 			const inputsNodes = document.querySelectorAll("section#alter input"); 
-			const inputs = Array.from(inputsNodes);			
+			const inputs = Array.from(inputsNodes);	
 			let inputsToFill = new Array()
 			let choicesToMake = new Array()
 			for (input of inputs){
@@ -108,17 +108,19 @@
 				}
 			}
 			inputsToFill.splice(0, 1);
+			inputsToFill.pop(inputsToFill.length-1)	
 		return [inputsToFill, choicesToMake];
 		}
 
 		//fills the inputs
-		function FillTheInputs(inputs){
+		function FillTheInputs(champs){
 			// this functions fills the inputs with the given data from animal
 			values = ['{{animal.name}}','{{animal.date_of_birth|date:"d/m/Y"}}','{{animal.date_of_adoption|date:"d/m/Y"}}','{{animal.admin_data.date_of_neuter|date:"d/m/Y"}}',
 			'{{animal.race}}', '{{animal.color}}', '{{animal.observation}}', "{{animal.admin_data.file}}", "{{animal.admin_data.tatoo}}", "{{animal.admin_data.chip}}", "{{animal.owner.caution}}", "{{animal.owner.tel_reminder}}","{{animal.owner.mail_reminder}}", "{{animal.owner.owner_name}}", "{{animal.owner.owner_surname}}", "{{animal.owner.phone}}", "{{animal.owner.mail}}" ]
-			for (i=0; i <= values.length; i++){
-				inputs[i].value = values[i];
+			for (i in values){
+				champs[i].value = values[i];
 			}
+			document.getElementById('id_status').innerHTML = "{{animal.admin_data.status}}"
 		}
 		//make choices
 		function CheckCHoices(checkboxes){

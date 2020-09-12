@@ -65,17 +65,20 @@ class ContentView(View):
         """ this function deals with the datas from the form"""
         form = ContentMail(request.POST)
         ut = Utils()
-        dict_values = {'overview':'0', 'mail_id':None}
-        print("- - - - - ")
-        print(dict_values, type(dict_values))
-        print(dict_values.keys())
-        print(dict_values['overview'] == '0')
+        dict_values = {'overview':'0', 'mail_id':None, 'checkIntegrity':'0'}
         dict_values.update(request.POST.dict())
         print("- - - - - ")
-        print(dict_values, type(dict_values))
-        print(dict_values.keys())
-        print(dict_values['overview'] == '0')
+        print(dict_values)
         print("- - - - - ")
+        if dict_values['checkIntegrity'] == '1': 
+            #check if title is unique
+            queryset = Mail.objects.filter(title=dict_values['title'])
+
+            if len(queryset) >= 1:
+                return JsonResponse({"problem" : "1"}, safe=False) 
+            return JsonResponse({"problem" : "0"}, safe=False) 
+
+
         #Django form ...
         if dict_values['mail_id'] != None:
             mail_id = dict_values['mail_id']
@@ -130,6 +133,9 @@ class SettingsView(View):
             mail = ut.get_mail_from_id(dict_values['mail_id'])
             print(mail)
             ut.change_auto_send(mail, (dict_values['auto_send']))
+            if dict_values['auto_send'] == 1:
+                mail.send_after_creation = True
+                mail.save()
             return JsonResponse({"chgt" : "saved"}, safe=False)
         if form.is_valid():
             mail = ut.get_mail_from_id(mail_id)

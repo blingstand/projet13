@@ -80,6 +80,7 @@
                 auto.textContent = "Je souhaite envoyer ce mail automatiquement ..."
                 formSettings.classList.remove("d-none");
                 formSettings.classList.add("d-flex");
+                document.getElementById('id_frequency_0').checked = true; 
                 },
                 error: function (res) {
                     alert("erreur lors de l'envoie de données");

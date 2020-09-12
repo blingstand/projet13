@@ -10,7 +10,7 @@ from .models import *
 CHOICES = (
     (0, "chat"),(1, "chatte"), (2, "chien"), (3, "chienne"))
 CHOICE_STERIL = (0,"stérile"), (1,"stérilisable"), (2,"sera stérilisable")
-CHOICE_SEX = (('H',"Homme"), ('F',"Femme"))
+CHOICE_SEX = ((0,"Homme"), (1,"Femme"))
 class PersonalErrorMsg(Exception):
     def __init__(self, m):
         self.message = m
@@ -24,29 +24,29 @@ class SheetForm(forms.Form):
     caution = forms.CharField(required=True, max_length=30, label='caution', 
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 
             'title' : 'montant de la caution',
-            'placeholder' : "montant de la caution"}))
+            'placeholder' : "montant "}))
     chip = forms.CharField(required=False,  label='puce',
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : 'num de la puce',
             'placeholder' : "num de la puce"}))
     date_of_adoption = forms.DateField(required=True, label="date d'adoption",
         widget=forms.TextInput(attrs={ 
-            'placeholder' : "date d'adoption ",
-             "class":"w-10rem", 
+            'placeholder' : "jj/mm/aaaa ",
+             "class":"w-7rem", 
              'title':"date d'adoption (jj/mm/aaa)"}))
     date_of_birth = forms.DateField(required=True, label="date de naissance",
         widget=forms.TextInput(attrs={ 
-            'placeholder' : "date de naissance ",
-             "class":"w-10rem", 
+            'placeholder' : "jj/mm/aaaa",
+             "class":"w-7rem", 
              'title':"date de naissance (jj/mm/aaa)"}))
     date_of_neuter = forms.DateField(required=False, label="date de stérilisation",
         widget=forms.TextInput(attrs={ 
-            'placeholder' : "date de stérilisation ",
-             "class":"w-10rem", 
+            'placeholder' : "jj/mm/aaaa",
+             "class":"w-7rem", 
              'title':"date de stérilisation (jj/mm/aaa)"}))
-    futur_date_of_neuter = forms.DateField(required=False, 
+    futur_date_of_neuter = forms.DateField(required=False, label="dès le ",
         widget=forms.TextInput(attrs={ 
-            'placeholder' : " à partir du :  ",
-            "class":"w-10rem", 
+            'placeholder' : "jj/mm/aaaa",
+            "class":"w-7rem", 
             'title':"stérilisable à partir du (jj/mm/aaa)"}))
     file = forms.CharField(required=False, label='dossier',
         widget=forms.TextInput(attrs={'class' : 'input-reduced',  'title' : "num du dossier",
@@ -68,10 +68,10 @@ class SheetForm(forms.Form):
             'placeholder' : "statut de la stérilisation", 'cols':30, 'rows':3}))
     owner_name = forms.CharField(required=True, label="prénom", max_length=30,
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "propriétaire" ,
-            'placeholder' : "prénom du propriétaire"}))
+            'placeholder' : "prénom proprio"}))
     owner_surname = forms.CharField(required=True, label="nom", max_length=30,
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "propriétaire" ,
-            'placeholder' : "nom du propriétaire"}))
+            'placeholder' : "nom proprio"}))
     owner_sex = forms.ChoiceField(label="Sexe", required=True, 
         widget=forms.RadioSelect(attrs={'class' : 'li-oneline '}), choices=CHOICE_SEX)
     observation = forms.CharField(required=False, max_length=50, label='observation(s)',
@@ -132,7 +132,7 @@ class SheetForm(forms.Form):
                 elif "mail" in str(ie):
                     return False, "Ce mail existe déjà dans la base ! Procédure annulée ... "
             except Exception as e: 
-                print(e)
+                    return False, f"Procédure annulée > Voici le problème({e})"
             
     def _handle_animal_class(self, dict_values):
         #create and save animal classe

@@ -9,10 +9,13 @@
 				<div class="row">
 					<div class="col-8 bg-yellow container">
 						<div class="row">
-							<div class="col-3 text-center">{{form.name.label}} {{form.name}}</div>
-							<div class="col-3 text-center">{{form.date_of_birth.label}}{{form.date_of_birth}}</div>
-							<div class="col-3 text-center">{{form.date_of_adoption.label}}{{form.date_of_adoption}}</div>
-							<div class="col-3 text-center">{{form.date_of_neuter.label}}{{form.date_of_neuter}}</div>
+							<div class="col-3 text-center">{{form.name.label}} <br><br>{{form.name}}</div>
+							<div class="col-3 text-center">{{form.date_of_birth.label}}<br> 
+								<span id='span_today_1' class=" text-blue curs-pointer" onclick="today(this)">(aujourd'hui)</span> <br>{{form.date_of_birth}}</div>
+							<div class="col-3 text-center">{{form.date_of_adoption.label}}<br> 
+								 <span id='span_today_2' class=" text-blue curs-pointer" onclick="today(this)">(aujourd'hui)</span> <br>{{form.date_of_adoption}}</div>
+							<div class="col-3 text-center">{{form.date_of_neuter.label}}<br> 
+								<span id='span_today_3' class=" text-blue curs-pointer" onclick="today(this)">(aujourd'hui)</span> <br>{{form.date_of_neuter}}</div>
 						</div>
 						<div class="row">
 							<div class="col-6" >
@@ -76,19 +79,35 @@
 		let owner_sex_button = document.getElementById("id_owner_sex_0")
 		owner_sex_button.checked = true
 		
+		const today = function(elem) {
+			let today = new Date();
+			let month = today.getMonth()+1
+			if (month <= 9) {
+				month = '0' + String(month)}
+			let date = today.getDate()+'/'+month+'/'+today.getFullYear();
+			let input = elem.nextElementSibling.nextElementSibling
+			input.value = date
+			
+		}
 		function appearNewInput(){
 			//create an input date
 			let divDate = document.createElement("div");
-			divDate.innerHTML = '{{form.futur_date_of_neuter}}'
+			divDate.innerHTML = '{{form.futur_date_of_neuter.label}}{{form.futur_date_of_neuter}}'
+			divDate.classList.add("d-none")
+			divDate.id = "divDate"
 			document.getElementById('inputDateZone').appendChild(divDate);
 
 		}
-		document.getElementById("id_is_neutered_2").addEventListener('click', function(e){
-			if(e.target.checked){
-				appearNewInput()
+		document.getElementById("id_is_neutered").addEventListener('click', function(e){
+			if(document.getElementById('id_is_neutered_2').checked){
+				document.getElementById('divDate').classList.replace('d-none', "d-flex")
+			}else{
+				document.getElementById('divDate').classList.replace('d-flex', "d-none")
 			}
-		
 		})
+		document.getElementById("id_mail_reminder").value = 0
+		document.getElementById("id_tel_reminder").value = 0
+		appearNewInput()
 	</script>
 	{% endblock  %}
 
