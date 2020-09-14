@@ -2,7 +2,7 @@
 
 from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 
@@ -49,14 +49,30 @@ class AddSheetView(View):
     def get(self, request):
         #displays the page
         form = SheetForm()
-        context = {'form' : form}
+        owners = Owner.objects.all()
+        context = {'form' : form, "owners" : owners}
         return render(request, 'sheet/add.html', context)
 
     def post(self, request):
         #handles the form and the errors
         form = SheetForm(request.POST)
         print("\n\n***")
-
+        dict_values = {'ask_owner_data':"0", 'mail_id': None}
+        dict_values.update(request.POST.dict())
+        print("- - - - - ")
+        print(dict_values)
+        print("- - - - - ")
+        if dict_values["ask_owner_data"] == "1":
+            selected_owner = Owner.objects.get(id=dict_values["owner_id"])
+            print(selected_owner)
+            data = {
+                "name":selected_owner.owner_name,
+                "surname":selected_owner.owner_surname,
+                "sex":selected_owner.owner_sex,
+                "phone":selected_owner.phone,
+                "mail":selected_owner.mail,
+                }
+            return JsonResponse({"data":data}, safe=False)
         if form.is_valid():
             print("---")
             # print("\t1/ récupération des données ...")
@@ -76,6 +92,7 @@ class AddSheetView(View):
                 
                 return render(request, 'sheet/add.html', context)
         else:
+            print("form not valid")
             context = {'form' : form}
             context['errors'] = form.errors.items()
             print("\n\n*** E R R O R ***\n")

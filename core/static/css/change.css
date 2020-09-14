@@ -1,11 +1,54 @@
 /* change.css */
-.very-center{
-	display: flex; 
-	-ms-flex-align: center !important;
-	align-items: center !important;
-	-ms-flex-pack: center !important;
-	justify-content: center !important;
+
+/* main */
+	.bg-green{ 
+		background-color: green;
+		}
+	.bg-tomato{
+		background-color: tomato;
 	}
+	.bg-yellow{ 
+		background-color: yellow;
+		}
+
+	.text-blue{
+		color: blue; 
+	}
+	.curs-pointer{
+		cursor: pointer; }
+	.input-reduced{
+		width: 9rem;
+	}
+	.li-oneline{
+		white-space:nowrap;
+		padding-left: 0;
+		margin-bottom: 0; 
+		margin-top: 0.4rem;
+	}
+	.li-oneline li{ 
+		display:inline;
+		margin: 1rem; 
+	} 
+	.lst-none{
+		list-style-type: none;
+	}
+	.no-a{
+		color: black;
+	}
+	.no-a:hover{
+		text-decoration : none;}
+	.very-center{
+		display: flex; 
+		-ms-flex-align: center !important;
+		align-items: center !important;
+		-ms-flex-pack: center !important;
+		justify-content: center !important;
+		}
+	.w-10rem{
+		width: 10rem;}
+	.w-7rem{
+		width: 7rem;}
+
 /* dashboard */
 	.right-part{
 		background: blue;
@@ -21,9 +64,6 @@
 		width: 30rem;
 		height: auto;
 	}
-	.curs-pointer{
-		cursor: pointer; }
-
 
 	/*---------------------------------*/
 
@@ -46,11 +86,6 @@
 		cursor: pointer; 
 		font-weight: bold; 
 	}
-	.no-a{
-		color: black;
-	}
-	.no-a:hover{
-		text-decoration : none;}
 
 /* connexion*/ 
 	.section-connection{ /*according to clients desires*/	
@@ -76,17 +111,29 @@
 		background-color: grey; }
 
 /* add sheet */
+	.bg-refresh{
+		border: 1px black solid;
+		background-color: #80b3ff;
+		height: 2rem;
+		width: 6rem;
+		color: black;
+	}
+	.bg-refresh:hover{
+		background-color: #1a75ff;
+	}
+	.new-former{
+		margin-left : -1.2rem;
+		padding : 2rem 0;
+	}
 
-	.bg-yellow{ 
-		background-color: yellow;
-		}
-	.bg-green{ 
-		background-color: green;
-		}
-    .w-10rem{
-    	width: 10rem;}
-	.w-7rem{
-	width: 7rem;}
+	div.former-owner, div.new-owner{
+		border: 1px black solid;
+		background-color: #80b3ff;
+	}
+
+	div.former-owner:hover, div.new-owner:hover{
+		background-color: #1a75ff;
+	}
 /* mail */ 
 	.mail-but{
 		height: 5rem; 
@@ -104,9 +151,6 @@
 		font-weight: bold; 
 	}
 	/* mailsettings */ 
-	.bg-tomato{
-		background-color: tomato;
-	}
 
 	/* mailcontent */
 	.button-inclusion{
@@ -120,21 +164,6 @@
 		cursor: pointer; 
 		font-weight: bold;
 	}
-	.li-oneline{
-		white-space:nowrap;
-		padding-left: 0;
-		margin-bottom: 0; 
-		margin-top: 0.4rem;
-	}
-	.li-oneline li{ 
-		display:inline;
-		margin: 1rem; 
-	} 
-	.lst-none{
-		list-style-type: none;}
-
-	.input-reduced{
-		width: 9rem;}
 
 	.button-mail-content{
 		width:	6rem;
@@ -144,7 +173,3 @@
 		}
 	.button-mail-content:hover{
 		background-color: #00b4b5;}
-
-	.text-blue{
-		color: blue; 
-	}

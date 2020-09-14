@@ -48,6 +48,7 @@ class Utils():
             input_output = {
                 '**color**' : f'couleur : {anim.color}', 
                 '**date_of_adoption**' : self.change_date_format(anim.date_of_adoption),
+                '**date_of_neuter**' : self.change_date_format(anim.admin_data.date_of_neuter),
                 '**futur_date_of_neuter**' : self.change_date_format(anim.admin_data.futur_date_of_neuter), 
                 '**is_neutered**' : steril_status(anim.admin_data.is_neutered), 
                 '**name**' : anim.name, 
@@ -59,7 +60,13 @@ class Utils():
                 }
             new_text = plain_text
             for key in input_output : 
+                if key == '**date_of_neuter**':
+                    print("before :")
+                    print(new_text)
                 new_text = new_text.replace(key, input_output[key])
+                if key == '**date_of_neuter**':
+                    print(new_text)
+
             # print(new_text)
             new_text = new_text.replace('\r\n', '\\n')
             plain_text = plain_text.replace('\r\n', '\\n')

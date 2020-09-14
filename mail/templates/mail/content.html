@@ -26,17 +26,22 @@
                 </form>
             </div>
             <div class="col-3">
-                <div class="h-100 p-4 row d-flex justify-content-around bg-green">
-                    <button class="button-mail-content" onclick='add_in_mail(this.value)' value="**owner_sex** **owner_surname**">Nom Propriétaire</button>
-                    <button class="button-mail-content" onclick='add_in_mail(this.value)' value="**name**">Nom Animal</button>
-                    <button class="button-mail-content" onclick='add_in_mail(this.value)' value="**species**">Espèce Animal</button>
-                    <button class="button-mail-content" onclick='add_in_mail(this.value)' value="**race**">Race Animal</button>
-                    <button class="button-mail-content" onclick='add_in_mail(this.value)' value="**date_of_adoption**">Date d'adoption</button>
-                    <button class="button-mail-content" onclick='add_in_mail(this.value)' value="**is_neutered**">Etat de la stérilisation</button>
-                    <button class="button-mail-content" onclick='add_in_mail(this.value)' value="**futur_date_of_neuter**">futur date stérilisation</button>
-                    <button class="button-mail-content" onclick='add_in_mail(this.value)' value="**color**">couleur</button>
-                    <button class="button-mail-content" onclick='send_data()'>Aperçu</button>
-                    <button class="button-mail-content" onclick='submit_datas()'>Enregistrer</button>
+                <div class=" row d-flex justify-content-around bg-green pre-scrollable">
+                    <button class="button-mail-content mt-1 mb-2" onclick='add_in_mail(this.value)' value="**color**">Couleur</button>
+                    <button class="very-center button-mail-content mt-1 mb-2" onclick='add_in_mail(this.value)' value="**date_of_adoption**">Date d'adoption</button>
+                    <button class="very-center button-mail-content mt-1 mb-2" onclick='add_in_mail(this.value)' value="**date_of_neuter**">Date de stérilisation</button>
+                    <button class="very-center button-mail-content mt-1 mb-2" onclick='add_in_mail(this.value)' value="**species**">Espèce Animal</button>
+                    <button class="very-center button-mail-content mt-1 mb-2" onclick='add_in_mail(this.value)' value="**is_neutered**">Etat de la stérilisation</button>
+                    <button class="very-center button-mail-content mt-1 mb-2" onclick='add_in_mail(this.value)' value="**futur_date_of_neuter**">Futur date stérilisation</button>
+                    <button class="very-center button-mail-content mt-1 mb-2" onclick='add_in_mail(this.value)' value="**name**">Nom Animal</button>
+                    <button class="very-center button-mail-content mt-1 mb-2" onclick='add_in_mail(this.value)' value="**owner_sex** **owner_surname**">Nom Propriétaire</button>
+                    <button class="very-center button-mail-content mt-1 mb-2" onclick='add_in_mail(this.value)' value="**race**">Race Animal</button>
+                </div>
+                <div class="row d-flex justify-content-around bg-green pre-scrollable">
+
+                    <button class="button-mail-content mt-1 mb-2" onclick='send_data()'>Aperçu</button>
+                    <button class="button-mail-content mt-1 mb-2" onclick='submit_datas()'>Enregistrer</button>
+                </div>
 
 
                 </div>
@@ -145,7 +150,6 @@
                 },
                 error: function (res) {
                     console.log("erreur");
-                    alert(res.status);
                 }
             });
         }
@@ -175,7 +179,6 @@
                 },
                 error: function (res) {
                     console.log("erreur");
-                    alert(res.status);
                 }
             });   
         }
