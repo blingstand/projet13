@@ -240,6 +240,5 @@ class SheetForm(forms.Form):
                 elem[1].save()
             allchanges += changes
             changes = []
-                
-
+        print(f'> {len(allchanges)} changement(s) détectés et effectués : {allchanges}' or 'echec')
         return(f'> {len(allchanges)} changement(s) détectés et effectués : {allchanges}' or 'echec')
