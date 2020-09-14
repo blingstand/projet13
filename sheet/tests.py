@@ -260,9 +260,6 @@ class TestSheetViews(TestCase):
         print("after", after)
         self.assertTrue(before == after + 3)
 
-
-
-
 class TestAddSheetViews(TestCase):
 
     def setUp(self):
@@ -289,8 +286,6 @@ class TestAddSheetViews(TestCase):
         self.mock_form.is_valid.return_value = True
         response = self.client.post(reverse("sheet:add"), follow=True)
         self.assertEqual(response.status_code, 200)
-
-
 
 class TestAlterSheetViews(TestCase): 
 

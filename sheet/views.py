@@ -43,8 +43,7 @@ class SheetView(View):
         print(f'\t{len(AdminData.objects.all())} admin.')
         print(f'\t{len(Owner.objects.all())} owner.')
         return redirect("sheet:index")
-
-
+        
 class AddSheetView(View): 
     #the add sheet page
     def get(self, request):

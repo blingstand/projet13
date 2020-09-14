@@ -25,7 +25,7 @@ class Mail(models.Model):
             self.send_after_creation : (bool, 'à la création de la fiche'),
             self.send_after_modif : (bool, 'à la modification de la fiche'),
             self.send_when_x_month : (int, f"pour les {self.send_when_x_month} mois de l'animal"),
-            self.send_at_this_date : (datetime, f'à la date du {self.send_at_this_date}')}
+            self.send_at_this_date : (datetime.datetime, f'à la date du {self.send_at_this_date}')}
 
         if self.auto_send == False: 
             return None

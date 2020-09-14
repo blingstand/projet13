@@ -33,7 +33,9 @@ class Utils():
 
     def change_date_format(self, date):
         """ take a date format and change it to a french date format """
-        return date.strftime('%A %d %B %Y')
+        if date is not None: 
+            return date.strftime('%A %d %B %Y')
+        return ""
     def modify_text(self, plain_text):
             """takes plain text and returns modified text"""
             anim = Animal.objects.all()[0]
@@ -58,7 +60,7 @@ class Utils():
             new_text = plain_text
             for key in input_output : 
                 new_text = new_text.replace(key, input_output[key])
-            print(new_text)
+            # print(new_text)
             new_text = new_text.replace('\r\n', '\\n')
             plain_text = plain_text.replace('\r\n', '\\n')
             return plain_text, new_text
@@ -71,7 +73,7 @@ class Utils():
         else:
             mail.auto_send=True
             mail.save()
-        print(f"changement auto_send pour {mail.auto_send}")
+        # print(f"changement auto_send pour {mail.auto_send}")
 
     def auto_send_false(self, mail):
         keys = 'send_after_creation','send_after_modif',
@@ -89,10 +91,11 @@ class Utils():
             3/ checks whether the owner is connected to others animals
             4/ yes > doesn't drop it || no > drops it 
         """
+        print("drop_mail", given_id)
         for elem in given_id:
-            print(f"Utils.drop_mail >> {elem}")
+            # print(f"Utils.drop_mail >> {elem}")
             mail = Mail.objects.get(mail_id=elem)
-            print(f"\tMail trouvé : {mail}")
+            # print(f"\tMail trouvé : {mail}")
             mail.delete()
-            print(f"\tMail supprimé.")
+            # print(f"\tMail supprimé.")
             
