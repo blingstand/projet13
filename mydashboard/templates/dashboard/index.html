@@ -1,16 +1,13 @@
 {% extends 'core/base.html' %}
 {% block content %}
-{% load static %}
-<section>
+<section class="h-100">
 	<h2 class="mt-5 pl-5">Bienvenu {{name}} sur le dashboard</h2>
-	<article class="m-5 p-5 container">
+	<article class="h-100 -5 p-5 container">
 	{% csrf_token %} 
 		<div class="row">
-			<div class="graphe col-7 bg-primary text-center">
-				<img id='graph' src="{%static 'img/graphique.jpg' %}" alt="graf nb de proprio à contacter(rouge) et ceux déjà contacté (bleu) en fonction du temps">
-			</div>
+			<div id='graph' class="graph col-9 bg-primary text-center"></div>
 			<div class="col-1"></div>
-			<div class="col-3  container">
+			<div class="col-2  container">
 				<div class="h-100 bg-primary p-2">
 					<div class="bg-secondary mt-3 h-25 d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) devant stériliser">25</div>
 					<div class="bg-secondary mt-3 h-25 d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) à contacter">17</div>
@@ -19,8 +16,55 @@
 			</div>
 			<div class="col-1"></div>
 		</div>
+		<p>
+
+		</p>
 
 	</article>
+	{% load static %}
+	 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script type="text/javascript" src='{% static "mydashboard/js/graph.js" %}'> </script>
+	<script type="text/javascript">
+	    let csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+        const csrfSafeMethod = function(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                // if not safe, set csrftoken
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        }); 
+        $.ajax({ 
+            type:"GET", 
+            url: "{% url 'mydashboard:index'%}", 
+            dataType: 'json',
+            data: {'ask_graph_datas':"1"},
+            success: function (res) {
+                console.log(res.status) 
+                console.log(res.cont) 
+                console.log(res.toCont) 
+
+                const month = 'Janvier'
+			    const container = 'graph'
+			    const datas = {
+			    	'contacted' :res.cont,
+		            'to contact' : res.toCont,
+		            }
+			    CreateChart(container, datas, month)
+		            },
+		    error: function (res) {
+                alert("erreur lors de l'envoie de données");
+                console.log(res.status);
+                console.log(res.error);
+            }
+        });
+	    
+	</script>
 </section>
 {% endblock  %}
 

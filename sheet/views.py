@@ -108,8 +108,8 @@ class AlterSheetView(View):
         form = SheetForm()
         #I need to get the concerned animal corresponding this given_id
         animal = ut.get_animal_from_given_id(given_id)[0]
-        print(animal.admin_data.status)
-        context = {'form' : form, 'animal' : animal}
+        owners = Owner.objects.all()
+        context = {'form' : form, 'animal' : animal,  "owners" : owners}
         return render(request, 'sheet/alter.html', context)
 
     def post(self, request, given_id):

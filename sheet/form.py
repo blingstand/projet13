@@ -214,7 +214,8 @@ class SheetForm(forms.Form):
         dict_values = self.cleaned_data
         animal = Animal.objects.get(animal_id=given_id)
         admin = animal.admin_data
-        owner = animal.owner
+        owner = Owner.objects.get(owner_name=dict_values["owner_name"], owner_surname=dict_values["owner_surname"])
+        print(f"j'ai ce propriétaire {owner}")
 
         #2/ finds difference between former and new datas
         loop_animal = ('name', 'date_of_birth', 'race', 'species', 'color', 'date_of_adoption', 'observation'), animal

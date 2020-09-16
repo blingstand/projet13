@@ -14,6 +14,10 @@
 	.text-blue{
 		color: blue; 
 	}
+	.text-bold{
+		font-weight: bold;
+		font-size: 1.2rem;
+	}
 	.curs-pointer{
 		cursor: pointer; }
 	.input-reduced{
@@ -61,8 +65,7 @@
 		background-color: yellow;
 	}
 	#graph{
-		width: 30rem;
-		height: auto;
+		height: 30rem;
 	}
 
 	/*---------------------------------*/

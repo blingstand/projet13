@@ -27,5 +27,10 @@
 		{% block content %}{% endblock %}
 		</div>
 	</div>
+	<script>
+		var height=document.getElementsByClassName('right-part')[0].offsetHeight;
+		var height2=document.getElementsByClassName('top-right-part')[0].offsetHeight;
+		document.getElementsByClassName('bottom-right-part')[0].style.height = String(((height-height2)*82)/100)+'px';
+	</script>
 </body>
 </html>

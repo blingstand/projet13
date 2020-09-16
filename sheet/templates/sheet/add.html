@@ -47,7 +47,7 @@
 							</div>
 							<div class="col-2"></div>
 
-							<div class="col-4 former-owner  very-center curs-pointer" onclick="dispForOwn()">
+							<div class="col-4 former-owner  very-center curs-pointer" onclick="SelectOwners()">
 								Ancien propriétaire
 							</div>
 							<div class="col-1"></div>
@@ -90,6 +90,16 @@
 	</article>
 	<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 	<script type="text/javascript">
+		/* *** plan ***
+		1/ User select new or former owner
+		2/ 	A. new displays Ownerform
+		2/ 	B. former displays select with owner in option
+		3/ Client sends Ajax request to get more infos about selected owner id
+		4/ Client receives info, success > display ownerform and fill it
+		*/
+
+
+
 		let is_neutered_button = document.getElementById("id_is_neutered_0")
 		is_neutered_button.checked = true
 		let species0_button = document.getElementById('id_species_0')
@@ -101,6 +111,7 @@
 		const Refresh = function(){
 			window.location.href = window.location.href; 
 		}
+		//*** auto fill with today date 
 		const today = function(elem) {
 			let today = new Date();
 			let month = today.getMonth()+1
@@ -109,8 +120,8 @@
 			let date = today.getDate()+'/'+month+'/'+today.getFullYear();
 			let input = elem.nextElementSibling.nextElementSibling
 			input.value = date
-			
 		}
+		// Owner form
 		const dispNewOwn = function(){
 			divNF = document.getElementsByClassName("new-former")[0]
 			divNF.classList.replace("d-flex", "d-none")
@@ -120,6 +131,7 @@
 			}
 			removeFromOwnerBlank()
 		}
+		// remove data from owner Form
 		const removeFromOwnerBlank = function(value){
 			ids = ["id_owner_name", "id_owner_surname", "id_owner_sex", 'id_phone', "id_mail"]
 			for (index in ids){
@@ -127,6 +139,7 @@
 				input.value = ""
 			}
 		}
+		// fill blank with ajax values
 		const fillBlank = function(value){
 			ids = ["id_owner_name", "id_owner_surname", 'id_phone', "id_mail"]
 			values = [value.name, value.surname, value.phone, value.mail]
@@ -143,6 +156,7 @@
 			}
 
 		}
+		// displays owner form with data from ajax request 
 		const displayOwnerForm = function(value){
 			// this functions fills the inputs with the given data from animal
 			//AJAX
@@ -182,7 +196,8 @@
                 }
             })			
 		}
-		const dispForOwn = function(){
+		// creates and displays select with owners name and validate button
+		const SelectOwners = function(){
 			divNF = document.getElementsByClassName("new-former")[0]
 			divFormer = document.getElementsByClassName("former-owner")[0]
 			divNew = document.getElementsByClassName("new-owner")[0]
@@ -205,8 +220,8 @@
 			divNF.appendChild(buttValidate)
 		}
 
+		//create an input date for the future date of neuter
 		const appearNewInput = function(){
-			//create an input date
 			let divDate = document.createElement("div");
 			divDate.innerHTML = '{{form.futur_date_of_neuter.label}}{{form.futur_date_of_neuter}}'
 			divDate.classList.add("d-none")
@@ -214,6 +229,7 @@
 			document.getElementById('inputDateZone').appendChild(divDate);
 
 		}
+		
 		document.getElementById("id_is_neutered").addEventListener('click', function(e){
 			if(document.getElementById('id_is_neutered_2').checked){
 				document.getElementById('divDate').classList.replace('d-none', "d-flex")
