@@ -247,14 +247,17 @@
 			for (input of allInput){
 				if (input.id.substring(0,7) == "id_date"){
 					allInputDate.push(input)
+				}else if dateField.id == "id_date_of_neuter" && dateField.value == ''{
+					console.log('pas de date de stérilisation')
 				}
 			}
+			console.log(allInputDate)
 			return allInputDate
 		}
 		document.getElementById('submit').addEventListener('click', function(event){
 			const dateFields = getInputDate()
 			const regex_date = /^([0-2]\d|3[0-1])\/(0\d|1[0-2])\/(\d{4})$/; 
-			
+
 			for (dateField of dateFields){
 		        if (regex_date.test(dateField.value)){
 		            dateField.style.color = "black";
@@ -263,6 +266,7 @@
 		            verif.textContent = verifText ;
 		            dateField.style.border = "2px red solid";
 		            dateField.style.color = "red";
+
 		            event.preventDefault();
 		            return
 		        }

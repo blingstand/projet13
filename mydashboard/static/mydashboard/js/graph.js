@@ -33,16 +33,16 @@ let CreateChart = function(container, datas, month){
             resize: {
                 enabled: true
             },
-            categories: [1, 7, 14, 21, 28]
+            categories: ["aujourd'hui"]
         },
         yAxis: {
           height: '80%',
 
           resize: {
             enabled: true
-        },
-        title: {
-            text: 'Nombre de propriétaires'
+            },
+            title: {
+                text: 'Nombre de propriétaires'
         },
     },
     series: [{

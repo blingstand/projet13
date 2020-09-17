@@ -2,20 +2,21 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
+
+#this app 
+from .utils import GraphDatas
 # Create your views here.
+gradat = GraphDatas()
 class MyDashboardView(View):
     def get(self, request):
         """display dashboard"""
-        if request.user.is_authenticated:
-            dict_values = {'ask_graph_datas':'0'}
-            dict_values.update(request.GET.dict())
-            if dict_values['ask_graph_datas'] == "1": 
-                datas ={
-                'cont' : [1, 7, 12, 19, 23],
-                'toCont' : [38, 28, 21, 20, 20],
-                }
-                print(datas)
-                return JsonResponse(datas, safe=False)  
-            context={'name': request.user.username}
+        if request.user.is_authenticated: 
+            datas ={
+            'nb_owner_with_obligations' : gradat.nb_owner_with_obligations,
+            'cont' : gradat.contacted,
+            'toCont' : gradat.to_contact,
+            }
+            print(gradat.nb_owner_with_obligations)
+            context={'name': request.user.username, 'datas' : datas}
             return render(request, "dashboard/index.html", context)
         return redirect('user:connection')

@@ -8,9 +8,9 @@ from django.db.utils import IntegrityError
 from .models import *
 
 CHOICES = (
-    (0, "chat"),(1, "chatte"), (2, "chien"), (3, "chienne"))
-CHOICE_STERIL = (0,"stérile"), (1,"stérilisable"), (2,"sera stérilisable")
-CHOICE_SEX = ((0,"Homme"), (1,"Femme"))
+    ("0", "chat"),("1", "chatte"), ("2", "chien"), ("3", "chienne"))
+CHOICE_STERIL = ("0","stérile"), ("1","stérilisable"), ("2","sera stérilisable")
+CHOICE_SEX = (("0","Homme"), ("1","Femme"))
 class PersonalErrorMsg(Exception):
     def __init__(self, m):
         self.message = m
@@ -102,11 +102,11 @@ class SheetForm(forms.Form):
         same_in_db = len(AdminData.objects.filter(chip=admin.chip,file=admin.file, tatoo=admin.tatoo)) > 0
         if same_in_db:
             return False, f"Erreur : ce dossier admin existe déjà dans la base, risque de doublon, procédure annulée !"
+        admin.is_neutered = int(owner.owner_sex)
         admin.save()
         return True, admin
 
     def _handle_owner_class(self, dict_values):
-        #create and save owner classe
         #already exists ? 
         list_owner = dict_values['owner']
         owner_in_db = Owner.objects.filter(owner_name=list_owner[1], owner_surname=list_owner[2])
@@ -123,6 +123,7 @@ class SheetForm(forms.Form):
         else:
             # print("Création d'un nouvel utilisateur ...")
             try: 
+                owner.owner_sex = int(owner.owner_sex)
                 owner.save()
                 # print('je retourne :', owner)
                 return True, owner
@@ -146,10 +147,11 @@ class SheetForm(forms.Form):
             print('*'*20)
             if same_in_base == animal:
                 return False, 'Cet animal existe déjà dans la base de données.'
+        animal.species = int(animal.species)
         animal.save()   
         return True, animal
 
-    def from_form(self):
+    def from_form(self, ):
         """ returns dictionary of values to fill rows in tables """
         animal = ('name', 'date_of_birth', 'race', 'species', 'color', 'date_of_adoption', 'observation')
         admin = ('file', 'chip', 'tatoo', 'is_neutered', 'date_of_neuter', 'futur_date_of_neuter', 'status')
@@ -166,6 +168,8 @@ class SheetForm(forms.Form):
             'admin':admin,
             'owner':owner,
             }
+        print("88888888888888888")
+        print('dict_values')
         return dict_values
 
     def save_new_datas(self, dict_values):
@@ -193,6 +197,10 @@ class SheetForm(forms.Form):
             animal = output
             animal.admin_data = admin
             animal.owner = owner
+            if animal.admin_data.is_neutered == "0": #if animal is neutered so owner has no obligation
+                owner.need_contact = False
+                owner.save()
+            print(f"Besoin de contacter cet utilisateur pour stérilisation : {owner.need_contact}")
             animal.save()
             # print('- données pour animal ok ')
             return 1
@@ -203,43 +211,4 @@ class SheetForm(forms.Form):
             error_msg = output
             return error_msg 
         
-
-    def modify_datas(self, given_id):
-        """ this function attemps to modify the db 
-            1/ find the concerned tables
-            2/ try a modification
-            3/ save the change
-        """
-        # 1/  finds the concerned tables
-        dict_values = self.cleaned_data
-        animal = Animal.objects.get(animal_id=given_id)
-        admin = animal.admin_data
-        owner = Owner.objects.get(owner_name=dict_values["owner_name"], owner_surname=dict_values["owner_surname"])
-        print(f"j'ai ce propriétaire {owner}")
-
-        #2/ finds difference between former and new datas
-        loop_animal = ('name', 'date_of_birth', 'race', 'species', 'color', 'date_of_adoption', 'observation'), animal
-        loop_admin = ('file', 'chip', 'tatoo', 'is_neutered', 'date_of_neuter', 'futur_date_of_neuter', 'status'), admin
-        loop_owner = ('owner_name', 'owner_surname','owner_sex',  'phone', 'mail', 'tel_reminder', 'mail_reminder', 'caution'), owner
-        loop = [loop_animal, loop_admin, loop_owner]
-        allchanges = []
-        changes = []
-        for elem in loop:
-            for key in elem[0]: 
-                # print(elem[1], key)
-                if getattr(elem[1], key) != dict_values[key]:
-                    print(elem[1], key, dict_values[key])
-                    # print('-> changement :  ', getattr(elem[1], key) != dict_values[key], getattr(elem[1], key), dict_values[key])
-                    print(f'\tchangement ici {key}')
-                    changes.append(key)
-            # print(changes)
-
-            for change in changes:
-                # print(f'avant : {key}, {getattr(elem[1], change)} ')
-                setattr(elem[1], change, dict_values[change])
-                # print(f'\taprès : {getattr(elem[1], change)}.')
-                elem[1].save()
-            allchanges += changes
-            changes = []
-        print(f'> {len(allchanges)} changement(s) détectés et effectués : {allchanges}' or 'echec')
-        return(f'> {len(allchanges)} changement(s) détectés et effectués : {allchanges}' or 'echec')
+    

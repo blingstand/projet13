@@ -7,7 +7,7 @@ class Animal(models.Model):
     name = models.CharField(max_length=30, verbose_name="Nom") #2 animaux peuvent avoir le même nom  
     date_of_birth = models.DateField(verbose_name="Date de naissance")
     race = models.CharField(max_length=50)
-    species = models.SmallIntegerField(verbose_name="chat/chatte/chien/chienne")
+    species = models.CharField(max_length=1, verbose_name="chat/chatte/chien/chienne")
     color = models.CharField(max_length=30, blank=True, verbose_name="Couleur")
     date_of_adoption = models.DateField(verbose_name="Date d'adoption",)
     observation = models.CharField(max_length=50, blank=True)
@@ -35,7 +35,7 @@ class AdminData(models.Model):
     file = models.CharField(max_length=15, null=True, blank=True, verbose_name="Numéro de dossier")
     chip = models.CharField(max_length=15, null=True, blank=True, verbose_name="Numéro de puce")
     tatoo = models.CharField(max_length=15, null=True, blank=True, verbose_name="Numéro de tatouage")
-    is_neutered = models.SmallIntegerField(default=0, verbose_name="statut stérilisation (stérile, stérilisable, à stériliser)")
+    is_neutered = models.CharField(max_length=1, default=0, verbose_name="statut stérilisation (stérile, stérilisable, à stériliser)")
     date_of_neuter = models.DateField(null=True, blank=True, verbose_name="A été stérilisé(e) le")
     futur_date_of_neuter = models.DateField(null=True, blank=True, verbose_name="Sera stérilisé(e) le")
     status = models.TextField(null=True, blank=True, max_length=200, 
@@ -51,14 +51,15 @@ class AdminData(models.Model):
 class Owner(models.Model):
     owner_name = models.CharField(max_length=50, null=True, verbose_name="Prénom propriétaire")#1 owner can have same name
     owner_surname = models.CharField(max_length=50, null=True, verbose_name="Nom propriétaire")#1 owner can have same surname
-    owner_sex = models.SmallIntegerField(default=0, null=True, verbose_name="Sexe propriétaire\n (0 = H / 1 = F)")
+    owner_sex = models.CharField(max_length=1, default=0, null=True, verbose_name="Sexe propriétaire\n (0 = H / 1 = F)")
     phone = models.CharField(unique=True, max_length=30, verbose_name="Téléphone")
     mail = models.EmailField(unique=True, verbose_name="Mail")
-    tel_reminder = models.SmallIntegerField(default=0, verbose_name="Nombre d'appel passés")
-    mail_reminder = models.SmallIntegerField(default=0, verbose_name="Nombre de mail envoyés")
+    tel_reminder = models.CharField(max_length=3, default=0, verbose_name="Nombre d'appel passés")
+    mail_reminder = models.CharField(max_length=3, default=0, verbose_name="Nombre de mail envoyés")
     caution = models.CharField(max_length=30, null=True, default="null",
         verbose_name="Caution + support (ex : 200e en chèque)")
-    contact_id = models.ForeignKey('Contact', on_delete=models.CASCADE, verbose_name="Gestion des contacts", 
+    need_contact = models.BooleanField(default=True)
+    contact= models.ForeignKey('Contact', on_delete=models.CASCADE, verbose_name="Gestion des contacts", 
         null=True, blank=True)
     def __str__(self):
         if self.owner_sex == 0:

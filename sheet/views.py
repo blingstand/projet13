@@ -115,24 +115,26 @@ class AlterSheetView(View):
     def post(self, request, given_id):
         """ picks up the data in order to modify the db """
         form = SheetForm(request.POST)
-        print("\n\n***")
+        dict_values = request.POST.dict()
+        context = {'form' : form}
         if form.is_valid():
-            print("---")
-            # print("\t1/ récupération des données ...")
-            dict_values = form.from_form()
             # print("\t2/ affichage des données récupérées ...")
             print(f">{dict_values}")
+            print("---dict_values")
             # print("\t3/ Tentative d'enregistrement des données ...")
-            status_operation = form.modify_datas(given_id)
-            context = {'form' : form}
-            return redirect("sheet:index")                
-        #         
-        else:
-            context = {'form' : form}
-            context['errors'] = form.errors.items()
-            print("\n\n*** E R R O R ***\n")
-            print(form.errors.items())
-            print("\n*** E N D ***\n\n")
-            print(request.POST, 'et', request.FILES)
-            return render(request, 'sheet/add.html', context)
+            success, response = ut.modify_datas(given_id, dict_values)
+            print('---end modify_datas')
+            if success:
+                print(f'{response} changement(s)')
+                context = {'form' : form}
+                return redirect("sheet:index")  
+            else: 
+                context["error"] = response  
+                return render(request, 'sheet/alter.html', context)        
+        context['error'] = form.errors.items()
+        print("\n\n*** E R R O R ***\n")
+        print(form.errors.items())
+        print("\n*** E N D ***\n\n")
+        print(request.POST, 'et', request.FILES)
+        return render(request, 'sheet/add.html', context)
 
