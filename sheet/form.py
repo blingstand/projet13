@@ -102,7 +102,6 @@ class SheetForm(forms.Form):
         same_in_db = len(AdminData.objects.filter(chip=admin.chip,file=admin.file, tatoo=admin.tatoo)) > 0
         if same_in_db:
             return False, f"Erreur : ce dossier admin existe déjà dans la base, risque de doublon, procédure annulée !"
-        admin.is_neutered = int(owner.owner_sex)
         admin.save()
         return True, admin
 

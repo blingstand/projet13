@@ -78,7 +78,7 @@ class Utils():
         """
         # 1/  finds the concerned tables
         animal = Animal.objects.get(animal_id=given_id)
-        print("la modif concerne : ", animal, animal.admin_data, animal.owner)
+        # print("la modif concerne : ", animal, animal.admin_data, animal.owner)
         #2/ finds difference between former and new datas
         loop_animal = ('name', 'date_of_birth', 'race', 'species', 'color', 'date_of_adoption', 'observation'), animal
         loop_admin = ('file', 'chip', 'tatoo', 'is_neutered', 'date_of_neuter', 'futur_date_of_neuter', 'status'), animal.admin_data
@@ -90,7 +90,7 @@ class Utils():
             for key in elem[0]: 
                 if getattr(elem[1], key) != dict_values[key]:
                     changes.append((key, elem[1]))
-        print("liste des modifications : ", changes)
+        # print("liste des modifications : ", changes)
         return changes
 
     def modify_datas(self, given_id, dict_values):
@@ -107,22 +107,21 @@ class Utils():
                 cas 3>remain former owner
             2/ gets the changes to make
             3/ makes changes
-
         """
         animal = Animal.objects.get(animal_id=given_id)
         is_same_owner = (dict_values['former_owner'] == str(animal.owner.id))
-        print("==========")
-        print((dict_values['former_owner'], animal.owner.id))
-        print(f'is_same_owner : {is_same_owner}')
-        print("==========")
+        # print("==========")
+        # print((dict_values['former_owner'], animal.owner.id))
+        # print(f'is_same_owner : {is_same_owner}')
+        # print("==========")
         
         try:
             if not is_same_owner and int(dict_values['former_owner']) > 0:
-                print("Cas 1 : Je change l'animal de propriétaire.")
+                # print("Cas 1 : Je change l'animal de propriétaire.")
                 animal.owner = Owner.objects.get(id=dict_values['former_owner'])
                 animal.save()
             elif not is_same_owner and int(dict_values['former_owner']) == 0:
-                print("Cas 2 : J'attribue à l'animal un nouveau propriétaire.")
+                # print("Cas 2 : J'attribue à l'animal un nouveau propriétaire.")
                 new_owner = Owner(
                     owner_name=dict_values['owner_name'],
                     owner_surname=dict_values['owner_surname'],
@@ -136,20 +135,21 @@ class Utils():
                 new_owner.save()
                 animal.owner = new_owner
                 animal.save()
-                print(f"\taprès > {animal.owner}")
+                # print(f"\taprès > {animal.owner}")
             else:
-                print(f'Cas3 : Je garde le même propriétaire {animal.owner}.')
-            print("détection des changements")
+                # print(f'Cas3 : Je garde le même propriétaire {animal.owner}.')
+                pass
+            # print("détection des changements")
             
             #I search for changes
             changes = self.find_changes(given_id, dict_values)
             allchanges = changes
-            print("---> début de la modif")
+            # print("---> début de la modif")
             for change in changes:
-                print(f"\t{change[1]}.{change[0]} = {dict_values[change[0]]}")
+                # print(f"\t{change[1]}.{change[0]} = {dict_values[change[0]]}")
                 setattr(change[1], change[0], dict_values[change[0]])
                 change[1].save()
-            print("---> fin de la modif")
+            # print("---> fin de la modif")
 
             #if animal is neutered so owner has no obligation
             if animal.admin_data.is_neutered == "0": 
@@ -158,10 +158,10 @@ class Utils():
                 animal.owner.need_contact = True
             owner = animal.owner
             owner.save()
-            print(f"Besoin de contacter {owner} pour stérilisation : {owner.need_contact}")
+            # print(f"Besoin de contacter {owner} pour stérilisation : {owner.need_contact}")
             #sum up
-            print(f'> {len(allchanges)} changement(s) détectés et effectués :')
-            [print(change) for change in allchanges]
+            # print(f'> {len(allchanges)} changement(s) détectés et effectués :')
+            # [print(change) for change in allchanges]
             return True, len(allchanges)
         except Exception as e:
             return False, e
