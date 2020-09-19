@@ -1,5 +1,8 @@
 from django.db import models
 
+from .models import GraModel
+
+
 #from other apps
 from sheet.models import Owner, Animal
 
@@ -36,11 +39,26 @@ class GraphDatas():
             if owner.mail_reminder == 0:
                 pass
             if int(owner.mail_reminder) > 0 and int(owner.mail_reminder) == int(owner.tel_reminder):
-                print("all_owner_contacted + 1")
+                # print("all_owner_contacted + 1")
                 all_owner_contacted.append(owner)
             elif int(owner.mail_reminder) > 0 and int(owner.mail_reminder) > int(owner.tel_reminder):
-                print("all_owner_to_contact + 1")
+                # print("all_owner_to_contact + 1")
                 all_owner_to_contact.append(owner)
         # print('tous, à contacter, contactés')
-        # print(len(all_owner_contacted), len(all_owner_to_contact), all_owner_to_contact)
+        # print(len(all_owner_contacted), len(all_owner_to_contact), (all_owner_to_contact))
         return (len(all_owner_contacted), len(all_owner_to_contact), all_owner_to_contact)
+
+    def getPrevData(self):
+        """
+            returns a dict of actionable datas
+        """
+        queryset = GraModel.objects.all()
+        prevData = {"contacted" : [], "to_contact": [], 'date': []}
+        for gram in queryset:
+            prevData['contacted'].append(gram.nb_contacted)
+            prevData['to_contact'].append(gram.nb_to_contact)
+            prevData['date'].append(gram.date.strftime("%d/%m/%y"))
+        first_month = queryset[0].date.strftime("%d/%m/%y")
+        last_month = queryset[len(queryset)-1].date.strftime("%d/%m/%y")
+        prevData['month'] = f"Graphe du {first_month} au {last_month}"
+        return prevData

@@ -58,11 +58,11 @@ class Owner(models.Model):
     mail_reminder = models.CharField(max_length=3, default=0, verbose_name="Nombre de mail envoyés")
     caution = models.CharField(max_length=30, null=True, default="null",
         verbose_name="Caution + support (ex : 200e en chèque)")
-    need_contact = models.BooleanField(default=True)
+    need_contact = models.BooleanField(default=True, verbose_name="besoin d'être contacté(e)")
     contact= models.ForeignKey('Contact', on_delete=models.CASCADE, verbose_name="Gestion des contacts", 
         null=True, blank=True)
     def __str__(self):
-        if self.owner_sex == 0:
+        if self.owner_sex == "0":
             return f'Monsieur {self.owner_surname.upper()} {self.owner_name}'
         else:
             return f'Madame {self.owner_surname.upper()} {self.owner_name}'

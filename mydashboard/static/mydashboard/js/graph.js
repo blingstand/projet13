@@ -1,4 +1,4 @@
-let CreateChart = function(container, datas, month){
+let CreateChart = function(container, datas){
     if ([typeof(container),typeof(datas)] == ['string', 'object']){
         console.log('graph.js : réception de données au mauvais format')
     }else{
@@ -16,11 +16,11 @@ let CreateChart = function(container, datas, month){
         },
         title: {
 
-            text: '<span class="title"> Mois de '+month+' </span>'
+            text: '<span class="title">Propriétaire devant encore stériliser</span>'
         },
         tooltip: {
             shared: true,
-            headerFormat: '<span style="font-size: 15px"> Au {point.y} '+month+'</span><br/>',
+            headerFormat: '<span style="font-size: 15px"> Au {point.x}</span><br/>',
             pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y}</b><br/>'
         },
         xAxis: {
@@ -33,7 +33,7 @@ let CreateChart = function(container, datas, month){
             resize: {
                 enabled: true
             },
-            categories: ["aujourd'hui"]
+            categories: datas['date']
         },
         yAxis: {
           height: '80%',
