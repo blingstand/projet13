@@ -32,11 +32,14 @@ class GraphDatas():
         all_owner_contacted = []
         all_owner_to_contact = []
         for owner in self.list_owner:
+            print('datas : ', owner, owner.mail_reminder, owner.tel_reminder)
             if owner.mail_reminder == 0:
                 pass
             if int(owner.mail_reminder) > 0 and int(owner.mail_reminder) == int(owner.tel_reminder):
+                print("all_owner_contacted + 1")
                 all_owner_contacted.append(owner)
             elif int(owner.mail_reminder) > 0 and int(owner.mail_reminder) > int(owner.tel_reminder):
+                print("all_owner_to_contact + 1")
                 all_owner_to_contact.append(owner)
         # print('tous, à contacter, contactés')
         # print(len(all_owner_contacted), len(all_owner_to_contact), all_owner_to_contact)

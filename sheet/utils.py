@@ -82,7 +82,8 @@ class Utils():
         #2/ finds difference between former and new datas
         loop_animal = ('name', 'date_of_birth', 'race', 'species', 'color', 'date_of_adoption', 'observation'), animal
         loop_admin = ('file', 'chip', 'tatoo', 'is_neutered', 'date_of_neuter', 'futur_date_of_neuter', 'status'), animal.admin_data
-        loop_owner = ('owner_name', 'owner_surname','owner_sex',  'phone', 'mail', 'tel_reminder', 'mail_reminder', 'caution'), animal.owner
+        loop_owner = ('owner_name', 'owner_surname','owner_sex',  'phone', 'mail', 'tel_reminder', \
+            'mail_reminder', 'caution'), animal.owner
         loop = [loop_animal, loop_admin, loop_owner]
         changes = []
         dict_values = self.change_date_format(dict_values)
@@ -90,7 +91,7 @@ class Utils():
             for key in elem[0]: 
                 if getattr(elem[1], key) != dict_values[key]:
                     changes.append((key, elem[1]))
-        # print("liste des modifications : ", changes)
+        print("liste des modifications : ", changes)
         return changes
 
     def modify_datas(self, given_id, dict_values):
@@ -137,20 +138,23 @@ class Utils():
                 animal.save()
                 # print(f"\taprès > {animal.owner}")
             else:
-                # print(f'Cas3 : Je garde le même propriétaire {animal.owner}.')
-                pass
-            # print("détection des changements")
+                print(f'Cas3 : Je garde le même propriétaire {animal.owner}.')
             
             #I search for changes
             changes = self.find_changes(given_id, dict_values)
             allchanges = changes
-            # print("---> début de la modif")
+            print(changes)
             for change in changes:
-                # print(f"\t{change[1]}.{change[0]} = {dict_values[change[0]]}")
-                setattr(change[1], change[0], dict_values[change[0]])
-                change[1].save()
+                if change[1] == animal.owner: 
+                    setattr(animal.owner, str(change[0]), dict_values[change[0]])
+                    animal.owner.save()
+                elif change[1] == animal.admin_data:
+                    setattr(animal.admin_data, str(change[0]), dict_values[change[0]])
+                    animal.admin_data.save()
+                else:
+                    setattr(animal, str(change[0]), dict_values[change[0]])
+                    animal.save()
             # print("---> fin de la modif")
-
             #if animal is neutered so owner has no obligation
             if animal.admin_data.is_neutered == "0": 
                 animal.owner.need_contact = False

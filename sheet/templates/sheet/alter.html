@@ -223,7 +223,7 @@
 		//fills the inputs
 		const FillTheInputs = function(fields){
 			// this functions fills the inputs with the given data from animal
-			values = ['{{animal.name}}','{{animal.date_of_birth|date:"d/m/Y"}}','{{animal.date_of_adoption|date:"d/m/Y"}}','{{animal.admin_data.date_of_neuter|date:"d/m/Y"}}', '{{animal.admin_data.date_of_neuter|date:"d/m/Y"}}', '{{animal.race}}', '{{animal.color}}', '{{animal.observation}}', "{{animal.admin_data.file}}", "{{animal.admin_data.tatoo}}", "{{animal.admin_data.chip}}", "{{animal.owner.caution}}", "{{animal.owner.tel_reminder}}","{{animal.owner.mail_reminder}}", "{{animal.owner.owner_name}}", "{{animal.owner.owner_surname}}", "{{animal.owner.phone}}", "{{animal.owner.mail}}" ]
+			values = ['{{animal.name}}','{{animal.date_of_birth|date:"d/m/Y"}}','{{animal.date_of_adoption|date:"d/m/Y"}}','{{animal.admin_data.date_of_neuter|date:"d/m/Y"}}', '{{animal.admin_data.date_of_neuter|date:"d/m/Y"}}', '{{animal.race}}', '{{animal.color}}', '{{animal.observation}}', "{{animal.admin_data.file}}", "{{animal.admin_data.tatoo}}", "{{animal.admin_data.chip}}", "{{animal.owner.caution}}", "{{animal.owner.mail_reminder}}","{{animal.owner.tel_reminder}}", "{{animal.owner.owner_name}}", "{{animal.owner.owner_surname}}", "{{animal.owner.phone}}", "{{animal.owner.mail}}" ]
 			for (i in values){
 				fields[i].value = values[i];
 			}
