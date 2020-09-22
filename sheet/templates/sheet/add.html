@@ -1,45 +1,70 @@
 {% extends 'core/base.html' %}
 {% block content %}
 <section>
-	<h2 class="mt-5 pl-5">Page Fiches</h2>
-	<article class="mt-5 bg-blue">
-		<form class="sheet" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+	<h2 class="mt-5 mb-2 pl-5">Page Ajout Fiche</h2>
+	<article class=" bg-blue">
+		<form class="sheet" action="" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
 			<div class="container">
 				<div class="row">
 					<div class="col-8 bg-yellow container">
 						<div class="row">
-							<div class="col-3 text-center">{{form.name}}</div>
-							<div class="col-3 text-center">{{form.date_of_birth}}</div>
-							<div class="col-3 text-center">{{form.date_of_adoption}}</div>
-							<div class="col-3 text-center">{{form.date_of_neuter}}</div>
+							<div class="col-3 text-center">{{form.name.label}} <br><br>{{form.name}}</div>
+							<div class="col-3 text-center">{{form.date_of_birth.label}}<br> 
+								<span id='span_today_1' class=" text-blue curs-pointer" onclick="today(this)">(aujourd'hui)</span> <br>{{form.date_of_birth}}</div>
+							<div class="col-3 text-center">{{form.date_of_adoption.label}}<br> 
+								 <span id='span_today_2' class=" text-blue curs-pointer" onclick="today(this)">(aujourd'hui)</span> <br>{{form.date_of_adoption}}</div>
+							<div class="col-3 text-center">{{form.date_of_neuter.label}}<br> 
+								<span id='span_today_3' class=" text-blue curs-pointer" onclick="today(this)">(aujourd'hui)</span> <br>{{form.date_of_neuter}}</div>
 						</div>
 						<div class="row">
 							<div class="col-6" >
 								<div class="row">
-									<div class="col-6 bg-primary" >{{form.species}}</div>
-									<div class="col-6 bg-primary" >{{form.is_neutered.label}} {{form.is_neutered}}</div>
+									<div class="col-6 bg-primary"> {{form.species}}</div>
+									<div class="col-6 bg-primary" id='inputDateZone' > {{form.is_neutered}}</div>
 								</div>
 							</div>
 							<div class="col-6 bg-secondary text-center">
-								<p>{{form.race}}</p>
-								<p>{{form.color}}</p>
-								<p>{{form.observation}}</p>
+								<p>{{form.race.label}} {{form.race}}</p>
+								<p>{{form.color.label}}  {{form.color}}</p>
+								<p>{{form.observation.label}} {{form.observation}}</p>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-4">{{form.file}}</div>
-							<div class="col-4">{{form.tatoo}}</div>
-							<div class="col-4">{{form.chip}}</div>
+							<div class="col-4 text-center">{{form.file.label}}<br/> {{form.file}}</div>
+							<div class="col-4 text-center">{{form.tatoo.label}}<br/> {{form.tatoo}}</div>
+							<div class="col-4 text-center">{{form.chip.label}}<br/> {{form.chip}}</div>
 						</div>
 						<div class="row">
-							<div class="col-4">{{form.caution}}</div>
-							<div class="col-4">{{form.mail_reminder}}</div>
-							<div class="col-4">{{form.tel_reminder}}</div>
+							<div class="col-4 text-center">{{form.caution.label}}<br/> {{form.caution}}</div>
+							<div class="col-4 text-center">{{form.mail_reminder.label}}<br/> {{form.mail_reminder}}</div>
+							<div class="col-4 text-center">{{form.tel_reminder.label}}<br/> {{form.tel_reminder}}</div>
 						</div>
-						<div class="row">
-							<div class="col-4">{{form.owner}}</div>
-							<div class="col-4">{{form.tel}}</div>
-							<div class="col-4">{{form.mail}}</div>
+						<div class=" row d-flex new-former">
+							<div class="col-1"></div>
+							<div class="col-4 new-owner  very-center curs-pointer" onclick="dispNewOwn()">
+								Nouveau propriétaire
+							</div>
+							<div class="col-2"></div>
+
+							<div class="col-4 former-owner  very-center curs-pointer" onclick="SelectOwners()">
+								Ancien propriétaire
+							</div>
+							<div class="col-1"></div>
+
+						</div>
+						<div class="row owner_input d-none">
+							<div class="col-4 text-center">{{form.owner_name.label}}<br/> {{form.owner_name}}</div>
+							<div class="col-4 text-center">{{form.owner_surname.label}}<br/> {{form.owner_surname}}</div>
+							<div class="col-4 text-center">{{form.owner_sex}}</div>
+						</div>
+						<div class="row owner_input d-none">
+							<div class="col-1"></div>
+							<div class="col-4 text-center">{{form.phone.label}}<br/> {{form.phone}}</div>
+							<div class="col-4 mb-2 text-center">{{form.mail.label}}<br/> {{form.mail}}</div>
+							<div class="col-3 mt-4 text-center ">
+								<button class="curs-pointer bg-refresh" onclick="Refresh()">retour</button>
+							</div>		
 						</div>
 					</div>			
 					<div class="col-4 bg-green">
@@ -48,7 +73,8 @@
 								<div class="col-12 text-center">{{form.status}}</div>
 								<div class="col-8"></div>
 								<div class="col-4">
-									<input type="submit"class="btn btn-primary big-btn" value="Enregistrer">
+									<input id="submit" type="submit" class="btn btn-primary big-btn" value="Enregistrer"> 
+									<p id='verif'></p>
 								</div>
 								<div class="col-12">
 									{% if error %}
@@ -62,12 +88,189 @@
 			</div>
 		</form>
 	</article>
+	<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 	<script type="text/javascript">
-		let true_radio = document.getElementById("id_is_neutered_0")
-		true_radio.checked = true
-		let species0 = document.getElementById("id_species_0")
-		species0.checked = true
+		/* *** plan ***
+		1/ User select new or former owner
+		2/ 	A. new displays Ownerform
+		2/ 	B. former displays select with owner in option
+		3/ Client sends Ajax request to get more infos about selected owner id
+		4/ Client receives info, success > display ownerform and fill it
+		*/
+
+
+
+		let is_neutered_button = document.getElementById("id_is_neutered_0")
+		is_neutered_button.checked = true
+		let species0_button = document.getElementById('id_species_0')
+		species0_button.checked = true
+		let owner_sex_button = document.getElementById("id_owner_sex_0")
+		owner_sex_button.checked = true
+		let csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 		
+		const Refresh = function(){
+			window.location.href = window.location.href; 
+		}
+		//*** auto fill with today date 
+		const today = function(elem) {
+			let today = new Date();
+			let month = today.getMonth()+1
+			if (month <= 9) {
+				month = '0' + String(month)}
+			let date = today.getDate()+'/'+month+'/'+today.getFullYear();
+			let input = elem.nextElementSibling.nextElementSibling
+			input.value = date
+		}
+		// Owner form
+		const dispNewOwn = function(){
+			divNF = document.getElementsByClassName("new-former")[0]
+			divNF.classList.replace("d-flex", "d-none")
+			ownDivs = document.getElementsByClassName('owner_input')
+			for (div of ownDivs){
+				div.classList.replace("d-none", "d-flex")
+			}
+			removeFromOwnerBlank()
+		}
+		// remove data from owner Form
+		const removeFromOwnerBlank = function(value){
+			ids = ["id_owner_name", "id_owner_surname", "id_owner_sex", 'id_phone', "id_mail"]
+			for (index in ids){
+				input = document.getElementById(ids[index])
+				input.value = ""
+			}
+		}
+		// fill blank with ajax values
+		const fillBlank = function(value){
+			ids = ["id_owner_name", "id_owner_surname", 'id_phone', "id_mail"]
+			values = [value.name, value.surname, value.phone, value.mail]
+			for (index in ids){
+				input = document.getElementById(ids[index])
+				input.value = values[index]
+			}
+			let inputSex = document.getElementById('id_owner_sex').children;
+			console.log(inputSex, value.sex)
+			if (value.sex == 0){
+				inputSex[0].firstChild.firstChild.checked = true
+			}else{
+				inputSex[1].firstChild.firstChild.checked = true
+			}
+
+		}
+		// displays owner form with data from ajax request 
+		const displayOwnerForm = function(value){
+			// this functions fills the inputs with the given data from animal
+			//AJAX
+			const csrfSafeMethod = function(method) {
+            	// these HTTP methods do not require CSRF protection
+            	return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        	}
+			$.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    // if not safe, set csrftoken
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            }); 
+            $.ajax({ 
+                type:"POST", 
+                url: "{% url 'sheet:add'%}", 
+                dataType: 'json',
+                data: {'ask_owner_data':"1", 'owner_id':value},
+                success: function (res) {
+                    // console.log('voici ta réponse : ')
+                    // console.log(res.data.name)
+                    // console.log(res.data.surname)
+                    // console.log(res.data.sex)
+                    // console.log(res.data.phone)
+                    // console.log(res.data.mail)
+                    dispNewOwn()
+                    fillBlank(res.data)
+                    // fillBlank(res.data)
+                    
+                },
+                error: function (res) {
+                    alert("erreur lors de l'envoie de données");
+                    console.log(res.status);
+                    console.log(res.error);
+                }
+            })			
+		}
+		// creates and displays select with owners name and validate button
+		const SelectOwners = function(){
+			divNF = document.getElementsByClassName("new-former")[0]
+			divFormer = document.getElementsByClassName("former-owner")[0]
+			divNew = document.getElementsByClassName("new-owner")[0]
+			divFormer.classList.add("d-none")
+			divNew.classList.add("d-none")
+			select = document.createElement('select')
+			select.id = "id_select"
+			select.name = "former_owner"
+			divNF.appendChild(select)
+			
+			{% for owner in owners%}
+				option = document.createElement('option')
+				option.value = '{{owner.id}}'
+				option.innerHTML = "{{owner}}"
+				select.appendChild(option)
+			{% endfor %}
+			buttValidate = document.createElement('button')
+			buttValidate.onclick = function(){displayOwnerForm(select.value)}
+			buttValidate.innerHTML = "valider"
+			divNF.appendChild(buttValidate)
+		}
+
+		//create an input date for the future date of neuter
+		const appearNewInput = function(){
+			let divDate = document.createElement("div");
+			divDate.innerHTML = '{{form.futur_date_of_neuter.label}}{{form.futur_date_of_neuter}}'
+			divDate.classList.add("d-none")
+			divDate.id = "divDate"
+			document.getElementById('inputDateZone').appendChild(divDate);
+
+		}
+		
+		document.getElementById("id_is_neutered").addEventListener('click', function(e){
+			if(document.getElementById('id_is_neutered_2').checked){
+				document.getElementById('divDate').classList.replace('d-none', "d-flex")
+			}else{
+				document.getElementById('divDate').classList.replace('d-flex', "d-none")
+			}
+		})
+		document.getElementById("id_mail_reminder").value = 0
+		document.getElementById("id_tel_reminder").value = 0
+		appearNewInput()
+
+		const getInputDate = function(){
+			const allInput = document.getElementsByTagName('input')
+			let allInputDate = []
+			for (input of allInput){
+				if (input.id.substring(0,7) == "id_date"){
+					allInputDate.push(input)
+				}else if (dateField.id == "id_date_of_neuter" && dateField.value == ''){
+					console.log('pas de date de stérilisation')
+				}
+			}
+			console.log(allInputDate)
+			return allInputDate
+		}
+		document.getElementById('submit').addEventListener('click', function(event){
+			const dateFields = getInputDate()
+			const regex_date = /^([0-2]\d|3[0-1])\/(0\d|1[0-2])\/(\d{4})$/; 
+
+			for (dateField of dateFields){
+		        if (regex_date.test(dateField.value)){
+		            dateField.style.color = "black";
+		        } else{
+		            verifText = dateField.value + " n'est pas une date au format jj/mm/aaa"
+		            verif.textContent = verifText ;
+		            dateField.style.border = "2px red solid";
+		            dateField.style.color = "red";
+
+		            event.preventDefault();
+		            return
+		        }
+			}})
 	</script>
 	{% endblock  %}
 

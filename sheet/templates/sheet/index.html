@@ -1,66 +1,188 @@
 {% extends 'core/base.html' %}
 {% block content %}
 <section>
-	<h2 class="mt-5 pl-5">Page Fiches</h2>
-	<article class="mt-5 container">
-		{% csrf_token %} 
-		<div class="row">
-			<div class="col-2"></div>
-			{% for elem in button_value %}
-			<div class="col-2 bg-primary text-center">
-				{% if elem.name == "ajouter"%}
-				<button id="{{elem.id}}" onclick="add()">{{elem.name}}</button>
-				{% else%}
-				<button id="{{elem.id}}">{{elem.name}}</button>
-				{% endif%}
-				
-			</div>
-			{% endfor %}
-			<div class="col-2"></div>
-			<div class="col-12 mb-5 text-center">
-				<button>imprimer</button>
-			</div>
-			<table>
-				<form action="">
-					<tr>
-						<td>&nbsp;</td>
-						<td>nom</td>
-						<td>statut animal</td>
-						<td>espèce</td>
-						<td>race</td>
-						<td>propriétaire</td>
-						<td>statut propriétaire</td>
-						<td>tel</td>
-						<td>num dossier</td>
-						<td>num tatouage</td>
-						<td>num puce</td>
-					</tr>
-					{% for animal in animals %}
-					<tr class="col-12  {% cycle 'row1' 'row2' %}">
-						<!-- nom sexe/espece status propriétaire num-dossier num-tatoo num-puce -->
-						<td><input type="checkbox" id='{{animal.id}}'></td>
-						<td>{{animal.name}}</a></td>
-						<td>{{animal.status}}</td>
-						<td>{{animal.species}}</td>
-						<td>{{animal.race}}</td>
-						<td>{{animal.owner}} </td>
-						<td>{{animal.owner_status}}</td>
-						<td>{{animal.owner_id.telephone}}</td>
-						<td>{{animal.admin_data_id.file}}</td>
-						<td>{{animal.admin_data_id.tatoo}}</td>
-						<td>{{animal.admin_data_id.chip}}</td>						
-					</tr>
-					{% endfor %}
-				</form>
-			</table>
-		</div>
-	</article>
-</article>
-<script type="text/javascript">
-	function add(){
-		add_page = window.location + "add"
-		window.location.href = add_page; 
-	}
+    <h2 class="mt-5 pl-5">Page Fiches</h2>
+    <article class="mt-5 container">
+        <div class="row">
+            <div class="col-1"></div>
+            {% for elem in button_value %} <!-- affiche les boutons -->
+            <div class="col-2 bg-primary text-center">
+                <button id="{{elem.id}}" onclick="{{elem.function}}">{{elem.name}}</button>
+            </div>
+            {% endfor %}
+            <div class="col-1"></div>
+            <div class="col-12 mb-5 text-center">
+                <button>imprimer</button>
+            </div>
+            <form id="my_form" action="" method="" name="my_form">
+                {% csrf_token %} 
+                <table id="anim_table" class=" d-flex">
+                    <tr class="col-12 text-center">
+                        <td>&nbsp;</td>
+                        {% for col in anim_cols %}
+                        <td>{{col}}</td>
+                        {% endfor %}
+                    </tr>
+                    {% for sheet in sheets|dictsort:"name" %}
+                    <tr class="col-12 text-center {% cycle 'row1' 'row2' %}">
+                        <!-- nom sexe/espece status propriétaire num-dossier num-tatoo num-puce -->
+                        <td><input type="checkbox" id='{{sheet.animal_id}}' name='checkbox' value={{sheet.animal_id}}></td>
+                        <td>{{sheet.name}}</a></td>
+                        <td>{{sheet.admin_data.is_neutered}}</td>
+                        <td>{{sheet.species}}</td>
+                        <td>{{sheet.race}}</td>
+                        <td>{{sheet.owner}} </td>
+                        <td>{{sheet.admin_data.file}}</td>
+                        <td>{{sheet.admin_data.tatoo}}</td>
+                        <td>{{sheet.admin_data.chip}}</td>                      
+                    </tr>
+                    {% endfor %}
+                </table>
+                <table id="owner_table" class=" d-none">
+                    <tr class="col-12 text-center">
+                        <td>&nbsp;</td>
+                        <td>nombre d'animaux</td>
+                        <td>Nom</td>
+                        <td>Prénom</td>
+                        <td>Caution</td>
+                        <td>Besoin contact</td>
+                        <td>tel</td>
+                        <td>mail</td>
+                        <td>nb appel</td>
+                        <td>nb mail</td>
+                    </tr>
+                     {% for owner in owners|dictsort:"number_animal" %}
+                    <tr class="col-12 text-center {% cycle 'row1' 'row2' %}">
+                        <td><input type="checkbox" id='{{owner.id}}' name='checkbox' value={{owner.id}}></td>
+                        <td>{{owner.number_animal}}</a></td>
+                        <td>{{owner.owner_name}}</a></td>
+                        <td>{{owner.owner_surname}}</a></td>
+                        <td>{{owner.caution}}</td>
+                        <td>{{owner.need_contact}}</td>
+                        <td>{{owner.phone}}</td>
+                        <td>{{owner.mail}} </td>
+                        <td>{{owner.tel_reminder}}</td>
+                        <td>{{owner.mail_reminder}}</td>                  
+                    </tr>
+                    {% endfor %}
+                </table>
+            </form>
+        </div>
+    </article>
+    <script type="text/javascript">
+    //**********Modification boostrap **********    
+    let displayButt = document.getElementById('display')
+
+    displayButt.parentElement.classList.replace('col-2', 'col-4')
+    const form = document.getElementById('my_form');
+    const isForAnimal = function(){
+        return displayButt.textContent == "Afficher Propriétaires"
+    }
+    //click on line means checkbox checked
+    const activClickEvent = function(){
+
+        let allTr = Array.from(document.querySelectorAll('tr')).slice(1); 
+        for (tr of allTr){
+            tr.style.cursor = 'pointer'; 
+            tr = Array.from(tr.children)
+            tr.splice(0,1)
+            for (child of tr){
+                child.addEventListener('click', function(e){
+                    let target = e.target.parentElement.children[0].firstChild;
+                    console.log(e.target.tagName)
+                    if (target.checked == true){
+                        target.checked=false; 
+                    }else{
+                        target.checked=true;
+                    }
+                });
+                child.addEventListener('dblclick', function(e){
+                    if (isForAnimal()){
+                        targid = e.target.parentElement.children[0].firstChild.id
+                        add_page = window.location + "alter/"+ targid;
+                        window.location.href = add_page; 
+                    }else{
+                        targid = e.target.parentElement.children[0].firstChild.id
+                        add_page = window.location + "alter_owner/"+ targid;
+                        window.location.href = add_page; 
+                    }
+                });
+            }
+        }
+    }
+
+    function add(){
+        add_page = window.location + "add"
+        window.location.href = add_page; 
+    }
+    function alter(){
+        //check whether only 1 sheet is selected
+        checkbox = document.querySelectorAll('input[type=checkbox]');
+        count = 0; 
+        for (i=0; i < checkbox.length; i ++){
+            console.log(count)
+            if (checkbox[i].checked){
+                id_selected = checkbox[i].id
+                count ++;}
+            }
+            if (count == 0){
+                alert('sélectionnez une fiche à modifier !')
+            }else if (count == 1){
+                add_page = window.location + "alter/"+ id_selected;
+                window.location.href = add_page; 
+            }else{
+                alert("trop de fiches sélectionnées (" + count + ").")
+            }
+
+        }
+
+    function remove(){
+        const checkbox = document.querySelectorAll('input[type=checkbox]');
+        let count = 0; 
+        let toDelete = []
+        for (i=0; i < checkbox.length; i ++){
+            if (checkbox[i].checked){
+                toDelete.push(checkbox[i])
+                count ++;
+            }
+        }
+        if (count == 0){
+            alert('sélectionnez au moins une fiche à supprimer !')
+        }else {
+            ToDelete = Array.from(toDelete)
+            let msg = 'Confirmez-vous la suppression de '+ count + ' éléments :'
+            let name = ""
+            let specie = ""
+            for (let elem of toDelete){
+                name = elem.parentElement.nextElementSibling.textContent
+                specie = elem.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.textContent
+                msg = msg + "\n  >" + name + " - " + specie;
+            }
+            let response = confirm(msg);
+            if (response){
+                form.setAttribute('action', "{% url 'sheet:index'%}");
+                form.setAttribute('method', "POST");
+                form.submit()
+            }
+        }
+        form.setAttribute('action', "");
+    }
+    const display= function(){
+        //display owner and change button value
+        if (displayButt.textContent == "Afficher Propriétaires"){
+            document.getElementById('anim_table').classList.replace('d-flex', 'd-none');
+            document.getElementById('owner_table').classList.replace('d-none', 'd-flex');
+            displayButt.textContent = "Afficher Animaux"
+        }else{
+            document.getElementById('owner_table').classList.replace('d-flex', 'd-none');
+            document.getElementById('anim_table').classList.replace('d-none', 'd-flex');
+            displayButt.textContent = "Afficher Propriétaires"
+        }
+    }
+    const main = function(){
+        activClickEvent()
+    }
+    main()
 </script>
 {% endblock  %}
 

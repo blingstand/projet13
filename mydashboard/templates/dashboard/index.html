@@ -1,26 +1,41 @@
 {% extends 'core/base.html' %}
 {% block content %}
-{% load static %}
-<section>
+<section class="h-100">
 	<h2 class="mt-5 pl-5">Bienvenu {{name}} sur le dashboard</h2>
-	<article class="m-5 p-5 container">
+	<article class="h-100 p-3 container ">
 	{% csrf_token %} 
 		<div class="row">
-			<div class="graphe col-7 bg-primary text-center">
-				<img id='graph' src="{%static 'img/graphique.jpg' %}" alt="graf nb de proprio à contacter(rouge) et ceux déjà contacté (bleu) en fonction du temps">
-			</div>
-			<div class="col-1"></div>
+			<div id='graph' class="graph col-9 bg-primary text-center"></div>
 			<div class="col-3  container">
 				<div class="h-100 bg-primary p-2">
-					<div class="bg-secondary mt-3 h-25 d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) devant stériliser">25</div>
-					<div class="bg-secondary mt-3 h-25 d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) à contacter">17</div>
-					<div class="bg-secondary mt-3 h-25 d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) contacté(s)">8</div>
+					<div class="bg-secondary mt-3 h-25 d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) devant stériliser">Propriétaires <br> avec obligations : {{datas.nb_owner_with_obligations}}</div>
+					<div class="bg-secondary mt-3 h-25 d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) à contacter"> Propriétaires <br> à contacter : {{datas.current_to_cont}} </div>
+					<div class="bg-secondary mt-3 h-25 d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) contacté(s)">Propriétaires <br> contactés : {{datas.current_cont }}</div>
 				</div>
 			</div>
 			<div class="col-1"></div>
 		</div>
+		<p>
+
+		</p>
 
 	</article>
+	{% load static %}
+	 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script type="text/javascript" src='{% static "mydashboard/js/graph.js" %}'> </script>
+	<script type="text/javascript">
+
+	    const container = 'graph';
+	    const datas = {
+	    	'contacted' :{{datas.cont}},
+            'to contact' : {{datas.toCont}},
+            'date' : {{datas.date|safe}},
+            };
+
+	    CreateChart(container, datas);
+	    
+	</script>
 </section>
 {% endblock  %}
 

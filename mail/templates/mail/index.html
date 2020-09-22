@@ -4,32 +4,106 @@
 <section>
 	<h2 class="mt-5 pl-5">Page Mail</h2>
 	<article class="mt-5 container">
-		{% csrf_token %} 
 		<div class="row ">
 			<div class="col-2"></div>
-			{% for elem in button_value %}
-			<div class="col-2 mt-3 mb-3  bg-primary text-center">
-				<button >{{elem}}</button>
-			</div>
-			{% endfor %}
+			{% for elem in button_value %} <!-- affiche les boutons -->
+            <div class="col-2 bg-primary text-center">
+                <button id="{{elem.id}}" onclick="{{elem.function}}">{{elem.name}}</button>
+            </div>
+            {% endfor%}
 			<div class="col-2"></div>
 		</div>
 		<div class="row">
 			<!-- nvl ligne -->
-			<div class="col-12 text-centercontainer"style="background-color: green;">
-				<form action="">
-					{%for mail in mails%}
-					<div class="row">
-						<div class="col-1"><input type="checkbox" id=''></div>
-						<div class="col-4"style="background-color: red;">{{mail.title}} </div>
-						<div class="col-7">{{mail.resume}}  </div>
-					</div>
-					{% endfor%}
+				<form id ="mail_form" action="{% url 'mail:index'%}" method="POST">
+					{% csrf_token %} 
+	                <table >
+	                    <tr>
+	                        <td>&nbsp;</td>
+	                        <td>nom</td>
+	                        <td>résumé</td>
+	                        <td>envoi auto</td>
+	                        <td>condition</td>
+	                    </tr>
+	                    <tr>
+						{%for mail in mails%}
+							<td >
+								<input type="checkbox" id='{{mail.mail_id}}' name="checkbox" value="{{mail.mail_id}}">
+							</td>
+							<td >{{mail.title}} </td>
+							<td >{{mail.resume}}  </td>
+							<td >{{mail.auto_send}}  </td>
+							<td >{{mail.get_condition}}  </td>
+	                    </tr>
+						{% endfor%}
 				</form>
-				<div class="col-2 mb-5 text-center"></div>
-			</div>
 
 		</div>
 	</article>
+	<script type="text/javascript">
+		
+		const add = function(){
+			//this function redirects to page to add a new mail 
+			window.location.href="{% url 'mail:cns'%}"
+		}
+
+		const alter = function(){
+			//this function modify a single selected mail
+			checkbox = document.querySelectorAll('input[type=checkbox]');
+	        count = 0; 
+	        let id_selected = ""
+	        for (i=0; i < checkbox.length; i ++){
+	            console.log(count)
+	            if (checkbox[i].checked){
+	                id_selected = checkbox[i].id; 
+	                count ++;}
+            }
+            if (count == 0){
+                alert('sélectionnez une fiche à modifier !')
+            }else if (count == 1){
+                alterPage = window.location + "cns/"+ id_selected;
+                window.location.href = alterPage; 
+            }else{
+                alert("trop de fiches sélectionnées (" + count + ").")
+            }
+		}
+
+		function remove(){
+			//this function remove from list and db the selected mails
+	        const checkbox = document.querySelectorAll('input[type=checkbox]');
+	        let count = 0; 
+	        let toDelete = []
+	        for (i=0; i < checkbox.length; i ++){
+	            if (checkbox[i].checked){
+	                toDelete.push(checkbox[i]);
+	                count ++;}}
+	        if (count == 0){
+	            alert('sélectionnez au moins une fiche à supprimer !');
+	        }else{
+	            ToDelete = Array.from(toDelete);
+	            let msg = 'Confirmez-vous la suppression de '+ count + ' éléments :';
+	            let name = "";
+	            let specie = "";
+	            for (let elem of toDelete){
+	                name = elem.parentElement.nextElementSibling.textContent;
+	                resume = elem.parentElement.nextElementSibling.nextElementSibling.textContent;
+	                msg = msg + "\n  >" + name + " - " + resume;
+	            }
+	            let response = confirm(msg);
+	            if (response){
+	            	form = document.getElementById('mail_form')
+	            	form.setAttribute('action', "{% url 'mail:index'%}");
+                	form.setAttribute('method', "POST");
+	                form.submit();
+	            }
+	        }
+        }
+
+		const print = function(){
+			//this function print a mail 
+		}
+
+
+	</script>
 </section>
 {%endblock%}

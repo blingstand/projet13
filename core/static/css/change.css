@@ -1,4 +1,58 @@
 /* change.css */
+
+/* main */
+	.bg-green{ 
+		background-color: green;
+		}
+	.bg-tomato{
+		background-color: tomato;
+	}
+	.bg-yellow{ 
+		background-color: yellow;
+		}
+
+	.text-blue{
+		color: blue; 
+	}
+	.text-bold{
+		font-weight: bold;
+		font-size: 1.2rem;
+	}
+	.curs-pointer{
+		cursor: pointer; }
+	.input-reduced{
+		width: 9rem;
+	}
+	.li-oneline{
+		white-space:nowrap;
+		padding-left: 0;
+		margin-bottom: 0; 
+		margin-top: 0.4rem;
+	}
+	.li-oneline li{ 
+		display:inline;
+		margin: 1rem; 
+	} 
+	.lst-none{
+		list-style-type: none;
+	}
+	.no-a{
+		color: black;
+	}
+	.no-a:hover{
+		text-decoration : none;}
+	.very-center{
+		display: flex; 
+		-ms-flex-align: center !important;
+		align-items: center !important;
+		-ms-flex-pack: center !important;
+		justify-content: center !important;
+		}
+	.w-10rem{
+		width: 10rem;}
+	.w-7rem{
+		width: 7rem;}
+
 /* dashboard */
 	.right-part{
 		background: blue;
@@ -11,12 +65,8 @@
 		background-color: yellow;
 	}
 	#graph{
-		width: 30rem;
-		height: auto;
+		height: 20rem;
 	}
-	.curs-pointer{
-		cursor: pointer; }
-
 
 	/*---------------------------------*/
 
@@ -34,11 +84,11 @@
 		width: 	10rem;
 		background-color: white;
 	}
-	.no-a{
-		color: black;
+	.button-verti:hover{
+		border : 0.2rem black dashed;
+		cursor: pointer; 
+		font-weight: bold; 
 	}
-	.no-a:hover{
-		text-decoration : none;}
 
 /* connexion*/ 
 	.section-connection{ /*according to clients desires*/	
@@ -64,21 +114,70 @@
 		background-color: grey; }
 
 /* add sheet */
+	.bg-refresh{
+		border: 1px black solid;
+		background-color: #80b3ff;
+		height: 2rem;
+		width: 6rem;
+		color: black;
+	}
+	.bg-refresh:hover{
+		background-color: #1a75ff;
+	}
+	.new-former{
+		margin-left : -1.2rem;
+		padding : 2rem 0;
+	}
 
-	.bg-yellow{ 
-		background-color: yellow;
-		}
-	.bg-green{ 
-		background-color: green;
-		}
-    .w-10rem{
-    	width: 10rem;}
+	div.former-owner, div.new-owner{
+		border: 1px black solid;
+		background-color: #80b3ff;
+	}
+
+	div.former-owner:hover, div.new-owner:hover{
+		background-color: #1a75ff;
+	}
+/* owner_page */
+	.btn-delete{
+		background-color: red;
+		border-color: red;
+	}
 /* mail */ 
 	.mail-but{
 		height: 5rem; 
 	}
-	.very-center{
-		display: flex; 
-		justify-content: center; 
-		align-content: center; 
+	
+	/* cns */
+	.cns-choice{	
+		height : 5rem;
+		border : 0.2rem black solid;
+		vertical-align: middle;
+	}
+	.cns-choice:hover{
+		border : 0.2rem black dashed;
+		cursor: pointer; 
+		font-weight: bold; 
+	}
+	/* mailsettings */ 
+
+	/* mailcontent */
+	.button-inclusion{
+		width : auto; 
+		height: 3rem;
+		background-color: white; 
+		border: 1px black solid;
+	}
+	.button-inclusion:hover{
+		border : 0.2rem black dashed;
+		cursor: pointer; 
+		font-weight: bold;
+	}
+
+	.button-mail-content{
+		width:	6rem;
+		height: 3rem;
+		font-weight: bold;
+		background-color: #ececec;
 		}
+	.button-mail-content:hover{
+		background-color: #00b4b5;}

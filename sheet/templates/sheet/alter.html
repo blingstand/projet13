@@ -1,0 +1,339 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<section id="alter">
+	<h2 class="mt-5 pl-5">Page Modification Fiche {{animal.name}}</h2>
+	<article class="mt-5 bg-blue">
+		<form id="form_alter" class="sheet" action="" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="container">
+				<div class="row">
+					<div class="col-8 bg-yellow container">
+						<div class="row">
+							<div class="col-3 text-center">{{form.name.label}} {{form.name}}</div>
+							<div class="col-3 text-center">{{form.date_of_birth.label}}{{form.date_of_birth}}</div>
+							<div class="col-3 text-center">{{form.date_of_adoption.label}}{{form.date_of_adoption}}</div>
+							<div class="col-3 text-center">{{form.date_of_neuter.label}}{{form.date_of_neuter}}</div>
+						</div>
+						<div class="row">
+							<div class="col-6" >
+								<div class="row">
+									<div class="col-6 bg-primary"> {{form.species}}</div>
+									<div class="col-6 bg-primary" id='inputDateZone'> {{form.is_neutered}}</div>
+								</div>
+							</div>
+							<div class="col-6 bg-secondary text-center">
+								<p>{{form.race.label}} {{form.race}}</p>
+								<p>{{form.color.label}}  {{form.color}}</p>
+								<p>{{form.observation.label}} {{form.observation}}</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-4 text-center">{{form.file.label}}<br/> {{form.file}}</div>
+							<div class="col-4 text-center">{{form.tatoo.label}}<br/> {{form.tatoo}}</div>
+							<div class="col-4 text-center">{{form.chip.label}}<br/> {{form.chip}}</div>
+						</div>
+						<div class="row">
+							<div class="col-4 text-center">{{form.caution.label}}<br/> {{form.caution}}</div>
+							<div class="col-4 text-center">{{form.mail_reminder.label}}<br/> {{form.mail_reminder}}</div>
+							<div class="col-4 text-center">{{form.tel_reminder.label}}<br/> {{form.tel_reminder}}</div>
+						</div>
+						<div id="new-former" class=" row d-none new-former">
+							<div class="col-1"></div>
+							<div class="col-4 new-owner  very-center curs-pointer" onclick="dispNewOwn()">
+								Nouveau propriétaire
+							</div>
+							<div class="col-2"></div>
+
+							<div class="col-4 former-owner  very-center curs-pointer" onclick="SelectOwners()">
+								Ancien propriétaire
+							</div>
+							<div class="col-1"></div>
+
+						</div>
+						<div class="row owner_input d-flex">
+							<div class="col-4 text-center">{{form.owner_name.label}}<br/> {{form.owner_name}}</div>
+							<div class="col-4 text-center">{{form.owner_surname.label}}<br/> {{form.owner_surname}}</div>
+							<div class="col-4 text-center very-center">{{form.owner_sex}}</div>
+						</div>
+						<div class="row owner_input d-flex">
+							<div class="col-3 text-center">{{form.phone.label}}<br/> {{form.phone}}</div>
+							<div class="col-4 mb-2 text-center">{{form.mail.label}}<br/> {{form.mail}}</div>
+							<div class="col-5 text-center ">
+								<div class="curs-pointer w-100">
+									<label for="id_select" class="m-0">Sélection propriétaire</label>
+									<select id="id_select" name="former_owner">
+										<option value="0" onclick="SelectOption(this.value)">Nouveau Propriétaire</option>
+										{% for owner in owners%}
+										<option value="{{owner.id}}" onclick="SelectOption(this.value)">{{owner}}</option>
+										{% endfor%}
+									</select>
+								</div>
+							</div>		
+						</div>
+					</div>			
+					<div class="col-4 bg-green">
+						<div class="container">
+							<div class="row">
+								<div class="col-12 text-center">{{form.status}}</div>
+								<div class="col-8"></div>
+								<div class="col-4">
+									<button id='submit' class="btn btn-primary big-btn">Enregistrer</button>
+								</div>
+								<div class="col-12">
+									{% if error %}
+									<p id="verif"> {{error}}</p>
+									{% else%}
+									<p id="verif"></p>
+									{% endif %}
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>			
+			</div>
+		</form>
+	</article>
+	<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+
+		let true_radio = document.getElementById("id_is_neutered_0");
+		true_radio.checked = true;
+		let species0 = document.getElementById("id_species_0");
+		species0.checked = true;	
+		let divOwners = document.getElementsByClassName('owner_input')
+        let divNewFormer = document.getElementById('new-former')	
+		const csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+		let new_owner = false
+		let reaction
+		const Select = function(){
+			for (div of divOwners){
+				div.classList.replace('d-flex', 'd-none')
+			}
+			divNewFormer.classList.replace('d-none', 'd-flex')
+		}
+
+		const SelectOption = function(value){
+			if (value != "0"){
+				new_owner = false
+				dispNewOwn()
+				fillBlank(value)				
+			}else{
+				new_owner = true
+				removeFromOwnerBlank()
+			}
+		}
+		const SendDatas = function(url, datas, reaction){
+			//AJAX
+			const csrfSafeMethod = function(method) {
+            	// these HTTP methods do not require CSRF protection
+            	return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        	}
+			$.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    // if not safe, set csrftoken
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            }); 
+            $.ajax({ 
+                type:"POST", 
+                url: "{% url 'sheet:add'%}", 
+                dataType: 'json',
+                data: datas,
+                success: function(res){
+                	reaction(res.data)
+                	},
+                error: function (res) {
+                    alert("erreur lors de l'envoie de données");
+                    console.log(res.status);
+                    console.log(res.error);
+                }
+            })			
+		}
+		const dispNewOwn = function(){
+			divNF = document.getElementsByClassName("new-former")[0]
+			divNF.classList.replace("d-flex", "d-none")
+			ownDivs = document.getElementsByClassName('owner_input')
+			for (div of ownDivs){
+				div.classList.replace("d-none", "d-flex")
+			}
+			removeFromOwnerBlank()
+		}
+		// remove data from owner Form
+		const removeFromOwnerBlank = function(){
+			ids = ["id_owner_name", "id_owner_surname", "id_owner_sex", 'id_phone', "id_mail"]
+			for (index in ids){
+				input = document.getElementById(ids[index])
+				input.value = ""
+			}
+		}
+		const fillBlank = function(value){
+			ids = ["id_owner_name", "id_owner_surname", 'id_phone', "id_mail"]
+			{% for owner in owners%}
+			if ({{owner.id}} == value){
+				values = ['{{owner.owner_name}}', '{{owner.owner_surname}}', '{{owner.phone}}', '{{owner.mail}}', '{{owner.owner_sex}}']
+			}
+			{% endfor %}
+			for (index in ids){
+				input = document.getElementById(ids[index])
+				input.value = values[index]
+			}
+			let inputSex = document.getElementById('id_owner_sex').children;
+			console.log(inputSex, value.sex)
+			if (values[4] == 0){
+				inputSex[0].firstChild.firstChild.checked = true
+			}else{
+				inputSex[1].firstChild.firstChild.checked = true
+			}
+
+		}
+		//complete the blank
+		//1 select inputs
+		const appearNewInput = function(){
+			//create an input date
+			let divDate = document.createElement("div");
+			divDate.innerHTML = '{{form.futur_date_of_neuter}}'
+			document.getElementById('inputDateZone').appendChild(divDate);
+			document.getElementById('id_futur_date_of_neuter').classList.add('d-none')
+			console.log('appeared')
+		}
+
+		const GetTheBlank = function(){
+			//takes all inputs
+			const inputsNodes = document.querySelectorAll("section#alter input"); 
+			const inputs = Array.from(inputsNodes);	
+			let inputsToFill = new Array()
+			let choicesToMake = new Array()
+
+			for (input of inputs){
+				let count = 0 
+				//split inputs between 2 cat : text and choice
+				for (elem of ['id_species_0','id_species_1','id_species_2','id_species_3', 'id_is_neutered_0', 'id_is_neutered_1', 'id_is_neutered_2', 'id_owner_sex_0', 'id_owner_sex_1']){
+					if (input.id == elem){
+						choicesToMake.push(input);
+						count ++}}
+				if (count == 0){inputsToFill.push(input);}
+			}
+			inputsToFill.splice(0, 1);//kick first one, not concerned
+			return [inputsToFill, choicesToMake]; //return array
+		}
+
+		//fills the inputs
+		const FillTheInputs = function(fields){
+			// this functions fills the inputs with the given data from animal
+			values = ['{{animal.name}}','{{animal.date_of_birth|date:"d/m/Y"}}','{{animal.date_of_adoption|date:"d/m/Y"}}','{{animal.admin_data.date_of_neuter|date:"d/m/Y"}}', '{{animal.admin_data.date_of_neuter|date:"d/m/Y"}}', '{{animal.race}}', '{{animal.color}}', '{{animal.observation}}', "{{animal.admin_data.file}}", "{{animal.admin_data.tatoo}}", "{{animal.admin_data.chip}}", "{{animal.owner.caution}}", "{{animal.owner.mail_reminder}}","{{animal.owner.tel_reminder}}", "{{animal.owner.owner_name}}", "{{animal.owner.owner_surname}}", "{{animal.owner.phone}}", "{{animal.owner.mail}}" ]
+			for (i in values){
+				fields[i].value = values[i];
+			}
+			document.getElementById('id_status').innerHTML = "{{animal.admin_data.status}}"
+		}
+		//make choices
+		const CheckCHoices = function(checkboxes){
+			// this function checks the concerned checkbox according to the given datas for db
+			let choice1 = ('id_species_' + '{{animal.species}}')
+			let choice2 = ('id_is_neutered_' + '{{animal.admin_data.is_neutered}}')
+			if ('{{animal.owner.owner_sex}}' == 'H'){
+				sex = 0;
+			}else{
+				sex = 1;
+			}
+			let choice3 = ('id_owner_sex_' + sex)
+
+			for (let choice of [choice1, choice2, choice3]){
+				for (let checkbox of checkboxes){
+					if (choice == checkbox.id){
+						a = checkbox
+						checkbox.checked = true;
+						if (checkbox.id == "id_is_neutered_2" ){
+							appearNewInput();
+							let newInput = document.getElementById('id_futur_date_of_neuter'); 
+							newInput.value ='{{animal.admin_data.futur_date_of_neuter|date:"d/m/Y"}}'; 
+						}
+						break; 
+					}
+				}
+			}
+		}
+		//send a resquest to server to modify db with new datas
+		const AlterDb = function(){
+			if (document.getElementById('id_select').value != 0){
+				new_owner = false
+			}else{
+				new_owner = true}
+		}
+
+		document.getElementById("id_is_neutered").addEventListener('click', function(e){
+			if(document.getElementById("id_is_neutered_2").checked){
+				document.getElementById("id_futur_date_of_neuter").classList.replace('d-none', 'd-flex')
+			}else{
+				document.getElementById("id_futur_date_of_neuter").classList.replace('d-flex', 'd-none')
+			}
+		})
+		const getInputDate = function(){
+			let allInputDate = []
+			keys = [ 'id_date_of_birth', 'id_date_of_adoption', 'id_date_of_neuter', 'id_futur_date_of_neuter']
+			for (key of keys){				
+				allInputDate.push(document.getElementById(key))
+			}
+			if (allInputDate.length == 4){
+				return allInputDate
+			}else{
+				alert('problem dans getInputDate()')}
+		}
+		document.getElementById('submit').addEventListener('click', function(event){
+			
+			let verif = document.getElementById('verif')
+			verif.textContent = ""
+			const dateFields = getInputDate()
+			for (df of dateFields){
+				df.style.border = "1px black solid";
+		        df.style.color = "black";
+			}
+			const regexDate = /^([0-2]\d|3[0-1])\/(0\d|1[0-2])\/(\d{4})$/; 
+			const choiceIsNeutered = function(){
+				for (i of [0,1,2]){
+					if (document.getElementById('id_is_neutered_'+i).checked){
+						return i
+			}}}
+			if (choiceIsNeutered() == 0) {
+				dateFields.splice(3,1)
+				console.log("dateFields après chgt : ")
+				console.log(dateFields)
+			}
+			else if (choiceIsNeutered() == 1) {
+				dateFields.splice(2,2)
+				console.log("dateFields après chgt : ")
+				console.log(dateFields)
+			}
+			else{
+				dateFields.splice(2,1)
+				console.log("dateFields après chgt : ")
+				console.log(dateFields)
+			}
+
+			for (dateField of dateFields){
+				console.log(dateField.value)
+		        if (regexDate.test(dateField.value) && dateField.value != ""){
+		        	//pass
+		        } else{
+		            verifText = "le champ en rouge n'est pas une date au format jj/mm/aaa"
+		            verif.textContent = verifText ;
+		            dateField.style.border = "2px red solid";
+		            dateField.style.color = "red";
+		            event.preventDefault();
+		        }
+		        
+			}
+		});
+
+		document.getElementById('id_select').value = {{animal.owner.id}}
+		appearNewInput();
+		let my_form  = GetTheBlank() //gives the void inputs in order to fill them  
+		FillTheInputs(my_form[0])
+		CheckCHoices(my_form[1])
+
+	</script>
+	{% endblock  %}
+
