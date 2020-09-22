@@ -18,14 +18,19 @@ class SheetView(View):
     'button_value':[
         {'name' : 'ajouter',    'id' : 'ajouter', 'function' : 'add()'}, 
         {'name' : 'modifier',   'id' : 'modifier', 'function' : 'alter()'},
-        {'name' : 'trier par',  'id' :'trier', 'function' : 'classify()'},
-        {'name' : 'supprimer',  'id' : 'supprimer', 'function' : 'remove()'}]}
+        {'name' : 'Afficher Propriétaires',  'id' :'display', 'function' : 'display()'},
+        {'name' : 'supprimer',  'id' : 'supprimer', 'function' : 'remove()'}],
+    'anim_cols':["nom", "stérilisation", "espèce", "race", "propriétaire", "num dossier", \
+        "num tatouage", "num puce"]}
     def get(self, request):
         #get the data from database
         print('-- get --')
         sheets = ut.get_animals_for_template()
+        owners = Owner.objects.all()
+        print(owners[0].number_animal())
+        # print(owners[0].number_animal())
         self.context['sheets'] = sheets
-        # print(sheets)
+        self.context['owners'] = list(owners)
         return render(request, 'sheet/index.html', self.context)
     def post(self, request):
         """receives data to pass to deals with the dropSheet function"""

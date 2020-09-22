@@ -67,6 +67,12 @@ class Owner(models.Model):
         else:
             return f'Madame {self.owner_surname.upper()} {self.owner_name}'
 
+    def number_animal(self): 
+        """ this function returns how many animals belong to this owner """
+        animal = Animal.objects.filter(owner=self)
+        print(len(animal))
+        return len(animal)
+        
 class Contact(models.Model):
 
     contact_date = models.DateField(default=timezone.now, verbose_name="Date du contact")

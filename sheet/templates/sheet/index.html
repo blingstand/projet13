@@ -4,33 +4,26 @@
     <h2 class="mt-5 pl-5">Page Fiches</h2>
     <article class="mt-5 container">
         <div class="row">
-            <div class="col-2"></div>
+            <div class="col-1"></div>
             {% for elem in button_value %} <!-- affiche les boutons -->
             <div class="col-2 bg-primary text-center">
                 <button id="{{elem.id}}" onclick="{{elem.function}}">{{elem.name}}</button>
             </div>
             {% endfor %}
-            <div class="col-2"></div>
+            <div class="col-1"></div>
             <div class="col-12 mb-5 text-center">
                 <button>imprimer</button>
             </div>
             <form id="my_form" action="" method="" name="my_form">
                 {% csrf_token %} 
-                <table>
-                    <tr>
+                <table id="anim_table" class=" d-flex">
+                    <tr class="col-12 text-center">
                         <td>&nbsp;</td>
-                        <td>nom</td>
-                        <td>stérilisation</td>
-                        <td>espèce</td>
-                        <td>race</td>
-                        <td>propriétaire</td>
-                        <td>statut propriétaire</td>
-                        <td>tel</td>
-                        <td>num dossier</td>
-                        <td>num tatouage</td>
-                        <td>num puce</td>
+                        {% for col in anim_cols %}
+                        <td>{{col}}</td>
+                        {% endfor %}
                     </tr>
-                    {% for sheet in sheets %}
+                    {% for sheet in sheets|dictsort:"name" %}
                     <tr class="col-12 text-center {% cycle 'row1' 'row2' %}">
                         <!-- nom sexe/espece status propriétaire num-dossier num-tatoo num-puce -->
                         <td><input type="checkbox" id='{{sheet.animal_id}}' name='checkbox' value={{sheet.animal_id}}></td>
@@ -39,11 +32,37 @@
                         <td>{{sheet.species}}</td>
                         <td>{{sheet.race}}</td>
                         <td>{{sheet.owner}} </td>
-                        <td>{{sheet.owner_status}}</td>
-                        <td>{{sheet.owner.phone}}</td>
                         <td>{{sheet.admin_data.file}}</td>
                         <td>{{sheet.admin_data.tatoo}}</td>
                         <td>{{sheet.admin_data.chip}}</td>                      
+                    </tr>
+                    {% endfor %}
+                </table>
+                <table id="owner_table" class=" d-none">
+                    <tr class="col-12 text-center">
+                        <td>&nbsp;</td>
+                        <td>nombre d'animaux</td>
+                        <td>Nom</td>
+                        <td>Prénom</td>
+                        <td>Caution</td>
+                        <td>Besoin contact</td>
+                        <td>tel</td>
+                        <td>mail</td>
+                        <td>nb appel</td>
+                        <td>nb mail</td>
+                    </tr>
+                     {% for owner in owners|dictsort:"number_animal" %}
+                    <tr class="col-12 text-center {% cycle 'row1' 'row2' %}">
+                        <td><input type="checkbox" id='{{owner.id}}' name='checkbox' value={{owner.id}}></td>
+                        <td>{{owner.number_animal}}</a></td>
+                        <td>{{owner.owner_name}}</a></td>
+                        <td>{{owner.owner_surname}}</a></td>
+                        <td>{{owner.caution}}</td>
+                        <td>{{owner.need_contact}}</td>
+                        <td>{{owner.phone}}</td>
+                        <td>{{owner.mail}} </td>
+                        <td>{{owner.tel_reminder}}</td>
+                        <td>{{owner.mail_reminder}}</td>                  
                     </tr>
                     {% endfor %}
                 </table>
@@ -51,6 +70,9 @@
         </div>
     </article>
     <script type="text/javascript">
+    //**********Modification boostrap **********    
+    let displayButt = document.getElementById('display')
+    displayButt.parentElement.classList.replace('col-2', 'col-4')
     const form = document.getElementById('my_form');
     //click on line means checkbox checked
     let allTr = Array.from(document.querySelectorAll('tr')).slice(1); 
@@ -67,6 +89,11 @@
                 }else{
                     target.checked=true;
                 }
+            });
+            child.addEventListener('dblclick', function(e){
+                targid = e.target.parentElement.children[0].firstChild.id
+                add_page = window.location + "alter/"+ targid;
+                window.location.href = add_page; 
             });
         }
     }
@@ -95,9 +122,7 @@
             }
 
         }
-        function classify(){
-            alert('classify') 
-        }
+
     function remove(){
         const checkbox = document.querySelectorAll('input[type=checkbox]');
         let count = 0; 
@@ -128,6 +153,18 @@
             }
         }
         form.setAttribute('action', "");
+    }
+    const display= function(){
+        //display owner and change button value
+        if (displayButt.textContent == "Afficher Propriétaires"){
+            document.getElementById('anim_table').classList.replace('d-flex', 'd-none');
+            document.getElementById('owner_table').classList.replace('d-none', 'd-flex');
+            displayButt.textContent = "Afficher Animaux"
+        }else{
+            document.getElementById('owner_table').classList.replace('d-flex', 'd-none');
+            document.getElementById('anim_table').classList.replace('d-none', 'd-flex');
+            displayButt.textContent = "Afficher Propriétaires"
+        }
     }
 </script>
 {% endblock  %}
