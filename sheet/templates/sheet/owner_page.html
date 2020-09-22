@@ -1,0 +1,205 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<section>
+	<p class="curs-pointer" onclick=BackToIndex()>Retour Index</p>
+	<h2 class="mt-5 mb-2 pl-5">Page Modification Fiche Propriétaire</h2>
+	<article class=" bg-blue">
+		<form class="sheet" action="" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="container">
+				<div class="row">
+					<div class="col-8 bg-yellow container">
+						<div class="row owner_input d-flex">
+							<div class="col-4 text-center">{{form.owner_name.label}}<br/> {{form.owner_name}}</div>
+							<div class="col-4 text-center">{{form.owner_surname.label}}<br/> {{form.owner_surname}}</div>
+							<div class="col-4 text-center very-center">{{form.owner_sex}}</div>
+						</div>
+						<div class="row owner_input">
+							<div class="col-4 text-center">{{form.caution.label}}<br/> {{form.caution}}</div>
+							<div class="col-4 text-center">{{form.mail_reminder.label}}<br/> {{form.mail_reminder}}</div>
+							<div class="col-4 text-center">{{form.tel_reminder.label}}<br/> {{form.tel_reminder}}</div>
+						</div>
+						<div class="row owner_input d-flex">
+							<div class="col-1"></div>
+							<div class="col-5 text-center">{{form.phone.label}}<br/> {{form.phone}}</div>
+							<div class="col-5 mb-2 text-center">{{form.mail.label}}<br/> {{form.mail}}</div>	
+							<div class="col-1"></div>
+						</div>
+						<div class=" row d-flex new-former">
+							<div class="col-1"></div>
+							<div class="col-4 new-owner  very-center curs-pointer" onclick="dispNewOwn()">
+								Nouveau propriétaire
+							</div>
+							<div class="col-2"></div>
+
+							<div class="col-4 former-owner  very-center curs-pointer" onclick="SelectOwners()">
+								Ancien propriétaire
+							</div>
+							<div class="col-1"></div>
+
+						</div>
+					</div>			
+					<div class="col-4 bg-green">
+						<div class="container">
+							<div class="row">
+								<div class="col-2"></div>
+								<div class="col-4">
+									<button class="btn-delete" >Supprimer </button>
+								</div>
+								<div class="col-4">
+									<input id="submit" type="submit" class="btn btn-primary big-btn" value="Enregistrer"> 
+									<p id='verif'></p>
+								</div>
+								<div class="col-2"></div>
+								<div class="col-12">
+									{% if error %}
+									<p> {{error}}</p>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>			
+			</div>
+		</form>
+	</article>
+	<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		/* *** plan ***
+		1/ User select new or former owner
+		2/ 	A. new displays Ownerform
+		2/ 	B. former displays select with owner in option
+		3/ Client sends Ajax request to get more infos about selected owner id
+		4/ Client receives info, success > display ownerform and fill it
+		*/
+		const url = window.location.href
+		
+		const GetParam = function(){
+			//return param from url 
+			param = url.split("/")
+			param = param[param.length-1]
+			return param
+		}
+		const given_id = GetParam()
+
+		const BackToIndex = function(){
+			let start_url = url.split("/")
+			start_url.splice(5,2)
+			const back_url = start_url.join("/")
+			window.location.href = back_url
+			// window.location.href = window.location.href; 
+		}
+
+		// Owner form
+		const dispNewOwn = function(){
+			
+			ownDivs = document.getElementsByClassName('owner_input')
+			for (div of ownDivs){
+				div.classList.replace("d-none", "d-flex")
+			}
+			removeFromOwnerBlank()
+		}
+		// remove data from owner Form
+		const removeFromOwnerBlank = function(value){
+			ids = ["id_owner_name", "id_owner_surname", 'id_phone', "id_mail", "id_caution", 
+			"id_mail_reminder", "id_tel_reminder"]
+			for (index in ids){
+				input = document.getElementById(ids[index])
+				input.value = ""
+			}
+		}
+		// fill blank with ajax values
+		const fillBlank = function(value){
+			ids = ["id_owner_name", "id_owner_surname", 'id_phone', "id_mail", "id_caution", 
+			"id_mail_reminder", "id_tel_reminder"]
+			values = [value.name, value.surname, value.phone, value.mail, value.caution, value.mail_reminder, value.tel_reminder]
+			for (index in ids){
+				input = document.getElementById(ids[index])
+				input.value = values[index]
+			}
+			let inputSex = document.getElementById('id_owner_sex').children;
+			if (value.sex == 0){
+				inputSex[0].firstChild.firstChild.checked = true
+			}else{
+				inputSex[1].firstChild.firstChild.checked = true
+			}
+
+		}
+		// displays owner form with data from ajax request 
+		const displayOwnerForm = function(value){
+			{% for owner in owners%}
+			if ({{owner.id}} == value){
+				valuesToFill = {
+					'name': "{{owner.owner_name}}",
+					'surname': "{{owner.owner_surname}}",
+					'sex': "{{owner.owner_sex}}",
+					'phone': "{{owner.phone}}",
+					'mail': "{{owner.mail}}",
+					'mail_reminder': "{{owner.mail_reminder}}",
+					'mail_reminder': "{{owner.mail_reminder}}",
+					'tel_reminder': "{{owner.tel_reminder}}",
+					'caution': "{{owner.caution}}"}
+			}
+			{% endfor%}
+			fillBlank(valuesToFill)
+			}
+		// creates and displays select with owners name and validate button
+		const SelectOwners = function(){
+			divNF = document.getElementsByClassName("new-former")[0]
+			divFormer = document.getElementsByClassName("former-owner")[0]
+			divNew = document.getElementsByClassName("new-owner")[0]
+			divFormer.classList.add("d-none")
+			select = document.createElement('select')
+			select.id = "id_select"
+			select.name = "former_owner"
+			divNF.appendChild(select)
+			
+			{% for owner in owners%}
+				option = document.createElement('option')
+				option.value = '{{owner.id}}'
+				option.innerHTML = "{{owner}}"
+				option.onclick = function(){displayOwnerForm({{owner.id}})}
+				select.appendChild(option)
+			{% endfor %}
+			select.value = {{selected_owner.id}}
+		}
+
+		const getInputDate = function(){
+			const allInput = document.getElementsByTagName('input')
+			let allInputDate = []
+			for (input of allInput){
+				if (input.id.substring(0,7) == "id_date"){
+					allInputDate.push(input)
+				}else if (dateField.id == "id_date_of_neuter" && dateField.value == ''){
+				}
+			}
+			return allInputDate
+		}
+		const BeforeSubmitCTRL = function(){
+			document.getElementById('submit').addEventListener('click', function(event){
+				const dateFields = getInputDate()
+				const regex_date = /^([0-2]\d|3[0-1])\/(0\d|1[0-2])\/(\d{4})$/; 
+
+				for (dateField of dateFields){
+			        if (regex_date.test(dateField.value)){
+			            dateField.style.color = "black";
+			        } else{
+			            verifText = dateField.value + " n'est pas une date au format jj/mm/aaa"
+			            verif.textContent = verifText ;
+			            dateField.style.border = "2px red solid";
+			            dateField.style.color = "red";
+
+			            event.preventDefault();
+			            return
+			        }
+				}
+			})
+		}
+		const main = function(){
+			displayOwnerForm(given_id)
+			BeforeSubmitCTRL()
+		}
+		main()
+	</script>
+	{% endblock  %}
+

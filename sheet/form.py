@@ -137,10 +137,3 @@ class SheetForm(forms.Form):
 
         except Exception as e:
             return e
-        # # #add foreignKey
-        
-
-
-    """
-        name_col = ('name','date_of_birth','race','species','color','date_of_adoption', 'picture')
-    """
