@@ -137,6 +137,11 @@
 	div.former-owner:hover, div.new-owner:hover{
 		background-color: #1a75ff;
 	}
+/* owner_page */
+	.btn-delete{
+		background-color: red;
+		border-color: red;
+	}
 /* mail */ 
 	.mail-but{
 		height: 5rem; 

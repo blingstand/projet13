@@ -72,29 +72,42 @@
     <script type="text/javascript">
     //**********Modification boostrap **********    
     let displayButt = document.getElementById('display')
+
     displayButt.parentElement.classList.replace('col-2', 'col-4')
     const form = document.getElementById('my_form');
+    const isForAnimal = function(){
+        return displayButt.textContent == "Afficher Propriétaires"
+    }
     //click on line means checkbox checked
-    let allTr = Array.from(document.querySelectorAll('tr')).slice(1); 
-    for (tr of allTr){
-        tr.style.cursor = 'pointer'; 
-        tr = Array.from(tr.children)
-        tr.splice(0,1)
-        for (child of tr){
-            child.addEventListener('click', function(e){
-                let target = e.target.parentElement.children[0].firstChild;
-                console.log(e.target.tagName)
-                if (target.checked == true){
-                    target.checked=false; 
-                }else{
-                    target.checked=true;
-                }
-            });
-            child.addEventListener('dblclick', function(e){
-                targid = e.target.parentElement.children[0].firstChild.id
-                add_page = window.location + "alter/"+ targid;
-                window.location.href = add_page; 
-            });
+    const activClickEvent = function(){
+
+        let allTr = Array.from(document.querySelectorAll('tr')).slice(1); 
+        for (tr of allTr){
+            tr.style.cursor = 'pointer'; 
+            tr = Array.from(tr.children)
+            tr.splice(0,1)
+            for (child of tr){
+                child.addEventListener('click', function(e){
+                    let target = e.target.parentElement.children[0].firstChild;
+                    console.log(e.target.tagName)
+                    if (target.checked == true){
+                        target.checked=false; 
+                    }else{
+                        target.checked=true;
+                    }
+                });
+                child.addEventListener('dblclick', function(e){
+                    if (isForAnimal()){
+                        targid = e.target.parentElement.children[0].firstChild.id
+                        add_page = window.location + "alter/"+ targid;
+                        window.location.href = add_page; 
+                    }else{
+                        targid = e.target.parentElement.children[0].firstChild.id
+                        add_page = window.location + "alter_owner/"+ targid;
+                        window.location.href = add_page; 
+                    }
+                });
+            }
         }
     }
 
@@ -166,6 +179,10 @@
             displayButt.textContent = "Afficher Propriétaires"
         }
     }
+    const main = function(){
+        activClickEvent()
+    }
+    main()
 </script>
 {% endblock  %}
 

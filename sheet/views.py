@@ -143,3 +143,18 @@ class AlterSheetView(View):
         print(request.POST, 'et', request.FILES)
         return render(request, 'sheet/add.html', context)
 
+class AlterOwnerSheetView(View):
+    """this class handles get and post for alter_owner page"""
+    def get(self, request, given_id):
+        """this function handles get request for alter_owner page"""
+        form = SheetForm()
+        selected_owner = Owner.objects.get(id=given_id)
+        owners = Owner.objects.all()
+        context = {"selected_owner":selected_owner, 'form':form, "owners":owners}
+        return render(request, "sheet/owner_page.html", context)
+        
+    def post(self, request):
+        """this function handles post request for alter_owner page"""
+        return HttpResponse('success')
+
+        
