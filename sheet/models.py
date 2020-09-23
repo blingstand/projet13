@@ -70,7 +70,6 @@ class Owner(models.Model):
     def number_animal(self): 
         """ this function returns how many animals belong to this owner """
         animal = Animal.objects.filter(owner=self)
-        print(len(animal))
         return len(animal)
         
 class Contact(models.Model):

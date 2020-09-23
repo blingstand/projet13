@@ -168,14 +168,17 @@ class Utils():
         except Exception as e:
             return False, e
 
-    def remove_owner(self, given_id): 
+    def remove_owner(self, given_ids): 
         """this function removes 1 owner from db if the ctrl is ok"""
-        owner_to_remove = Owner.objects.get(id=given_id)
-        if owner_to_remove.number_animal() == 0: 
-            owner_to_remove.delete()
-            return True, f'{owner_to_remove} a été effacé(e).'
-        else:
-            return False, f"{owner_to_remove} n'a pas été effacé(e) car il possède au moins un animal." 
+        if isinstance(given_ids, int): 
+            given_ids = list(given_ids)
+        for given_id in given_ids:
+            owner_to_remove = Owner.objects.get(id=given_id)
+            if owner_to_remove.number_animal() == 0: 
+                owner_to_remove.delete()
+            else:
+                return False, f"{owner_to_remove} n'a pas été effacé(e) car il possède au moins un animal." 
+        return True, f'Le(s) {len(given_ids)} propriétaire(s) a/ont été effacé(s).'
 
     def check_owner_values(self, dict_values, given_id=None, for_modif=None):
         queryset1 = Owner.objects.filter(

@@ -76,6 +76,15 @@
 
     const url = window.location.href
     const form = document.getElementById('my_form');
+    let allTr = Array.from(document.querySelectorAll('tr')).slice(1); 
+    allTr.splice(6,1)
+
+    const UncheckAll = function(){
+        //this function unchecks all the checkbox visible and invisible
+        for (tr of allTr){
+            tr.children[0].firstChild.checked = false
+        }
+    }
     
     const GetParam = function(){
             //return param from url 
@@ -86,12 +95,10 @@
     const getBaseUrl = function(){
         //return the base url usefull for button add and alter
         let param = GetParam()
-        alert(param)
         if (param != ""){
             let baseUrl = url.split('/')
             baseUrl.pop(param)
             baseUrl = baseUrl.join("/")+"/"
-            alert(baseUrl)
             return baseUrl
         }
         return url
@@ -102,8 +109,6 @@
     }
     //click on line means checkbox checked
     const activClickEvent = function(){
-
-        let allTr = Array.from(document.querySelectorAll('tr')).slice(1); 
         for (tr of allTr){
             tr.style.cursor = 'pointer'; 
             tr = Array.from(tr.children)
@@ -182,17 +187,40 @@
             ToDelete = Array.from(toDelete)
             let msg = 'Confirmez-vous la suppression de '+ count + ' éléments :'
             let name = ""
-            let specie = ""
-            for (let elem of toDelete){
-                name = elem.parentElement.nextElementSibling.textContent
-                specie = elem.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.textContent
-                msg = msg + "\n  >" + name + " - " + specie;
-            }
-            let response = confirm(msg);
-            if (response){
-                form.setAttribute('action', "{% url 'sheet:index'%}");
-                form.setAttribute('method', "POST");
-                form.submit()
+            let response = false
+            if (isForAnimal()){
+                let specie = ""
+                for (elem of toDelete){
+                    name = elem.parentElement.nextElementSibling.textContent
+                    specie = elem.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.textContent
+                    msg = msg + "\n  >" + name + " - " + specie;
+                }
+                response = confirm(msg);
+                if (response){
+                    form.setAttribute('action', "{% url 'sheet:index' own=0%}");
+                    form.setAttribute('method', "POST");
+                    form.submit()
+                }
+            }else{
+                let nb_animaux = ""
+                let surname = ""
+                for (elem of toDelete){
+                    nb_animaux = elem.parentElement.nextElementSibling.textContent
+                    name = elem.parentElement.nextElementSibling.nextElementSibling.textContent
+                    surname = elem.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.textContent
+                    if (nb_animaux != 0){
+                        alert("Ce propriétaire ("+ name +" "+surname+") est lié à au moins une fiche animal. Il ne peut être suppprimé !")
+                        return
+                    }
+                    msg = msg + "\n  > " + name + " " + surname + " ("+nb_animaux+" animal).";
+                }
+                response = confirm(msg);
+                if (response){
+                    form.setAttribute('action', "{% url 'sheet:index' own=1%}");
+                    form.setAttribute('method', "POST");
+                    form.submit()
+                }
+
             }
         }
         form.setAttribute('action', "");
@@ -202,6 +230,7 @@
         let addBut = document.getElementById('ajouter')
         let alterBut = document.getElementById('modifier')
         let removeBut = document.getElementById('supprimer')
+        UncheckAll()
 
 
         if (displayButt.textContent == "Afficher Propriétaires"){
@@ -210,14 +239,14 @@
             displayButt.innerHTML = "Afficher <br/>Animaux"
             addBut.innerHTML = "Ajouter Propriétaire"  
             alterBut.innerHTML = "Modifier Propriétaire"  
-            removeBut.innerHTML = "Supprimer Propriétaire"  
+            removeBut.innerHTML = "Supprimer Propriétaire(s)"  
         }else{
             document.getElementById('owner_table').classList.replace('d-flex', 'd-none');
             document.getElementById('anim_table').classList.replace('d-none', 'd-flex');
             displayButt.textContent = "Afficher Propriétaires"
             addBut.innerHTML = "Ajouter Animaux"  
             alterBut.innerHTML = "Modifier Animaux"  
-            removeBut.innerHTML = "Supprimer Animaux"
+            removeBut.innerHTML = "Supprimer Animal/Animaux"
         }
     }
     const displayOwner = function(){

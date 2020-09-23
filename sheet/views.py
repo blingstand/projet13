@@ -21,7 +21,7 @@ class SheetView(View):
         {'name' : 'Ajouter Animaux',    'id' : 'ajouter', 'function' : 'add()'}, 
         {'name' : 'Modifier Animaux',   'id' : 'modifier', 'function' : 'alter()'},
         {'name' : 'Afficher Propriétaires',  'id' :'display', 'function' : 'display()'},
-        {'name' : 'Supprimer Animaux',  'id' : 'supprimer', 'function' : 'remove()'}],
+        {'name' : 'Supprimer Animal/Animaux',  'id' : 'supprimer', 'function' : 'remove()'}],
     'anim_cols':["nom", "stérilisation", "espèce", "race", "propriétaire", "num dossier", \
         "num tatouage", "num puce"]}
     def get(self, request, own=0):
@@ -33,18 +33,15 @@ class SheetView(View):
         self.context['owners'] = list(owners)
         self.context['disp_owners'] = own 
         return render(request, 'sheet/index.html', self.context)
-    def post(self, request):
+    def post(self, request, own):
         """receives data to pass to deals with the dropSheet function"""
         given_id = request.POST.getlist('checkbox')
-        print('Avant supression :') #affichage de vérification
-        print(f'\t{len(Animal.objects.all())} animaux.')
-        print(f'\t{len(AdminData.objects.all())} admin.')
-        print(f'\t{len(Owner.objects.all())} owner.')
-        ut.drop_sheet(given_id)
-        print('Après supression :')
-        print(f'\t{len(Animal.objects.all())} animaux.')
-        print(f'\t{len(AdminData.objects.all())} admin.')
-        print(f'\t{len(Owner.objects.all())} owner.')
+        if own == 0: 
+            print("demande de suppression pour un animal |", given_id )
+            ut.drop_sheet(given_id)
+        else: 
+            print("demande de suppression pour un humain |", given_id )
+            ut.remove_owner(given_id)
         return redirect("sheet:index")
         
 class AddSheetView(View): 
