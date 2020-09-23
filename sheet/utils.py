@@ -17,7 +17,6 @@ class Utils():
             a.admin_data.is_neutered = steril_status(a.admin_data.is_neutered)
             if a.admin_data.is_neutered == 'sera stérilisable': 
                 a.admin_data.is_neutered = f'sera stérilisable le {a.admin_data.futur_date_of_neuter}'
-            print(a.name, a.admin_data.is_neutered)
             try:
                 a.admin_data.file = a.admin_data.file or "vide"
                 a.admin_data.chip = a.admin_data.chip or "vide"
@@ -58,7 +57,6 @@ class Utils():
                 continue
             print(f"/!\ Atention ce propriétaire a plusieurs animaux, seuls les fiches {animal} et {admin}"\
                     " seront effacées.")
-
     def change_date_format(self, dict_values):
         """ 
             this function turns str date into datetime.date
@@ -169,3 +167,69 @@ class Utils():
             return True, len(allchanges)
         except Exception as e:
             return False, e
+
+    def remove_owner(self, given_id): 
+        """this function removes 1 owner from db if the ctrl is ok"""
+        owner_to_remove = Owner.objects.get(id=given_id)
+        if owner_to_remove.number_animal() == 0: 
+            owner_to_remove.delete()
+            return True, f'{owner_to_remove} a été effacé(e).'
+        else:
+            return False, f"{owner_to_remove} n'a pas été effacé(e) car il possède au moins un animal." 
+
+    def check_owner_values(self, dict_values, given_id=None, for_modif=None):
+        queryset1 = Owner.objects.filter(
+            phone=dict_values['phone'])
+        queryset2 = Owner.objects.filter(
+            mail=dict_values['mail'])
+        if len(queryset1) != 0 and not for_modif: 
+            return False, 'Ce numéro de téléphone existe déjà'
+        elif len(queryset1) != 0 and for_modif:
+            verif = (queryset1[0].id == given_id)
+            if not verif:
+                return False, 'Ce numéro de téléphone existe déjà'
+        if len(queryset2) != 0 and not for_modif: 
+            return False, 'Ce mail existe déjà'
+        elif len(queryset2) != 0 and for_modif:
+            verif = (queryset2[0].id == given_id)
+            if not verif:
+                return False, 'Ce mail existe déjà'
+        return True, "aucun problème"
+
+    def create_owner(self, dict_values):
+        """this function creates a new owner if it is possible """
+        try:
+            success, message = self.check_owner_values(dict_values)
+            if success:
+                ow = Owner(
+                    owner_name=dict_values['owner_name'],
+                    owner_surname=dict_values['owner_surname'],
+                    owner_sex=dict_values['owner_sex'],
+                    phone=dict_values['phone'],
+                    mail=dict_values['mail'],
+                    mail_reminder=dict_values['mail_reminder'],
+                    tel_reminder=dict_values['tel_reminder'],
+                    caution=dict_values['caution'])
+                ow.save()
+                return True, f"création de {ow.owner_name} réussie"
+            else: 
+                return success, message
+        except Exception as e:
+            return False, f"une erreur a été rencontrée : {e}"
+            # raise e
+
+    def modify_owner(self, given_id, dict_values):
+        """this function modifies the recognize owner with dict_values """
+        owner = Owner.objects.get(id=given_id)
+        try:
+            success, message = self.check_owner_values(dict_values, given_id, for_modif=True)
+            if success:
+                for key in dict_values: 
+                    setattr(owner, key, dict_values[key])
+                    owner.save()
+                return True, "Modifications effectuées."
+            else: 
+                return success, message
+        except Exception as e:
+            # return False, f"une erreur a été rencontrée : {e}"
+            raise e

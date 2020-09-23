@@ -72,9 +72,31 @@
     <script type="text/javascript">
     //**********Modification boostrap **********    
     let displayButt = document.getElementById('display')
-
     displayButt.parentElement.classList.replace('col-2', 'col-4')
+
+    const url = window.location.href
     const form = document.getElementById('my_form');
+    
+    const GetParam = function(){
+            //return param from url 
+            param = url.split("/")
+            param = param[param.length-1]
+            return param
+        }
+    const getBaseUrl = function(){
+        //return the base url usefull for button add and alter
+        let param = GetParam()
+        alert(param)
+        if (param != ""){
+            let baseUrl = url.split('/')
+            baseUrl.pop(param)
+            baseUrl = baseUrl.join("/")+"/"
+            alert(baseUrl)
+            return baseUrl
+        }
+        return url
+    }
+
     const isForAnimal = function(){
         return displayButt.textContent == "Afficher Propriétaires"
     }
@@ -99,11 +121,11 @@
                 child.addEventListener('dblclick', function(e){
                     if (isForAnimal()){
                         targid = e.target.parentElement.children[0].firstChild.id
-                        add_page = window.location + "alter/"+ targid;
+                        add_page = getBaseUrl() + "alter/"+ targid;
                         window.location.href = add_page; 
                     }else{
                         targid = e.target.parentElement.children[0].firstChild.id
-                        add_page = window.location + "alter_owner/"+ targid;
+                        add_page = getBaseUrl() + "alter_owner/"+ targid;
                         window.location.href = add_page; 
                     }
                 });
@@ -112,8 +134,12 @@
     }
 
     function add(){
-        add_page = window.location + "add"
-        window.location.href = add_page; 
+        if (isForAnimal()){
+            add_page = getBaseUrl() + "add"
+        }else{
+            add_page = getBaseUrl() + "add_owner" 
+        }
+            window.location.href = add_page; 
     }
     function alter(){
         //check whether only 1 sheet is selected
@@ -128,8 +154,12 @@
             if (count == 0){
                 alert('sélectionnez une fiche à modifier !')
             }else if (count == 1){
-                add_page = window.location + "alter/"+ id_selected;
-                window.location.href = add_page; 
+                if (isForAnimal()){
+                    alter_page = getBaseUrl() + "alter/"+ id_selected;
+                }else{
+                    alter_page = getBaseUrl() + "alter_owner/"+ id_selected;
+                }
+                window.location.href = alter_page; 
             }else{
                 alert("trop de fiches sélectionnées (" + count + ").")
             }
@@ -169,18 +199,37 @@
     }
     const display= function(){
         //display owner and change button value
+        let addBut = document.getElementById('ajouter')
+        let alterBut = document.getElementById('modifier')
+        let removeBut = document.getElementById('supprimer')
+
+
         if (displayButt.textContent == "Afficher Propriétaires"){
             document.getElementById('anim_table').classList.replace('d-flex', 'd-none');
             document.getElementById('owner_table').classList.replace('d-none', 'd-flex');
-            displayButt.textContent = "Afficher Animaux"
+            displayButt.innerHTML = "Afficher <br/>Animaux"
+            addBut.innerHTML = "Ajouter Propriétaire"  
+            alterBut.innerHTML = "Modifier Propriétaire"  
+            removeBut.innerHTML = "Supprimer Propriétaire"  
         }else{
             document.getElementById('owner_table').classList.replace('d-flex', 'd-none');
             document.getElementById('anim_table').classList.replace('d-none', 'd-flex');
             displayButt.textContent = "Afficher Propriétaires"
+            addBut.innerHTML = "Ajouter Animaux"  
+            alterBut.innerHTML = "Modifier Animaux"  
+            removeBut.innerHTML = "Supprimer Animaux"
+        }
+    }
+    const displayOwner = function(){
+        let dispOwn = ({{disp_owners}} == 1)
+        if (dispOwn){
+            display()
         }
     }
     const main = function(){
         activClickEvent()
+        displayOwner()
+        getBaseUrl()
     }
     main()
 </script>

@@ -138,9 +138,15 @@
 		background-color: #1a75ff;
 	}
 /* owner_page */
+	#submit{
+		width: 7rem;}
 	.btn-delete{
 		background-color: red;
-		border-color: red;
+	    border-color: red;
+	    height: 2.4rem;
+	    border-radius: 5px;
+	    width: 7rem;
+	    color:white;
 	}
 /* mail */ 
 	.mail-but{

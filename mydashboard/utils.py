@@ -35,7 +35,7 @@ class GraphDatas():
         all_owner_contacted = []
         all_owner_to_contact = []
         for owner in self.list_owner:
-            print('datas : ', owner, owner.mail_reminder, owner.tel_reminder)
+
             if owner.mail_reminder == 0:
                 pass
             if int(owner.mail_reminder) > 0 and int(owner.mail_reminder) == int(owner.tel_reminder):

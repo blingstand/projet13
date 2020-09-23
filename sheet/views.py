@@ -12,31 +12,29 @@ from .utils import Utils
 
 # Create your views here.
 ut = Utils()
+def redirectIndex(request):
+    return redirect('sheet:index')
 class SheetView(View):
     #the sheet view page
     context={
     'button_value':[
-        {'name' : 'ajouter',    'id' : 'ajouter', 'function' : 'add()'}, 
-        {'name' : 'modifier',   'id' : 'modifier', 'function' : 'alter()'},
+        {'name' : 'Ajouter Animaux',    'id' : 'ajouter', 'function' : 'add()'}, 
+        {'name' : 'Modifier Animaux',   'id' : 'modifier', 'function' : 'alter()'},
         {'name' : 'Afficher Propriétaires',  'id' :'display', 'function' : 'display()'},
-        {'name' : 'supprimer',  'id' : 'supprimer', 'function' : 'remove()'}],
+        {'name' : 'Supprimer Animaux',  'id' : 'supprimer', 'function' : 'remove()'}],
     'anim_cols':["nom", "stérilisation", "espèce", "race", "propriétaire", "num dossier", \
         "num tatouage", "num puce"]}
-    def get(self, request):
+    def get(self, request, own=0):
         #get the data from database
-        print('-- get --')
         sheets = ut.get_animals_for_template()
         owners = Owner.objects.all()
-        print(owners[0].number_animal())
         # print(owners[0].number_animal())
         self.context['sheets'] = sheets
         self.context['owners'] = list(owners)
+        self.context['disp_owners'] = own 
         return render(request, 'sheet/index.html', self.context)
     def post(self, request):
         """receives data to pass to deals with the dropSheet function"""
-        print('*******')   
-        print(request.POST.getlist('checkbox'))
-        print('*******')    
         given_id = request.POST.getlist('checkbox')
         print('Avant supression :') #affichage de vérification
         print(f'\t{len(Animal.objects.all())} animaux.')
@@ -127,9 +125,9 @@ class AlterSheetView(View):
             print(f">{dict_values}")
             print("---dict_values")
             # print("\t3/ Tentative d'enregistrement des données ...")
-            success, response = ut.modify_datas(given_id, dict_values)
+            successs, response = ut.modify_datas(given_id, dict_values)
             print('---end modify_datas')
-            if success:
+            if successs:
                 print(f'{response} changement(s)')
                 context = {'form' : form}
                 return redirect("sheet:index")  
@@ -145,16 +143,64 @@ class AlterSheetView(View):
 
 class AlterOwnerSheetView(View):
     """this class handles get and post for alter_owner page"""
-    def get(self, request, given_id):
+    def get(self, request, given_id, action=None):
         """this function handles get request for alter_owner page"""
         form = SheetForm()
         selected_owner = Owner.objects.get(id=given_id)
-        owners = Owner.objects.all()
-        context = {"selected_owner":selected_owner, 'form':form, "owners":owners}
-        return render(request, "sheet/owner_page.html", context)
+        context = {"selected_owner":selected_owner, 'form':form}
+        return render(request, "sheet/alter_owner.html", context)
+        
+    def post(self, request, given_id, action=None):
+        """this function handles post request for alter_owner page"""
+        print(f"action :", action)
+        form = SheetForm()
+        context = {'form':form}
+        dict_values = request.POST.dict()
+        del dict_values['csrfmiddlewaretoken']
+        if action == "delete":
+            success, message = ut.remove_owner(given_id)
+            print(success, message)
+            if success: 
+                return redirect("sheet:index", own=1)
+            else: 
+                return HttpResponse(message)
+        elif action == "modify": 
+            success, message = ut.modify_owner(given_id, dict_values)
+            if success:
+                print(message)
+                return redirect("sheet:index", own=1)
+            else: 
+                context['error'] = message
+                print(" * * *")
+                print(context)
+                print(" * * *")
+                return render(request, "sheet/alter_owner.html", context)
+        return redirect("sheet:index", own=1)
+
+class AddOwnerSheetView(View):
+    """this class handles get and post for alter_owner page"""
+    def get(self, request):
+        """this function handles the get request for add_owner page"""
+        form = SheetForm()
+        context = {'form':form}
+        return render(request, "sheet/add_owner.html", context)
         
     def post(self, request):
-        """this function handles post request for alter_owner page"""
-        return HttpResponse('success')
-
-        
+        """this function handles the post request for add_owner page"""
+        form = SheetForm()
+        context = {'form':form}
+        dict_values = request.POST.dict()
+        del dict_values['csrfmiddlewaretoken']
+        print(dict_values)
+        if len(dict_values) == 8:
+            successs, message = ut.create_owner(dict_values)
+            if successs: 
+                return redirect("sheet:index", own=1)
+            else:
+                context['error'] = message
+                print(" * * *")
+                print(context)
+                print(" * * *")
+                return render(request, "sheet/add_owner.html", context)
+        context['error'] = 'Remplissez tous les champs'
+        return render(request, "sheet/add_owner.html", context)

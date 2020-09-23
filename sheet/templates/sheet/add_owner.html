@@ -1,0 +1,123 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<section>
+	<p class="curs-pointer" onclick=BackToIndex()>Retour Index</p>
+	<h2 class="mt-5 mb-5 pl-5">Page Modification Fiche Propriétaire</h2>
+	<article class=" bg-blue">
+		<form id='form' class="sheet" action="{% url 'sheet:add_owner'%}" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="container">
+				<div class="row">
+					<div class="col-8 bg-yellow container">
+						<div class="row owner_input d-flex">
+							<div class="col-4 text-center">{{form.owner_name.label}}<br/> {{form.owner_name}}</div>
+							<div class="col-4 text-center">{{form.owner_surname.label}}<br/> {{form.owner_surname}}</div>
+							<div class="col-4 text-center very-center">{{form.owner_sex}}</div>
+						</div>
+						<div class="row owner_input">
+							<div class="col-4 text-center">{{form.caution.label}}<br/> {{form.caution}}</div>
+							<div class="col-4 text-center">{{form.mail_reminder.label}}<br/> {{form.mail_reminder}}</div>
+							<div class="col-4 text-center">{{form.tel_reminder.label}}<br/> {{form.tel_reminder}}</div>
+						</div>
+						<div class="row owner_input d-flex">
+							<div class="col-1"></div>
+							<div class="col-5 text-center">{{form.phone.label}}<br/> {{form.phone}}</div>
+							<div class="col-5 mb-2 text-center">{{form.mail.label}}<br/> {{form.mail}}</div>	
+							<div class="col-1"></div>
+						</div>
+						<div class=" row d-flex new-former">
+							<!-- <div class="col-1"></div> -->
+							<div class="col-3"></div>
+							<div class="col-6 new-owner  very-center curs-pointer" onclick="dispNewOwn()">
+								Tout effacer
+							</div>
+							<div class="col-3"></div>
+
+						</div>
+					</div>			
+					<div class="col-4 bg-green d-flex align-items-center">
+						<div class="container">
+							<div class="row">
+								<div class="col-12 very-center">
+									<input id="submit" type="submit" class="btn btn-primary big-btn" value="Enregistrer"> 
+								</div>
+								<div class="col-12 very-center">
+									<p id='verif' class="alert-secondary"></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>			
+			</div>
+		</form>
+	</article>
+</section>
+	<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		/* *** plan ***
+		1/ User select new or former owner
+		2/ 	A. new displays Ownerform
+		2/ 	B. former displays select with owner in option
+		3/ Client sends Ajax request to get more infos about selected owner id
+		4/ Client receives info, success > display ownerform and fill it
+		*/
+		const url = window.location.href
+		
+		const GetParam = function(){
+			//return param from url 
+			param = url.split("/")
+			param = param[param.length-1]
+			return param
+		}
+		const given_id = GetParam()
+
+		const BackToIndex = function(){
+			let start_url = url.split("/")
+			start_url.splice(5,2)
+			const back_url = start_url.join("/")
+			window.location.href = back_url
+			// window.location.href = window.location.href; 
+		}
+
+		// button 1 
+		const dispNewOwn = function(){
+			ownDivs = document.getElementsByClassName('owner_input')
+			for (div of ownDivs){
+				div.classList.replace("d-none", "d-flex")
+			}
+			removeFromOwnerBlank()
+		}
+		// remove data from owner Form
+		const removeFromOwnerBlank = function(value){
+			ids = ["id_owner_name", "id_owner_surname", 'id_phone', "id_mail", "id_caution", 
+			"id_mail_reminder", "id_tel_reminder"]
+			for (index in ids){
+				input = document.getElementById(ids[index])
+				input.value = ""
+			}
+		}
+		const BeforeSubmit = function(){
+			document.getElementById('submit').addEventListener('click', function(event){
+				let verif = document.getElementById('verif')
+				verif.innerHTML = ""
+				nodes = document.querySelectorAll('input[type=text]')
+				inputs = Array.from(nodes)
+				for (input of inputs){
+					if (input.value == 0){
+						verif.innerHTML = input.name + "ne doit pas être vide."
+						event.preventDefault()
+						break
+					}
+				}
+			})	
+		}
+		document.getElementById('id_mail_reminder').value = "0"
+		document.getElementById('id_tel_reminder').value = "0"
+		{% if error %}
+		document.getElementById('verif').innerHTML = "{{error}}"
+		{% endif %}
+
+
+	</script>
+{% endblock  %}
+

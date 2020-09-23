@@ -2,9 +2,9 @@
 {% block content %}
 <section>
 	<p class="curs-pointer" onclick=BackToIndex()>Retour Index</p>
-	<h2 class="mt-5 mb-2 pl-5">Page Modification Fiche Propriétaire</h2>
+	<h2 class="mt-5 mb-5 pl-5">Page Modification Fiche Propriétaire</h2>
 	<article class=" bg-blue">
-		<form class="sheet" action="" method="post" enctype="multipart/form-data">
+		<form id='form' class="sheet" action="" method="post" enctype="multipart/form-data">
 			{% csrf_token %}
 			<div class="container">
 				<div class="row">
@@ -26,36 +26,28 @@
 							<div class="col-1"></div>
 						</div>
 						<div class=" row d-flex new-former">
-							<div class="col-1"></div>
-							<div class="col-4 new-owner  very-center curs-pointer" onclick="dispNewOwn()">
-								Nouveau propriétaire
+							<!-- <div class="col-1"></div> -->
+							<div class="col-2"></div>
+							<div class="col-3 new-owner  very-center curs-pointer" onclick="dispNewOwn()">
+								Tout effacer
 							</div>
 							<div class="col-2"></div>
-
-							<div class="col-4 former-owner  very-center curs-pointer" onclick="SelectOwners()">
-								Ancien propriétaire
-							</div>
-							<div class="col-1"></div>
+							<div class="col-3 former-owner text-center very-center curs-pointer" onclick="FillBlank()">Restaurer les valeurs de la base de données</div>
+							<div class="col-2"></div>
 
 						</div>
 					</div>			
-					<div class="col-4 bg-green">
+					<div class="col-4 bg-green d-flex align-items-center">
 						<div class="container">
+							<div class="row mb-5">
+								<div class="col-12 very-center">
+									<button id='delete' class="btn-delete" onclick=Delete()>Supprimer </button>
+								</div>
+							</div>
 							<div class="row">
-								<div class="col-2"></div>
-								<div class="col-4">
-									<button class="btn-delete" >Supprimer </button>
-								</div>
-								<div class="col-4">
-									<input id="submit" type="submit" class="btn btn-primary big-btn" value="Enregistrer"> 
+								<div class="col-12 very-center">
+									<button id="submit" class="btn btn-primary big-btn" onclick=Modify()> Enregistrer </button>
 									<p id='verif'></p>
-								</div>
-								<div class="col-2"></div>
-								<div class="col-12">
-									{% if error %}
-									<p> {{error}}</p>
-									{% endif %}
-								</div>
 							</div>
 						</div>
 					</div>
@@ -90,9 +82,8 @@
 			// window.location.href = window.location.href; 
 		}
 
-		// Owner form
+		// button 1 
 		const dispNewOwn = function(){
-			
 			ownDivs = document.getElementsByClassName('owner_input')
 			for (div of ownDivs){
 				div.classList.replace("d-none", "d-flex")
@@ -108,8 +99,17 @@
 				input.value = ""
 			}
 		}
-		// fill blank with ajax values
-		const fillBlank = function(value){
+		// button 2 
+		const FillBlank = function(){
+			value = {
+					'name': "{{selected_owner.owner_name}}",
+					'surname': "{{selected_owner.owner_surname}}",
+					'sex': "{{selected_owner.owner_sex}}",
+					'phone': "{{selected_owner.phone}}",
+					'mail': "{{selected_owner.mail}}",
+					'mail_reminder': "{{selected_owner.mail_reminder}}",
+					'tel_reminder': "{{selected_owner.tel_reminder}}",
+					'caution': "{{selected_owner.caution}}"}
 			ids = ["id_owner_name", "id_owner_surname", 'id_phone', "id_mail", "id_caution", 
 			"id_mail_reminder", "id_tel_reminder"]
 			values = [value.name, value.surname, value.phone, value.mail, value.caution, value.mail_reminder, value.tel_reminder]
@@ -123,47 +123,7 @@
 			}else{
 				inputSex[1].firstChild.firstChild.checked = true
 			}
-
 		}
-		// displays owner form with data from ajax request 
-		const displayOwnerForm = function(value){
-			{% for owner in owners%}
-			if ({{owner.id}} == value){
-				valuesToFill = {
-					'name': "{{owner.owner_name}}",
-					'surname': "{{owner.owner_surname}}",
-					'sex': "{{owner.owner_sex}}",
-					'phone': "{{owner.phone}}",
-					'mail': "{{owner.mail}}",
-					'mail_reminder': "{{owner.mail_reminder}}",
-					'mail_reminder': "{{owner.mail_reminder}}",
-					'tel_reminder': "{{owner.tel_reminder}}",
-					'caution': "{{owner.caution}}"}
-			}
-			{% endfor%}
-			fillBlank(valuesToFill)
-			}
-		// creates and displays select with owners name and validate button
-		const SelectOwners = function(){
-			divNF = document.getElementsByClassName("new-former")[0]
-			divFormer = document.getElementsByClassName("former-owner")[0]
-			divNew = document.getElementsByClassName("new-owner")[0]
-			divFormer.classList.add("d-none")
-			select = document.createElement('select')
-			select.id = "id_select"
-			select.name = "former_owner"
-			divNF.appendChild(select)
-			
-			{% for owner in owners%}
-				option = document.createElement('option')
-				option.value = '{{owner.id}}'
-				option.innerHTML = "{{owner}}"
-				option.onclick = function(){displayOwnerForm({{owner.id}})}
-				select.appendChild(option)
-			{% endfor %}
-			select.value = {{selected_owner.id}}
-		}
-
 		const getInputDate = function(){
 			const allInput = document.getElementsByTagName('input')
 			let allInputDate = []
@@ -176,30 +136,83 @@
 			return allInputDate
 		}
 		const BeforeSubmitCTRL = function(){
-			document.getElementById('submit').addEventListener('click', function(event){
-				const dateFields = getInputDate()
-				const regex_date = /^([0-2]\d|3[0-1])\/(0\d|1[0-2])\/(\d{4})$/; 
+			for (elem of ['submit', 'delete']){
+				document.getElementById(elem).addEventListener('click', function(event){
+					const dateFields = getInputDate()
+					const regex_date = /^([0-2]\d|3[0-1])\/(0\d|1[0-2])\/(\d{4})$/; 
 
-				for (dateField of dateFields){
-			        if (regex_date.test(dateField.value)){
-			            dateField.style.color = "black";
-			        } else{
-			            verifText = dateField.value + " n'est pas une date au format jj/mm/aaa"
-			            verif.textContent = verifText ;
-			            dateField.style.border = "2px red solid";
-			            dateField.style.color = "red";
+					for (dateField of dateFields){
+				        if (regex_date.test(dateField.value)){
+				            dateField.style.color = "black";
+				        } else{
+				            verifText = dateField.value + " n'est pas une date au format jj/mm/aaa"
+				            verif.textContent = verifText ;
+				            dateField.style.border = "2px red solid";
+				            dateField.style.color = "red";
 
-			            event.preventDefault();
-			            return
-			        }
-				}
-			})
+				            event.preventDefault();
+				            return
+		}	} 	})	}	}
+		const Delete = function(){
+			form = document.getElementById('form')
+			form.action = url + '/delete'
+			BeforeSubmitCTRL()
+			form.submit()
 		}
+		const Modify = function(){
+			form = document.getElementById('form')
+			form.action = url + '/modify'
+			BeforeSubmitCTRL()
+			form.submit()
+		}
+		
+
 		const main = function(){
-			displayOwnerForm(given_id)
+			FillBlank()
 			BeforeSubmitCTRL()
 		}
+		{% if error %}
+		document.getElementById('verif').innerHTML = "{{error}}"
+		{% endif %}
 		main()
+		// // displays owner form with data from ajax request 
+		// const displayOwnerForm = function(value){
+		// 	{% for owner in owners%}
+		// 	if ({{owner.id}} == value){
+		// 		valuesToFill = {
+		// 			'name': "{{owner.owner_name}}",
+		// 			'surname': "{{owner.owner_surname}}",
+		// 			'sex': "{{owner.owner_sex}}",
+		// 			'phone': "{{owner.phone}}",
+		// 			'mail': "{{owner.mail}}",
+		// 			'mail_reminder': "{{owner.mail_reminder}}",
+		// 			'mail_reminder': "{{owner.mail_reminder}}",
+		// 			'tel_reminder': "{{owner.tel_reminder}}",
+		// 			'caution': "{{owner.caution}}"}
+		// 	}
+		// 	{% endfor%}
+		// 	fillBlank(valuesToFill)
+		// 	}
+		// // creates and displays select with owners name and validate button
+		// const SelectOwners = function(){
+		// 	divNF = document.getElementsByClassName("new-former")[0]
+		// 	divFormer = document.getElementsByClassName("former-owner")[0]
+		// 	divNew = document.getElementsByClassName("new-owner")[0]
+		// 	divFormer.classList.add("d-none")
+		// 	select = document.createElement('select')
+		// 	select.id = "id_select"
+		// 	select.name = "former_owner"
+		// 	divNF.appendChild(select)
+			
+		// 	{% for owner in owners%}
+		// 		option = document.createElement('option')
+		// 		option.value = '{{owner.id}}'
+		// 		option.innerHTML = "{{owner}}"
+		// 		option.onclick = function(){displayOwnerForm({{owner.id}})}
+		// 		select.appendChild(option)
+		// 	{% endfor %}
+		// 	select.value = {{selected_owner.id}}
+		// }
 	</script>
 	{% endblock  %}
 
