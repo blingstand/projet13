@@ -9,22 +9,19 @@
 				<div class="row">
 					<div class="col-8 bg-yellow container">
 						<div class="row">
-							<div class="col-3 text-center">{{form.name.label}} <br><br>{{form.name}}</div>
-							<div class="col-3 text-center">{{form.date_of_birth.label}}<br> 
-								<span id='span_today_1' class=" text-blue curs-pointer" onclick="today(this)">(aujourd'hui)</span> <br>{{form.date_of_birth}}</div>
-							<div class="col-3 text-center">{{form.date_of_adoption.label}}<br> 
-								 <span id='span_today_2' class=" text-blue curs-pointer" onclick="today(this)">(aujourd'hui)</span> <br>{{form.date_of_adoption}}</div>
-							<div class="col-3 text-center">{{form.date_of_neuter.label}}<br> 
-								<span id='span_today_3' class=" text-blue curs-pointer" onclick="today(this)">(aujourd'hui)</span> <br>{{form.date_of_neuter}}</div>
+							<div class="col-3 text-center">{{form.name.label}} <br>{{form.name}}</div>
+							<div class="col-3 text-center">{{form.date_of_birth.label}}<br>{{form.date_of_birth}}</div>
+							<div class="col-3 text-center">{{form.date_of_adoption.label}}<br>{{form.date_of_adoption}}</div>
+							<div class="col-3 text-center">{{form.date_of_neuter.label}}<br>{{form.date_of_neuter}}</div>
 						</div>
 						<div class="row">
-							<div class="col-6" >
+							<div class="col-8" >
 								<div class="row">
-									<div class="col-6 bg-primary"> {{form.species}}</div>
-									<div class="col-6 bg-primary" id='inputDateZone' > {{form.is_neutered}}</div>
+									<div class="col-5 bg-primary"> {{form.species}}</div>
+									<div class="col-7 bg-primary" id='inputDateZone' > {{form.is_neutered}}</div>
 								</div>
 							</div>
-							<div class="col-6 bg-secondary text-center">
+							<div class="col-4 bg-secondary text-center">
 								<p>{{form.race.label}} {{form.race}}</p>
 								<p>{{form.color.label}}  {{form.color}}</p>
 								<p>{{form.observation.label}} {{form.observation}}</p>
@@ -36,9 +33,10 @@
 							<div class="col-4 text-center">{{form.chip.label}}<br/> {{form.chip}}</div>
 						</div>
 						<div class="row">
-							<div class="col-4 text-center">{{form.caution.label}}<br/> {{form.caution}}</div>
-							<div class="col-4 text-center">{{form.mail_reminder.label}}<br/> {{form.mail_reminder}}</div>
-							<div class="col-4 text-center">{{form.tel_reminder.label}}<br/> {{form.tel_reminder}}</div>
+							<div class="col-3 text-center">{{form.caution.label}}<br/> {{form.caution}}</div>
+							<div class="col-3 text-center">{{form.nature_caution.label}}<br/> {{form.nature_caution}}</div>
+							<div class="col-3 text-center">{{form.mail_reminder.label}}<br/> {{form.mail_reminder}}</div>
+							<div class="col-3 text-center">{{form.tel_reminder.label}}<br/> {{form.tel_reminder}}</div>
 						</div>
 						<div class=" row d-flex new-former">
 							<div class="col-1"></div>
@@ -125,8 +123,9 @@
 
 	//create an input date for the future date of neuter
 	const appearNewInput = function(){
+		document.getElementById('id_is_neutered_2')
 		let divDate = document.createElement("div");
-		divDate.innerHTML = '{{form.futur_date_of_neuter.label}}{{form.futur_date_of_neuter}}'
+		divDate.innerHTML = '{{form.futur_date_of_neuter.label}} &nbsp {{form.futur_date_of_neuter}}'
 		divDate.classList.add("d-none")
 		divDate.id = "divDate"
 		document.getElementById('inputDateZone').appendChild(divDate);
@@ -145,9 +144,10 @@
 		}
 		SelectOwners(owners, '{% url "sheet:add"%}', whatToDo)
 	}
-	const GiveValueReminder = function(){
+	const GiveStartValue = function(){
 		document.getElementById("id_mail_reminder").value = 0
 		document.getElementById("id_tel_reminder").value = 0
+		document.getElementById("id_caution").value = 0
 	}
 	const getInputDate = function(){
 		const allInput = document.getElementsByTagName('input')
@@ -170,26 +170,34 @@
 			document.getElementById('divDate').classList.replace('d-flex', "d-none")
 		}
 	})
-	appearNewInput()
 	document.getElementById('submit').addEventListener('click', function(event){
-		const dateFields = getInputDate()
-		const regex_date = /^([0-2]\d|3[0-1])\/(0\d|1[0-2])\/(\d{4})$/; 
-		for (dateField of dateFields){
-	        if (regex_date.test(dateField.value)){
-	            dateField.style.color = "black";
-	        } else{
-	            verifText = dateField.value + " n'est pas une date au format jj/mm/aaa"
-	            verif.textContent = verifText ;
-	            dateField.style.border = "2px red solid";
-	            dateField.style.color = "red";
+		//checks data consistency
+		IsNeutered = document.getElementById('id_is_neutered_0').checked
+		willBeNeuterable = document.getElementById('id_is_neutered_2').checked
+		aniHasCaution = document.getElementById('id_caution').value
+		console.log(Number(aniHasCaution) < 1)
+		if (IsNeutered){
+			alert("Si l'animal est déjà stéril, ne pas l'enregistrer.")
+			event.preventDefault()
+		}else{
+			console.log("willBeNeuterable: ", willBeNeuterable)
+			if (willBeNeuterable){
+				if (document.getElementById('id_futur_date_of_neuter').value == ""){
+					alert("Si l'animal n'est pas encore stéril, il faut indiquer quand il le sera.")
+					event.preventDefault()
+					return
+				}
+			}
+			if (aniHasCaution == "" || Number(aniHasCaution) < 1) {
+				alert("Si l'animal n'est pas stéril, il faut une caution.")
+				event.preventDefault()
+			}
+		}
 
-	            event.preventDefault();
-	            return
-	        }
-		}})
-
+	});
 	const main = function(){
-		GiveValueReminder()
+		GiveStartValue()
+		appearNewInput()
 	}
 	main()
 </script>

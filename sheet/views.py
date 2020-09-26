@@ -9,6 +9,7 @@ from django.views import View
 from .models import *
 from .form import *
 from .utils import Utils
+from .datas import *
 
 # Create your views here.
 ut = Utils()
@@ -16,33 +17,27 @@ def redirectIndex(request):
     return redirect('sheet:index')
 class SheetView(View):
     #the sheet view page
-    context={
-    'button_value':[
-        {'name' : 'Ajouter Animaux',    'id' : 'ajouter', 'function' : 'add()'}, 
-        {'name' : 'Modifier Animaux',   'id' : 'modifier', 'function' : 'alter()'},
-        {'name' : 'Afficher Propriétaires',  'id' :'display', 'function' : 'display()'},
-        {'name' : 'Supprimer Animal/Animaux',  'id' : 'supprimer', 'function' : 'remove()'}],
-    'anim_cols':["nom", "stérilisation", "espèce", "race", "propriétaire", "num dossier", \
-        "num tatouage", "num puce"]}
+    context= context_sheet_view
     def get(self, request, own=0):
         #get the data from database
-        sheets = ut.get_animals_for_template()
+        animals = Animal.objects.all()
         owners = Owner.objects.all()
         # print(owners[0].number_animal())
-        self.context['sheets'] = sheets
+        self.context['animals'] = animals
         self.context['owners'] = list(owners)
         self.context['disp_owners'] = own 
+        print(self.context)
         return render(request, 'sheet/index.html', self.context)
     def post(self, request, own):
         """receives data to pass to deals with the dropSheet function"""
         given_id = request.POST.getlist('checkbox')
         if own == 0: 
-            print("demande de suppression pour un animal |", given_id )
+            print("demande de suppression pour au moins un animal |", given_id )
             ut.drop_sheet(given_id)
         else: 
-            print("demande de suppression pour un humain |", given_id )
+            print("demande de suppression pour au moins un humain |", given_id )
             ut.remove_owner(given_id)
-        return redirect("sheet:index")
+        return redirect("sheet:index",own='1')
         
 class AddSheetView(View): 
     #the add sheet page
@@ -109,6 +104,7 @@ class AlterSheetView(View):
         #I need to get the concerned animal corresponding this given_id
         animal = ut.get_animal_from_given_id(given_id)[0]
         owners = Owner.objects.all()
+        print("**////", animal.nature_caution)
         context = {'form' : form, 'animal' : animal,  "owners" : owners}
         return render(request, 'sheet/alter.html', context)
 
@@ -189,7 +185,7 @@ class AddOwnerSheetView(View):
         dict_values = request.POST.dict()
         del dict_values['csrfmiddlewaretoken']
         print(dict_values)
-        if len(dict_values) == 8:
+        if len(dict_values) == 7:
             successs, message = ut.create_owner(dict_values)
             if successs: 
                 return redirect("sheet:index", own=1)

@@ -2,7 +2,7 @@
 {% block content %}
 <section>
 	<p class="curs-pointer" onclick=BackToIndex()>Retour Index</p>
-	<h2 class="mt-5 mb-5 pl-5">Page Modification Fiche Propriétaire</h2>
+	<h2 class="mt-5 mb-5 pl-5">Page Ajout Nouvelle Fiche Propriétaire</h2>
 	<article class=" bg-blue">
 		<form id='form' class="sheet" action="{% url 'sheet:add_owner'%}" method="post" enctype="multipart/form-data">
 			{% csrf_token %}
@@ -15,9 +15,8 @@
 							<div class="col-4 text-center very-center">{{form.owner_sex}}</div>
 						</div>
 						<div class="row owner_input">
-							<div class="col-4 text-center">{{form.caution.label}}<br/> {{form.caution}}</div>
-							<div class="col-4 text-center">{{form.mail_reminder.label}}<br/> {{form.mail_reminder}}</div>
-							<div class="col-4 text-center">{{form.tel_reminder.label}}<br/> {{form.tel_reminder}}</div>
+							<div class="col-6 text-center">{{form.mail_reminder.label}}<br/> {{form.mail_reminder}}</div>
+							<div class="col-6 text-center">{{form.tel_reminder.label}}<br/> {{form.tel_reminder}}</div>
 						</div>
 						<div class="row owner_input d-flex">
 							<div class="col-1"></div>
@@ -39,7 +38,7 @@
 						<div class="container">
 							<div class="row">
 								<div class="col-12 very-center">
-									<input id="submit" type="submit" class="btn btn-primary big-btn" value="Enregistrer"> 
+									<input id="save" type="submit" class="btn btn-primary big-btn" value="Enregistrer"> 
 								</div>
 								<div class="col-12 very-center">
 									<p id='verif' class="alert-secondary"></p>
@@ -63,26 +62,14 @@
 		3/ Client sends Ajax request to get more infos about selected owner id
 		4/ Client receives info, success > display ownerform and fill it
 		*/
-		const url = window.location.href
-		const given_id = GetParam()
 
 		const BackToIndex = function(){
-			let start_url = url.split("/")
-			start_url.splice(5,2)
-			const back_url = start_url.join("/")
-			window.location.href = back_url
+			window.location.href = "{% url 'sheet:index' own=1%}"
+			// window.location.href = window.location.href; 
 		}
-		// remove data from owner Form
-		const removeFromOwnerBlank = function(){
-			ids = ["id_owner_name", "id_owner_surname", 'id_phone', "id_mail", "id_caution", 
-			"id_mail_reminder", "id_tel_reminder"]
-			for (index in ids){
-				input = document.getElementById(ids[index])
-				input.value = ""
-			}
-		}
+
 		const BeforeSubmit = function(){
-			document.getElementById('submit').addEventListener('click', function(event){
+			document.getElementById('save').addEventListener('click', function(event){
 				let verif = document.getElementById('verif')
 				verif.innerHTML = ""
 				nodes = document.querySelectorAll('input[type=text]')

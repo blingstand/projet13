@@ -3,7 +3,7 @@ from django.utils import timezone
 
 
 class Animal(models.Model):
-    animal_id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30, verbose_name="Nom") #2 animaux peuvent avoir le même nom  
     date_of_birth = models.DateField(verbose_name="Date de naissance")
     race = models.CharField(max_length=50)
@@ -11,13 +11,13 @@ class Animal(models.Model):
     color = models.CharField(max_length=30, blank=True, verbose_name="Couleur")
     date_of_adoption = models.DateField(verbose_name="Date d'adoption",)
     observation = models.CharField(max_length=50, blank=True)
+    caution = models.PositiveSmallIntegerField(default=0, verbose_name="Montant de la caution(sans €)")
+    nature_caution = models.CharField(max_length=20, default="chèque", verbose_name="Nature de la caution(sans €)")
     picture = models.FileField(blank=True, null=True, upload_to="animals/", default = 'animals/no-img.j')
     admin_data = models.OneToOneField('AdminData', on_delete=models.CASCADE, 
         verbose_name="Suivi administratif", null=True, blank=True, unique=True)
     owner = models.ForeignKey('Owner', on_delete=models.PROTECT, 
         verbose_name="Propriétaire", null=True, blank=True)
-    caution = models.PositiveSmallIntegerField(default=0, verbose_name="Montant de la caution(sans €)")
-    nature_caution = models.CharField(max_length=20, default="chèque", verbose_name="Nature de la caution(sans €)")
     def __str__(self):
         try :
             if self.admin_data.file is not None: 
@@ -26,16 +26,22 @@ class Animal(models.Model):
                 return self.name
         except:
             return self.name
+    @property    
+    def species_name(self): 
+        species = ("0", "chat"),("1", "chatte"), ("2", "chien"), ("3", "chienne")
+        species_name = lambda x : species[int(x)][1]
+        return species_name(self.species)
+
 
 
 class AdminData(models.Model):
-    admin_data_id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     file = models.CharField(max_length=15, null=True, blank=True, verbose_name="Numéro de dossier")
     chip = models.CharField(max_length=15, null=True, blank=True, verbose_name="Numéro de puce")
     tatoo = models.CharField(max_length=15, null=True, blank=True, verbose_name="Numéro de tatouage")
     is_neutered = models.CharField(max_length=1, default=0, verbose_name="statut stérilisation (stérile, stérilisable, à stériliser)")
     date_of_neuter = models.DateField(null=True, blank=True, verbose_name="A été stérilisé(e) le")
-    futur_date_of_neuter = models.DateField(null=True, blank=True, verbose_name="Sera stérilisé(e) le")
+    futur_date_of_neuter = models.DateField(null=True, blank=True, verbose_name="Sera stérilisable le")
     status = models.TextField(null=True, blank=True, max_length=200, 
         verbose_name="Explication concernant la stérilisation")
     def __str__(self):
@@ -45,6 +51,12 @@ class AdminData(models.Model):
             return f"puce {self.chip}"
         else:
             return f"tatoo {self.tatoo}"
+    @property
+    def neuter_status(self):
+        ststatus = (0,"stérile"), (2,"stérilisable"), (3,"sera stérilisable")
+        neuter_status = lambda x : ststatus[int(x)][1]
+        return neuter_status(self.is_neutered)
+    
 
 class Owner(models.Model):
     owner_name = models.CharField(max_length=50, null=True, verbose_name="Prénom propriétaire")#1 owner can have same name
@@ -65,7 +77,7 @@ class Owner(models.Model):
         """ this function returns how many animals belong to this owner """
         animal = Animal.objects.filter(owner=self)
         return len(animal)
-
+    @property
     def sum_caution(self):
         """ this function calculate the sum of all caution of animal that belongs to this owner """
         all_cautions = [animal.caution for animal in Animal.objects.filter(owner=self)]

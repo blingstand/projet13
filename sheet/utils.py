@@ -1,38 +1,8 @@
 from .models import *
 import datetime
 class Utils():
-    def get_animals_for_template(self):
-        """ return a list easy to use for template, build with different models"""
-        #1 get list of animals
-        animals = [animal for animal in Animal.objects.all()]
-        all_sheets = []
-        species = ("0", "chat"),("1", "chatte"), ("2", "chien"), ("3", "chienne")
-        ststatus = (0,"stérile"), (2,"stérilisable"), (3,"sera stérilisable")
-
-        species_name = lambda x : species[int(x)][1]
-        steril_status = lambda x : ststatus[int(x)][1]
-        for a in animals:
-            a.species = species_name(a.species)
-            a.owner.owner_surname, a.owner.owner_name = a.owner.owner_surname.upper(), a.owner.owner_name.upper()
-            a.admin_data.is_neutered = steril_status(a.admin_data.is_neutered)
-            if a.admin_data.is_neutered == 'sera stérilisable': 
-                a.admin_data.is_neutered = f'sera stérilisable le {a.admin_data.futur_date_of_neuter}'
-            try:
-                a.admin_data.file = a.admin_data.file or "vide"
-                a.admin_data.chip = a.admin_data.chip or "vide"
-                a.admin_data.tatoo = a.admin_data.tatoo or "vide"
-                all_sheets.append(a)
-                # print(f"--\n> nom : {a.name}\nid : {a.animal_id}\nnature : {a.species}\nstatut : {a.status}"\
-                #     f"\nrace : {a.race}\npropriétaire : {a.owner}"\
-                #     f"\ntel propriétaire : {a.owner.phone}"\
-                #     f"\nnum dossier : {a.admin_data.file}"\
-                #     f"\nnum tatouage : {a.admin_data.tatoo}"\
-                #     f"\nnum puce : {a.admin_data.chip}") 
-            except Exception as e:
-                raise e
-        return all_sheets
     def get_animal_from_given_id(self, given_id):
-        animal = Animal.objects.filter(animal_id=given_id)
+        animal = Animal.objects.filter(id=given_id)
         return animal 
     def drop_sheet(self, given_id):
         """ this functions drops sheets in the db
@@ -43,7 +13,7 @@ class Utils():
         """
         for elem in given_id:
             print(f">> {elem}")
-            animal = Animal.objects.get(animal_id=elem)
+            animal = Animal.objects.get(id=elem)
             admin = animal.admin_data
             owner = animal.owner
             print(animal, ' || ', admin, ' || ', owner)
@@ -61,7 +31,7 @@ class Utils():
         """ 
             this function turns str date into datetime.date
         """    
-        format_str = '%d/%m/%Y' # The format
+        format_str = '%Y-%m-%d' # The format
         for date in ('date_of_birth', 'date_of_adoption', 'date_of_neuter', 'futur_date_of_neuter'):
             if dict_values[date] != "": 
                 dict_values[date] = datetime.datetime.strptime(dict_values[date], format_str).date()
@@ -74,13 +44,15 @@ class Utils():
 
         """
         # 1/  finds the concerned tables
-        animal = Animal.objects.get(animal_id=given_id)
+        animal = Animal.objects.get(id=given_id)
         # print("la modif concerne : ", animal, animal.admin_data, animal.owner)
         #2/ finds difference between former and new datas
-        loop_animal = ('name', 'date_of_birth', 'race', 'species', 'color', 'date_of_adoption', 'observation'), animal
-        loop_admin = ('file', 'chip', 'tatoo', 'is_neutered', 'date_of_neuter', 'futur_date_of_neuter', 'status'), animal.admin_data
+        loop_animal = ('name', 'date_of_birth', 'race', 'species', 'color', 'date_of_adoption', 'observation',\
+          'caution',  'nature_caution'), animal
+        loop_admin = ('file', 'chip', 'tatoo', 'is_neutered', 'date_of_neuter', 'futur_date_of_neuter',\
+         'status'), animal.admin_data
         loop_owner = ('owner_name', 'owner_surname','owner_sex',  'phone', 'mail', 'tel_reminder', \
-            'mail_reminder', 'caution'), animal.owner
+            'mail_reminder',), animal.owner
         loop = [loop_animal, loop_admin, loop_owner]
         changes = []
         dict_values = self.change_date_format(dict_values)
@@ -105,7 +77,7 @@ class Utils():
             2/ gets the changes to make
             3/ makes changes
         """
-        animal = Animal.objects.get(animal_id=given_id)
+        animal = Animal.objects.get(id=given_id)
         is_same_owner = (dict_values['former_owner'] == str(animal.owner.id))
         # print("==========")
         # print((dict_values['former_owner'], animal.owner.id))
@@ -127,7 +99,6 @@ class Utils():
                     mail=dict_values['mail'],
                     tel_reminder=dict_values['tel_reminder'],
                     mail_reminder=dict_values['mail_reminder'],
-                    caution=dict_values['caution']
                     )
                 new_owner.save()
                 animal.owner = new_owner
@@ -206,8 +177,7 @@ class Utils():
                     phone=dict_values['phone'],
                     mail=dict_values['mail'],
                     mail_reminder=dict_values['mail_reminder'],
-                    tel_reminder=dict_values['tel_reminder'],
-                    caution=dict_values['caution'])
+                    tel_reminder=dict_values['tel_reminder'])
                 ow.save()
                 return True, f"création de {ow.owner_name} réussie"
             else: 
@@ -239,13 +209,8 @@ class Utils():
                 resume = dict_values['select'],
                 full_text = dict_values['title'],
                 nature = dict_values['object'],
-                )
+                contact = owner)
             new_contact.save()
-            a = Animal.objects.all()[0]
-            print("***")
-            print(dir(a.owner))
-            owner.contact.add(new_contact)
-            print(owner.contact)
 
             # print(owner.contact,type(owner.contact))
             # print('***')

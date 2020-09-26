@@ -15,7 +15,9 @@
 							<div class="col-4 text-center very-center">{{form.owner_sex}}</div>
 						</div>
 						<div class="row owner_input">
-							<div class="col-4 text-center">{{form.caution.label}}<br/> {{form.caution}}</div>
+							<div class="col-4 text-center">Caution totale :<br/> 
+								<span class="text-border" title="Ne se modifie pas">{{selected_owner.sum_caution}}€</span>
+							</div>
 							<div class="col-4 text-center">{{form.mail_reminder.label}}<br/> {{form.mail_reminder}}</div>
 							<div class="col-4 text-center">{{form.tel_reminder.label}}<br/> {{form.tel_reminder}}</div>
 						</div>
@@ -25,15 +27,9 @@
 							<div class="col-5 mb-2 text-center">{{form.mail.label}}<br/> {{form.mail}}</div>	
 							<div class="col-1"></div>
 						</div>
-						<div class=" row d-flex new-former">
+						<div class=" bg-tomato row d-flex new-former">
 							<!-- <div class="col-1"></div> -->
-							<div class="col-2"></div>
-							<div class="col-3 new-owner  very-center curs-pointer" onclick="dispNewOwn()">
-								Tout effacer
-							</div>
-							<div class="col-2"></div>
-							<div class="col-3 former-owner text-center very-center curs-pointer" onclick="FillBlank()">Restaurer les valeurs de la base de données</div>
-							<div class="col-2"></div>
+							
 
 						</div>
 					</div>			
@@ -55,127 +51,100 @@
 			</div>
 		</form>
 	</article>
-	<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-	<script type="text/javascript">
-		/* *** plan ***
-		1/ User select new or former owner
-		2/ 	A. new displays Ownerform
-		2/ 	B. former displays select with owner in option
-		3/ Client sends Ajax request to get more infos about selected owner id
-		4/ Client receives info, success > display ownerform and fill it
-		*/
-		const url = window.location.href
-		
-		const GetParam = function(){
-			//return param from url 
-			param = url.split("/")
-			param = param[param.length-1]
-			return param
-		}
-		const given_id = GetParam()
+</section>
+{% load static %}
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+<script type="text/javascript" src='{% static "sheet/js/utils.js" %}'> </script>
+<script type="text/javascript">
+	/* *** plan ***
+	1/ User select new or former owner
+	2/ 	A. new displays Ownerform
+	2/ 	B. former displays select with owner in option
+	3/ Client sends Ajax request to get more infos about selected owner id
+	4/ Client receives info, success > display ownerform and fill it
+	*/	
 
-		const BackToIndex = function(){
-			let start_url = url.split("/")
-			start_url.splice(5,2)
-			const back_url = start_url.join("/")
-			window.location.href = back_url
-			// window.location.href = window.location.href; 
-		}
+	const BackToIndex = function(){
+		window.location.href = "{% url 'sheet:index' own=1%}"
+		// window.location.href = window.location.href; 
+	}
 
-		// button 1 
-		const dispNewOwn = function(){
-			ownDivs = document.getElementsByClassName('owner_input')
-			for (div of ownDivs){
-				div.classList.replace("d-none", "d-flex")
-			}
-			removeFromOwnerBlank()
+	// button 2 
+	const FillBlank = function(){
+		value = {
+				'name': "{{selected_owner.owner_name}}",
+				'surname': "{{selected_owner.owner_surname}}",
+				'sex': "{{selected_owner.owner_sex}}",
+				'phone': "{{selected_owner.phone}}",
+				'mail': "{{selected_owner.mail}}",
+				'mail_reminder': "{{selected_owner.mail_reminder}}",
+				'tel_reminder': "{{selected_owner.tel_reminder}}"}
+		ids = ["id_owner_name", "id_owner_surname", 'id_phone', "id_mail", 
+		"id_mail_reminder", "id_tel_reminder"]
+		values = [value.name, value.surname, value.phone, value.mail, value.mail_reminder, value.tel_reminder]
+		for (index in ids){
+			input = document.getElementById(ids[index])
+			input.value = values[index]
 		}
-		// remove data from owner Form
-		const removeFromOwnerBlank = function(value){
-			ids = ["id_owner_name", "id_owner_surname", 'id_phone', "id_mail", "id_caution", 
-			"id_mail_reminder", "id_tel_reminder"]
-			for (index in ids){
-				input = document.getElementById(ids[index])
-				input.value = ""
-			}
+		let inputSex = document.getElementById('id_owner_sex').children;
+		if (value.sex == 0){
+			inputSex[0].firstChild.firstChild.checked = true
+		}else{
+			inputSex[1].firstChild.firstChild.checked = true
 		}
-		// button 2 
-		const FillBlank = function(){
-			value = {
-					'name': "{{selected_owner.owner_name}}",
-					'surname': "{{selected_owner.owner_surname}}",
-					'sex': "{{selected_owner.owner_sex}}",
-					'phone': "{{selected_owner.phone}}",
-					'mail': "{{selected_owner.mail}}",
-					'mail_reminder': "{{selected_owner.mail_reminder}}",
-					'tel_reminder': "{{selected_owner.tel_reminder}}",
-					'caution': "{{selected_owner.caution}}"}
-			ids = ["id_owner_name", "id_owner_surname", 'id_phone', "id_mail", "id_caution", 
-			"id_mail_reminder", "id_tel_reminder"]
-			values = [value.name, value.surname, value.phone, value.mail, value.caution, value.mail_reminder, value.tel_reminder]
-			for (index in ids){
-				input = document.getElementById(ids[index])
-				input.value = values[index]
-			}
-			let inputSex = document.getElementById('id_owner_sex').children;
-			if (value.sex == 0){
-				inputSex[0].firstChild.firstChild.checked = true
-			}else{
-				inputSex[1].firstChild.firstChild.checked = true
+	}
+	const getInputDate = function(){
+		const allInput = document.getElementsByTagName('input')
+		let allInputDate = []
+		for (input of allInput){
+			if (input.id.substring(0,7) == "id_date"){
+				allInputDate.push(input)
+			}else if (dateField.id == "id_date_of_neuter" && dateField.value == ''){
 			}
 		}
-		const getInputDate = function(){
-			const allInput = document.getElementsByTagName('input')
-			let allInputDate = []
-			for (input of allInput){
-				if (input.id.substring(0,7) == "id_date"){
-					allInputDate.push(input)
-				}else if (dateField.id == "id_date_of_neuter" && dateField.value == ''){
-				}
-			}
-			return allInputDate
-		}
-		const BeforeSubmitCTRL = function(){
-			for (elem of ['submit', 'delete']){
-				document.getElementById(elem).addEventListener('click', function(event){
-					const dateFields = getInputDate()
-					const regex_date = /^([0-2]\d|3[0-1])\/(0\d|1[0-2])\/(\d{4})$/; 
+		return allInputDate
+	}
+	const BeforeSubmitCTRL = function(){
+		for (elem of ['submit', 'delete']){
+			document.getElementById(elem).addEventListener('click', function(event){
+				const dateFields = getInputDate()
+				const regex_date = /^([0-2]\d|3[0-1])\/(0\d|1[0-2])\/(\d{4})$/; 
 
-					for (dateField of dateFields){
-				        if (regex_date.test(dateField.value)){
-				            dateField.style.color = "black";
-				        } else{
-				            verifText = dateField.value + " n'est pas une date au format jj/mm/aaa"
-				            verif.textContent = verifText ;
-				            dateField.style.border = "2px red solid";
-				            dateField.style.color = "red";
+				for (dateField of dateFields){
+			        if (regex_date.test(dateField.value)){
+			            dateField.style.color = "black";
+			        } else{
+			            verifText = dateField.value + " n'est pas une date au format jj/mm/aaa"
+			            verif.textContent = verifText ;
+			            dateField.style.border = "2px red solid";
+			            dateField.style.color = "red";
 
-				            event.preventDefault();
-				            return
-		}	} 	})	}	}
-		const Delete = function(){
-			form = document.getElementById('form')
-			form.action = url + '/delete'
-			BeforeSubmitCTRL()
-			form.submit()
-		}
-		const Modify = function(){
-			form = document.getElementById('form')
-			form.action = url + '/modify'
-			BeforeSubmitCTRL()
-			form.submit()
-		}
-		
+			            event.preventDefault();
+			            return
+	}	} 	})	}	}
+	const Delete = function(){
+		form = document.getElementById('form')
+		form.action = url + '/delete'
+		BeforeSubmitCTRL()
+		form.submit()
+	}
+	const Modify = function(){
+		form = document.getElementById('form')
+		form.action = url + '/modify'
+		BeforeSubmitCTRL()
+		form.submit()
+	}
+	
 
-		const main = function(){
-			FillBlank()
-			BeforeSubmitCTRL()
-		}
-		{% if error %}
-		document.getElementById('verif').innerHTML = "{{error}}"
-		{% endif %}
-		main()
+	const main = function(){
+		FillBlank()
+		BeforeSubmitCTRL()
+	}
+	{% if error %}
+	document.getElementById('verif').innerHTML = "{{error}}"
+	{% endif %}
+	main()
 
-	</script>
-	{% endblock  %}
+</script>
+{% endblock  %}
 

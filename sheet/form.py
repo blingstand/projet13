@@ -14,6 +14,7 @@ CHOICE_STERIL = ("0","stérile"), ("1","stérilisable"), ("2","sera stérilisabl
 CHOICE_SEX = (("0","Homme"), ("1","Femme"))
 CHOICES_NATURE = (("0", "mail automatique"),("1", "mail spa"), ("2", "tel spa"), \
     ("3", "mail propriétaire"), ("4", "tel propriétaire"))
+CHOICES_CAUTION = ("0","chèque"), ("1","virement"), ("2","espèces")
 class PersonalErrorMsg(Exception):
     def __init__(self, m):
         self.message = m
@@ -24,32 +25,36 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 class SheetForm(forms.Form):
     """form to add a new sheet """   
-    caution = forms.CharField(required=True, max_length=30, label='caution', 
+    caution = forms.IntegerField(required=True, label='caution', 
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 
             'title' : 'montant de la caution',
-            'placeholder' : "montant "}))
+            'placeholder' : "montant (sans €)"}))
     chip = forms.CharField(required=False,  label='puce',
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : 'num de la puce',
             'placeholder' : "num de la puce"}))
     date_of_adoption = forms.DateField(required=True, label="date d'adoption",
-        widget=forms.TextInput(attrs={ 
+        widget=forms.DateInput(attrs={ 
             'placeholder' : "jj/mm/aaaa ",
-             "class":"w-7rem", 
-             'title':"date d'adoption (jj/mm/aaa)"}))
+            'type' : 'date',
+            "class":"w-10rem", 
+            'title':"date d'adoption (jj/mm/aaa)"}))
     date_of_birth = forms.DateField(required=True, label="date de naissance",
-        widget=forms.TextInput(attrs={ 
+        widget=forms.DateInput(attrs={ 
             'placeholder' : "jj/mm/aaaa",
-             "class":"w-7rem", 
-             'title':"date de naissance (jj/mm/aaa)"}))
+            'type' : 'date',
+            "class":"w-10rem", 
+            'title':"date de naissance (jj/mm/aaa)"}))
     date_of_neuter = forms.DateField(required=False, label="date de stérilisation",
-        widget=forms.TextInput(attrs={ 
+        widget=forms.DateInput(attrs={ 
             'placeholder' : "jj/mm/aaaa",
-             "class":"w-7rem", 
+            'type' : 'date',
+             "class":"w-10rem", 
              'title':"date de stérilisation (jj/mm/aaa)"}))
-    futur_date_of_neuter = forms.DateField(required=False, label="dès le ",
-        widget=forms.TextInput(attrs={ 
+    futur_date_of_neuter = forms.DateField(required=False, label="dès le : ",
+        widget=forms.DateInput(attrs={ 
             'placeholder' : "jj/mm/aaaa",
-            "class":"w-7rem", 
+            'type' : 'date',
+            "class":"w-10rem", 
             'title':"stérilisable à partir du (jj/mm/aaa)"}))
     file = forms.CharField(required=False, label='dossier',
         widget=forms.TextInput(attrs={'class' : 'input-reduced',  'title' : "num du dossier",
@@ -61,11 +66,14 @@ class SheetForm(forms.Form):
         widget=forms.TextInput(attrs={'class' : 'text-center', 'title' : 'mail' ,
             'placeholder' : "mail"}))
     mail_reminder = forms.IntegerField(required=True, label='nb mail',
-        widget=forms.NumberInput(attrs={ 'class' : 'input-reduced', 'title' : 'nb rappel mail' ,
+        widget=forms.NumberInput(attrs={ 'class' : 'input-very-reduced', 'title' : 'nb rappel mail' ,
             'placeholder' : "nb rappel mail",'min':0}))
     name = forms.CharField(required=True, label="Nom de l'animal", max_length=30, 
         widget=forms.TextInput(attrs={ 'title' : "nom de l'animal",
             'placeholder' : "nom de l'animal", "class":"w-10rem"}))
+    nature_caution = forms.CharField(required=True, label="nature : ", max_length=20, 
+        widget=forms.Select(attrs={ 'title' : "Nature de la caution",
+            "class":"w-10rem"}, choices=CHOICES_CAUTION))
     status = forms.CharField(required=False, max_length=200, 
         widget=forms.Textarea(attrs={ 'title' : "statut de la stérilisation",
             'placeholder' : "statut de la stérilisation", 'cols':30, 'rows':3}))
@@ -76,7 +84,7 @@ class SheetForm(forms.Form):
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "propriétaire" ,
             'placeholder' : "nom proprio"}))
     owner_sex = forms.ChoiceField(label="Sexe", required=True, 
-        widget=forms.RadioSelect(attrs={'class' : 'li-oneline '}), choices=CHOICE_SEX)
+        widget=forms.RadioSelect(attrs={'class' : 'li-oneline very-center'}), choices=CHOICE_SEX)
     observation = forms.CharField(required=False, max_length=50, label='observation(s)',
         widget=forms.TextInput(attrs={ 'title' : "observation(s)",
             'placeholder' : "observation(s)"}))
@@ -94,7 +102,7 @@ class SheetForm(forms.Form):
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "téléphone",
             'placeholder' : "téléphone"}))
     tel_reminder = forms.IntegerField(required=True, label='nb appel', 
-        widget=forms.NumberInput(attrs={ 'class' : 'input-reduced', 'title' : "nb rappel téléphonique",
+        widget=forms.NumberInput(attrs={ 'class' : 'input-very-reduced', 'title' : "nb rappel téléphonique",
             'placeholder' : "nb rappel tel",'min':0, "values":0}))
 
     def _handle_admin_class(self, dict_values):
@@ -115,7 +123,7 @@ class SheetForm(forms.Form):
         owner = Owner(*list_owner)
         if len(owner_in_db) > 0:
             owner.id = owner_in_db[0].id #have to give because auto increment is on for id
-            for elem in ('id','owner_name', 'owner_surname','owner_sex',  'phone', 'mail', 'tel_reminder', 'mail_reminder', 'caution'):
+            for elem in ('id','owner_name', 'owner_surname','owner_sex',  'phone', 'mail', 'tel_reminder', 'mail_reminder'):
                 if getattr(owner, elem) != getattr(owner_in_db[0], elem):
                     # print('diff')
                     owner.id == None
@@ -142,7 +150,7 @@ class SheetForm(forms.Form):
         #animal already exists
         list_ani = dict_values['animal']
         animal = Animal(*list_ani)  
-        same_in_base = Animal.objects.filter(name=animal.name)
+        same_in_base = Animal.objects.filter(name=animal.name, date_of_birth=animal.date_of_birth)
         if len(same_in_base) > 0:
             print(type(same_in_base))
             print(f'comparaison : {same_in_base == animal}')
@@ -155,9 +163,9 @@ class SheetForm(forms.Form):
 
     def from_form(self, ):
         """ returns dictionary of values to fill rows in tables """
-        animal = ('name', 'date_of_birth', 'race', 'species', 'color', 'date_of_adoption', 'observation')
+        animal = ('name', 'date_of_birth', 'race', 'species', 'color', 'date_of_adoption', 'observation', 'caution', 'nature_caution')
         admin = ('file', 'chip', 'tatoo', 'is_neutered', 'date_of_neuter', 'futur_date_of_neuter', 'status')
-        owner = ('owner_name', 'owner_surname','owner_sex',  'phone', 'mail', 'tel_reminder', 'mail_reminder', 'caution')
+        owner = ('owner_name', 'owner_surname','owner_sex',  'phone', 'mail', 'tel_reminder', 'mail_reminder')
         dict_values=self.cleaned_data
 
         # first element have to stay None because it is for auto-id
@@ -199,10 +207,6 @@ class SheetForm(forms.Form):
             animal = output
             animal.admin_data = admin
             animal.owner = owner
-            if animal.admin_data.is_neutered == "0": #if animal is neutered so owner has no obligation
-                owner.need_contact = False
-                owner.save()
-            print(f"Besoin de contacter cet utilisateur pour stérilisation : {owner.need_contact}")
             animal.save()
             # print('- données pour animal ok ')
             return 1

@@ -10,9 +10,6 @@
 	.bg-yellow{ 
 		background-color: yellow;
 		}
-	.border-blue{
-		border: 1px #2f7bff solid;
-	}
 	.text-blue{
 		color: blue; 
 	}
@@ -25,6 +22,8 @@
 	.input-reduced{
 		width: 9rem;
 	}
+	.input-very-reduced{
+		width: 4rem;}
 	.li-oneline{
 		white-space:nowrap;
 		padding-left: 0;
@@ -51,9 +50,13 @@
 		justify-content: center !important;
 		}
 	.w-10rem{
-		width: 10rem;}
-	.w-7rem{
-		width: 7rem;}
+		width: 10rem;
+		text-align: center;
+		padding: 0;}
+	.w-8rem{
+		width: 8rem;
+		text-align: center;
+		padding: 0;}
 
 /* dashboard */
 	.right-part{
@@ -142,6 +145,13 @@
 	/* historic */
 		.input-object{
 			width: 15rem}
+
+	/* alter_owner */
+		.text-border{
+		border: 1px black solid;
+		display: inline-block;
+		width : 8rem;
+		background-color: #fff;}
 /* owner_page */
 	#submit{
 		width: 7rem;}
