@@ -1,3 +1,4 @@
+//123
 let CreateChart = function(container, datas){
     if ([typeof(container),typeof(datas)] == ['string', 'object']){
         console.log('graph.js : réception de données au mauvais format')

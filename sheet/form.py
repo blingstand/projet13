@@ -3,6 +3,7 @@
 from datetime import date
 
 from django import forms
+from django.forms import ModelForm
 from django.db.utils import IntegrityError
 
 from .models import *
@@ -11,6 +12,8 @@ CHOICES = (
     ("0", "chat"),("1", "chatte"), ("2", "chien"), ("3", "chienne"))
 CHOICE_STERIL = ("0","stérile"), ("1","stérilisable"), ("2","sera stérilisable")
 CHOICE_SEX = (("0","Homme"), ("1","Femme"))
+CHOICES_NATURE = (("0", "mail automatique"),("1", "mail spa"), ("2", "tel spa"), \
+    ("3", "mail propriétaire"), ("4", "tel propriétaire"))
 class PersonalErrorMsg(Exception):
     def __init__(self, m):
         self.message = m
@@ -210,3 +213,11 @@ class SheetForm(forms.Form):
             error_msg = output
             return error_msg 
         
+class ContactForm(ModelForm):
+
+    class Meta:
+        model = Contact
+        fields = ['contact_date', 'resume', 'full_text', 'nature']
+        widgets = {
+            'nature': forms.Select(choices=CHOICES_NATURE),
+        }

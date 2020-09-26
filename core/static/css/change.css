@@ -10,7 +10,9 @@
 	.bg-yellow{ 
 		background-color: yellow;
 		}
-
+	.border-blue{
+		border: 1px #2f7bff solid;
+	}
 	.text-blue{
 		color: blue; 
 	}
@@ -113,30 +115,33 @@
 	.row2{
 		background-color: grey; }
 
-/* add sheet */
-	.bg-refresh{
-		border: 1px black solid;
-		background-color: #80b3ff;
-		height: 2rem;
-		width: 6rem;
-		color: black;
-	}
-	.bg-refresh:hover{
-		background-color: #1a75ff;
-	}
-	.new-former{
-		margin-left : -1.2rem;
-		padding : 2rem 0;
-	}
+	/* add sheet */
+		.bg-refresh{
+			border: 1px black solid;
+			background-color: #80b3ff;
+			height: 2rem;
+			width: 6rem;
+			color: black;
+		}
+		.bg-refresh:hover{
+			background-color: #1a75ff;
+		}
+		.new-former{
+			margin-left : -1.2rem;
+			padding : 2rem 0;
+		}
 
-	div.former-owner, div.new-owner{
-		border: 1px black solid;
-		background-color: #80b3ff;
-	}
+		div.former-owner, div.new-owner{
+			border: 1px black solid;
+			background-color: #80b3ff;
+		}
 
-	div.former-owner:hover, div.new-owner:hover{
-		background-color: #1a75ff;
-	}
+		div.former-owner:hover, div.new-owner:hover{
+			background-color: #1a75ff;
+		}
+	/* historic */
+		.input-object{
+			width: 15rem}
 /* owner_page */
 	#submit{
 		width: 7rem;}

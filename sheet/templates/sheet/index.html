@@ -34,7 +34,8 @@
                         <td>{{sheet.owner}} </td>
                         <td>{{sheet.admin_data.file}}</td>
                         <td>{{sheet.admin_data.tatoo}}</td>
-                        <td>{{sheet.admin_data.chip}}</td>                      
+                        <td>{{sheet.admin_data.chip}}</td> 
+
                     </tr>
                     {% endfor %}
                 </table>
@@ -63,21 +64,26 @@
                         <td>{{owner.mail}} </td>
                         <td>{{owner.tel_reminder}}</td>
                         <td>{{owner.mail_reminder}}</td>                  
+                        <td class="bg-white border-blue">
+                            <a href="{% url 'sheet:contact_owner' owner.id%}">historique contact pour {{owner.owner_name}} {{owner.owner_surname}}</td></a>                 
                     </tr>
                     {% endfor %}
                 </table>
             </form>
         </div>
     </article>
-    <script type="text/javascript">
+</section>
+{% load static %}
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+<script type="text/javascript" src='{% static "sheet/js/utils.js" %}'> </script>
+<script type="text/javascript">
     //**********Modification boostrap **********    
     let displayButt = document.getElementById('display')
     displayButt.parentElement.classList.replace('col-2', 'col-4')
-
-    const url = window.location.href
     const form = document.getElementById('my_form');
-    let allTr = Array.from(document.querySelectorAll('tr')).slice(1); 
-    allTr.splice(6,1)
+    let trRow1 = Array.from(document.getElementsByClassName('row1'));
+    let trRow2 = Array.from(document.getElementsByClassName('row2'));
+    allTr = trRow1.concat(trRow2)
 
     const UncheckAll = function(){
         //this function unchecks all the checkbox visible and invisible
@@ -85,30 +91,13 @@
             tr.children[0].firstChild.checked = false
         }
     }
-    
-    const GetParam = function(){
-            //return param from url 
-            param = url.split("/")
-            param = param[param.length-1]
-            return param
-        }
-    const getBaseUrl = function(){
-        //return the base url usefull for button add and alter
-        let param = GetParam()
-        if (param != ""){
-            let baseUrl = url.split('/')
-            baseUrl.pop(param)
-            baseUrl = baseUrl.join("/")+"/"
-            return baseUrl
-        }
-        return url
-    }
+
 
     const isForAnimal = function(){
         return displayButt.textContent == "Afficher Propriétaires"
     }
     //click on line means checkbox checked
-    const activClickEvent = function(){
+    const activClickEvent = function(page){
         for (tr of allTr){
             tr.style.cursor = 'pointer'; 
             tr = Array.from(tr.children)
@@ -126,12 +115,12 @@
                 child.addEventListener('dblclick', function(e){
                     if (isForAnimal()){
                         targid = e.target.parentElement.children[0].firstChild.id
-                        add_page = getBaseUrl() + "alter/"+ targid;
-                        window.location.href = add_page; 
+                        new_page = getBaseUrl() + "alter/"+ targid;
+                        window.location.href = new_page; 
                     }else{
                         targid = e.target.parentElement.children[0].firstChild.id
-                        add_page = getBaseUrl() + "alter_owner/"+ targid;
-                        window.location.href = add_page; 
+                        new_page = getBaseUrl() + "alter_owner/"+ targid;
+                        window.location.href = new_page; 
                     }
                 });
             }

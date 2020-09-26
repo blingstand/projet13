@@ -5,9 +5,8 @@
 {% extends 'core/base.html' %}
 {% block content %}
 <section>
-    <h4 onclick="backCNS()" class="curs-pointer">< index/CNS</h4>
+    <h4 onclick="BackCNS('content')" class="curs-pointer">< index/CNS</h4>
     <h2  class="mt-5 pl-5">Contenu du mail </h2>
-
     <article class="mt-5 container">
         <div class="row">
             <div class="col-1 bg-secondary"></div>
@@ -42,197 +41,181 @@
                     <button class="button-mail-content mt-1 mb-2" onclick='send_data()'>Aperçu</button>
                     <button class="button-mail-content mt-1 mb-2" onclick='submit_datas()'>Enregistrer</button>
                 </div>
-
-
-                </div>
             </div>
-            <div class="col-1 bg-secondary"></div>
-
         </div>
+        <div class="col-1 bg-secondary"></div>
     </article>
-    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-    <script type="text/javascript">
+</section>
+{% load static %}
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+<script type="text/javascript" src='{% static "mail/js/utils.js" %}'> </script>
 
-        const fullPath = window.location.href;
-        let tabFullPath = fullPath.split('/');
-        let param = tabFullPath[tabFullPath.length-1];
-        let anteParam = tabFullPath[tabFullPath.length-2]
-        const title = document.getElementById('id_title');
+<script type="text/javascript">
 
-        const backCNS = function (){
-            console.log(fullPath, '- content')
-            console.log(fullPath.substr(0, fullPath.length-(param.length)))
-            console.log(fullPath.substr(0, fullPath.length-(param.length)-(anteParam.length)-1) + 'cns/')
-            console.log(param, anteParam, anteParam.length - param.length)
+    const fullPath = window.location.href;
+    let tabFullPath = fullPath.split('/');
+    let param = tabFullPath[tabFullPath.length-1];
+    let anteParam = tabFullPath[tabFullPath.length-2]
+    const title = document.getElementById('id_title');
+
+    let add_in_mail = function (givenValue){
+        // this function adds the value of a button in the mail
+        let body_mail = document.getElementById('body_mail');
+        const startPos = body_mail.selectionStart;
+        const endPos = body_mail.selectionEnd; 
+        body_mail.value = body_mail.value.substring(0, startPos)
+        + givenValue
+        + body_mail.value.substring(endPos, body_mail.value.length)
+        body_mail.focus()
+    }
+
+    // using jQuery get csrftoken from your HTML
+    let csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    const get_data = function(){
+        return {
+            'title': document.getElementById('id_title').value, 
+            'resume': document.getElementById('id_resume').value, 
+            'full_text': document.getElementById('body_mail').value.replaceAll("\n", "\\n"), 
+            'overview': 1,
+        }
+    }
+    let getOverview = function(mail_id){
+        //open a new window for the overview
+        const width  = document.body.clientWidth;
+        const height = document.body.clientHeight;
+        let wanted_width = (width * 50)/100
+        let wanted_height = (height * 80)/100
+        let spec =  "toolbar=yes,scrollbars=yes,resizable=yes,top=100,left=200,width="
+        spec += wanted_width+",height="+wanted_height
+        window.open("{% url 'mail:overview'%}"+mail_id, "_blank", spec);
+    }
+    const ReactProblem = function(input, problem){
+        if (problem == 0){
+            input.style.color = 'black';
+            if (input.value.search('pb') != -1){
+                console.log("--->" + input.value.search('pb'))
+                newInput = input.value.replace(' (pb : Ce titre existe déjà)', '')
+                console.log(newInput)
+                input.value = newInput; 
+            }
+        }else if (problem == 1){
+            input.style.color = 'red';
+            input.title = "Ce titre existe déjà ";
+            if (input.value.search('pb') == -1){
+                input.value += ' (pb : Ce titre existe déjà)'
+            }
+        }
+    }
+    const checkIntegrity = function(input){
+        value = input.value
+        if ("{{mail.title}}" == value){
+            return
+        }
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                // if not safe, set csrftoken
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+        $.ajax( 
+        { 
+            type:"POST", 
+            url: "{% url 'mail:content'%}", 
+            dataType: 'json',
+            data: {'title':value, 'checkIntegrity':'1'},
+            success: function (res) {
+                issue = res['problem']; 
+                ReactProblem(input, issue)                   
+            },
+            error: function (res) {
+                console.log("erreur");
+            }
+        });
+    }
+
+    const send_data = function(){
+        let receivedData = get_data()
+        if (param != 'content'){
+            receivedData['mail_id']=param
+        } 
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                // if not safe, set csrftoken
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+        $.ajax( 
+        { 
+            type:"POST", 
+            url: "{% url 'mail:content'%}", 
+            dataType: 'json',
+            data: receivedData,
+            success: function (res) {
+                mail_id = res['mail_id'];
+                getOverview(mail_id)
+            },
+            error: function (res) {
+                console.log("erreur");
+            }
+        });   
+    }
+    const submit_datas = function(){
+        //check if fields are empty
+        const datas = get_data()
+        let canSave = true
+        const keys = ['title', 'resume', 'full_text']
+        const frenchKeys = ['titre', 'objet', 'message']
+        for (let i in keys){
+            if (datas[keys[i]].length == 0 ){
+                alert('le champ '+ frenchKeys[i] +" est vide ! ")
+                canSave = false; 
+            }
+        }
+        if (title.value.search('pb') != -1){
+            canSave = false
+            alert("Réglez le problème de titre")
+        }else{
+            checkIntegrity(title)
+        }
+        //fields are not empty
+        if (canSave){
+            form = document.getElementById('form_mail_skull');
             if (param != 'content'){
-                //fullPath - content - mail_id + cns
-                url = fullPath.substr(0, fullPath.length-(anteParam.length)-(param.length)-1) + 'cns'
-                window.location.href = url;
+                mail_id = document.createElement('input');
+                mail_id.value = param; 
+                mail_id.name = 'mail_id'
+                mail_id.classList.add("d-none");
+                form.appendChild(mail_id)
             }
-            console.log("")
-            url = fullPath.substr(0, fullPath.length-(param.length)) +'cns'
-            //fullPath - content + cns
-            window.location.href = url;
-            console.log(url)
-           
+            form.setAttribute('action', "{% url 'mail:content'%}");
+            form.setAttribute('method', "POST");
+            form.submit()
         }
-        let add_in_mail = function (givenValue){
-            // this function adds the value of a button in the mail
-            let body_mail = document.getElementById('body_mail');
-            const startPos = body_mail.selectionStart;
-            const endPos = body_mail.selectionEnd; 
-            body_mail.value = body_mail.value.substring(0, startPos)
-            + givenValue
-            + body_mail.value.substring(endPos, body_mail.value.length)
-            body_mail.focus()
-        }
-
-        // using jQuery get csrftoken from your HTML
-        let csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-        function csrfSafeMethod(method) {
-            // these HTTP methods do not require CSRF protection
-            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-        }
-        const get_data = function(){
-            return {
-                'title': document.getElementById('id_title').value, 
-                'resume': document.getElementById('id_resume').value, 
-                'full_text': document.getElementById('body_mail').value.replaceAll("\n", "\\n"), 
-                'overview': 1,
-            }
-        }
-        let getOverview = function(mail_id){
-            //open a new window for the overview
-            const width  = document.body.clientWidth;
-            const height = document.body.clientHeight;
-            let wanted_width = (width * 50)/100
-            let wanted_height = (height * 80)/100
-            let spec =  "toolbar=yes,scrollbars=yes,resizable=yes,top=100,left=200,width="
-            spec += wanted_width+",height="+wanted_height
-            window.open("{% url 'mail:overview'%}"+mail_id, "_blank", spec);
-        }
-
-        const checkIntegrity = function(input){
-            value = input.value
-            $.ajaxSetup({
-                beforeSend: function (xhr, settings) {
-                    // if not safe, set csrftoken
-                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                    }
-                }
-            });
-            $.ajax( 
-            { 
-                type:"POST", 
-                url: "{% url 'mail:content'%}", 
-                dataType: 'json',
-                data: {'title':value, 'checkIntegrity':'1'},
-                success: function (res) {
-                    console.log("success")
-                    problem = res['problem'];
-                    console.log(res, res['problem'])
-                    if (problem == 0){
-                        input.style.color = 'black';
-                        if (input.value.search('pb') != -1){
-                            console.log("--->" + input.value.search('pb'))
-                            newInput = input.value.replace(' (pb : Ce titre existe déjà)', '')
-                            console.log(newInput)
-                            input.value = newInput; 
-                        }
-                    }else if (problem == 1){
-                        input.style.color = 'red';
-                        input.title = "Ce titre existe déjà ";
-                        if (input.value.search('pb') == -1){
-                            input.value += ' (pb : Ce titre existe déjà)'}
-                        
-                    }                    
-                },
-                error: function (res) {
-                    console.log("erreur");
-                }
-            });
-        }
-
-        const send_data = function(){
-            let receivedData = get_data()
-            if (param != 'content'){
-                receivedData['mail_id']=param
-            } 
-            $.ajaxSetup({
-                beforeSend: function (xhr, settings) {
-                    // if not safe, set csrftoken
-                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                    }
-                }
-            });
-            $.ajax( 
-            { 
-                type:"POST", 
-                url: "{% url 'mail:content'%}", 
-                dataType: 'json',
-                data: receivedData,
-                success: function (res) {
-                    mail_id = res['mail_id'];
-                    getOverview(mail_id)
-                },
-                error: function (res) {
-                    console.log("erreur");
-                }
-            });   
-        }
-        const submit_datas = function(){
-            //check if fields are empty
-            const datas = get_data()
-            let canSave = true
-            const keys = ['title', 'resume', 'full_text']
-            const frenchKeys = ['titre', 'objet', 'message']
-            for (let i in keys){
-                if (datas[keys[i]].length == 0 ){
-                    alert('le champ '+ frenchKeys[i] +" est vide ! ")
-                    canSave = false; 
-                }
-            }
-            if (title.value.search('pb') != -1){
-                canSave = false
-                alert("Réglez le problème de titre")
-            }else{
-                checkIntegrity(title)
-            }
-            //fields are not empty
-            if (canSave){
-                form = document.getElementById('form_mail_skull');
-                if (param != 'content'){
-                    mail_id = document.createElement('input');
-                    mail_id.value = param; 
-                    mail_id.name = 'mail_id'
-                    mail_id.classList.add("d-none");
-                    form.appendChild(mail_id)
-                }
-                form.setAttribute('action', "{% url 'mail:content'%}");
-                form.setAttribute('method', "POST");
-                form.submit()
-            }
-        }
-        {% if mail %}
-            let get_field = function(){
-                //returns the 3 blanks to fill
-                const blanks = document.getElementsByClassName('blank')
-                const content = ['{{mail.title}}', '{{mail.resume}}', '{{mail.full_text}}', ] 
-                for (let i = 0 ; i < blanks.length - 1 ; i++){
-                    blanks[i].value = content[i]}
+    }
+    {% if mail %}
+    const get_field = function(){
+            //returns the 3 blanks to fill
+            const blanks = document.getElementsByClassName('blank')
+            const content = ['{{mail.title}}', '{{mail.resume}}', '{{mail.full_text}}', ] 
+            for (let i = 0 ; i < blanks.length - 1 ; i++){
+                blanks[i].value = content[i]}
                 blanks[2].innerHTML = content[2]
 
             }
             get_field()
-        {% endif %}
+            {% endif %}
 
-        title.addEventListener('focusout', function(){
-            checkIntegrity(title);
-        })
-        
+            title.addEventListener('focusout', function(){
+                checkIntegrity(title);
+            })
+
         </script>
-        }
-    </section>
-    {% endblock%}
+        {% endblock%}

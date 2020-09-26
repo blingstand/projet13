@@ -25,8 +25,8 @@
 	                        <td>envoi auto</td>
 	                        <td>condition</td>
 	                    </tr>
-	                    <tr>
 						{%for mail in mails%}
+	                    <tr class="col-12 text-center {% cycle 'row1' 'row2' %}">
 							<td >
 								<input type="checkbox" id='{{mail.mail_id}}' name="checkbox" value="{{mail.mail_id}}">
 							</td>
@@ -40,70 +40,103 @@
 
 		</div>
 	</article>
-	<script type="text/javascript">
-		
-		const add = function(){
-			//this function redirects to page to add a new mail 
-			window.location.href="{% url 'mail:cns'%}"
-		}
-
-		const alter = function(){
-			//this function modify a single selected mail
-			checkbox = document.querySelectorAll('input[type=checkbox]');
-	        count = 0; 
-	        let id_selected = ""
-	        for (i=0; i < checkbox.length; i ++){
-	            console.log(count)
-	            if (checkbox[i].checked){
-	                id_selected = checkbox[i].id; 
-	                count ++;}
-            }
-            if (count == 0){
-                alert('sélectionnez une fiche à modifier !')
-            }else if (count == 1){
-                alterPage = window.location + "cns/"+ id_selected;
-                window.location.href = alterPage; 
-            }else{
-                alert("trop de fiches sélectionnées (" + count + ").")
-            }
-		}
-
-		function remove(){
-			//this function remove from list and db the selected mails
-	        const checkbox = document.querySelectorAll('input[type=checkbox]');
-	        let count = 0; 
-	        let toDelete = []
-	        for (i=0; i < checkbox.length; i ++){
-	            if (checkbox[i].checked){
-	                toDelete.push(checkbox[i]);
-	                count ++;}}
-	        if (count == 0){
-	            alert('sélectionnez au moins une fiche à supprimer !');
-	        }else{
-	            ToDelete = Array.from(toDelete);
-	            let msg = 'Confirmez-vous la suppression de '+ count + ' éléments :';
-	            let name = "";
-	            let specie = "";
-	            for (let elem of toDelete){
-	                name = elem.parentElement.nextElementSibling.textContent;
-	                resume = elem.parentElement.nextElementSibling.nextElementSibling.textContent;
-	                msg = msg + "\n  >" + name + " - " + resume;
-	            }
-	            let response = confirm(msg);
-	            if (response){
-	            	form = document.getElementById('mail_form')
-	            	form.setAttribute('action', "{% url 'mail:index'%}");
-                	form.setAttribute('method', "POST");
-	                form.submit();
-	            }
-	        }
-        }
-
-		const print = function(){
-			//this function print a mail 
-		}
-
-
-	</script>
 </section>
+{% load static%}
+<script type="text/javascript" src='{% static "sheet/js/utils.js" %}'> </script>
+<script type="text/javascript">
+	let trRow1 = Array.from(document.getElementsByClassName('row1'));
+    let trRow2 = Array.from(document.getElementsByClassName('row2'));
+    allTr = trRow1.concat(trRow2)
+	
+	const add = function(){
+		//this function redirects to page to add a new mail 
+		window.location.href="{% url 'mail:cns'%}"
+	}
+
+	const alter = function(){
+		//this function modify a single selected mail
+		checkbox = document.querySelectorAll('input[type=checkbox]');
+        count = 0; 
+        let id_selected = ""
+        for (i=0; i < checkbox.length; i ++){
+            console.log(count)
+            if (checkbox[i].checked){
+                id_selected = checkbox[i].id; 
+                count ++;}
+        }
+        if (count == 0){
+            alert('sélectionnez une fiche à modifier !')
+        }else if (count == 1){
+            alterPage = window.location + "cns/"+ id_selected;
+            window.location.href = alterPage; 
+        }else{
+            alert("trop de fiches sélectionnées (" + count + ").")
+        }
+	}
+    //click on line means checkbox checked
+    const activClickEvent = function(){
+        for (tr of allTr){
+            tr.style.cursor = 'pointer'; 
+            tr = Array.from(tr.children)
+            tr.splice(0,1)
+            for (child of tr){
+                child.addEventListener('click', function(e){
+                    let target = e.target.parentElement.children[0].children[0];
+                    console.log(target)
+                    if (target.checked == true){
+                        target.checked=false; 
+                    }else{
+                        target.checked=true;
+                    }
+                });
+                child.addEventListener('dblclick', function(e){
+                    targid = e.target.parentElement.children[0].children[0].id
+                    new_page = getBaseUrl() + "cns/"+ targid;
+                    window.location.href = new_page; 
+                });
+            }
+        }
+    }		
+
+	function remove(){
+		//this function remove from list and db the selected mails
+        const checkbox = document.querySelectorAll('input[type=checkbox]');
+        let count = 0; 
+        let toDelete = []
+        for (i=0; i < checkbox.length; i ++){
+            if (checkbox[i].checked){
+                toDelete.push(checkbox[i]);
+                count ++;}}
+        if (count == 0){
+            alert('sélectionnez au moins une fiche à supprimer !');
+        }else{
+            ToDelete = Array.from(toDelete);
+            let msg = 'Confirmez-vous la suppression de '+ count + ' éléments :';
+            let name = "";
+            let specie = "";
+            for (let elem of toDelete){
+                name = elem.parentElement.nextElementSibling.textContent;
+                resume = elem.parentElement.nextElementSibling.nextElementSibling.textContent;
+                msg = msg + "\n  >" + name + " - " + resume;
+            }
+            let response = confirm(msg);
+            if (response){
+            	form = document.getElementById('mail_form')
+            	form.setAttribute('action', "{% url 'mail:index'%}");
+            	form.setAttribute('method', "POST");
+                form.submit();
+            }
+        }
+    }
+
+	const print = function(){
+		//this function print a mail 
+	}
+
+	const main = function(){
+		activClickEvent()
+	}
+	main()
+</script>
+
 {%endblock%}

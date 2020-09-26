@@ -56,7 +56,9 @@ class ContentView(View):
             'form' : form}
         if mail_id: 
             mail = ut.get_mail_from_id(mail_id)
-            mail.full_text = ut.modify_text(mail.full_text)[1]
+            print("avant ut.modify_text")
+            print(mail.full_text)
+            mail.full_text = ut.modify_text(mail.full_text)[0]
             context["mail"] = mail 
         return render(request, 'mail/content.html', context)
 

@@ -16,14 +16,12 @@ class Animal(models.Model):
         verbose_name="Suivi administratif", null=True, blank=True, unique=True)
     owner = models.ForeignKey('Owner', on_delete=models.PROTECT, 
         verbose_name="Propriétaire", null=True, blank=True)
+    caution = models.PositiveSmallIntegerField(default=0, verbose_name="Montant de la caution(sans €)")
+    nature_caution = models.CharField(max_length=20, default="chèque", verbose_name="Nature de la caution(sans €)")
     def __str__(self):
         try :
             if self.admin_data.file is not None: 
                 return f'{self.name} (dossier : {self.admin_data.file})'
-            if self.admin_data.chip is not None: 
-                return f'{self.name} (puce : {self.admin_data.chip})'
-            if self.admin_data.tatoo is not None: 
-                return f'{self.name} (tatouage : {self.admin_data.tatoo})'
             else:
                 return self.name
         except:
@@ -56,11 +54,7 @@ class Owner(models.Model):
     mail = models.EmailField(unique=True, verbose_name="Mail")
     tel_reminder = models.CharField(max_length=3, default=0, verbose_name="Nombre d'appel passés")
     mail_reminder = models.CharField(max_length=3, default=0, verbose_name="Nombre de mail envoyés")
-    caution = models.CharField(max_length=30, null=True, default="null",
-        verbose_name="Caution + support (ex : 200e en chèque)")
-    need_contact = models.BooleanField(default=True, verbose_name="besoin d'être contacté(e)")
-    contact= models.ForeignKey('Contact', on_delete=models.CASCADE, verbose_name="Gestion des contacts", 
-        null=True, blank=True)
+
     def __str__(self):
         if self.owner_sex == "0":
             return f'Monsieur {self.owner_surname.upper()} {self.owner_name}'
@@ -71,13 +65,23 @@ class Owner(models.Model):
         """ this function returns how many animals belong to this owner """
         animal = Animal.objects.filter(owner=self)
         return len(animal)
+
+    def sum_caution(self):
+        """ this function calculate the sum of all caution of animal that belongs to this owner """
+        all_cautions = [animal.caution for animal in Animal.objects.filter(owner=self)]
+        total = 0
+        for caution in all_cautions:
+            total += int(caution) 
+        return total
         
 class Contact(models.Model):
 
     contact_date = models.DateField(default=timezone.now, verbose_name="Date du contact")
-    resume = models.CharField(blank=True, max_length=90)
-    full_text = models.TextField(blank=True)
-    is_mail = models.BooleanField(default=True)
+    resume = models.CharField(default="A compléter ...", max_length=90)
+    full_text = models.TextField(default="A compléter ...")
+    nature = models.CharField(default="à compléter", max_length=20) 
+    owner = models.ForeignKey(Owner, on_delete=models.CASCADE, verbose_name="Gestion des contacts", 
+        null=True, blank=True)
     def __str__(self):
-        return f"suivi contact {self.contact_id}"
+        return f"Contact n°{self.id} du {self.contact_date} (type: {self.nature}) "
     

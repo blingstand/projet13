@@ -1,7 +1,7 @@
 {% extends 'core/base.html' %}
 {% block content %}
 <section>
-    <p id="close" onclick="backCNS()" class="curs-pointer">< index/CNS</a></p>
+    <p id="close" onclick=BackToCNS() class="curs-pointer">< index/CNS</a></p>
     {% if mail %}
         <h2 class="mt-5 pl-5">Règle(s) d'envoi pour {{mail}} </h2>
     {% else %}
@@ -34,7 +34,9 @@
 
         </div>
     </article>
+    {% load static%}
     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src='{% static "mail/js/utils.js" %}'> </script>
     <script type="text/javascript">
         const fullPath = window.location.href
         let tabFullPath = fullPath.split('/')
@@ -45,18 +47,14 @@
         let count = 0
         let csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
         
+        const BackToCNS = function(){
+            pageName = 'settings'
+            BackCNS(pageName)
+        }
         //for ajax
         const csrfSafeMethod = function(method) {
             // these HTTP methods do not require CSRF protection
             return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-        }
-
-        //onclick back to cns page 
-        const backCNS = function (){
-            local = window.location.href;
-            url = local.substr(0, local.length- (10 + param.length)) + '/cns/'+param;
-            window.location.href = url;
-           
         }
 
         //*****toggle form

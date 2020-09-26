@@ -57,7 +57,7 @@ class AddSheetView(View):
         #handles the form and the errors
         form = SheetForm(request.POST)
         print("\n\n***")
-        dict_values = {'ask_owner_data':"0", 'mail_id': None}
+        dict_values = {'ask_owner_data':"0"}
         dict_values.update(request.POST.dict())
         print("- - - - - ")
         print(dict_values)
@@ -201,3 +201,41 @@ class AddOwnerSheetView(View):
                 return render(request, "sheet/add_owner.html", context)
         context['error'] = 'Remplissez tous les champs'
         return render(request, "sheet/add_owner.html", context)
+
+
+class ContactOwnerView(View): 
+    """ this class handles the historic of contact for a given owner """
+    def get(self, request, given_id=None): 
+        """this method displays historic of contact for a given owner """
+        owner = Owner.objects.get(id=given_id)
+        contact = owner.contact
+        context = {
+            'historic_cols':["Date", "Type", "Titre", "Objet"],
+            'owner': owner, 'contact': contact, 
+            'button_value':[
+                {'name' : 'Ajouter Contact',    'id' : 'ajouter', 'function' : 'Add()'}, 
+                {'name' : 'Modifier Contact',   'id' : 'modifier', 'function' : 'Alter()'},
+                {'name' : 'Supprimer Contact',  'id' : 'supprimer', 'function' : 'Remove()'}]
+        }
+
+        return render(request, "sheet/historic.html", context)
+    def post(self, request, given_id=None): 
+        """this method handles a post request for the  historic of contact page """
+        dict_values = request.POST.dict()
+        print(f"j'ai reçu {len(dict_values)} données: ", dict_values)
+        owner = Owner.objects.get(id=given_id)
+        contact = owner.contact
+        context = {
+            'historic_cols':["Date", "Type", "Titre", "Objet"],
+            'owner': owner, 'contact': contact, 
+            'button_value':[
+                {'name' : 'Ajouter Contact',    'id' : 'ajouter', 'function' : 'Add()'}, 
+                {'name' : 'Modifier Contact',   'id' : 'modifier', 'function' : 'Alter()'},
+                {'name' : 'Supprimer Contact',  'id' : 'supprimer', 'function' : 'Remove()'}]
+        }
+        if len(dict_values) == 4: 
+            success, message = ut.create_contact(owner, dict_values)
+            data = {"success":success, message:"message"}
+            return JsonResponse({"data":data}, safe=False)
+        return HttpResponse('success ! ', dict_values )
+        return render(request, "sheet/historic.html", context)

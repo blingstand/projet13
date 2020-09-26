@@ -68,7 +68,6 @@ class Utils():
             else:
                 dict_values[date] = None
         return dict_values
-
     def find_changes(self, given_id, dict_values):
         """ this funtions makes a comparison between db class datas and dict_values datas
             if it finds a changes, this one is add to list changes 
@@ -91,7 +90,6 @@ class Utils():
                     changes.append((key, elem[1]))
         print("liste des modifications : ", changes)
         return changes
-
     def modify_datas(self, given_id, dict_values):
         """ this function attemps to modify the db 
             1/ determinates wehther we have a new owner for animal from given_id
@@ -167,7 +165,6 @@ class Utils():
             return True, len(allchanges)
         except Exception as e:
             return False, e
-
     def remove_owner(self, given_ids): 
         """this function removes 1 owner from db if the ctrl is ok"""
         if isinstance(given_ids, int): 
@@ -179,7 +176,6 @@ class Utils():
             else:
                 return False, f"{owner_to_remove} n'a pas été effacé(e) car il possède au moins un animal." 
         return True, f'Le(s) {len(given_ids)} propriétaire(s) a/ont été effacé(s).'
-
     def check_owner_values(self, dict_values, given_id=None, for_modif=None):
         queryset1 = Owner.objects.filter(
             phone=dict_values['phone'])
@@ -198,7 +194,6 @@ class Utils():
             if not verif:
                 return False, 'Ce mail existe déjà'
         return True, "aucun problème"
-
     def create_owner(self, dict_values):
         """this function creates a new owner if it is possible """
         try:
@@ -220,7 +215,6 @@ class Utils():
         except Exception as e:
             return False, f"une erreur a été rencontrée : {e}"
             # raise e
-
     def modify_owner(self, given_id, dict_values):
         """this function modifies the recognize owner with dict_values """
         owner = Owner.objects.get(id=given_id)
@@ -235,4 +229,32 @@ class Utils():
                 return success, message
         except Exception as e:
             # return False, f"une erreur a été rencontrée : {e}"
-            raise e
+            raise 
+
+    def create_contact(self, owner, dict_values): 
+        """this function creates a new contact for a owner """
+        try:   
+            new_contact = Contact(
+                contact_date = dict_values['date'],
+                resume = dict_values['select'],
+                full_text = dict_values['title'],
+                nature = dict_values['object'],
+                )
+            new_contact.save()
+            a = Animal.objects.all()[0]
+            print("***")
+            print(dir(a.owner))
+            owner.contact.add(new_contact)
+            print(owner.contact)
+
+            # print(owner.contact,type(owner.contact))
+            # print('***')
+            # 
+            # owner.contact.save()
+            # print('***')
+            # print(owner.contact)
+            # print('***')
+            return True, owner.contact
+        except Exception as e:
+            raise(e)
+            return False, f"problème : {e}"

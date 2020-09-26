@@ -175,44 +175,7 @@
 		document.getElementById('verif').innerHTML = "{{error}}"
 		{% endif %}
 		main()
-		// // displays owner form with data from ajax request 
-		// const displayOwnerForm = function(value){
-		// 	{% for owner in owners%}
-		// 	if ({{owner.id}} == value){
-		// 		valuesToFill = {
-		// 			'name': "{{owner.owner_name}}",
-		// 			'surname': "{{owner.owner_surname}}",
-		// 			'sex': "{{owner.owner_sex}}",
-		// 			'phone': "{{owner.phone}}",
-		// 			'mail': "{{owner.mail}}",
-		// 			'mail_reminder': "{{owner.mail_reminder}}",
-		// 			'mail_reminder': "{{owner.mail_reminder}}",
-		// 			'tel_reminder': "{{owner.tel_reminder}}",
-		// 			'caution': "{{owner.caution}}"}
-		// 	}
-		// 	{% endfor%}
-		// 	fillBlank(valuesToFill)
-		// 	}
-		// // creates and displays select with owners name and validate button
-		// const SelectOwners = function(){
-		// 	divNF = document.getElementsByClassName("new-former")[0]
-		// 	divFormer = document.getElementsByClassName("former-owner")[0]
-		// 	divNew = document.getElementsByClassName("new-owner")[0]
-		// 	divFormer.classList.add("d-none")
-		// 	select = document.createElement('select')
-		// 	select.id = "id_select"
-		// 	select.name = "former_owner"
-		// 	divNF.appendChild(select)
-			
-		// 	{% for owner in owners%}
-		// 		option = document.createElement('option')
-		// 		option.value = '{{owner.id}}'
-		// 		option.innerHTML = "{{owner}}"
-		// 		option.onclick = function(){displayOwnerForm({{owner.id}})}
-		// 		select.appendChild(option)
-		// 	{% endfor %}
-		// 	select.value = {{selected_owner.id}}
-		// }
+
 	</script>
 	{% endblock  %}
 

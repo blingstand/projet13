@@ -52,7 +52,9 @@
 		</form>
 	</article>
 </section>
+	{% load static %}
 	<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src='{% static "sheet/js/utils.js" %}'> </script>
 	<script type="text/javascript">
 		/* *** plan ***
 		1/ User select new or former owner
@@ -62,13 +64,6 @@
 		4/ Client receives info, success > display ownerform and fill it
 		*/
 		const url = window.location.href
-		
-		const GetParam = function(){
-			//return param from url 
-			param = url.split("/")
-			param = param[param.length-1]
-			return param
-		}
 		const given_id = GetParam()
 
 		const BackToIndex = function(){
@@ -76,19 +71,9 @@
 			start_url.splice(5,2)
 			const back_url = start_url.join("/")
 			window.location.href = back_url
-			// window.location.href = window.location.href; 
-		}
-
-		// button 1 
-		const dispNewOwn = function(){
-			ownDivs = document.getElementsByClassName('owner_input')
-			for (div of ownDivs){
-				div.classList.replace("d-none", "d-flex")
-			}
-			removeFromOwnerBlank()
 		}
 		// remove data from owner Form
-		const removeFromOwnerBlank = function(value){
+		const removeFromOwnerBlank = function(){
 			ids = ["id_owner_name", "id_owner_surname", 'id_phone', "id_mail", "id_caution", 
 			"id_mail_reminder", "id_tel_reminder"]
 			for (index in ids){

@@ -38,6 +38,7 @@ class Utils():
         return ""
     def modify_text(self, plain_text):
             """takes plain text and returns modified text"""
+            print("plain_text from modify_text : ", plain_text)
             anim = Animal.objects.all()[0]
             species = ("0", "chat"),("1", "chatte"), ("2", "chien"), ("3", "chienne")
             ststatus = (0,"stérile"), (2,"stérilisable"), (3,"à stériliser")
@@ -61,11 +62,10 @@ class Utils():
             new_text = plain_text
             for key in input_output : 
                 if key == '**date_of_neuter**':
-                    print("before :")
-                    print(new_text)
+                    pass
+                    # print("before :")
+                    # print(new_text)
                 new_text = new_text.replace(key, input_output[key])
-                if key == '**date_of_neuter**':
-                    print(new_text)
 
             # print(new_text)
             new_text = new_text.replace('\r\n', '\\n')
