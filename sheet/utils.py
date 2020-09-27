@@ -200,26 +200,18 @@ class Utils():
         except Exception as e:
             # return False, f"une erreur a été rencontrée : {e}"
             raise 
-
     def create_contact(self, owner, dict_values): 
         """this function creates a new contact for a owner """
-        try:   
+        try:  
+            print("ut : ", dict_values['date']) 
             new_contact = Contact(
                 contact_date = dict_values['date'],
                 resume = dict_values['select'],
                 full_text = dict_values['title'],
                 nature = dict_values['object'],
-                contact = owner)
+                owner = owner)
             new_contact.save()
-
-            # print(owner.contact,type(owner.contact))
-            # print('***')
-            # 
-            # owner.contact.save()
-            # print('***')
-            # print(owner.contact)
-            # print('***')
-            return True, owner.contact
+            return True, new_contact
         except Exception as e:
             raise(e)
             return False, f"problème : {e}"

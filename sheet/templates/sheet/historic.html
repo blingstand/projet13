@@ -23,6 +23,15 @@
                         <td>{{col}}</td>
                         {% endfor %}
                     </tr>
+                        {% for contact in contacts|dictsort:"contact_date"%}
+                    <tr class="col-12 text-center {% cycle 'row1' 'row2' %}">
+                         <td><input type="checkbox" id='{{contact.id}}' name='checkbox' value={{contact.id}}></td>
+                        <td>{{contact.contact_date}}</td>
+                        <td>{{contact.resume}}</td>
+                        <td>{{contact.full_text}}</td>
+                        <td>{{contact.nature}}</td>
+                    </tr>
+                        {% endfor %}
                 </table>
             </form>
         </div>
@@ -48,6 +57,7 @@
         }
         let whatToDo = function(data){
             console.log("Success")
+            window.location.href = window.location.href  
         }
         sendDatasToServer(value, "{% url 'sheet:contact_owner' owner.id%}", whatToDo)
         console.log(value)

@@ -29,7 +29,12 @@
 						</div>
 						<div class=" bg-tomato row d-flex new-former">
 							<!-- <div class="col-1"></div> -->
-							
+							<h4 class="pl-3">Propriétaire de : </h4>
+							<ol>
+								{% for animal in animals %}
+								<li class="curs-pointer" onclick=GoTo("{{animal.id}}")>  {{animal.name}} - {{animal.species_name}} - {{animal.admin_data.neuter_status}}   </li>
+								{% endfor %}
+							</ol>
 
 						</div>
 					</div>			
@@ -67,6 +72,14 @@
 	const BackToIndex = function(){
 		window.location.href = "{% url 'sheet:index' own=1%}"
 		// window.location.href = window.location.href; 
+	}
+
+	const GoTo = function(given_id){
+		{% for animal in animals %}
+		if ({{animal.id}} == given_id){
+			window.location.href = "{% url 'sheet:alter' animal.id%}"
+		}
+		{% endfor %}
 	}
 
 	// button 2 

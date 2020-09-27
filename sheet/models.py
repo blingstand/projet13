@@ -27,7 +27,7 @@ class Animal(models.Model):
         except:
             return self.name
     @property    
-    def species_name(self): 
+    def str_species(self): 
         species = ("0", "chat"),("1", "chatte"), ("2", "chien"), ("3", "chienne")
         species_name = lambda x : species[int(x)][1]
         return species_name(self.species)
@@ -53,7 +53,9 @@ class AdminData(models.Model):
             return f"tatoo {self.tatoo}"
     @property
     def neuter_status(self):
-        ststatus = (0,"stérile"), (2,"stérilisable"), (3,"sera stérilisable")
+        ststatus = (0,"stérile"), (2,"stérilisable"), (3,f"pas encore stérilisable")
+        if self.futur_date_of_neuter is not None: 
+            ststatus = (0,"stérile"), (2,"stérilisable"), (3,f"stérilisable dès le {self.futur_date_of_neuter.strftime('%d/%m/%Y')}")
         neuter_status = lambda x : ststatus[int(x)][1]
         return neuter_status(self.is_neutered)
     
@@ -91,9 +93,22 @@ class Contact(models.Model):
     contact_date = models.DateField(default=timezone.now, verbose_name="Date du contact")
     resume = models.CharField(default="A compléter ...", max_length=90)
     full_text = models.TextField(default="A compléter ...")
-    nature = models.CharField(default="à compléter", max_length=20) 
+    nature = models.CharField(default="à compléter", max_length=1) 
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE, verbose_name="Gestion des contacts", 
         null=True, blank=True)
     def __str__(self):
         return f"Contact n°{self.id} du {self.contact_date} (type: {self.nature}) "
-    
+    @property
+    def str_nature(self):
+        """this function returns a readable nature data"""
+        conversion = [
+        {'nature' : "0", "str_nature": "sélectionnez un type"},
+        {'nature' : "1", "str_nature": "mail spa"},
+        {'nature' : "2", "str_nature": "tel spa"},
+        {'nature' : "3", "str_nature": "mail propriétaire"},
+        {'nature' : "4", "str_nature": "tel propriétaire"},
+        {'nature' : "5", "str_nature": "mail automatique"},
+        ]
+        for dic in conversion:
+            if dic["nature"] == self.nature: 
+                return dic['str_nature']

@@ -140,7 +140,9 @@ class AlterOwnerSheetView(View):
         """this function handles get request for alter_owner page"""
         form = SheetForm()
         selected_owner = Owner.objects.get(id=given_id)
-        context = {"selected_owner":selected_owner, 'form':form}
+        animals = Animal.objects.filter(owner=selected_owner)
+        context = {"selected_owner":selected_owner, 'form':form, 'animals':animals}
+        print(context)
         return render(request, "sheet/alter_owner.html", context)
         
     def post(self, request, given_id, action=None):
@@ -198,40 +200,27 @@ class AddOwnerSheetView(View):
         context['error'] = 'Remplissez tous les champs'
         return render(request, "sheet/add_owner.html", context)
 
-
 class ContactOwnerView(View): 
     """ this class handles the historic of contact for a given owner """
+    context = context_contact_owner_view
     def get(self, request, given_id=None): 
         """this method displays historic of contact for a given owner """
         owner = Owner.objects.get(id=given_id)
-        contact = owner.contact
-        context = {
-            'historic_cols':["Date", "Type", "Titre", "Objet"],
-            'owner': owner, 'contact': contact, 
-            'button_value':[
-                {'name' : 'Ajouter Contact',    'id' : 'ajouter', 'function' : 'Add()'}, 
-                {'name' : 'Modifier Contact',   'id' : 'modifier', 'function' : 'Alter()'},
-                {'name' : 'Supprimer Contact',  'id' : 'supprimer', 'function' : 'Remove()'}]
-        }
+        contacts = Contact.objects.filter(owner=owner)
+        self.context["owner"] = owner
+        self.context["contacts"] = contacts
+        print("j'envoie ça : ", self.context)
+        return render(request, "sheet/historic.html", self.context)
 
-        return render(request, "sheet/historic.html", context)
     def post(self, request, given_id=None): 
         """this method handles a post request for the  historic of contact page """
         dict_values = request.POST.dict()
         print(f"j'ai reçu {len(dict_values)} données: ", dict_values)
         owner = Owner.objects.get(id=given_id)
-        contact = owner.contact
-        context = {
-            'historic_cols':["Date", "Type", "Titre", "Objet"],
-            'owner': owner, 'contact': contact, 
-            'button_value':[
-                {'name' : 'Ajouter Contact',    'id' : 'ajouter', 'function' : 'Add()'}, 
-                {'name' : 'Modifier Contact',   'id' : 'modifier', 'function' : 'Alter()'},
-                {'name' : 'Supprimer Contact',  'id' : 'supprimer', 'function' : 'Remove()'}]
-        }
+        contacts = Contact.objects.filter(owner=owner)
+        self.context["owner"] = owner
+        self.context["contacts"] = contacts 
         if len(dict_values) == 4: 
             success, message = ut.create_contact(owner, dict_values)
-            data = {"success":success, message:"message"}
-            return JsonResponse({"data":data}, safe=False)
-        return HttpResponse('success ! ', dict_values )
-        return render(request, "sheet/historic.html", context)
+            return JsonResponse({"data":f'{success}{message}'}, safe=False)
+        return render(request, "sheet/historic.html", self.context)

@@ -56,7 +56,7 @@ class Utils():
                 '**owner_name**' : anim.owner.owner_name, 
                 '**owner_surname**' : anim.owner.owner_surname, 
                 '**owner_sex**' : get_str_sex(anim.owner.owner_sex), 
-                '**species**' : species_name(anim.species), 
+                '**species**' : str_species(anim.species), 
                 '**race**' : f'race : {anim.race}', 
                 }
             new_text = plain_text

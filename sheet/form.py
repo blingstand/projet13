@@ -1,12 +1,15 @@
 """ script for the needed form"""
 
-from datetime import date
+from datetime import datetime, date
 
 from django import forms
 from django.forms import ModelForm
 from django.db.utils import IntegrityError
 
 from .models import *
+from .utils import Utils
+
+ut = Utils()
 
 CHOICES = (
     ("0", "chat"),("1", "chatte"), ("2", "chien"), ("3", "chienne"))
@@ -181,20 +184,41 @@ class SheetForm(forms.Form):
         print("88888888888888888")
         print('dict_values')
         return dict_values
+    
+    def is_owner_unique(self, owner):
+        """this function checks whether owner is unique """
+        animals = Animal.objects.filter(owner=owner)   
+        is_unique = len(animals) < 1
+        return is_unique
+
+    def create_first_contact(self, owner, animal):
+        """when a sheet is created > app sends an auto_mail, this function 
+        keeps a trace in contact"""
+        try:    
+            data = {
+                "date": datetime.now().date(),
+                "select": "5", 
+                "title": "félicitation + rappel loi",
+                "object": f"félicitation adoption de {animal.name}({animal.str_species}) + rappel loi sur stérilisation"
+            }
+            success, output = ut.create_contact(owner, data)
+            return success, output
+        except Exception as e:
+            raise e
 
     def save_new_datas(self, dict_values):
         """ save the data in database and return """
 
         #transaction : one fails all fail
-        succes1, output = self._handle_admin_class(dict_values)
-        if succes1:
+        success1, output = self._handle_admin_class(dict_values)
+        if success1:
             admin = output
             # print('- données pour admin ok ')
         else:
             error_msg = output
             return error_msg
-        succes2, output = self._handle_owner_class(dict_values)
-        if succes2: 
+        success2, output = self._handle_owner_class(dict_values)
+        if success2: 
             owner = output
             # print('- données pour owner ok ')
         else:
@@ -202,20 +226,40 @@ class SheetForm(forms.Form):
             print("deleted")
             error_msg = output
             return error_msg
-        succes3, output = self._handle_animal_class(dict_values)
-        if succes3:
+        success3, output = self._handle_animal_class(dict_values)
+        if success3:
             animal = output
             animal.admin_data = admin
             animal.owner = owner
             animal.save()
             # print('- données pour animal ok ')
-            return 1
         else:
             animal.delete()
-            owner.delete()
-            print('\t- erreur pour owner, effacement données admin et owner.')
+            admin.delete()
+            response = self.is_owner_unique(owner)
+            if response:
+                owner.delete()
+                print('\t- erreur pour owner, effacement données animal, admin et owner (unique).')
+            else:
+                print('\t- erreur pour owner, effacement données animal et admin, owner (pas unique).')
             error_msg = output
             return error_msg 
+        success4, output = self.create_first_contact(owner, animal)
+        if success4: 
+            return 1 
+        else: 
+            animal.delete()
+            admin.delete()
+            response = self.is_owner_unique(owner)
+            if response:
+                owner.delete()
+                print('\t- erreur pour contact, effacement données animal, admin et owner (unique).')
+            else:
+                print('\t- erreur pour contact, effacement données animal et admin, owner (pas unique).')
+            error_msg = output
+            return error_msg 
+
+
         
 class ContactForm(ModelForm):
 
