@@ -214,4 +214,14 @@ class Utils():
             return True, new_contact
         except Exception as e:
             raise(e)
-            return False, f"problème : {e}"
+            return False, f"problème pour ut.create_contact: {e}"
+
+    def remove_contact(self, list_contact_id):
+        """this function identifies contact to remove and remove it """
+        try:
+            for given_id in list_contact_id:
+                contact = Contact.objects.get(id=given_id)
+                contact.delete()
+            return True, f"{contact} a été supprimé."
+        except Exception as e:
+            return False, f"ut.remove_contact > pas de supression car :\n{e}"

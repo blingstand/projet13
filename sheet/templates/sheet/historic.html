@@ -25,7 +25,7 @@
                     </tr>
                         {% for contact in contacts|dictsort:"contact_date"%}
                     <tr class="col-12 text-center {% cycle 'row1' 'row2' %}">
-                         <td><input type="checkbox" id='{{contact.id}}' name='checkbox' value={{contact.id}}></td>
+                         <td><input type="checkbox" id='{{contact.id}}' name='checkbox' title="{{contact.id}}" value={{contact.id}}></td>
                         <td>{{contact.contact_date}}</td>
                         <td>{{contact.resume}}</td>
                         <td>{{contact.full_text}}</td>
@@ -59,11 +59,8 @@
             console.log("Success")
             window.location.href = window.location.href  
         }
-        sendDatasToServer(value, "{% url 'sheet:contact_owner' owner.id%}", whatToDo)
+        sendDatasToServer(value, "{% url 'sheet:contact_owner' owner.id 'add'%}", whatToDo)
         console.log(value)
-
-
-
     }
     const SpecifyInput = function(tabInput, counter){
         //this function specifies the given input}
@@ -134,6 +131,41 @@
 
         SpecifyInput(tabInput, counter)
 
+    }
+    const Remove = function(){
+        const checkboxes = document.querySelectorAll('input[type=checkbox]');
+        let count = 0; 
+        let toDelete = []
+        for (checkbox of checkboxes){
+            if (checkbox.checked){
+                toDelete.push(checkbox)
+                count ++;
+            }
+        }
+        if (count == 0){
+            alert('sélectionnez au moins une fiche à supprimer !')
+        }else {
+            let msg = 'Confirmez-vous la suppression de '+ count + ' éléments :'
+            let response = false
+            let idToDelete = []
+            for (elem of toDelete){
+                date = elem.parentElement.nextElementSibling.textContent
+                title = elem.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.textContent
+                msg = msg + "\n  >" + date + " - " + title;
+                idToDelete.push(elem.id)
+            }
+            console.log(idToDelete)
+            response = confirm(msg);
+            if (response){
+                let whatToDo = function(data){
+                    window.location.href = window.location.href  
+                }
+                data = {"id_check" : idToDelete, }
+                console.log(data)
+                sendDatasToServer(data, "{% url 'sheet:contact_owner' owner.id 'remove'%}", whatToDo)
+            }
+        }
+        form.setAttribute('action', "");
     }
 </script>
 {% endblock  %}

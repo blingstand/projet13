@@ -14,4 +14,5 @@ urlpatterns = [
     path('index/alter_owner/<int:given_id>/<str:action>', AlterOwnerSheetView.as_view(), name='alter_owner'),
     path('index/add_owner', AddOwnerSheetView.as_view(), name='add_owner'),
     path('index/contact/<int:given_id>', ContactOwnerView.as_view(), name='contact_owner'),
+    path('index/contact/<int:given_id>/<str:action>', ContactOwnerView.as_view(), name='contact_owner'),
 ]

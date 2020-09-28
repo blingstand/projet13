@@ -53,6 +53,8 @@ plan :
 	            }
 	        }
 	    }); 
+	    console.log("sendDatasToServer")
+	    console.log("data : " + value)
 	    $.ajax({ 
 	    	type:"POST", 
 	    	url: url, 

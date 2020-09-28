@@ -118,9 +118,9 @@ class AlterSheetView(View):
             print(f">{dict_values}")
             print("---dict_values")
             # print("\t3/ Tentative d'enregistrement des données ...")
-            successs, response = ut.modify_datas(given_id, dict_values)
+            success, response = ut.modify_datas(given_id, dict_values)
             print('---end modify_datas')
-            if successs:
+            if success:
                 print(f'{response} changement(s)')
                 context = {'form' : form}
                 return redirect("sheet:index")  
@@ -188,8 +188,8 @@ class AddOwnerSheetView(View):
         del dict_values['csrfmiddlewaretoken']
         print(dict_values)
         if len(dict_values) == 7:
-            successs, message = ut.create_owner(dict_values)
-            if successs: 
+            success, message = ut.create_owner(dict_values)
+            if success: 
                 return redirect("sheet:index", own=1)
             else:
                 context['error'] = message
@@ -203,7 +203,7 @@ class AddOwnerSheetView(View):
 class ContactOwnerView(View): 
     """ this class handles the historic of contact for a given owner """
     context = context_contact_owner_view
-    def get(self, request, given_id=None): 
+    def get(self, request, given_id=None, action=None): 
         """this method displays historic of contact for a given owner """
         owner = Owner.objects.get(id=given_id)
         contacts = Contact.objects.filter(owner=owner)
@@ -212,15 +212,27 @@ class ContactOwnerView(View):
         print("j'envoie ça : ", self.context)
         return render(request, "sheet/historic.html", self.context)
 
-    def post(self, request, given_id=None): 
+    def post(self, request, given_id=None, action=None): 
         """this method handles a post request for the  historic of contact page """
+        
+        print(request.POST.getlist('id_check[]'))
+        print("\t>Je reçois une demande de type : ", action)
         dict_values = request.POST.dict()
-        print(f"j'ai reçu {len(dict_values)} données: ", dict_values)
+        print(f"t>Je  reçois {len(dict_values)} données: ", dict_values)
         owner = Owner.objects.get(id=given_id)
         contacts = Contact.objects.filter(owner=owner)
         self.context["owner"] = owner
         self.context["contacts"] = contacts 
-        if len(dict_values) == 4: 
+        if action == "add": 
             success, message = ut.create_contact(owner, dict_values)
-            return JsonResponse({"data":f'{success}{message}'}, safe=False)
+            if success: 
+                return JsonResponse({"data":f'{success}{message}'}, safe=False)
+            print(message)
+        if action == "remove":
+            success, message = ut.remove_contact(request.POST.getlist('id_check[]'))
+            print('//////')
+            print(success, message)
+            print('//////')
+            if success: 
+                return JsonResponse({"data":f'{success}{message}'}, safe=False)
         return render(request, "sheet/historic.html", self.context)
