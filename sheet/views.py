@@ -209,7 +209,6 @@ class ContactOwnerView(View):
         contacts = Contact.objects.filter(owner=owner)
         self.context["owner"] = owner
         self.context["contacts"] = contacts
-        print("j'envoie ça : ", self.context)
         return render(request, "sheet/historic.html", self.context)
 
     def post(self, request, given_id=None, action=None): 
@@ -218,7 +217,7 @@ class ContactOwnerView(View):
         print(request.POST.getlist('id_check[]'))
         print("\t>Je reçois une demande de type : ", action)
         dict_values = request.POST.dict()
-        print(f"t>Je  reçois {len(dict_values)} données: ", dict_values)
+        # print(f"t>Je  reçois {len(dict_values)} données: ", dict_values)
         owner = Owner.objects.get(id=given_id)
         contacts = Contact.objects.filter(owner=owner)
         self.context["owner"] = owner
@@ -228,11 +227,18 @@ class ContactOwnerView(View):
             if success: 
                 return JsonResponse({"data":f'{success}{message}'}, safe=False)
             print(message)
-        if action == "remove":
+        elif action == "remove":
             success, message = ut.remove_contact(request.POST.getlist('id_check[]'))
             print('//////')
             print(success, message)
             print('//////')
             if success: 
                 return JsonResponse({"data":f'{success}{message}'}, safe=False)
+        elif action == "modify": 
+            print(dict_values)
+            success, message = ut.modify_contact(dict_values)
+            if success: 
+                print(message)
+                return JsonResponse({"data":f'{success}{message}'}, safe=False)
+            print(message)
         return render(request, "sheet/historic.html", self.context)

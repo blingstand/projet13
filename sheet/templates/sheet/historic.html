@@ -3,7 +3,7 @@
 <section>
     <h2 class="mt-5 pl-5">Historique des contacts de {{owner.owner_name}} {{owner.owner_surname}}</h2>
     <article class="mt-5 container">
-        <div class="row">
+        <div class="row bg-green">
             <div class="col-2"></div>
             {% for elem in button_value %} <!-- affiche les boutons -->
             <div class="col-3 bg-primary text-center">
@@ -11,44 +11,48 @@
             </div>
             {% endfor %}
             <div class="col-1"></div>
-            <div class="col-12 mb-5 text-center">
+            <div class="col-12 mb-2 text-center">
                 <button>imprimer</button>
             </div>
-            <form id="my_form" action="" method="" name="my_form">
-                {% csrf_token %} 
-                <table id="histo_table" class="">
-                    <tr class="col-12 text-center">
-                        <td>&nbsp;</td>
-                        {% for col in historic_cols %}
-                        <td>{{col}}</td>
-                        {% endfor %}
-                    </tr>
-                        {% for contact in contacts|dictsort:"contact_date"%}
-                    <tr class="col-12 text-center {% cycle 'row1' 'row2' %}">
-                         <td><input type="checkbox" id='{{contact.id}}' name='checkbox' title="{{contact.id}}" value={{contact.id}}></td>
-                        <td>{{contact.contact_date}}</td>
-                        <td>{{contact.resume}}</td>
-                        <td>{{contact.full_text}}</td>
-                        <td>{{contact.nature}}</td>
-                    </tr>
-                        {% endfor %}
-                </table>
-            </form>
         </div>
-    </article>
+        <div class="row scrolable">
+            <table id="histo_table" class="">
+                <tr class="col-12 text-center">
+                    <td>&nbsp;</td>
+                    {% for col in historic_cols %}
+                    <td>{{col}}</td>
+                    {% endfor %}
+                </tr>
+                {% for contact in contacts|dictsort:"contact_date"%}
+                <tr id="tr_{{forloop.counter}}"class="col-12 text-center {% cycle 'row1' 'row2' %}">
+                 <td><input type="checkbox" id='{{contact.id}}' name='checkbox' title="{{contact.id}}" value={{contact.id}}></td>
+                 <td>{{contact.contact_date}}</td>
+                 <td>{{contact.str_nature}}</td>
+                 <td>{{contact.resume}}</td>
+                 <td>{{contact.full_text}}</td>
+             </tr>
+             {% endfor %}
+         </table>
+     </div>
+ </article>
 </section>
 {% load static %}
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 <script type="text/javascript" src='{% static "sheet/js/utils.js" %}'> </script>
 <script type="text/javascript">
+    /* plan
+    > variables,
+    > functions,
+    > events,
+    */
     let table = document.getElementById('histo_table')
     const form = document.getElementById('my_form')
     const getCounter = function(){
         allTd = document.querySelectorAll('tr')
-        return allTd.length  
+        return allTd.length
     }
-    const GetDatas = function(counter){
-        keys = ["date", "select", "title", "object"]
+    const GetDatas = function(counter, action, idModif){
+        keys = ["contact_date", "nature", "resume", "full_text"]
         ids = ["id_date_"+counter, "id_select_"+counter, "id_title_"+counter, "id_area_"+counter]
         console.log(ids)
         value = {}
@@ -59,8 +63,15 @@
             console.log("Success")
             window.location.href = window.location.href  
         }
-        sendDatasToServer(value, "{% url 'sheet:contact_owner' owner.id 'add'%}", whatToDo)
-        console.log(value)
+        if (action == 'add'){
+            console.log(">", value)
+            sendDatasToServer(value, "{% url 'sheet:contact_owner' owner.id 'add'%}", whatToDo)
+
+        }else if (action == 'modify'){
+            value['id_modif'] = idModif
+            sendDatasToServer(value, "{% url 'sheet:contact_owner' owner.id 'modify'%}", whatToDo)
+        }
+
     }
     const SpecifyInput = function(tabInput, counter){
         //this function specifies the given input}
@@ -80,7 +91,7 @@
         for (opt of options){
             option = document.createElement('option')
             option.id = "id_option_" + counter
-            option.value = opt.name
+            option.value = opt.value
             option.innerHTML = opt.name
             select.appendChild(option)
         }
@@ -99,8 +110,8 @@
         let tabInput = []
 
         tr = document.createElement('tr')
-        tr.id = counter
-        table.appendChild(tr)
+        tr.id = "tr_" + counter
+        table.children[0].appendChild(tr)
 
         tdCheck = document.createElement('td')
         checkbox = document.createElement('input')
@@ -123,18 +134,18 @@
         but.onclick = function(event){
             e = event || window.event;
             e.preventDefault()
-            GetDatas(counter)
+            GetDatas(counter, 'add')
 
         }
         tr.appendChild(lastTD) 
         lastTD.appendChild(but)
 
         SpecifyInput(tabInput, counter)
-
     }
-    const Remove = function(){
+    const GetChecked = function(){
+        //this function returns an Array of selected html checkbox (not id)
         const checkboxes = document.querySelectorAll('input[type=checkbox]');
-        let count = 0; 
+        count = 0; 
         let toDelete = []
         for (checkbox of checkboxes){
             if (checkbox.checked){
@@ -142,6 +153,11 @@
                 count ++;
             }
         }
+        return [toDelete, count]
+    }
+    const Remove = function(){
+        let toDelete = GetChecked()[0]
+        let count = GetChecked()[1]
         if (count == 0){
             alert('sélectionnez au moins une fiche à supprimer !')
         }else {
@@ -157,7 +173,7 @@
             console.log(idToDelete)
             response = confirm(msg);
             if (response){
-                let whatToDo = function(data){
+                let whatToDo = function(data){  
                     window.location.href = window.location.href  
                 }
                 data = {"id_check" : idToDelete, }
@@ -166,6 +182,54 @@
             }
         }
         form.setAttribute('action', "");
+    }
+    const GetValuesFromOwner = function(idSelected){
+        //this function return an Array with all values in a row
+        let values = []
+        {% for contact in contacts%}
+        if (idSelected == '{{contact.id}}')
+            values = ["", '{{contact.contact_date|date:"Y-m-d" }}', "{{contact.nature}}", "{{contact.resume|escapejs}}", "{{contact.full_text|escapejs}}", ]
+        {% endfor %}
+        console.log(values)
+        return values
+    }
+    const FillInput = function(values, idSelected){
+        //this function gets the selected input and fill it with values
+        counter = getCounter() -1
+        ident = 'tr_'+ counter
+        tr = document.getElementById(ident)
+        tr = Array.from(tr.children)
+        for (i in tr){
+            td = tr[i]
+            td.children[0].value = values[i]
+        }
+        tr[0].children[0].id = idSelected
+        tr[0].title = idSelected
+        console.log(tr[5])
+        tr[5].children[0].onclick = function(event){
+            e = event || window.event;
+            console.log(e)
+            e.preventDefault()
+            GetDatas(counter, 'modify', idSelected)
+        }
+    }
+    const Alter = function(){
+        let elemSelected = GetChecked()[0][0]
+        count = GetChecked()[1]
+        if (count == 0){
+            alert("Vous devez sélectionner un contact !")
+            return
+        }else if (count > 1){
+            alert("Vous ne pouvez modifier qu'un seul contact à la fois !")
+            return
+        }
+        let values = []
+        let tr = elemSelected.parentElement.parentElement
+        tr.classList.add('d-none')
+        values = GetValuesFromOwner(elemSelected.id)
+        Add()
+        FillInput(values, elemSelected.id)
+
     }
 </script>
 {% endblock  %}

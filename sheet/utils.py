@@ -203,12 +203,11 @@ class Utils():
     def create_contact(self, owner, dict_values): 
         """this function creates a new contact for a owner """
         try:  
-            print("ut : ", dict_values['date']) 
             new_contact = Contact(
-                contact_date = dict_values['date'],
-                resume = dict_values['select'],
-                full_text = dict_values['title'],
-                nature = dict_values['object'],
+                contact_date = dict_values['contact_date'],
+                resume = dict_values['resume'],
+                full_text = dict_values['full_text'],
+                nature = dict_values['nature'],
                 owner = owner)
             new_contact.save()
             return True, new_contact
@@ -225,3 +224,15 @@ class Utils():
             return True, f"{contact} a été supprimé."
         except Exception as e:
             return False, f"ut.remove_contact > pas de supression car :\n{e}"
+
+    def modify_contact(self, dict_values): 
+        """ this function gets a selected contact and modifies its datas """
+        try:
+            selected_contact = Contact.objects.get(id=dict_values['id_modif'])
+            del dict_values['id_modif']
+            for key in dict_values:
+                setattr(selected_contact, key, dict_values[key])
+                selected_contact.save()
+            return True, f"{selected_contact} a bien été modifié."
+        except Exception as e:
+            return False, f"modify_contact > problème ici : {e}"
