@@ -33,10 +33,11 @@ SECRET_KEY = '7691-0!3k#_q=4&l4s*-qs^d42+n8vi5f&6$2vedf*cc4g13fg'
 if os.environ.get('ENV') == 'PRODUCTION':
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = False
+    ALLOWED_HOSTS = ["spa-bergerac.herokuapp.com"]
 else:
+    ALLOWED_HOSTS = ["127.0.0.1"]
     DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "spa-bergerac.herokuapp.com"]
 
 # Application definition
 
@@ -165,9 +166,9 @@ if os.environ.get('ENV') == 'PRODUCTION':
     # Extra places for collectstatic to find static files.
     STATICFILES_DIRS = (
         os.path.join(PROJECT_ROOT, 'static'),
-        os.path.join(PROJECT_ROOT, 'mail'),
-        os.path.join(PROJECT_ROOT, 'sheet'),
-        os.path.join(PROJECT_ROOT, 'core'),
+        os.path.join(ROOT_DIR, 'mail'),
+        os.path.join(ROOT_DIR, 'sheet'),
+        os.path.join(ROOT_DIR, 'core'),
     )
     # Simplified static file serving.
     # https://warehouse.python.org/project/whitenoise/
