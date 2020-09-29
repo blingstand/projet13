@@ -1,3 +1,7 @@
+#from python 
+from datetime import datetime, timedelta
+
+#from django 
 from django.db import models
 from django.utils import timezone
 
@@ -32,8 +36,6 @@ class Animal(models.Model):
         species_name = lambda x : species[int(x)][1]
         return species_name(self.species)
 
-
-
 class AdminData(models.Model):
     id = models.AutoField(primary_key=True)
     file = models.CharField(max_length=15, null=True, blank=True, verbose_name="Numéro de dossier")
@@ -59,7 +61,6 @@ class AdminData(models.Model):
         neuter_status = lambda x : ststatus[int(x)][1]
         return neuter_status(self.is_neutered)
     
-
 class Owner(models.Model):
     owner_name = models.CharField(max_length=50, null=True, verbose_name="Prénom propriétaire")#1 owner can have same name
     owner_surname = models.CharField(max_length=50, null=True, verbose_name="Nom propriétaire")#1 owner can have same surname
@@ -87,7 +88,25 @@ class Owner(models.Model):
         for caution in all_cautions:
             total += int(caution) 
         return total
-        
+    @property
+    def to_contact(self):
+        """ this function returns True if last contact is bigger than 1 week """
+        contacts = Contact.objects.filter(owner=self).order_by('contact_date')
+        print("list contact pour vérif : ")
+        print(self, [contact.contact_date for contact in contacts])
+        contacts = [contact for contact in contacts]
+        if len(contacts) == 0:
+            pass
+        else: 
+            last_contact = contacts[0].contact_date
+            if len(contacts) > 1:
+                last_contact = contacts[-1].contact_date
+            now = datetime.now().date()
+            more_than_a_week = (now) >= (last_contact + timedelta(weeks=1))
+            if more_than_a_week:
+                return True
+            return False
+    
 class Contact(models.Model):
 
     contact_date = models.DateField(default=timezone.now, verbose_name="Date du contact")

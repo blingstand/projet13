@@ -9,7 +9,7 @@ from .models import GraModel
 
 #from other apps
 from sheet.models import *
-
+ 
 # Create your models here.
 class GraphDatas():
     """ All the datas that graph needs to be built """
@@ -32,56 +32,33 @@ class GraphDatas():
     		elif len(contact) > 1:
     			last_contact = contact[-1].contact_date
     		else:
+    			print("******get_list_datas" )
+    			print(f"je vire {owner}, car il n'a pas de contact")
+    			print("******get_list_datas" )
     			continue
     		new_dict['owner'] = owner
     		new_dict['date_of_adoption'] = date_of_adoption
-    		new_dict['last_contact'] = last_contact
-    		list_datas.append(new_dict)
-    	return list_datas
-
-    @property
-    def contacted_or_to_contact(self):
-    	"""this functions reads get_list_datas and return a list of each owner
-    	who has been contacted less than 7 days before"""
-    	self.contacted, self.to_contact = [], []
-    	list_datas = self.get_list_datas
-    	now = datetime.now().date()
-    	print("***contacted_or_to_contact")
-    	for dict_datas in list_datas:
-    		last_contact = dict_datas['last_contact']
-    		more_than_a_week = (now - timedelta(weeks=1)) >= last_contact
-    		print((now - timedelta(weeks=1)) >= last_contact, (now - timedelta(weeks=1))," >= ", last_contact)
-    		if more_than_a_week:
-    			self.to_contact.append(dict_datas)
+    		new_dict['to_contact'] = owner.to_contact
+    		if len(list_datas) >= 1:
+    			if not new_dict['owner'] in [dict_data['owner'] for dict_data in list_datas]:
+    				list_datas.append(new_dict)
     		else:
-    			self.to_contact.append(dict_datas)
+    			list_datas.append(new_dict)
+    	return list_datas
+    @property
+    def get_list_for_search(self):
+    	"""this function returns all the owners with caution"""
+    	datas = self.get_list_datas
+    	list_owner, list_to_contact, list_contacted = [], [], []
+    	for data in datas: 
+    		if data["owner"] not in list_owner:
+    			list_owner.append(data['owner'])
+    			if data['owner'].to_contact:
+    				list_to_contact.append(data['owner'])
+    			else:
+    				list_contacted.append(data['owner'])
+    	return list_owner, list_to_contact, list_contacted
 
-    	print("contacted_or_to_contact***")
-    	return self.contacted, self.to_contact
-    
-
-
-
-
-    def get_report(self):
-        """ This functions returns the number of owner with same number of mail 
-        and tel contact if this number is not 0 
-        """
-        # print("get_report")
-        all_owner_contacted = []
-        all_owner_to_contact = []
-        for owner in self.owner_with_obligations:
-            if owner.mail_reminder == 0:
-                pass
-            if int(owner.mail_reminder) > 0 and int(owner.mail_reminder) == int(owner.tel_reminder):
-                # print("all_owner_contacted + 1")
-                all_owner_contacted.append(owner)
-            elif int(owner.mail_reminder) > 0 and int(owner.mail_reminder) > int(owner.tel_reminder):
-                # print("all_owner_to_contact + 1")
-                all_owner_to_contact.append(owner)
-        # print('tous, à contacter, contactés')
-        # print(len(all_owner_contacted), len(all_owner_to_contact), (all_owner_to_contact))
-        return (len(all_owner_contacted), len(all_owner_to_contact), all_owner_to_contact)
 
     # def getPrevData(self):
     #     """

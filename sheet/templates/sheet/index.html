@@ -113,14 +113,20 @@
                     }
                 });
                 child.addEventListener('dblclick', function(e){
+                    // this event opens alter page for animal or owner
+                    targid = e.target.parentElement.children[0].firstChild.id
                     if (isForAnimal()){
-                        targid = e.target.parentElement.children[0].firstChild.id
-                        new_page = getBaseUrl() + "alter/"+ targid;
-                        window.location.href = new_page; 
+                        {% for animal in animals %}
+                        if (targid == "{{animal.id}}"){
+                            window.location.href = "{%url 'sheet:alter' animal.id%}" 
+                        }
+                        {% endfor %}
                     }else{
-                        targid = e.target.parentElement.children[0].firstChild.id
-                        new_page = getBaseUrl() + "alter_owner/"+ targid;
-                        window.location.href = new_page; 
+                        {% for owner in owners %}
+                        if (targid == "{{owner.id}}"){
+                            window.location.href = "{%url 'sheet:alter_owner' owner.id%}"
+                        }
+                        {% endfor %}
                     }
                 });
             }

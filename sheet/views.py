@@ -1,34 +1,48 @@
 #rajouter un ordre dans ma list animals
-
+#from django 
 from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 
+#from current app 
 from .models import *
 from .form import *
 from .utils import Utils
 from .datas import *
 
+#from others app 
+from mydashboard.utils import GraphDatas
+
 # Create your views here.
 ut = Utils()
+gradat = GraphDatas()
+
 def redirectIndex(request):
     return redirect('sheet:index')
 class SheetView(View):
     #the sheet view page
     context= context_sheet_view
-    def get(self, request, own=0):
+    def get(self, request, own=0, search=0):
         #get the data from database
         animals = Animal.objects.all()
-        owners = Owner.objects.all()
-        # print(owners[0].number_animal())
+        if search == 0: 
+            owners = Owner.objects.all()
+        else:  
+            list_owners, list_contacted, list_to_contact = gradat.get_list_for_search
+            if search == 1:
+                owners = list_owners
+            if search == 2: 
+                owners = list_contacted
+            elif search == 3: 
+                owners = list_to_contact
         self.context['animals'] = animals
         self.context['owners'] = list(owners)
         self.context['disp_owners'] = own 
-        print(self.context)
+
         return render(request, 'sheet/index.html', self.context)
-    def post(self, request, own):
+    def post(self, request, own, search=0):
         """receives data to pass to deals with the dropSheet function"""
         given_id = request.POST.getlist('checkbox')
         if own == 0: 

@@ -196,10 +196,10 @@ class SheetForm(forms.Form):
         keeps a trace in contact"""
         try:    
             data = {
-                "date": datetime.now().date(),
-                "select": "5", 
-                "title": "félicitation + rappel loi",
-                "object": f"félicitation adoption de {animal.name}({animal.str_species}) + rappel loi sur stérilisation"
+                "contact_date": datetime.now().date(),
+                "nature": "5", 
+                "resume": "félicitation + rappel loi",
+                "full_text": f"félicitation adoption de {animal.name}({animal.str_species}) + rappel loi sur stérilisation"
             }
             success, output = ut.create_contact(owner, data)
             return success, output

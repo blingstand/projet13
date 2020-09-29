@@ -3,14 +3,14 @@
 <section class="h-100">
 	<h2 class="mt-5 pl-5">Bienvenu {{name}} sur le dashboard</h2>
 	<article class="h-100 p-3 container ">
-	{% csrf_token %} 
+		{% csrf_token %} 
 		<div class="row">
 			<div id='graph' class="graph col-9 bg-primary text-center"></div>
 			<div class="col-3  container">
 				<div class="h-100 bg-primary p-2">
-					<div class="bg-secondary mt-3 h-25 d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) devant stériliser">Propriétaires <br> avec obligations : {{datas.nb_owner_with_obligations}}</div>
-					<div class="bg-secondary mt-3 h-25 d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) à contacter"> Propriétaires <br> à contacter : {{datas.current_to_cont}} </div>
-					<div class="bg-secondary mt-3 h-25 d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) contacté(s)">Propriétaires <br> contactés : {{datas.current_cont }}</div>
+					<div onclick=owner()  class="bg-secondary mt-3 h-25 d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) devant stériliser">Propriétaires <br> avec obligations : {{nb_owners}}</div>
+					<div onclick=contacted() class="bg-secondary mt-3 h-25 d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) à contacter"> Propriétaires <br> à contacter : {{nb_to_contact}} </div>
+					<div onclick=to_contact() class="bg-secondary mt-3 h-25 d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) contacté(s)">Propriétaires <br> contactés : {{nb_contacted}}</div>
 				</div>
 			</div>
 			<div class="col-1"></div>
@@ -20,22 +20,32 @@
 		</p>
 
 	</article>
-	{% load static %}
-	 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-	<script src="https://code.highcharts.com/highcharts.js"></script>
-	<script type="text/javascript" src='{% static "mydashboard/js/graph.js" %}'> </script>
-	<script type="text/javascript">
-
-	    const container = 'graph';
-	    const datas = {
-	    	'contacted' :{{datas.cont}},
-            'to contact' : {{datas.toCont}},
-            'date' : {{datas.date|safe}},
-            };
-
-	    CreateChart(container, datas);
-	    
-	</script>
 </section>
+{% load static %}
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script type="text/javascript" src='{% static "mydashboard/js/graph.js" %}'> </script>
+<script type="text/javascript">
+	// const container = 'graph';
+	// const datas = {
+	// 	'contacted' :{{datas.cont}},
+	// 	'to contact' : {{datas.toCont}},
+	// 	'date' : {{datas.date|safe}},
+	// };
+	// CreateChart(container, datas);
+
+	const owner = function(){
+		//this function sends user to sheet/index.html
+		window.location.href = "{% url 'sheet:index' own=1 search=1%}"
+	}
+	const contacted = function(){
+		//this function sends user to sheet/index.html
+		window.location.href = "{% url 'sheet:index' own=1 search=2%}"
+	}
+	const to_contact = function(){
+		//this function sends user to sheet/index.html
+		window.location.href = "{% url 'sheet:index' own=1 search=3%}"
+	}
+</script>
 {% endblock  %}
 
