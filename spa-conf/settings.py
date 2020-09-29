@@ -17,9 +17,11 @@ import dj_database_url
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
 # print("1", BASE_DIR)
 # print("2", ROOT_DIR)
 # print("3", PROJECT_ROOT)
+
 
 
 # Quick-start development settings - unsuitable for production
