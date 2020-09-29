@@ -1,0 +1,207 @@
+/* change.css */
+
+/* main */
+	.bg-green{ 
+		background-color: green;
+		}
+	.bg-tomato{
+		background-color: tomato;
+	}
+	.bg-yellow{ 
+		background-color: yellow;
+		}
+	.text-blue{
+		color: blue; 
+	}
+	.text-bold{
+		font-weight: bold;
+		font-size: 1.2rem;
+	}
+	.curs-pointer{
+		cursor: pointer; }
+	.input-reduced{
+		width: 9rem;
+	}
+	.input-very-reduced{
+		width: 4rem;}
+	.li-oneline{
+		white-space:nowrap;
+		padding-left: 0;
+		margin-bottom: 0; 
+		margin-top: 0.4rem;
+	}
+	.li-oneline li{ 
+		display:inline;
+		margin: 1rem; 
+	} 
+	.lst-none{
+		list-style-type: none;
+	}
+	.no-a{
+		color: black;
+	}
+	.no-a:hover{
+		text-decoration : none;}
+	.scrolable{
+		overflow: scroll;
+	}
+	.very-center{
+		display: flex; 
+		-ms-flex-align: center !important;
+		align-items: center !important;
+		-ms-flex-pack: center !important;
+		justify-content: center !important;
+		}
+	.w-10rem{
+		width: 10rem;
+		text-align: center;
+		padding: 0;}
+	.w-8rem{
+		width: 8rem;
+		text-align: center;
+		padding: 0;}
+
+/* dashboard */
+	.right-part{
+		background: blue;
+		width:  80%;	
+	}
+	.top-right-part{
+		background: green;
+	}
+	article{
+		background-color: yellow;
+	}
+	#graph{
+		height: 20rem;
+	}
+
+	/*---------------------------------*/
+
+	/*left part*/
+	.left-part{
+		width:  20%;	
+		background: red;	
+	}
+	.photo > img{
+		width:  10rem;
+		height: auto;
+	}
+	.button-verti{
+		height:  3rem;
+		width: 	10rem;
+		background-color: white;
+	}
+	.button-verti:hover{
+		border : 0.2rem black dashed;
+		cursor: pointer; 
+		font-weight: bold; 
+	}
+
+/* connexion*/ 
+	.section-connection{ /*according to clients desires*/	
+		background: linear-gradient(to bottom, rgba(92, 77, 66, 0.5) 0%, 
+			rgba(92, 77, 66, 0.6) 100%), url("../img/fond.png");
+		padding-top: 8rem;
+		padding-bottom: calc(8rem - 56px);
+		background-position: center center;
+		background-size: 70rem; 
+		background-repeat: no-repeat;
+	}
+	.cont-form{
+		width: 30rem;
+		background-color: rgba(255,255,255,0.4)
+	}
+
+/* sheet */
+
+	.row1{
+		background-color: gold; }
+	
+	.row2{
+		background-color: grey; }
+
+	/* add sheet */
+		.bg-refresh{
+			border: 1px black solid;
+			background-color: #80b3ff;
+			height: 2rem;
+			width: 6rem;
+			color: black;
+		}
+		.bg-refresh:hover{
+			background-color: #1a75ff;
+		}
+		.new-former{
+			margin-left : -1.2rem;
+			padding : 2rem 0;
+		}
+
+		div.former-owner, div.new-owner{
+			border: 1px black solid;
+			background-color: #80b3ff;
+		}
+
+		div.former-owner:hover, div.new-owner:hover{
+			background-color: #1a75ff;
+		}
+	/* historic */
+		.input-object{
+			width: 15rem}
+
+	/* alter_owner */
+		.text-border{
+		border: 1px black solid;
+		display: inline-block;
+		width : 8rem;
+		background-color: #fff;}
+/* owner_page */
+	#submit{
+		width: 7rem;}
+	.btn-delete{
+		background-color: red;
+	    border-color: red;
+	    height: 2.4rem;
+	    border-radius: 5px;
+	    width: 7rem;
+	    color:white;
+	}
+/* mail */ 
+	.mail-but{
+		height: 5rem; 
+	}
+	
+	/* cns */
+	.cns-choice{	
+		height : 5rem;
+		border : 0.2rem black solid;
+		vertical-align: middle;
+	}
+	.cns-choice:hover{
+		border : 0.2rem black dashed;
+		cursor: pointer; 
+		font-weight: bold; 
+	}
+	/* mailsettings */ 
+
+	/* mailcontent */
+	.button-inclusion{
+		width : auto; 
+		height: 3rem;
+		background-color: white; 
+		border: 1px black solid;
+	}
+	.button-inclusion:hover{
+		border : 0.2rem black dashed;
+		cursor: pointer; 
+		font-weight: bold;
+	}
+
+	.button-mail-content{
+		width:	6rem;
+		height: 3rem;
+		font-weight: bold;
+		background-color: #ececec;
+		}
+	.button-mail-content:hover{
+		background-color: #00b4b5;}
