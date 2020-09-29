@@ -17,9 +17,9 @@ import dj_database_url
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-print("1", BASE_DIR)
-print("2", ROOT_DIR)
-print("3", PROJECT_ROOT)
+# print("1", BASE_DIR)
+# print("2", ROOT_DIR)
+# print("3", PROJECT_ROOT)
 
 
 # Quick-start development settings - unsuitable for production
@@ -163,6 +163,9 @@ if os.environ.get('ENV') == 'PRODUCTION':
     # Extra places for collectstatic to find static files.
     STATICFILES_DIRS = (
         os.path.join(PROJECT_ROOT, 'static'),
+        os.path.join(PROJECT_ROOT, 'mail'),
+        os.path.join(PROJECT_ROOT, 'sheet'),
+        os.path.join(PROJECT_ROOT, 'core'),
     )
     # Simplified static file serving.
     # https://warehouse.python.org/project/whitenoise/
