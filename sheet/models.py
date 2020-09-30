@@ -75,6 +75,12 @@ class Owner(models.Model):
             return f'Monsieur {self.owner_surname.upper()} {self.owner_name}'
         else:
             return f'Madame {self.owner_surname.upper()} {self.owner_name}'
+    @property
+    def apostrophe(self):
+        if self.owner_sex == "0":
+            return 'Monsieur'
+        else:
+            return 'Madame'
 
     def number_animal(self): 
         """ this function returns how many animals belong to this owner """

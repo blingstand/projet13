@@ -18,9 +18,9 @@ class MailView(View):
         context={
             'button_value':[
         {'name' : 'imprimer',  'id' :'print', 'function' : 'print()'},
-        {'name' : 'ajouter',    'id' : 'add', 'function' : 'add()'}, 
-        {'name' : 'modifier',   'id' : 'alter', 'function' : 'alter()'},
-        {'name' : 'supprimer',  'id' : 'remove', 'function' : 'remove()'}],
+        {'name' : 'ajouter',    'id' : 'add', 'function' : 'Add()'}, 
+        {'name' : 'modifier',   'id' : 'alter', 'function' : 'Alter()'},
+        {'name' : 'supprimer',  'id' : 'remove', 'function' : 'Remove()'}],
             'mails' : mails}
         return render(request, 'mail/index.html', context)
 
@@ -49,12 +49,13 @@ class CNSView(View):
 
 class ContentView(View):
     """ this class handles the content of an automatic mail"""
-    def get(self, request, mail_id=None):
+    def get(self, request, mail_id=0):
         """ this function displays the form"""
         form = ContentMail()
         context = {
             'form' : form}
-        if mail_id: 
+        print('get', mail_id)
+        if mail_id != 0: 
             mail = ut.get_mail_from_id(mail_id)
             print("avant ut.modify_text")
             print(mail.full_text)
@@ -62,42 +63,41 @@ class ContentView(View):
             context["mail"] = mail 
         return render(request, 'mail/content.html', context)
 
-    def post(self, request):
+    def post(self, request, mail_id=0, action=None):
         """ this function deals with the datas from the form"""
         form = ContentMail(request.POST)
         ut = Utils()
-        dict_values = {'overview':'0', 'mail_id': None, 'checkIntegrity':'0'}
-        dict_values.update(request.POST.dict())
+        dict_values = request.POST.dict()
         print("- - - - - ")
         print(dict_values)
+        print(mail_id, action)
         print("- - - - - ")
-        if dict_values['checkIntegrity'] == '1': 
-            #check if title is unique
-            queryset = Mail.objects.filter(title=dict_values['title'])
-
-            if len(queryset) >= 1:
-                return JsonResponse({"problem" : "1"}, safe=False) 
-            return JsonResponse({"problem" : "0"}, safe=False) 
+        # if dict_values['checkIntegrity'] == '1': 
 
         #Django form ...
-        if dict_values['mail_id'] != None:
-            mail_id = dict_values['mail_id']
+        if mail_id != 0:
             #with mail_id -> mail exists -> alter db 
             print('alter db')
-            mail = ut.alter_db(dict_values)
+            mail = ut.alter_db(dict_values, mail_id)
         else:
             #no mail_id -> create a new mail
             print('save')
             mail_id = ut.save_datas(dict_values)
             mail = ut.get_mail_from_id(mail_id)
-        if dict_values['overview'] == '0':
-            print("here 0")
+        if action == None:
             context = {'mail' : mail}
             return render(request, 'mail/cns.html', context)
-        elif dict_values['overview'] == '1': 
+        elif action == 'overview': 
             #AJAX request before overview
             print("juste un aperçu")
-            return JsonResponse({"mail_id" : mail_id}, safe=False)
+            return JsonResponse({"data" : mail_id}, safe=False)
+        elif action == 'check_integrity':
+            #check if title is unique
+            queryset = Mail.objects.filter(title=dict_values['title'])
+            if len(queryset) >= 1:
+                return JsonResponse({"data" : "1"}, safe=False) 
+            return JsonResponse({"data" : "0"}, safe=False) 
+
         else:
             return HttpResponse(('Il y a une erreur :/'))
 

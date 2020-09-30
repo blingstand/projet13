@@ -1,13 +1,13 @@
 /*
-this page is actived for 
-sheet/
-	add.html
-	alter.html
+	this script is working for 
+	sheet/
+		add.html
+		alter.html
 
-plan :
-> variables
-> fonctions
-> events
+	plan :
+	> variables
+	> fonctions
+	> events
 */
 
 /***** variables */

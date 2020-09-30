@@ -2,6 +2,7 @@
 import json
 from sheet.models import Animal, Owner, AdminData
 from .models import Mail
+from .data import converter
 import locale
 locale.setlocale(locale.LC_TIME,'')
 class Utils():
@@ -16,11 +17,10 @@ class Utils():
         new_mail.save()
         return new_mail.mail_id
 
-    def alter_db(self, dict_values): 
+    def alter_db(self, dict_values, given_id): 
         dv2 = dict_values.copy()
-        dv2.pop('overview', None)
         dv2.pop('csrfmiddlewaretoken', None)
-        mail = Mail.objects.get(mail_id=dv2['mail_id'])
+        mail = Mail.objects.get(mail_id=given_id)
         for key in dv2: 
             setattr(mail, key, dv2[key])
             print(key, getattr(mail, key))
@@ -30,12 +30,7 @@ class Utils():
 
     def get_mail_from_id(self, mail_id):
         return Mail.objects.get(mail_id=mail_id)
-
-    def change_date_format(self, date):
-        """ take a date format and change it to a french date format """
-        if date is not None: 
-            return date.strftime('%A %d %B %Y')
-        return ""
+    
     def modify_text(self, plain_text):
             """takes plain text and returns modified text"""
             print("plain_text from modify_text : ", plain_text)
@@ -46,26 +41,16 @@ class Utils():
             species_name = lambda x : species[int(x)][1]
             steril_status = lambda x : ststatus[int(x)][1]
             get_str_sex = lambda x : sex[int(x)][1]
-            input_output = {
-                '**color**' : f'couleur : {anim.color}', 
-                '**date_of_adoption**' : self.change_date_format(anim.date_of_adoption),
-                '**date_of_neuter**' : self.change_date_format(anim.admin_data.date_of_neuter),
-                '**futur_date_of_neuter**' : self.change_date_format(anim.admin_data.futur_date_of_neuter), 
-                '**is_neutered**' : steril_status(anim.admin_data.is_neutered), 
-                '**name**' : anim.name, 
-                '**owner_name**' : anim.owner.owner_name, 
-                '**owner_surname**' : anim.owner.owner_surname, 
-                '**owner_sex**' : get_str_sex(anim.owner.owner_sex), 
-                '**species**' : str_species(anim.species), 
-                '**race**' : f'race : {anim.race}', 
-                }
             new_text = plain_text
-            for key in input_output : 
-                if key == '**date_of_neuter**':
+            dict_conversion = converter(anim)
+            for key in dict_conversion: 
+                if key == '**date de stérilisation**':
                     pass
                     # print("before :")
                     # print(new_text)
-                new_text = new_text.replace(key, input_output[key])
+                if dict_conversion[key] == "": 
+                    dict_conversion[key] = f" {key} = vide"
+                new_text = new_text.replace(key, dict_conversion[key])
 
             # print(new_text)
             new_text = new_text.replace('\r\n', '\\n')

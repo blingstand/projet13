@@ -42,18 +42,19 @@
 	</article>
 </section>
 {% load static%}
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 <script type="text/javascript" src='{% static "sheet/js/utils.js" %}'> </script>
 <script type="text/javascript">
-	let trRow1 = Array.from(document.getElementsByClassName('row1'));
-    let trRow2 = Array.from(document.getElementsByClassName('row2'));
-    allTr = trRow1.concat(trRow2)
+	// let trRow1 = Array.from(document.getElementsByClassName('row1'));
+ //    let trRow2 = Array.from(document.getElementsByClassName('row2'));
+ //    allTr = trRow1.concat(trRow2)
 	
-	const add = function(){
+	const Add = function(){
 		//this function redirects to page to add a new mail 
 		window.location.href="{% url 'mail:cns'%}"
 	}
 
-	const alter = function(){
+	const Alter = function(){
 		//this function modify a single selected mail
 		checkbox = document.querySelectorAll('input[type=checkbox]');
         count = 0; 
@@ -74,7 +75,7 @@
         }
 	}
     //click on line means checkbox checked
-    const activClickEvent = function(){
+    const ActivClickEvent = function(){
         for (tr of allTr){
             tr.style.cursor = 'pointer'; 
             tr = Array.from(tr.children)
@@ -98,7 +99,7 @@
         }
     }		
 
-	function remove(){
+	function Remove(){
 		//this function remove from list and db the selected mails
         const checkbox = document.querySelectorAll('input[type=checkbox]');
         let count = 0; 
@@ -133,10 +134,10 @@
 		//this function print a mail 
 	}
 
-	const main = function(){
-		activClickEvent()
+	const Main = function(){
+		ActivClickEvent()
 	}
-	main()
+	Main()
 </script>
 
 {%endblock%}

@@ -9,9 +9,9 @@
     <h2  class="mt-5 pl-5">Contenu du mail </h2>
     <article class="mt-5 container">
         <div class="row">
-            <div class="col-1 bg-secondary"></div>
-            <div class="col-7">
-                <form id="form_mail_skull" action="" method='post'>{% csrf_token %}
+            <div class="col-8">
+                <form id="form_mail_skull" action="" method='post'>
+                    {% csrf_token %}
                     <div class="row">
                         {%for field in form%}
                         {% for error in field.errors %}
@@ -24,21 +24,50 @@
                     </div>
                 </form>
             </div>
-            <div class="col-3">
-                <div class=" row d-flex justify-content-around bg-green pre-scrollable">
-                    <button class="button-mail-content mt-1 mb-2" onclick='add_in_mail(this.value)' value="**color**">Couleur</button>
-                    <button class="very-center button-mail-content mt-1 mb-2" onclick='add_in_mail(this.value)' value="**date_of_adoption**">Date d'adoption</button>
-                    <button class="very-center button-mail-content mt-1 mb-2" onclick='add_in_mail(this.value)' value="**date_of_neuter**">Date de stérilisation</button>
-                    <button class="very-center button-mail-content mt-1 mb-2" onclick='add_in_mail(this.value)' value="**species**">Espèce Animal</button>
-                    <button class="very-center button-mail-content mt-1 mb-2" onclick='add_in_mail(this.value)' value="**is_neutered**">Etat de la stérilisation</button>
-                    <button class="very-center button-mail-content mt-1 mb-2" onclick='add_in_mail(this.value)' value="**futur_date_of_neuter**">Futur date stérilisation</button>
-                    <button class="very-center button-mail-content mt-1 mb-2" onclick='add_in_mail(this.value)' value="**name**">Nom Animal</button>
-                    <button class="very-center button-mail-content mt-1 mb-2" onclick='add_in_mail(this.value)' value="**owner_sex** **owner_surname**">Nom Propriétaire</button>
-                    <button class="very-center button-mail-content mt-1 mb-2" onclick='add_in_mail(this.value)' value="**race**">Race Animal</button>
+            <div class="col-4 bg-green">
+                <div class=" row d-flex justify-content-around  pre-scrollable">
+                    <div>
+                        <p><label class="mb-0" for="sel_animal">Variables de la catégorie Animal</label></p>
+                        <select name="sel_animal" id="id_select_1">
+                            <option>-- Sélectionnez une variable -- </option>
+                            <option onclick=AddInMail(this.value) value="**nom animal**">nom</option>
+                            <option onclick=AddInMail(this.value) value="**date de naissance**">date de naissance</option>
+                            <option onclick=AddInMail(this.value) value="**race**">race</option>
+                            <option onclick=AddInMail(this.value) value="**espèce**">espèce</option>
+                            <option onclick=AddInMail(this.value) value="**couleur**">couleur</option>
+                            <option onclick=AddInMail(this.value) value="**date d'adoption**">date d'adoption</option>
+                            <option onclick=AddInMail(this.value) value="**caution**">caution</option>
+                        </select>
+                    </div>
+                    <div>
+                        <p><label class="mb-0" for="sel_owner">Variables de la catégorie Propriétaire</label></p>
+                        <select name="sel_owner" id="id_select_2">
+                            <option>-- Sélectionnez une variable -- </option>
+                            <option onclick=AddInMail(this.value) value="**prénom prop**">prénom propriétaire</option>
+                            <option onclick=AddInMail(this.value) value="**nom prop**">nom propriétaire</option>
+                            <option onclick=AddInMail(this.value) value="**M./Mme**">M./Mme</option>
+                            <option onclick=AddInMail(this.value) value="**tel**">téléphone</option>
+                            <option onclick=AddInMail(this.value) value="**mail**">mail</option>
+                            <option onclick=AddInMail(this.value) value="**nb appels**">nombre d'appels</option>
+                            <option onclick=AddInMail(this.value) value="**nb mails**">nombre de mails</option>
+                        </select>
+                    </div>
+                    <div>
+                        <p><label class="mb-0" for="sel_admin">Variables de la catégorie Admin</label></p>
+                        <select name="sel_admin" id="id_select_3">
+                            <option>-- Sélectionnez une variable -- </option>
+                            <option onclick=AddInMail(this.value) value="**id dossier**">id dossier</option>
+                            <option onclick=AddInMail(this.value) value="**id puce**">id puce</option>
+                            <option onclick=AddInMail(this.value) value="**id tatouage**">id tatouage</option>
+                            <option onclick=AddInMail(this.value) value="**état stérilisation**">état stérilisation</option>
+                            <option onclick=AddInMail(this.value) value="**date de stérilisation**">date de stérilisation</option>
+                            <option onclick=AddInMail(this.value) value="**date future stérilisation**">futur date de stérilisation</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="row d-flex justify-content-around bg-green pre-scrollable">
+                <div class="row mt-4 mb-2 d-flex justify-content-around bg-green pre-scrollable">
 
-                    <button class="button-mail-content mt-1 mb-2" onclick='send_data()'>Aperçu</button>
+                    <button class="button-mail-content mt-1 mb-2" onclick='GetOverview()'>Aperçu</button>
                     <button class="button-mail-content mt-1 mb-2" onclick='submit_datas()'>Enregistrer</button>
                 </div>
             </div>
@@ -58,7 +87,8 @@
     let anteParam = tabFullPath[tabFullPath.length-2]
     const title = document.getElementById('id_title');
 
-    let add_in_mail = function (givenValue){
+    //this function adds expression in body mail when user selects an option
+    let AddInMail = function (givenValue){
         // this function adds the value of a button in the mail
         let body_mail = document.getElementById('body_mail');
         const startPos = body_mail.selectionStart;
@@ -69,21 +99,17 @@
         body_mail.focus()
     }
 
-    // using jQuery get csrftoken from your HTML
-    let csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-    function csrfSafeMethod(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
+    //this function takes the datas from title, object and body
     const get_data = function(){
         return {
             'title': document.getElementById('id_title').value, 
             'resume': document.getElementById('id_resume').value, 
             'full_text': document.getElementById('body_mail').value.replaceAll("\n", "\\n"), 
-            'overview': 1,
         }
     }
-    let getOverview = function(mail_id){
+
+    //this function opens a new window for overview
+    let OpenOverview = function(mail_id){
         //open a new window for the overview
         const width  = document.body.clientWidth;
         const height = document.body.clientHeight;
@@ -92,9 +118,12 @@
         let spec =  "toolbar=yes,scrollbars=yes,resizable=yes,top=100,left=200,width="
         spec += wanted_width+",height="+wanted_height
         window.open("{% url 'mail:overview'%}"+mail_id, "_blank", spec);
+        window.location.href = "{% url 'mail:content'%}/"+mail_id
     }
-    const ReactProblem = function(input, problem){
-        if (problem == 0){
+
+    //this functions handles reaction to integrity problem
+    const ReactProblem = function(input, issue){
+        if (issue == 0){
             input.style.color = 'black';
             if (input.value.search('pb') != -1){
                 console.log("--->" + input.value.search('pb'))
@@ -102,7 +131,7 @@
                 console.log(newInput)
                 input.value = newInput; 
             }
-        }else if (problem == 1){
+        }else if (issue == 1){
             input.style.color = 'red';
             input.title = "Ce titre existe déjà ";
             if (input.value.search('pb') == -1){
@@ -110,63 +139,41 @@
             }
         }
     }
+
+    //this function verifies if this title is available in db
     const checkIntegrity = function(input){
-        value = input.value
+        let value = {}
+        value['title'] = input.value
         if ("{{mail.title}}" == value){
             return
         }
-        $.ajaxSetup({
-            beforeSend: function (xhr, settings) {
-                // if not safe, set csrftoken
-                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
-            }
-        });
-        $.ajax( 
-        { 
-            type:"POST", 
-            url: "{% url 'mail:content'%}", 
-            dataType: 'json',
-            data: {'title':value, 'checkIntegrity':'1'},
-            success: function (res) {
-                issue = res['problem']; 
-                ReactProblem(input, issue)                   
-            },
-            error: function (res) {
-                console.log("erreur");
-            }
-        });
+        let url = "{% url 'mail:content' 0 'check_integrity'%}"
+        if (param != 'content'){
+            url = "{% url 'mail:content' %}/" + param + "/check_integrity" 
+        }
+        const WhatToDo = function(issue){
+            ReactProblem(input, issue)
+        }
+        sendDatasToServer(value, url, WhatToDo)
     }
 
-    const send_data = function(){
-        let receivedData = get_data()
+    const GetOverview = function(){
+        //this function organises overview
+        //1 get datas
+        let value = get_data()
+        let url = "{% url 'mail:content' 0 'overview'%}"
         if (param != 'content'){
-            receivedData['mail_id']=param
+            value['mail_id']=param
+            url = "{% url 'mail:content' %}/" + param + "/overview" 
+
         } 
-        $.ajaxSetup({
-            beforeSend: function (xhr, settings) {
-                // if not safe, set csrftoken
-                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
-            }
-        });
-        $.ajax( 
-        { 
-            type:"POST", 
-            url: "{% url 'mail:content'%}", 
-            dataType: 'json',
-            data: receivedData,
-            success: function (res) {
-                mail_id = res['mail_id'];
-                getOverview(mail_id)
-            },
-            error: function (res) {
-                console.log("erreur");
-            }
-        });   
+        const WhatToDo = function(mail_id){
+            OpenOverview(mail_id)
+        }
+        sendDatasToServer(value, url, WhatToDo)
     }
+
+    // //this function sends datas to server to save them
     const submit_datas = function(){
         //check if fields are empty
         const datas = get_data()
@@ -188,34 +195,31 @@
         //fields are not empty
         if (canSave){
             form = document.getElementById('form_mail_skull');
-            if (param != 'content'){
-                mail_id = document.createElement('input');
-                mail_id.value = param; 
-                mail_id.name = 'mail_id'
-                mail_id.classList.add("d-none");
-                form.appendChild(mail_id)
-            }
             form.setAttribute('action', "{% url 'mail:content'%}");
+            if (param != 'content'){
+                form.setAttribute('action', "{% url 'mail:content'%}/"+param);
+            }
             form.setAttribute('method', "POST");
             form.submit()
         }
+        return
     }
     {% if mail %}
-    const get_field = function(){
-            //returns the 3 blanks to fill
-            const blanks = document.getElementsByClassName('blank')
-            const content = ['{{mail.title}}', '{{mail.resume}}', '{{mail.full_text}}', ] 
-            for (let i = 0 ; i < blanks.length - 1 ; i++){
-                blanks[i].value = content[i]}
-                blanks[2].innerHTML = content[2]
+        const get_field = function(){
+        //returns the 3 blanks to fill
+        const blanks = document.getElementsByClassName('blank')
+        const content = ['{{mail.title}}', '{{mail.resume}}', '{{mail.full_text}}', ] 
+        for (let i = 0 ; i < blanks.length - 1 ; i++){
+            blanks[i].value = content[i]
+        }
+        blanks[2].innerHTML = content[2]
+    }
+    get_field()
+    {% endif %}
 
-            }
-            get_field()
-            {% endif %}
+    // title.addEventListener('focusout', function(){
+    //     checkIntegrity(title);
+    // })
 
-            title.addEventListener('focusout', function(){
-                checkIntegrity(title);
-            })
-
-        </script>
-        {% endblock%}
+</script>
+{% endblock%}
