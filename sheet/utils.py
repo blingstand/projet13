@@ -138,8 +138,10 @@ class Utils():
             return False, e
     def remove_owner(self, given_ids): 
         """this function removes 1 owner from db if the ctrl is ok"""
-        if isinstance(given_ids, int): 
-            given_ids = list(given_ids)
+        print("test remove_owner : ", not isinstance(given_ids, list) )
+        if not isinstance(given_ids, list): 
+            given_ids = [given_ids]
+            print("changement : ", given_ids)
         for given_id in given_ids:
             owner_to_remove = Owner.objects.get(id=given_id)
             if owner_to_remove.number_animal() == 0: 
