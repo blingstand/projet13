@@ -56,8 +56,8 @@
                     <tr class="col-12 text-center {% cycle 'row1' 'row2' %}">
                         <td><input type="checkbox" id='{{owner.id}}' name='checkbox' value={{owner.id}}></td>
                         <td>{{owner.number_animal}}</a></td>
-                        <td>{{owner.owner_name}}</a></td>
-                        <td>{{owner.owner_surname}}</a></td>
+                        <td>{{owner.name}}</a></td>
+                        <td>{{owner.surname}}</a></td>
                         <td>{{owner.caution}}</td>
                         <td>{{owner.need_contact}}</td>
                         <td>{{owner.phone}}</td>
@@ -65,7 +65,7 @@
                         <td>{{owner.tel_reminder}}</td>
                         <td>{{owner.mail_reminder}}</td>                  
                         <td class="bg-white border-blue">
-                            <a href="{% url 'sheet:contact_owner' owner.id%}">historique contact pour {{owner.owner_name}} {{owner.owner_surname}}</td></a>                 
+                            <a href="{% url 'sheet:contact_owner' owner.id%}">historique contact pour {{owner.name}} {{owner.surname}}</td></a>                 
                     </tr>
                     {% endfor %}
                 </table>
@@ -135,9 +135,9 @@
 
     function add(){
         if (isForAnimal()){
-            add_page = getBaseUrl() + "add"
+            add_page = "{% url 'sheet:add' %}"
         }else{
-            add_page = getBaseUrl() + "add_owner" 
+            add_page = "{% url 'sheet:add_owner' %}"
         }
             window.location.href = add_page; 
     }
@@ -155,11 +155,18 @@
                 alert('sélectionnez une fiche à modifier !')
             }else if (count == 1){
                 if (isForAnimal()){
-                    alter_page = getBaseUrl() + "alter/"+ id_selected;
+                    {% for animal in animals %}
+                    if (id_selected == "{{animal.id}}"){
+                        window.location.href = "{%url 'sheet:alter' animal.id%}" 
+                    }
+                    {% endfor %}
                 }else{
-                    alter_page = getBaseUrl() + "alter_owner/"+ id_selected;
+                    {% for owner in owners %}
+                    if (id_selected == "{{owner.id}}"){
+                        window.location.href = "{%url 'sheet:alter_owner' owner.id%}"
+                    }
+                    {% endfor %}
                 }
-                window.location.href = alter_page; 
             }else{
                 alert("trop de fiches sélectionnées (" + count + ").")
             }
