@@ -62,9 +62,9 @@ class AdminData(models.Model):
         return neuter_status(self.is_neutered)
     
 class Owner(models.Model):
-    name = models.CharField(max_length=50, null=True, verbose_name="Prénom propriétaire")#1 owner can have same name
-    surname = models.CharField(max_length=50, null=True, verbose_name="Nom propriétaire")#1 owner can have same surname
-    sex = models.CharField(max_length=1, default=0, null=True, verbose_name="Sexe propriétaire\n (0 = H / 1 = F)")
+    owner_name = models.CharField(max_length=50, null=True, verbose_name="Prénom propriétaire")#1 owner can have same name
+    owner_surname = models.CharField(max_length=50, null=True, verbose_name="Nom propriétaire")#1 owner can have same surname
+    owner_sex = models.CharField(max_length=1, default=0, null=True, verbose_name="Sexe propriétaire\n (0 = H / 1 = F)")
     phone = models.CharField(unique=True, max_length=30, verbose_name="Téléphone")
     mail = models.EmailField(unique=True, verbose_name="Mail")
     tel_reminder = models.CharField(max_length=3, default=0, verbose_name="Nombre d'appel passés")
