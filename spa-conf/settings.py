@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-import dj_database_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # projets (1), projets/projet13 (2), projets/projet13/spa-conf (3)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) 
@@ -171,6 +170,4 @@ if os.environ.get('ENV') == 'PRODUCTION':
     # https://warehouse.python.org/project/whitenoise/
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-    db_from_env = dj_database_url.config(conn_max_age=500)
-    DATABASES['default'].update(db_from_env)
 # SHORT_DATE_FORMAT='d/m/Y'
