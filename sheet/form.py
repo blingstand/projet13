@@ -136,7 +136,6 @@ class SheetForm(forms.Form):
         else:
             # print("Création d'un nouvel utilisateur ...")
             try: 
-                owner.owner_sex = int(owner.owner_sex)
                 owner.save()
                 # print('je retourne :', owner)
                 return True, owner

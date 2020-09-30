@@ -71,10 +71,10 @@ class Owner(models.Model):
     mail_reminder = models.CharField(max_length=3, default=0, verbose_name="Nombre de mail envoyés")
 
     def __str__(self):
-        if self.owner_sex == "0":
-            return f'Monsieur {self.owner_surname.upper()} {self.owner_name}'
+        if self.sex == "0":
+            return f'Monsieur {self.surname.upper()} {self.name}'
         else:
-            return f'Madame {self.owner_surname.upper()} {self.owner_name}'
+            return f'Madame {self.surname.upper()} {self.name}'
 
     def number_animal(self): 
         """ this function returns how many animals belong to this owner """
