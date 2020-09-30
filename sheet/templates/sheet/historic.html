@@ -230,5 +230,36 @@
         Add()
         FillInput(values, elemSelected.id)
     }
+    const activClickEvent = function(){
+        for (tr of allTr){
+            tr.style.cursor = 'pointer'; 
+            tr = Array.from(tr.children)
+            tr.splice(0,1)
+            for (child of tr){
+                child.addEventListener('click', function(e){
+                    let target = e.target.parentElement.children[0].firstChild;
+                    console.log(e.target.tagName)
+                    if (target.checked == true){
+                        target.checked=false; 
+                    }else{
+                        target.checked=true;
+                    }
+                });
+                child.addEventListener('dblclick', function(e){
+                    // this event opens alter page for animal or owner
+                    let target = e.target.parentElement.children[0].firstChild;
+                    console.log(e.target.tagName)
+                    if (target.checked != true){
+                        target.checked=true; 
+                    }
+                    Alter()
+                });
+            }
+        }
+    }
+    const main = function(){
+        activClickEvent()
+    }
+    main()
 </script>
 {% endblock  %}

@@ -81,9 +81,6 @@
     let displayButt = document.getElementById('display')
     displayButt.parentElement.classList.replace('col-2', 'col-4')
     const form = document.getElementById('my_form');
-    let trRow1 = Array.from(document.getElementsByClassName('row1'));
-    let trRow2 = Array.from(document.getElementsByClassName('row2'));
-    allTr = trRow1.concat(trRow2)
 
     const UncheckAll = function(){
         //this function unchecks all the checkbox visible and invisible
@@ -97,7 +94,7 @@
         return displayButt.textContent == "Afficher Propriétaires"
     }
     //click on line means checkbox checked
-    const activClickEvent = function(page){
+    const activClickEvent = function(){
         for (tr of allTr){
             tr.style.cursor = 'pointer'; 
             tr = Array.from(tr.children)
