@@ -56,8 +56,8 @@
                     <tr class="col-12 text-center {% cycle 'row1' 'row2' %}">
                         <td><input type="checkbox" id='{{owner.id}}' name='checkbox' value={{owner.id}}></td>
                         <td>{{owner.number_animal}}</a></td>
-                        <td>{{owner.name}}</a></td>
-                        <td>{{owner.surname}}</a></td>
+                        <td>{{owner.owner_name}}</a></td>
+                        <td>{{owner.owner_surname}}</a></td>
                         <td>{{owner.caution}}</td>
                         <td>{{owner.need_contact}}</td>
                         <td>{{owner.phone}}</td>
@@ -65,7 +65,7 @@
                         <td>{{owner.tel_reminder}}</td>
                         <td>{{owner.mail_reminder}}</td>                  
                         <td class="bg-white border-blue">
-                            <a href="{% url 'sheet:contact_owner' owner.id%}">historique contact pour {{owner.name}} {{owner.surname}}</td></a>                 
+                            <a href="{% url 'sheet:contact_owner' owner.id%}">historique contact pour {{owner.owner_name}} {{owner.owner_surname}}</td></a>                 
                     </tr>
                     {% endfor %}
                 </table>

@@ -75,9 +75,9 @@ class AddSheetView(View):
             selected_owner = Owner.objects.get(id=dict_values["owner_id"])
             print(selected_owner)
             data = {
-                "name":selected_owner.name,
-                "surname":selected_owner.surname,
-                "sex":selected_owner.sex,
+                "name":selected_owner.owner_name,
+                "surname":selected_owner.owner_surname,
+                "sex":selected_owner.owner_sex,
                 "phone":selected_owner.phone,
                 "mail":selected_owner.mail,
                 }

@@ -123,9 +123,9 @@
 			{% for owner in owners%}
 			if ({{owner.id}} == value){
 				data = {
-	                "name":'{{owner.name}}',
-	                "surname":'{{owner.surname}}',
-	                "sex":'{{owner.sex}}',
+	                "name":'{{owner.owner_name}}',
+	                "surname":'{{owner.owner_surname}}',
+	                "sex":'{{owner.owner_sex}}',
 	                "phone":'{{owner.phone}}',
 	                "mail":'{{owner.mail}}',
 	                }
@@ -200,7 +200,7 @@
 	//fills the inputs
 	const FillTheInputs = function(fields){
 		// this functions fills the inputs with the given data from animal
-		values = ['{{animal.name}}','{{animal.date_of_birth|date:"Y-m-d"}}','{{animal.date_of_adoption|date:"Y-m-d"}}','{{animal.admin_data.date_of_neuter|date:"Y-m-d"}}', '{{animal.admin_data.futur_date_of_neuter|date:"Y-m-d"}}', '{{animal.race}}', '{{animal.color}}', '{{animal.observation}}', "{{animal.admin_data.file}}", "{{animal.admin_data.tatoo}}", "{{animal.admin_data.chip}}", "{{animal.caution}}", "{{animal.owner.mail_reminder}}","{{animal.owner.tel_reminder}}", "{{animal.owner.name}}", "{{animal.owner.surname}}", "{{animal.owner.phone}}", "{{animal.owner.mail}}" ]
+		values = ['{{animal.name}}','{{animal.date_of_birth|date:"Y-m-d"}}','{{animal.date_of_adoption|date:"Y-m-d"}}','{{animal.admin_data.date_of_neuter|date:"Y-m-d"}}', '{{animal.admin_data.futur_date_of_neuter|date:"Y-m-d"}}', '{{animal.race}}', '{{animal.color}}', '{{animal.observation}}', "{{animal.admin_data.file}}", "{{animal.admin_data.tatoo}}", "{{animal.admin_data.chip}}", "{{animal.caution}}", "{{animal.owner.mail_reminder}}","{{animal.owner.tel_reminder}}", "{{animal.owner.owner_name}}", "{{animal.owner.owner_surname}}", "{{animal.owner.phone}}", "{{animal.owner.mail}}" ]
 		for (i in values){
 
 			fields[i].value = values[i];
@@ -213,7 +213,7 @@
 		console.log("doit être checké : "+ 'id_is_neutered_' + '{{animal.admin_data.is_neutered}}')
 		document.getElementById('id_species_' + '{{animal.species}}').checked = true
 		document.getElementById('id_is_neutered_' + '{{animal.admin_data.is_neutered}}').checked = true
-		document.getElementById('id_owner_sex_' + '{{animal.owner.sex}}').checked = true
+		document.getElementById('id_owner_sex_' + '{{animal.owner.owner_sex}}').checked = true
 		document.getElementById('id_nature_caution').value = '{{animal.nature_caution}}'
 		if (document.getElementById('id_is_neutered_2').checked){
 			document.getElementById('id_futur_date_of_neuter').classList.replace('d-none', 'd-flex')
