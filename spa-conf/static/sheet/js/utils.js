@@ -1,18 +1,21 @@
-/*
-this page is actived for 
-sheet/
-	add.html
-	alter.html
+/* petit changement 
+	this script is working for 
+	sheet/
+		add.html
+		alter.html
 
-plan :
-> variables
-> fonctions
-> events
+	plan :
+	> variables
+	> fonctions
+	> events
 */
 
 /***** variables */
 	const url = window.location.href
 	const csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+	const trRow1 = Array.from(document.getElementsByClassName('row1'));
+    const trRow2 = Array.from(document.getElementsByClassName('row2'));
+    const allTr = trRow1.concat(trRow2)
 
 /***** functions */
 	//clean owner input and display form like beginning

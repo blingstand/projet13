@@ -14,13 +14,13 @@ import os
 import dj_database_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # projets (1), projets/projet13 (2), projets/projet13/spa-conf (3)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-# print("1", BASE_DIR)
-# print("2", ROOT_DIR)
-# print("3", PROJECT_ROOT)
+print("1", ROOT_DIR)
+print("2", BASE_DIR)
+print("3", PROJECT_ROOT)
 
 
 
@@ -148,12 +148,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(ROOT_DIR, 'static')
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(ROOT_DIR, 'media')
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 
 DATE_FORMAT = '%m/%d/%Y'
+
+STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'sheet/static'),
+        os.path.join(BASE_DIR, 'mail/static'),
+        os.path.join(BASE_DIR, 'mydashboard/static'),
+        os.path.join(BASE_DIR, 'core/static'),
+    )
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    #'django.contrib.staticfiles.finders.AppDirectoriesFinder',    #causes verbose duplicate notifications in django 1.9
+)
 
 if os.environ.get('ENV') == 'PRODUCTION':
 
@@ -163,7 +174,7 @@ if os.environ.get('ENV') == 'PRODUCTION':
     #location for manage.py collectstatic
     STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 
-    # Extra places for collectstatic to find static files.
+    #In production collectstatic gathers the data in spa-conf/static.
     STATICFILES_DIRS = (
         os.path.join(PROJECT_ROOT, 'static'),
     )
