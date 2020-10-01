@@ -18,9 +18,9 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-print("1", ROOT_DIR)
-print("2", BASE_DIR)
-print("3", PROJECT_ROOT)
+# print("1", ROOT_DIR)
+# print("2", BASE_DIR)
+# print("3", PROJECT_ROOT)
 
 
 
@@ -32,7 +32,7 @@ SECRET_KEY = '7691-0!3k#_q=4&l4s*-qs^d42+n8vi5f&6$2vedf*cc4g13fg'
 
 if os.environ.get('ENV') == 'PRODUCTION':
     # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = False
+    DEBUG = True
     ALLOWED_HOSTS = ["spa-bergerac.herokuapp.com"]
 else:
     ALLOWED_HOSTS = ["127.0.0.1"]
