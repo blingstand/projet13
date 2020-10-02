@@ -1,4 +1,5 @@
 
+from django.conf.urls import handler404, handler500
 from django.contrib import admin
 from django.urls import path, include
 
@@ -7,6 +8,7 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 
 from django.views.static import serve
+from mydashboard.views import MyDashboardView
 
 urlpatterns = [
     path('spa/admin/', admin.site.urls),
@@ -22,3 +24,7 @@ if settings.DEBUG:
 	urlpatterns += [
 		url(r'^media/(?P<path>.*)$', serve,{
 			'document_root': settings.MEDIA_ROOT})]
+
+"""Custom 404 and 500 pages works only when Debug is set to false"""
+handler404 = MyDashboardView.error_404
+handler500 = MyDashboardView.error_500

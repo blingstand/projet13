@@ -32,10 +32,10 @@ SECRET_KEY = '7691-0!3k#_q=4&l4s*-qs^d42+n8vi5f&6$2vedf*cc4g13fg'
 
 if os.environ.get('ENV') == 'PRODUCTION':
     # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = True
+    DEBUG = False
     ALLOWED_HOSTS = ["spa-bergerac.herokuapp.com"]
 else:
-    ALLOWED_HOSTS = ["127.0.0.1"]
+    ALLOWED_HOSTS = ["*"]
     DEBUG = True
 
 

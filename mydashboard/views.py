@@ -24,3 +24,10 @@ class MyDashboardView(View):
                 'nb_to_contact':len(to_contact)}
             return render(request, "dashboard/index.html", context)
         return redirect('user:connection')
+    def error_404(request, exception):
+        context = {}
+        return render(request,'dashboard/error_404.html', context)
+
+    def error_500(request):
+        context = {}
+        return render(request,'dashboard/error_500.html', context)
