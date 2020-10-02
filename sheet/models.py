@@ -112,6 +112,28 @@ class Owner(models.Model):
             if more_than_a_week:
                 return True
             return False
+    @property
+    def refresh_sum_mail(self):
+        """ this function refresh the value of mail_reminder according to contact nature in db """
+        nature1 = Contact.objects.filter(nature=1, owner=self)
+        nature3 = Contact.objects.filter(nature=3, owner=self)
+        nature5 = Contact.objects.filter(nature=5, owner=self)
+        sum_mail = len(nature1) + len(nature3) + len(nature5)
+        self.mail_reminder = sum_mail
+        self.save()
+        print("save change")
+        return sum_mail
+    @property
+    def refresh_sum_tel(self):
+        """ this function refresh the value of tel_reminder according to contact nature in db """
+        nature2 = Contact.objects.filter(nature=2, owner=self)
+        nature4 = Contact.objects.filter(nature=4, owner=self)
+        sum_tel = len(nature2) + len(nature4)
+        self.tel_reminder = sum_tel
+        self.save()
+        print("save change")
+        return sum_tel
+    
     
 class Contact(models.Model):
 

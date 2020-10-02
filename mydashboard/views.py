@@ -9,13 +9,12 @@ from django.views import View
 
 #this app 
 from .utils import GraphDatas
-from .models import GraModel
+
 # Create your views here.
-gradat = GraphDatas()
-gramod = GraModel()
 class MyDashboardView(View):
     def get(self, request):
         """display dashboard"""
+        gradat = GraphDatas()
         if request.user.is_authenticated:
             dict_value = gradat.get_list_datas
             owners, to_contact, contacted = gradat.get_list_for_search

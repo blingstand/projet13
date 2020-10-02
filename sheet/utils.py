@@ -136,6 +136,8 @@ class Utils():
             return True, len(allchanges)
         except Exception as e:
             return False, e
+    
+    """ methodes for Owner """
     def remove_owner(self, given_ids): 
         """this function removes 1 owner from db if the ctrl is ok"""
         print("test remove_owner : ", not isinstance(given_ids, list) )
@@ -202,6 +204,13 @@ class Utils():
         except Exception as e:
             # return False, f"une erreur a été rencontrée : {e}"
             raise 
+    
+    """ methodes for Contact """
+
+    def refresh_reminder(self, owner): 
+        """ this function refresh data for mail_reminder and tel reminder """
+        owner.refresh_sum_mail
+        owner.refresh_sum_tel
     def create_contact(self, owner, dict_values): 
         """this function creates a new contact for a owner """
         try:  
@@ -212,6 +221,8 @@ class Utils():
                 nature = dict_values['nature'],
                 owner = owner)
             new_contact.save()
+            counter = 0
+            self.refresh_reminder(owner)
             return True, new_contact
         except Exception as e:
             raise(e)
@@ -223,6 +234,7 @@ class Utils():
             for given_id in list_contact_id:
                 contact = Contact.objects.get(id=given_id)
                 contact.delete()
+            self.refresh_reminder(contact.owner)
             return True, f"{contact} a été supprimé."
         except Exception as e:
             return False, f"ut.remove_contact > pas de supression car :\n{e}"
@@ -235,6 +247,7 @@ class Utils():
             for key in dict_values:
                 setattr(selected_contact, key, dict_values[key])
                 selected_contact.save()
+                self.refresh_reminder(selected_contact.owner)
             return True, f"{selected_contact} a bien été modifié."
         except Exception as e:
             return False, f"modify_contact > problème ici : {e}"

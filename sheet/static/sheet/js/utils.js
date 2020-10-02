@@ -94,10 +94,14 @@
 		document.getElementById("id_tel_reminder").value = 0
 	}
 
-	// fill blank with given values
+	// fill blank with given values 
 	const fillBlank = function(value){
 		ids = ["id_owner_name", "id_owner_surname", 'id_phone', "id_mail"]
 		values = [value.name, value.surname, value.phone, value.mail]
+		console.log("test fillBlank")
+		console.log(document.getElementById('id_mail'))
+		console.log(values[3])
+
 		for (index in ids){
 			input = document.getElementById(ids[index])
 			input.value = values[index]

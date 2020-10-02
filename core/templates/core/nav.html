@@ -11,16 +11,16 @@
 	</div>
 	<div class="container">
 		<div class="row">
-		<div id="id_mydashboard" class=" col-12 text-center button-verti mb-3 very-center">Tableau de bord</div>
-		<div id="id_sheet" class=" col-12 text-center button-verti mb-3 very-center "><a class="no-a" href="{% url 'sheet:index' %}">Fiches</a></div>
-		<div id="id_mail" class=" col-12 text-center button-verti mb-3 very-center "><a class="no-a" href="{% url 'mail:index' %}">Mails</a></div>
-		<div id="id_info" class=" col-12 text-center button-verti mb-5 very-center "><a class="no-a" href="{% url 'info:index' %}">Informations</a>	</div>
+		<div id="id_nav_mydashboard" class=" col-12 text-center button-verti mb-3 very-center">Tableau de bord</div>
+		<div id="id_nav_sheet" class=" col-12 text-center button-verti mb-3 very-center "><a class="no-a" href="{% url 'sheet:index' %}">Fiches</a></div>
+		<div id="id_nav_mail" class=" col-12 text-center button-verti mb-3 very-center "><a class="no-a" href="{% url 'mail:index' %}">Mails</a></div>
+		<div id="id_nav_info" class=" col-12 text-center button-verti mb-5 very-center "><a class="no-a" href="{% url 'info:index' %}">Informations</a>	</div>
 		</div>
 	</div>
 
 </nav>
 <script>
-	navElem = ['id_mydashboard', 'id_sheet', 'id_mail', 'id_info']
+	navElem = ['id_nav_mydashboard', 'id_nav_sheet', 'id_nav_mail', 'id_nav_info']
 	href =["{% url 'mydashboard:index' %}", "{% url 'sheet:index' %}", "{% url 'mail:index' %}", "{% url 'info:index' %}"]
 
 	for (let i = 0; i < navElem.length; i++){

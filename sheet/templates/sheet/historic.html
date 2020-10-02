@@ -1,6 +1,7 @@
 {% extends 'core/base.html' %}
 {% block content %}
 <section>
+    <p id='back_to_owner' onclick=ReturnOwnerIndex()>Retour Index</p>
     <h2 class="mt-5 pl-5">Historique des contacts de {{owner.owner_name}} {{owner.owner_surname}}</h2>
     <article class="mt-5 container">
         <div class="row bg-green">
@@ -47,7 +48,10 @@
     */
     let table = document.getElementById('histo_table')
     const form = document.getElementById('my_form')
-    const getCounter = function(){
+    document.getElementById('back_to_owner').classList.add('curs-pointer')
+
+    
+    const GetCounter = function(){
         allTd = document.querySelectorAll('tr')
         return allTd.length
     }
@@ -106,7 +110,7 @@
     }
     const Add = function (){
         //this function adds a new line in table
-        let counter = getCounter()
+        let counter = GetCounter()
         let tabInput = []
 
         tr = document.createElement('tr')
@@ -195,7 +199,7 @@
     }
     const FillInput = function(values, idSelected){
         //this function gets the selected input and fill it with values
-        counter = getCounter() -1
+        counter = GetCounter() -1
         ident = 'tr_'+ counter
         tr = document.getElementById(ident)
         tr = Array.from(tr.children)
@@ -256,6 +260,11 @@
                 });
             }
         }
+    }
+    const ReturnOwnerIndex = function(){
+        //this functions opens index page with owners
+        window.location.href = "{% url 'sheet:index' 1 %}"
+
     }
     const main = function(){
         activClickEvent()

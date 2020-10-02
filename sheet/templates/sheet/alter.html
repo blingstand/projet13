@@ -129,6 +129,8 @@
 	                "phone":'{{owner.phone}}',
 	                "mail":'{{owner.mail}}',
 	                }
+	            console.log("pour compléter : ")
+	            console.log(data)
 			}
 			{% endfor%}
 			fillBlank(data)				
@@ -200,7 +202,7 @@
 	//fills the inputs
 	const FillTheInputs = function(fields){
 		// this functions fills the inputs with the given data from animal
-		values = ['{{animal.name}}','{{animal.date_of_birth|date:"Y-m-d"}}','{{animal.date_of_adoption|date:"Y-m-d"}}','{{animal.admin_data.date_of_neuter|date:"Y-m-d"}}', '{{animal.admin_data.futur_date_of_neuter|date:"Y-m-d"}}', '{{animal.race}}', '{{animal.color}}', '{{animal.observation}}', "{{animal.admin_data.file}}", "{{animal.admin_data.tatoo}}", "{{animal.admin_data.chip}}", "{{animal.caution}}", "{{animal.owner.mail_reminder}}","{{animal.owner.tel_reminder}}", "{{animal.owner.owner_name}}", "{{animal.owner.owner_surname}}", "{{animal.owner.phone}}", "{{animal.owner.mail}}" ]
+		values = ['{{animal.name}}','{{animal.date_of_birth|date:"Y-m-d"}}','{{animal.date_of_adoption|date:"Y-m-d"}}','{{animal.admin_data.date_of_neuter|date:"Y-m-d"}}', '{{animal.admin_data.futur_date_of_neuter|date:"Y-m-d"}}', '{{animal.race}}', '{{animal.color}}', '{{animal.observation|escapejs}}', "{{animal.admin_data.file}}", "{{animal.admin_data.tatoo}}", "{{animal.admin_data.chip}}", "{{animal.caution}}", "{{animal.owner.mail_reminder}}","{{animal.owner.tel_reminder}}", "{{animal.owner.owner_name}}", "{{animal.owner.owner_surname}}", "{{animal.owner.phone}}", "{{animal.owner.mail}}" ]
 		for (i in values){
 
 			fields[i].value = values[i];
