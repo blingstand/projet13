@@ -28,7 +28,7 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 class SheetForm(forms.Form):
     """form to add a new sheet """   
-    caution = forms.IntegerField(required=True, label='caution', 
+    caution = forms.IntegerField(required=True, label='caution', initial='100',
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 
             'title' : 'montant de la caution',
             'placeholder' : "montant (sans €)"}))
@@ -66,9 +66,9 @@ class SheetForm(forms.Form):
         widget=forms.RadioSelect(attrs={"class" : "lst-none pl-0 mb-0"}), 
         choices=(CHOICE_STERIL))
     mail = forms.EmailField(required=True, max_length=30, label='mail',
-        widget=forms.TextInput(attrs={'class' : 'text-center', 'title' : 'mail' ,
-            'placeholder' : "mail"}))
-    mail_reminder = forms.IntegerField(required=True, label='nb mail',
+        widget=forms.EmailInput(attrs={'class' : 'text-center', 'title' : 'mail' ,
+            'placeholder' : "mail", 'name' : 'mail'}))
+    mail_reminder = forms.IntegerField(required=True, label='nb mail',initial='0', 
         widget=forms.NumberInput(attrs={ 'class' : 'input-very-reduced', 'title' : 'nb rappel mail' ,
             'placeholder' : "nb rappel mail",'min':0}))
     name = forms.CharField(required=True, label="Nom de l'animal", max_length=30, 
@@ -80,14 +80,14 @@ class SheetForm(forms.Form):
     status = forms.CharField(required=False, max_length=200, 
         widget=forms.Textarea(attrs={ 'title' : "statut de la stérilisation",
             'placeholder' : "statut de la stérilisation", 'cols':30, 'rows':3}))
-    owner_name = forms.CharField(required=True, label="prénom", max_length=30,
+    owner_name = forms.CharField(required=True, label="prénom", max_length=30, 
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "propriétaire" ,
-            'placeholder' : "prénom proprio"}))
+            'placeholder' : "prénom proprio", 'name':"Prénom"}))
     owner_surname = forms.CharField(required=True, label="nom", max_length=30,
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "propriétaire" ,
-            'placeholder' : "nom proprio"}))
+            'placeholder' : "nom proprio", 'name':"Nom"}))
     owner_sex = forms.ChoiceField(label="Sexe", required=True, 
-        widget=forms.RadioSelect(attrs={'class' : 'li-oneline very-center'}), choices=CHOICE_SEX)
+        widget=forms.RadioSelect(attrs={'class' : 'li-oneline very-center', 'name':"Sexe"}), choices=CHOICE_SEX)
     observation = forms.CharField(required=False, max_length=50, label='observation(s)',
         widget=forms.TextInput(attrs={ 'title' : "observation(s)",
             'placeholder' : "observation(s)"}))
@@ -102,9 +102,9 @@ class SheetForm(forms.Form):
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "num de tatouage" ,
             'placeholder' : "num de tatouage"}))
     phone = forms.CharField(required=True, max_length=15, label='tel', 
-        widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "téléphone",
+        widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "téléphone",'name':"Téléphone",
             'placeholder' : "téléphone"}))
-    tel_reminder = forms.IntegerField(required=True, label='nb appel', 
+    tel_reminder = forms.IntegerField(required=True, label='nb appel', initial='0', 
         widget=forms.NumberInput(attrs={ 'class' : 'input-very-reduced', 'title' : "nb rappel téléphonique",
             'placeholder' : "nb rappel tel",'min':0, "values":0}))
 
@@ -116,31 +116,27 @@ class SheetForm(forms.Form):
         same_in_db = len(AdminData.objects.filter(chip=admin.chip,file=admin.file, tatoo=admin.tatoo)) > 0
         if same_in_db:
             return False, f"Erreur : ce dossier admin existe déjà dans la base, risque de doublon, procédure annulée !"
-        admin.save()
         return True, admin
 
     def _handle_owner_class(self, dict_values):
-        #already exists ? 
+        #already exists or namesake ? 
         list_owner = dict_values['owner']
-        owner_in_db = Owner.objects.filter(owner_name=list_owner[1], owner_surname=list_owner[2])
-        owner = Owner(*list_owner)
-        if len(owner_in_db) > 0:
-            owner.id = owner_in_db[0].id #have to give because auto increment is on for id
-            for elem in ('id','owner_name', 'owner_surname','owner_sex',  'phone', 'mail', 'tel_reminder', 'mail_reminder'):
-                if getattr(owner, elem) != getattr(owner_in_db[0], elem):
-                    # print('diff')
-                    owner.id == None
+        query = Owner.objects.filter(owner_name=list_owner[1], owner_surname=list_owner[2], phone=list_owner[4], mail=list_owner[5])
+        already_exists = (len(query) != 0)
+        print("_handle_owner_class, already_exists : ", already_exists)
+        if already_exists:
             # print('Cet utilisateur existe déjà je récupère sa fiche.')
-            return True, owner
-
+            print('je retourne : True, ', query[0])
+            return True, query[0]
         else:
             # print("Création d'un nouvel utilisateur ...")
             try: 
-                owner.save()
-                # print('je retourne :', owner)
+                owner = Owner(*list_owner)
+                owner.save() #this creates id
                 return True, owner
             except IntegrityError as ie: 
-                if "tel" in str(ie):
+                print("ici")
+                if "phone" in str(ie):
                     return False , "Ce téléphone existe déjà dans la base ! Procédure annulée ..."
                 elif "mail" in str(ie):
                     return False, "Ce mail existe déjà dans la base ! Procédure annulée ... "
@@ -154,11 +150,7 @@ class SheetForm(forms.Form):
         animal = Animal(*list_ani)  
         same_in_base = Animal.objects.filter(name=animal.name, date_of_birth=animal.date_of_birth)
         if len(same_in_base) > 0:
-            print(type(same_in_base))
-            print(f'comparaison : {same_in_base == animal}')
-            print('*'*20)
-            if same_in_base == animal:
-                return False, 'Cet animal existe déjà dans la base de données.'
+            return False, 'Cet animal existe déjà dans la base de données.'
         animal.species = int(animal.species)
         animal.save()   
         return True, animal
@@ -180,8 +172,6 @@ class SheetForm(forms.Form):
             'admin':admin,
             'owner':owner,
             }
-        print("88888888888888888")
-        print('dict_values')
         return dict_values
     
     def is_owner_unique(self, owner):
@@ -200,61 +190,77 @@ class SheetForm(forms.Form):
                 "resume": "félicitation + rappel loi",
                 "full_text": f"félicitation adoption de {animal.name}({animal.str_species}) + rappel loi sur stérilisation"
             }
+            owner.mail_reminder = str(int(owner.mail_reminder) + 1)
             success, output = ut.create_contact(owner, data)
             return success, output
         except Exception as e:
             raise e
+            return False, f"problème dans create_first_contact : {e}"
 
     def save_new_datas(self, dict_values):
         """ save the data in database and return """
 
         #transaction : one fails all fail
-        success1, output = self._handle_admin_class(dict_values)
-        if success1:
+        try : 
+            success1, output = self._handle_admin_class(dict_values)
+            if not success1:
+                error_msg = output
+                return error_msg
             admin = output
+            admin.save()
             # print('- données pour admin ok ')
-        else:
-            error_msg = output
-            return error_msg
-        success2, output = self._handle_owner_class(dict_values)
-        if success2: 
-            owner = output
-            # print('- données pour owner ok ')
-        else:
+        except Exception as e:
+            print("***")
+            print("ERROR : ", e)
+            print("***")
+        try:
+            success2, output = self._handle_owner_class(dict_values)
+            if success2: 
+                print(f"output : {output}")
+                owner = output
+                owner.save()
+                # print('- données pour owner ok ')
+            else:
+                admin.delete()
+                error_msg = output
+                return error_msg
+            pass
+        except Exception as e:
             admin.delete()
-            print("deleted")
-            error_msg = output
-            return error_msg
-        success3, output = self._handle_animal_class(dict_values)
-        if success3:
-            animal = output
-            animal.admin_data = admin
-            animal.owner = owner
-            animal.save()
-            # print('- données pour animal ok ')
-        else:
-            animal.delete()
+            return "erreur pour animal, effacement données admin"
+        try:
+            success3, output = self._handle_animal_class(dict_values)
+            if success3:
+                print(f"output : {output}")
+                animal = output
+                animal.admin_data = admin
+                animal.owner = owner
+                animal.save()
+                # print('- données pour animal ok ')
+            else:
+                admin.delete()
+                response = self.is_owner_unique(owner)
+                if response:
+                    owner.delete()
+                    print('\t- erreur pour animal, effacement données animal, admin et owner (unique).')
+                else:
+                    print('\t- erreur pour owner, effacement données animal et admin, owner (pas unique).')
+                error_msg = output
+                return error_msg 
+        except Exception as e:
+            raise e
+        success4, output = self.create_first_contact(owner, animal)
+        print(f"création 1er contact")
+        if success4: 
+            return  1
+        else: 
             admin.delete()
             response = self.is_owner_unique(owner)
             if response:
                 owner.delete()
-                print('\t- erreur pour owner, effacement données animal, admin et owner (unique).')
+                print('\t- erreur pour animal, effacement données animal, admin et owner (unique).')
             else:
                 print('\t- erreur pour owner, effacement données animal et admin, owner (pas unique).')
-            error_msg = output
-            return error_msg 
-        success4, output = self.create_first_contact(owner, animal)
-        if success4: 
-            return 1 
-        else: 
-            animal.delete()
-            admin.delete()
-            response = self.is_owner_unique(owner)
-            if response:
-                owner.delete()
-                print('\t- erreur pour contact, effacement données animal, admin et owner (unique).')
-            else:
-                print('\t- erreur pour contact, effacement données animal et admin, owner (pas unique).')
             error_msg = output
             return error_msg 
 

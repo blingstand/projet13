@@ -11,10 +11,22 @@
 	</div>
 	<div class="container">
 		<div class="row">
-		<div class=" col-12 text-center button-verti mb-3 very-center"><a class="no-a" href="{% url 'mydashboard:index' %}">Tableau de bord</a></div>
-		<div class=" col-12 text-center button-verti mb-3 very-center "><a class="no-a" href="{% url 'sheet:index' %}">Fiches</a></div>
-		<div class=" col-12 text-center button-verti mb-3 very-center "><a class="no-a" href="{% url 'mail:index' %}">Mails</a></div>
-		<div class=" col-12 text-center button-verti mb-5 very-center "><a class="no-a" href="{% url 'info:index' %}">Informations</a>	</div>
+		<div id="id_mydashboard" class=" col-12 text-center button-verti mb-3 very-center">Tableau de bord</div>
+		<div id="id_sheet" class=" col-12 text-center button-verti mb-3 very-center "><a class="no-a" href="{% url 'sheet:index' %}">Fiches</a></div>
+		<div id="id_mail" class=" col-12 text-center button-verti mb-3 very-center "><a class="no-a" href="{% url 'mail:index' %}">Mails</a></div>
+		<div id="id_info" class=" col-12 text-center button-verti mb-5 very-center "><a class="no-a" href="{% url 'info:index' %}">Informations</a>	</div>
 		</div>
 	</div>
+
 </nav>
+<script>
+	navElem = ['id_mydashboard', 'id_sheet', 'id_mail', 'id_info']
+	href =["{% url 'mydashboard:index' %}", "{% url 'sheet:index' %}", "{% url 'mail:index' %}", "{% url 'info:index' %}"]
+
+	for (let i = 0; i < navElem.length; i++){
+		console.log(navElem[i])
+		document.getElementById(navElem[i]).addEventListener('click', function(){
+			window.location.href = href[i]
+		})
+	}
+</script>

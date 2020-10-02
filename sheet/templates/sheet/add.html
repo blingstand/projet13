@@ -145,8 +145,6 @@
 		SelectOwners(owners, '{% url "sheet:add"%}', whatToDo)
 	}
 	const GiveStartValue = function(){
-		document.getElementById("id_mail_reminder").value = 0
-		document.getElementById("id_tel_reminder").value = 0
 		document.getElementById("id_caution").value = 0
 	}
 	const getInputDate = function(){
@@ -193,7 +191,6 @@
 				event.preventDefault()
 			}
 		}
-
 	});
 	const main = function(){
 		GiveStartValue()

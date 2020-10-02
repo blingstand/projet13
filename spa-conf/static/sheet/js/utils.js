@@ -1,4 +1,4 @@
-/* petit changement 
+/* maj 1.0 
 	this script is working for 
 	sheet/
 		add.html
@@ -34,6 +34,7 @@
 		divNew.classList.replace("d-none", "d-flex")
 		if (document.getElementById('id_select')){
 			document.getElementById('id_select').remove()
+			document.getElementById('id_return').remove()
 		}
 		for (div of ownDivs){
 			div.classList.replace("d-flex", "d-none")
@@ -151,6 +152,16 @@
 			option.innerHTML = owner.name
 			select.appendChild(option)
 		}
+		returnChoice = document.createElement('button')
+		returnChoice.id = "id_return"
+		returnChoice.textContent = "Retour"
+		returnChoice.onclick = function(event){
+			event.preventDefault()
+			CleanOwnerInput(event)
+		}
+		divNF.appendChild(returnChoice)
+
+
 	}
 
 /***** events */
@@ -180,3 +191,10 @@ if (document.getElementById('submit')){
 		}
 	});
 }
+if (document.getElementById('id_species')){
+	document.getElementById('id_species').addEventListener('click', function(){
+		if (document.getElementById('id_species_0').checked || document.getElementById('id_species_1').checked){
+			document.getElementById('id_caution').value = "100"
+		}else{
+			document.getElementById('id_caution').value = "200"
+		}})}

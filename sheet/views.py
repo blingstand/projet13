@@ -65,12 +65,9 @@ class AddSheetView(View):
     def post(self, request):
         #handles the form and the errors
         form = SheetForm(request.POST)
-        print("\n\n***")
         dict_values = {'ask_owner_data':"0"}
         dict_values.update(request.POST.dict())
-        print("- - - - - ")
-        print(dict_values)
-        print("- - - - - ")
+
         if dict_values["ask_owner_data"] == "1":
             selected_owner = Owner.objects.get(id=dict_values["owner_id"])
             print(selected_owner)
@@ -90,15 +87,15 @@ class AddSheetView(View):
             print(f">{dict_values}")
             # print("\t3/ Tentative d'enregistrement des données ...")
             status_operation = form.save_new_datas(dict_values)
+            owners = Owner.objects.all()
             if status_operation == 1:
                 print('Réussite')
                 # print("\t4/ Fin de la transaction, retour sur la page sheet.")
                 return redirect("sheet:index")
             else:
-                print('\tEchec, raison :')
-                print("***\n",status_operation,"\n***")
-                context = {'form' : form, 'error' : status_operation}
-                
+                print('Echec, raison :')
+                print("***\n\t",status_operation,"\n***")
+                context = {'form' : form, "owners" : owners, 'error' : status_operation}                
                 return render(request, 'sheet/add.html', context)
         else:
             print("form not valid")

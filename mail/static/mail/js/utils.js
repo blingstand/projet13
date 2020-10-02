@@ -1,4 +1,4 @@
-/*
+/* maj 1.0
     this script is working for 
     mail/
         content.html

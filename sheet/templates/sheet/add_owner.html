@@ -20,8 +20,8 @@
 						</div>
 						<div class="row owner_input d-flex">
 							<div class="col-1"></div>
-							<div class="col-5 text-center">{{form.phone.label}}<br/> {{form.phone}}</div>
-							<div class="col-5 mb-2 text-center">{{form.mail.label}}<br/> {{form.mail}}</div>	
+							<div class="col-5 text-center"><p>{{form.phone.label}}</p>{{form.phone}}</div>
+							<div class="col-5 mb-2 text-center"><p>{{form.mail.label}}</p> {{form.mail}}</div>	
 							<div class="col-1"></div>
 						</div>
 						<div class=" row d-flex new-former">
@@ -63,6 +63,7 @@
 		4/ Client receives info, success > display ownerform and fill it
 		*/
 
+		const phoneNumber = document.getElementById('id_phone')
 		const BackToIndex = function(){
 			window.location.href = "{% url 'sheet:index' own=1%}"
 			// window.location.href = window.location.href; 
@@ -70,21 +71,36 @@
 
 		const BeforeSubmit = function(){
 			document.getElementById('save').addEventListener('click', function(event){
+				// event.preventDefault()
 				let verif = document.getElementById('verif')
 				verif.innerHTML = ""
 				nodes = document.querySelectorAll('input[type=text]')
 				inputs = Array.from(nodes)
+				inputs.splice(0,1)
+				console.log(inputs)
+				if (CheckPhoneNumber() != true){
+					event.preventDefault()
+					alert("Format numéro de téléphone : invalide")
+					return
+				}
 				for (input of inputs){
 					if (input.value == 0){
-						verif.innerHTML = input.name + "ne doit pas être vide."
+						alert("Tous les champs doivent être remplis.")
 						event.preventDefault()
-						break
+						return
 					}
 				}
 			})	
 		}
-		document.getElementById('id_mail_reminder').value = "0"
-		document.getElementById('id_tel_reminder').value = "0"
+		const CheckPhoneNumber = function(){
+			const reg_telephone = /^(\+\d+(\s|-))?0\d(\s|-|\.)?(\d{2}(\s|-|\.)?){4}$/
+			if (phoneNumber.value.match(reg_telephone)){
+				return true
+			}else{
+				return false
+			}
+		}
+		BeforeSubmit()
 		{% if error %}
 		document.getElementById('verif').innerHTML = "{{error}}"
 		{% endif %}

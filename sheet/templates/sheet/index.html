@@ -42,30 +42,31 @@
                 <table id="owner_table" class=" d-none">
                     <tr class="col-12 text-center">
                         <td>&nbsp;</td>
-                        <td>nombre d'animaux</td>
+                        <td>Identifiant</td>
                         <td>Nom</td>
                         <td>Prénom</td>
+                        <td>Nombre d'animaux</td>
                         <td>Caution</td>
-                        <td>Besoin contact</td>
-                        <td>tel</td>
-                        <td>mail</td>
-                        <td>nb appel</td>
-                        <td>nb mail</td>
+                        <td>Tel</td>
+                        <td>Mail</td>
+                        <td>Nb appel</td>
+                        <td>Nb mail</td>
+                        <td>Historique</td>
                     </tr>
-                     {% for owner in owners|dictsort:"number_animal" %}
+                    {% for owner in owners|dictsort:"owner_surname" %}
                     <tr class="col-12 text-center {% cycle 'row1' 'row2' %}">
                         <td><input type="checkbox" id='{{owner.id}}' name='checkbox' value={{owner.id}}></td>
-                        <td>{{owner.number_animal}}</a></td>
-                        <td>{{owner.owner_name}}</a></td>
-                        <td>{{owner.owner_surname}}</a></td>
-                        <td>{{owner.caution}}</td>
-                        <td>{{owner.need_contact}}</td>
+                        <td>{{owner.id}}</a></td>
+                        <td id="id_surname_{{owner.id}}">{{owner.owner_surname}}</a></td>
+                        <td id="id_name_{{owner.id}}">{{owner.owner_name}}</a></td>
+                        <td id="id_nb_{{owner.id}}">{{owner.number_animal}}</a></td>
+                        <td>{{owner.sum_caution}}€</td>
                         <td>{{owner.phone}}</td>
                         <td>{{owner.mail}} </td>
                         <td>{{owner.tel_reminder}}</td>
                         <td>{{owner.mail_reminder}}</td>                  
                         <td class="bg-white border-blue">
-                            <a href="{% url 'sheet:contact_owner' owner.id%}">historique contact pour {{owner.owner_name}} {{owner.owner_surname}}</td></a>                 
+                            <a href="{% url 'sheet:contact_owner' owner.id%}">gestion des contact</td></a>                 
                     </tr>
                     {% endfor %}
                 </table>
@@ -204,9 +205,9 @@
                 let nb_animaux = ""
                 let surname = ""
                 for (elem of toDelete){
-                    nb_animaux = elem.parentElement.nextElementSibling.textContent
-                    name = elem.parentElement.nextElementSibling.nextElementSibling.textContent
-                    surname = elem.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.textContent
+                    nb_animaux = document.getElementById('id_nb_'+elem.id).textContent
+                    name = document.getElementById('id_name_'+elem.id).textContent
+                    surname = document.getElementById('id_surname_'+elem.id).textContent
                     if (nb_animaux != 0){
                         alert("Ce propriétaire ("+ name +" "+surname+") est lié à au moins une fiche animal. Il ne peut être suppprimé !")
                         return
