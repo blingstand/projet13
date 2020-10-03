@@ -22,7 +22,13 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 # print("2", BASE_DIR)
 # print("3", PROJECT_ROOT)
 
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -32,7 +38,7 @@ SECRET_KEY = '7691-0!3k#_q=4&l4s*-qs^d42+n8vi5f&6$2vedf*cc4g13fg'
 
 if os.environ.get('ENV') == 'PRODUCTION':
     # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = False
+    DEBUG = True
     ALLOWED_HOSTS = ["spa-bergerac.herokuapp.com"]
 else:
     ALLOWED_HOSTS = ["*"]

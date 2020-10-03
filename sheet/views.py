@@ -1,17 +1,17 @@
 #rajouter un ordre dans ma list animals
 #from django 
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from django.db.utils import IntegrityError
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
-
 #from current app 
 from .models import *
 from .form import *
 from .utils import Utils
 from .datas import *
-
+# from .send_email import send_mail
 #from others app 
 from mydashboard.utils import GraphDatas
 
@@ -234,6 +234,10 @@ class ContactOwnerView(View):
         self.context["owner"] = owner
         self.context["contacts"] = contacts 
         if action == "add": 
+            send_mail(
+            'Subject here', 'Here is the message.', 'blingstand@hotmail.fr',
+             ['adrien.clupot@gmail.com'], fail_silently=False)
+            
             success, message = ut.create_contact(owner, dict_values)
             if success: 
                 return JsonResponse({"data":f'{success}{message}'}, safe=False)

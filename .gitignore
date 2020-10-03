@@ -1,3 +1,6 @@
 __pycache__
 env/
-appris/
+hidden/
+sendgrid.env
+secret.py
+
