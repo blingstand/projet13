@@ -8,16 +8,15 @@ from .models import *
 CHOICES = (
     ("1", "à la création de la fiche"),
     ("2", "quand je modifie la valeur de la caution"), 
-    ("3", "quand l'animal a plus de"),
-    ("4", "à cette date : jj/mm/aaaa"))
+    ("3", "à la suppression d'une fiche"),
+    ("4", "quand l'animal a plus de"),
+    ("5", "à cette date : jj/mm/aaaa"))
 
-class DateInput(forms.DateInput):
-    input_type = 'date'
 class SettingsMail(forms.Form):
     """form to add a new mail rule"""
     frequency = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
     age = forms.IntegerField(required=False)
-    date = forms.DateField(required=False)
+    date = forms.DateField(required=False, widget=forms.DateInput)
 
 class ContentMail(forms.Form):
     """form to add a new mail content"""

@@ -9,14 +9,16 @@ from django.views import View
 #from current app 
 from .models import *
 from .form import *
-from .utils import Utils
+from .utils import UtilsSheet
 from .datas import *
-# from .send_email import send_mail
+
 #from others app 
 from mydashboard.utils import GraphDatas
+from mail.utils import UtilsMail
 
 # Create your views here.
-ut = Utils()
+ut = UtilsSheet()
+utm = UtilsMail()
 gradat = GraphDatas()
 
 def redirectIndex(request):
@@ -86,10 +88,13 @@ class AddSheetView(View):
             # print("\t2/ affichage des données récupérées ...")
             print(f">{dict_values}")
             # print("\t3/ Tentative d'enregistrement des données ...")
-            status_operation = form.save_new_datas(dict_values)
+            status_operation, owner = form.save_new_datas(dict_values)
             owners = Owner.objects.all()
-            if status_operation == 1:
-                print('Réussite')
+            if status_operation == 1:   
+                success = utm.has_to_send_mail('creation', owner.mail)
+                if success:
+                    print("> un mail a été envoyé suite à cet ajout")
+                print("\t\t*** important *** ")
                 # print("\t4/ Fin de la transaction, retour sur la page sheet.")
                 return redirect("sheet:index")
             else:
@@ -99,7 +104,7 @@ class AddSheetView(View):
                 return render(request, 'sheet/add.html', context)
         else:
             print("form not valid")
-            context = {'form' : form}
+            context = {'form' : form, "owners" : owners}
             context['errors'] = form.errors.items()
             print("\n\n*** E R R O R ***\n")
             print(form.errors.items())
@@ -129,7 +134,7 @@ class AlterSheetView(View):
             print(f">{dict_values}")
             print("---dict_values")
             # print("\t3/ Tentative d'enregistrement des données ...")
-            success, response = ut.modify_datas(given_id, dict_values)
+            success, response = ut.manage_modify_datas(given_id, dict_values)
             print('---end modify_datas')
             if success:
                 print(f'{response} changement(s)')
@@ -233,11 +238,7 @@ class ContactOwnerView(View):
         contacts = Contact.objects.filter(owner=owner)
         self.context["owner"] = owner
         self.context["contacts"] = contacts 
-        if action == "add": 
-            send_mail(
-            'Subject here', 'Here is the message.', 'blingstand@hotmail.fr',
-             ['adrien.clupot@gmail.com'], fail_silently=False)
-            
+        if action == "add":             
             success, message = ut.create_contact(owner, dict_values)
             if success: 
                 return JsonResponse({"data":f'{success}{message}'}, safe=False)

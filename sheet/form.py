@@ -7,9 +7,9 @@ from django.forms import ModelForm
 from django.db.utils import IntegrityError
 
 from .models import *
-from .utils import Utils
+from .utils import UtilsSheet
 
-ut = Utils()
+ut = UtilsSheet()
 
 CHOICES = (
     ("0", "chat"),("1", "chatte"), ("2", "chien"), ("3", "chienne"))
@@ -205,7 +205,7 @@ class SheetForm(forms.Form):
             success1, output = self._handle_admin_class(dict_values)
             if not success1:
                 error_msg = output
-                return error_msg
+                return error_msg, None
             admin = output
             admin.save()
             # print('- données pour admin ok ')
@@ -213,6 +213,8 @@ class SheetForm(forms.Form):
             print("***")
             print("ERROR : ", e)
             print("***")
+            error_msg = output
+            return error_msg, None
         try:
             success2, output = self._handle_owner_class(dict_values)
             if success2: 
@@ -223,11 +225,11 @@ class SheetForm(forms.Form):
             else:
                 admin.delete()
                 error_msg = output
-                return error_msg
+                return error_msg, None
             pass
         except Exception as e:
             admin.delete()
-            return "erreur pour animal, effacement données admin"
+            return "erreur pour animal, effacement données admin", None
         try:
             success3, output = self._handle_animal_class(dict_values)
             if success3:
@@ -246,13 +248,13 @@ class SheetForm(forms.Form):
                 else:
                     print('\t- erreur pour owner, effacement données animal et admin, owner (pas unique).')
                 error_msg = output
-                return error_msg 
+                return error_msg, None 
         except Exception as e:
             raise e
         success4, output = self.create_first_contact(owner, animal)
         print(f"création 1er contact")
         if success4: 
-            return  1
+            return  1, owner
         else: 
             admin.delete()
             response = self.is_owner_unique(owner)
@@ -262,7 +264,7 @@ class SheetForm(forms.Form):
             else:
                 print('\t- erreur pour owner, effacement données animal et admin, owner (pas unique).')
             error_msg = output
-            return error_msg 
+            return error_msg, None 
 
 
         

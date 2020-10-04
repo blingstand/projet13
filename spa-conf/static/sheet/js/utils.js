@@ -1,4 +1,4 @@
-/* maj 1.0 
+/* maj 1.1
 	this script is working for 
 	sheet/
 		add.html
@@ -54,7 +54,7 @@
 	            // if not safe, set csrftoken
 	            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
 	            	xhr.setRequestHeader("X-CSRFToken", csrftoken);
-	            }
+	            } 
 	        }
 	    }); 
 	    console.log("sendDatasToServer")
@@ -94,10 +94,14 @@
 		document.getElementById("id_tel_reminder").value = 0
 	}
 
-	// fill blank with given values
+	// fill blank with given values 
 	const fillBlank = function(value){
 		ids = ["id_owner_name", "id_owner_surname", 'id_phone', "id_mail"]
 		values = [value.name, value.surname, value.phone, value.mail]
+		console.log("test fillBlank")
+		console.log(document.getElementById('id_mail'))
+		console.log(values[3])
+
 		for (index in ids){
 			input = document.getElementById(ids[index])
 			input.value = values[index]
@@ -109,22 +113,11 @@
 			inputSex[1].firstChild.firstChild.checked = true
 		}
 	}
-	const getBaseUrl = function(){
-	    //return the base url usefull for button add and alter
-	    let param = GetParam()
-	    if (param != ""){
-	        let baseUrl = url.split('/')
-	        baseUrl.pop(param)
-	        baseUrl = baseUrl.join("/")+"/"
-	        return baseUrl
-	    }
-	    return url
-	}
 	const GetParam = function(){
 		//return param from url 
-		param = url.split("/")
-		param = param[param.length-1]
-		return param
+		let endUrl = url.split("/")
+		endUrl = endUrl[endUrl.length-1]
+		return endUrl
 	}
 	// remove data from owner Form
 	const removeFromOwnerBlank = function(){

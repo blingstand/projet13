@@ -5,7 +5,7 @@
 {% extends 'core/base.html' %}
 {% block content %}
 <section>
-    <h4 onclick="BackCNS('content')" class="curs-pointer">< index/CNS</h4>
+    <h4 onclick=BackToCNS() class="curs-pointer">< index/CNS</h4>
     <h2  class="mt-5 pl-5">Contenu du mail </h2>
     <article class="mt-5 container">
         <div class="row">
@@ -43,10 +43,11 @@
                         <p><label class="mb-0" for="sel_owner">Variables de la catégorie Propriétaire</label></p>
                         <select name="sel_owner" id="id_select_2">
                             <option>-- Sélectionnez une variable -- </option>
-                            <option onclick=AddInMail(this.value) value="**prénom prop**">prénom propriétaire</option>
-                            <option onclick=AddInMail(this.value) value="**nom prop**">nom propriétaire</option>
                             <option onclick=AddInMail(this.value) value="**M./Mme**">M./Mme</option>
+                            <option onclick=AddInMail(this.value) value="**nom prop**">nom propriétaire</option>
+                            <option onclick=AddInMail(this.value) value="**prénom prop**">prénom propriétaire</option>
                             <option onclick=AddInMail(this.value) value="**tel**">téléphone</option>
+                            <option onclick=AddInMail(this.value) value="**caution totale**">caution totale</option>
                             <option onclick=AddInMail(this.value) value="**mail**">mail</option>
                             <option onclick=AddInMail(this.value) value="**nb appels**">nombre d'appels</option>
                             <option onclick=AddInMail(this.value) value="**nb mails**">nombre de mails</option>
@@ -80,11 +81,7 @@
 <script type="text/javascript" src='{% static "mail/js/utils.js" %}'> </script>
 
 <script type="text/javascript">
-
-    const fullPath = window.location.href;
-    let tabFullPath = fullPath.split('/');
-    let param = tabFullPath[tabFullPath.length-1];
-    let anteParam = tabFullPath[tabFullPath.length-2]
+    param = GetParam()
     const title = document.getElementById('id_title');
 
     //this function adds expression in body mail when user selects an option
@@ -99,12 +96,18 @@
         body_mail.focus()
     }
 
+    const BackToCNS = function(){
+        //this function sends user to cns page
+        let pageName = 'content'
+        BackCNS(pageName, "{% url 'mail:cns'%}")
+
+    }
     //this function takes the datas from title, object and body
     const get_data = function(){
         return {
             'title': document.getElementById('id_title').value, 
             'resume': document.getElementById('id_resume').value, 
-            'full_text': document.getElementById('body_mail').value.replaceAll("\n", "\\n"), 
+            'plain_text': document.getElementById('body_mail').value.replaceAll("\n", "\\n"), 
         }
     }
 
@@ -161,8 +164,11 @@
         //this function organises overview
         //1 get datas
         let value = get_data()
+        console.log(value)
         let url = "{% url 'mail:content' 0 'overview'%}"
         if (param != 'content'){
+            console.log('test')
+            console.log(param)
             value['mail_id']=param
             url = "{% url 'mail:content' %}/" + param + "/overview" 
 
@@ -178,7 +184,7 @@
         //check if fields are empty
         const datas = get_data()
         let canSave = true
-        const keys = ['title', 'resume', 'full_text']
+        const keys = ['title', 'resume', 'plain_text']
         const frenchKeys = ['titre', 'objet', 'message']
         for (let i in keys){
             if (datas[keys[i]].length == 0 ){
@@ -217,6 +223,7 @@
     get_field()
     {% endif %}
 
+    console.log(param)
     // title.addEventListener('focusout', function(){
     //     checkIntegrity(title);
     // })

@@ -24,7 +24,6 @@
 	href =["{% url 'mydashboard:index' %}", "{% url 'sheet:index' %}", "{% url 'mail:index' %}", "{% url 'info:index' %}"]
 
 	for (let i = 0; i < navElem.length; i++){
-		console.log(navElem[i])
 		document.getElementById(navElem[i]).addEventListener('click', function(){
 			window.location.href = href[i]
 		})

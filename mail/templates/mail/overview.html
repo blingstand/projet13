@@ -42,10 +42,8 @@
 		let get_field = function(){
 			//returns the 3 blanks to fill
 			const blanks = document.getElementsByClassName('blank')
-			const content = ['{{mail.title}}', '{{mail.resume}}', '{{mail.full_text}}', ] 
-			console.log(blanks)
-			console.log(content)
-			console.log('{{mail}}')
+			const content = ['{{mail.title}}', '{{mail.resume}}', '{{mail.modified_text}}', ] 
+			
 			for (let i = 0 ; i < blanks.length - 1 ; i++){
 				console.log(blanks[i], content[i])
 				blanks[i].value = content[i]}

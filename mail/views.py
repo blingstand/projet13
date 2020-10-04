@@ -5,11 +5,11 @@ from django.views import View
 
 from .models import Mail
 from .form import SettingsMail, ContentMail
-from .utils import Utils
+from .utils import UtilsMail
 
 from sheet.models import Animal
 
-ut = Utils()
+ut = UtilsMail()
 # Create your views here.
 class MailView(View):
     def get(self, request):
@@ -40,7 +40,7 @@ class MailView(View):
 
 class CNSView(View):
     """this class organize the choices """
-    def get(self, request,mail_id=None):
+    def get(self, request, mail_id=None):
         context = {}
         if mail_id is not None: 
             mail = ut.get_mail_from_id(mail_id)
@@ -59,14 +59,12 @@ class ContentView(View):
             mail = ut.get_mail_from_id(mail_id)
             print("avant ut.modify_text")
             print(mail.full_text)
-            mail.full_text = ut.modify_text(mail.full_text)[0]
             context["mail"] = mail 
         return render(request, 'mail/content.html', context)
 
     def post(self, request, mail_id=0, action=None):
         """ this function deals with the datas from the form"""
         form = ContentMail(request.POST)
-        ut = Utils()
         dict_values = request.POST.dict()
         print("- - - - - ")
         print(dict_values)
@@ -105,11 +103,8 @@ class OverviewView(View):
     """ this class handles the views for overview.html """
     def get(self, request, mail_id):
         form = ContentMail()
-        ut = Utils()
         animal = Animal.objects.all()[0]
-        print(request.GET)
         mail = ut.get_mail_from_id(mail_id)
-        mail.full_text = ut.modify_text(mail.full_text)[1]
         context = {
             'form' : form, 'mail' : mail, 'animal' : animal}
         return render(request, 'mail/overview.html', context)
@@ -144,16 +139,15 @@ class SettingsView(View):
             age, date= form.cleaned_data["age"], form.cleaned_data["date"]
             if form.cleaned_data["frequency"] == "1": 
                 mail.send_after_creation = True
-                # print("1 > Un mail sera envoyé à la création de la fiche.")
             elif form.cleaned_data["frequency"] == "2": 
                 mail.send_after_modif = True
-                # print("2 > Un mail sera envoyé à chaque modification de la fiche.")
             elif form.cleaned_data["frequency"] == "3": 
-                mail.send_when_x_month = age
-                # print(f"3 > un mail sera envoyé quand l'animal aura {mail.send_when_x_month} mois")
+                mail.send_after_delete = True
+                print("changement pour à la destruction de la fiche")
             elif form.cleaned_data["frequency"] == "4": 
+                mail.send_when_x_month = age
+            elif form.cleaned_data["frequency"] == "5": 
                 mail.send_at_this_date = date
-                # print(f"4 > un mail auto sera envoyé à cette date : {mail.send_at_this_date} ")
             
             mail.save()
             print(mail.auto_send)

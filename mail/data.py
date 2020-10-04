@@ -5,7 +5,8 @@ def change_date_format(date):
         return ""
 def converter(anim):       
         converter = {
-                '**caution**' : f'{anim.caution}', 
+                '**caution**' : f'{anim.caution}€', 
+                '**caution totale**' : f'{anim.owner.sum_caution}€', 
                 '**couleur**' : f'couleur : {anim.color}', 
                 "**date d'adoption**" : change_date_format(anim.date_of_adoption),
                 '**date de naissance**' : change_date_format(anim.date_of_birth),

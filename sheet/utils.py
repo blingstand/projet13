@@ -1,6 +1,11 @@
 from .models import *
 import datetime
-class Utils():
+
+from mail.utils import UtilsMail
+
+utm = UtilsMail()
+
+class UtilsSheet():
     def get_animal_from_given_id(self, given_id):
         animal = Animal.objects.filter(id=given_id)
         return animal 
@@ -14,14 +19,14 @@ class Utils():
         for elem in given_id:
             print(f">> {elem}")
             animal = Animal.objects.get(id=elem)
-            admin = animal.admin_data
-            owner = animal.owner
+            admin, owner = animal.admin_data, animal.owner
             print(animal, ' || ', admin, ' || ', owner)
             other_animal = Animal.objects.filter(owner=owner)
             print(len(other_animal) , other_animal)
             animal.delete()
             admin.delete()
-            if len(other_animal) - 1 == 0 :
+            utm.has_to_send_mail("delete", [owner])
+            if len(other_animal) < 1 :
                 owner.delete()
                 print(f"Suppression de : {animal}, {admin} et {owner}")
                 continue
@@ -39,8 +44,9 @@ class Utils():
                 dict_values[date] = None
         return dict_values
     def find_changes(self, given_id, dict_values):
-        """ this funtions makes a comparison between db class datas and dict_values datas
-            if it finds a changes, this one is add to list changes 
+        """ this funtions returns a list of changes 
+            1/ it makes a comparison between db class datas and dict_values datas
+            2/ if it finds a changes, this one is add to list of changes 
 
         """
         # 1/  finds the concerned tables
@@ -62,7 +68,33 @@ class Utils():
                     changes.append((key, elem[1]))
         print("liste des modifications : ", changes)
         return changes
-    def modify_datas(self, given_id, dict_values):
+
+        def change_animal_owner(animal, given_id):
+            """this function modifies the animal.owner and returns the new_owner"""
+            former_owner = animal.owner
+            animal.owner = Owner.objects.get(id=given_id)
+            new_owner = animal.owner
+            if former_owner != new_owner: 
+                animal.save()
+                return new_owner
+            else:
+                raise "Erreur dans sheet.utils.py ligne 92"
+    def modify_datas(self, changes, animal, dict_values):
+        """this functions modifies the data according to change and dict_values"""
+        try:    
+            for change in changes:
+                if change[1] == animal.owner: 
+                    setattr(animal.owner, str(change[0]), dict_values[change[0]])
+                    animal.owner.save()
+                elif change[1] == animal.admin_data:
+                    setattr(animal.admin_data, str(change[0]), dict_values[change[0]])
+                    animal.admin_data.save()
+                else:
+                    setattr(animal, str(change[0]), dict_values[change[0]])
+                    animal.save()
+        except Exception as e:
+            return False, e
+    def manage_modify_datas(self, given_id, dict_values):
         """ this function attemps to modify the db 
             1/ determinates wehther we have a new owner for animal from given_id
                 cas 1>changes for former owner : 
@@ -77,65 +109,31 @@ class Utils():
             2/ gets the changes to make
             3/ makes changes
         """
-        animal = Animal.objects.get(id=given_id)
-        is_same_owner = (dict_values['former_owner'] == str(animal.owner.id))
-        # print("==========")
-        # print((dict_values['former_owner'], animal.owner.id))
-        # print(f'is_same_owner : {is_same_owner}')
-        # print("==========")
-        
         try:
-            if not is_same_owner and int(dict_values['former_owner']) > 0:
-                # print("Cas 1 : Je change l'animal de propriétaire.")
-                animal.owner = Owner.objects.get(id=dict_values['former_owner'])
-                animal.save()
-            elif not is_same_owner and int(dict_values['former_owner']) == 0:
-                # print("Cas 2 : J'attribue à l'animal un nouveau propriétaire.")
-                new_owner = Owner(
-                    owner_name=dict_values['owner_name'],
-                    owner_surname=dict_values['owner_surname'],
-                    owner_sex=dict_values['owner_sex'],
-                    phone=dict_values['phone'],
-                    mail=dict_values['mail'],
-                    tel_reminder=dict_values['tel_reminder'],
-                    mail_reminder=dict_values['mail_reminder'],
-                    )
-                new_owner.save()
-                animal.owner = new_owner
-                animal.save()
-                # print(f"\taprès > {animal.owner}")
-            else:
-                print(f'Cas3 : Je garde le même propriétaire {animal.owner}.')
-            
+            animal = Animal.objects.get(id=given_id)
+            is_same_owner = (dict_values['former_owner'] == str(animal.owner.id))
+            if not is_same_owner:
+                former_owner = animal.owner
+                if int(dict_values['former_owner']) > 0:
+                    new_owner = self.change_animal_owner(animal, dict_values['former_owner'])
+                elif int(dict_values['former_owner']) == 0:
+                    # print("Cas 2 : J'attribue à l'animal un nouveau propriétaire.")
+                    new_owner = self.create_owner(dict_values, return_owner=True)
+                    animal.owner = new_owner
+                    animal.save()
             #I search for changes
             changes = self.find_changes(given_id, dict_values)
-            allchanges = changes
             print(changes)
-            for change in changes:
-                if change[1] == animal.owner: 
-                    setattr(animal.owner, str(change[0]), dict_values[change[0]])
-                    animal.owner.save()
-                elif change[1] == animal.admin_data:
-                    setattr(animal.admin_data, str(change[0]), dict_values[change[0]])
-                    animal.admin_data.save()
-                else:
-                    setattr(animal, str(change[0]), dict_values[change[0]])
-                    animal.save()
-            # print("---> fin de la modif")
-            #if animal is neutered so owner has no obligation
-            if animal.admin_data.is_neutered == "0": 
-                animal.owner.need_contact = False
-            else: 
-                animal.owner.need_contact = True
-            owner = animal.owner
-            owner.save()
-            # print(f"Besoin de contacter {owner} pour stérilisation : {owner.need_contact}")
-            #sum up
-            # print(f'> {len(allchanges)} changement(s) détectés et effectués :')
-            # [print(change) for change in allchanges]
-            return True, len(allchanges)
+            self.modify_datas(changes, animal, dict_values)
+            if is_same_owner: 
+                datas = [animal.owner]
+            else:
+                datas = [former_owner,new_owner]
+            utm.has_to_send_mail("modif", datas)
+            return True, changes
         except Exception as e:
             return False, e
+
     
     """ methodes for Owner """
     def remove_owner(self, given_ids): 
@@ -151,7 +149,9 @@ class Utils():
             else:
                 return False, f"{owner_to_remove} n'a pas été effacé(e) car il possède au moins un animal." 
         return True, f'Le(s) {len(given_ids)} propriétaire(s) a/ont été effacé(s).'
+    
     def check_owner_values(self, dict_values, given_id=None, for_modif=None):
+        """ this function verifies the Integrity of data """
         queryset1 = Owner.objects.filter(
             phone=dict_values['phone'])
         queryset2 = Owner.objects.filter(
@@ -169,7 +169,7 @@ class Utils():
             if not verif:
                 return False, 'Ce mail existe déjà'
         return True, "aucun problème"
-    def create_owner(self, dict_values):
+    def create_owner(self, dict_values, return_owner=False):
         """this function creates a new owner if it is possible """
         try:
             success, message = self.check_owner_values(dict_values)
@@ -183,6 +183,8 @@ class Utils():
                     mail_reminder=dict_values['mail_reminder'],
                     tel_reminder=dict_values['tel_reminder'])
                 ow.save()
+                if return_owner: 
+                    return owner
                 return True, f"création de {ow.owner_name} réussie"
             else: 
                 return success, message
@@ -227,7 +229,6 @@ class Utils():
         except Exception as e:
             raise(e)
             return False, f"problème pour ut.create_contact: {e}"
-
     def remove_contact(self, list_contact_id):
         """this function identifies contact to remove and remove it """
         try:
@@ -238,7 +239,6 @@ class Utils():
             return True, f"{contact} a été supprimé."
         except Exception as e:
             return False, f"ut.remove_contact > pas de supression car :\n{e}"
-
     def modify_contact(self, dict_values): 
         """ this function gets a selected contact and modifies its datas """
         try:

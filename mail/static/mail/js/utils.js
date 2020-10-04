@@ -1,4 +1,4 @@
-/* maj 1.0
+/* maj 1.1
     this script is working for 
     mail/
         content.html
@@ -12,6 +12,8 @@
 */
 
 let csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+const url = window.location.href
+let param = ""
 
 const sendDatasToServer = function(value, url, whatToDo){
     // this functions fills the inputs with the given data from animal
@@ -53,15 +55,13 @@ const sendDatasToServer = function(value, url, whatToDo){
 
 
 
-const BackCNS = function (pageName){
-    let param = GetParam()
+const BackCNS = function (pageName,destination){
+    param = GetParam()
     newPage = url.split('/')
     idContent = newPage.indexOf(pageName)
     if (param != pageName){
         //fullPath - content - mail_id + cns
-        newPage.splice(idContent, 1, "cns")
-        newPage = newPage.join('/')
-        window.location.href = newPage
+        window.location.href = destination+"/"+ param
     }else{
         let response = true
         if (pageName == "content"){
@@ -70,7 +70,7 @@ const BackCNS = function (pageName){
         if (response){
             newPage.splice(idContent,1, "cns")
             newPage = newPage.join('/')
-            window.location.href = newPage
+            window.location.href = destination
         }
     }       
 }

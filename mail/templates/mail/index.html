@@ -92,7 +92,7 @@
                 });
                 child.addEventListener('dblclick', function(e){
                     targid = e.target.parentElement.children[0].children[0].id
-                    new_page = getBaseUrl() + "cns/"+ targid;
+                    new_page = "{% url 'mail:cns' %}/"+ targid;
                     window.location.href = new_page; 
                 });
             }
