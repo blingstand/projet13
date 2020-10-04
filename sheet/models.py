@@ -15,7 +15,7 @@ class Animal(models.Model):
     color = models.CharField(max_length=30, blank=True, verbose_name="Couleur")
     date_of_adoption = models.DateField(verbose_name="Date d'adoption",)
     observation = models.CharField(max_length=50, blank=True)
-    caution = models.PositiveSmallIntegerField(default=0, verbose_name="Montant de la caution(sans €)")
+    caution = models.CharField(max_length=5, verbose_name="Montant de la caution(sans €)")
     nature_caution = models.CharField(max_length=20, default="chèque", verbose_name="Nature de la caution(sans €)")
     picture = models.FileField(blank=True, null=True, upload_to="animals/", default = 'animals/no-img.j')
     admin_data = models.OneToOneField('AdminData', on_delete=models.CASCADE, 

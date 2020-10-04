@@ -42,7 +42,6 @@ class SheetView(View):
         self.context['animals'] = animals
         self.context['owners'] = list(owners)
         self.context['disp_owners'] = own 
-
         return render(request, 'sheet/index.html', self.context)
     def post(self, request, own, search=0):
         """receives data to pass to deals with the dropSheet function"""
@@ -88,10 +87,10 @@ class AddSheetView(View):
             # print("\t2/ affichage des données récupérées ...")
             print(f">{dict_values}")
             # print("\t3/ Tentative d'enregistrement des données ...")
-            status_operation, owner = form.save_new_datas(dict_values)
+            status_operation, animal = form.save_new_datas(dict_values)
             owners = Owner.objects.all()
             if status_operation == 1:   
-                success = utm.has_to_send_mail('creation', owner.mail)
+                success = utm.has_to_send_mail('creation', [animal.owner.mail], animal.id)
                 if success:
                     print("> un mail a été envoyé suite à cet ajout")
                 print("\t\t*** important *** ")
@@ -120,7 +119,6 @@ class AlterSheetView(View):
         #I need to get the concerned animal corresponding this given_id
         animal = ut.get_animal_from_given_id(given_id)[0]
         owners = Owner.objects.all()
-        print("**////", animal.nature_caution)
         context = {'form' : form, 'animal' : animal,  "owners" : owners}
         return render(request, 'sheet/alter.html', context)
 

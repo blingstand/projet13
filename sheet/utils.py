@@ -23,9 +23,9 @@ class UtilsSheet():
             print(animal, ' || ', admin, ' || ', owner)
             other_animal = Animal.objects.filter(owner=owner)
             print(len(other_animal) , other_animal)
+            utm.has_to_send_mail("delete", [owner], animal.id)
             animal.delete()
             admin.delete()
-            utm.has_to_send_mail("delete", [owner])
             if len(other_animal) < 1 :
                 owner.delete()
                 print(f"Suppression de : {animal}, {admin} et {owner}")
@@ -123,18 +123,21 @@ class UtilsSheet():
                     animal.save()
             #I search for changes
             changes = self.find_changes(given_id, dict_values)
-            print(changes)
             self.modify_datas(changes, animal, dict_values)
             can_send_mail = False
             if is_same_owner: 
                 for change in changes:
+                    print("change > ", change[0])
                     if change[0] == "caution": 
                         can_send_mail = True
                         datas = [animal.owner]
             else:
                 can_send_mail = True
                 datas = [former_owner,new_owner]
-            utm.has_to_send_mail("modif", datas)
+            print("can_send_mail : ", can_send_mail)
+            print("pour : ", given_id)
+            if can_send_mail: 
+                utm.has_to_send_mail("modif", datas, given_id)
             return True, changes
         except Exception as e:
             return False, e

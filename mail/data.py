@@ -21,7 +21,7 @@ def converter(anim):
                 '**M./Mme**' : anim.owner.apostrophe, 
                 '**mail**' : anim.owner.mail, 
                 '**nb appels**' : f'{anim.owner.tel_reminder} appel(s)', 
-                '**nb mail**' : f'{anim.owner.mail_reminder} mail(s)', 
+                '**nb mails**' : f'{anim.owner.mail_reminder} mail(s)', 
                 '**nom prop**' : anim.owner.owner_surname, 
                 '**prénom prop**' : anim.owner.owner_name, 
                 '**tel**' : anim.owner.phone, 

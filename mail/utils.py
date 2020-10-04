@@ -73,7 +73,7 @@ class UtilsMail():
             mail.delete()
             # print(f"\tMail supprimé.")
 
-    def has_to_send_mail(self, action, data):
+    def has_to_send_mail(self, action, data, given_id):
         """ this function verifies whether a mail should be send according to the action """
         queryset = ""
         if action == 'creation': 
@@ -81,12 +81,13 @@ class UtilsMail():
         elif action == 'modif': 
             queryset = Mail.objects.filter(auto_send=True, send_after_modif=True)
         elif action == 'delete': 
-            print("action delete identifiée ")
             queryset = Mail.objects.filter(auto_send=True, send_after_delete=True)
-            print(len(queryset))
+        
+        print("has_to_send_mail : ", len(queryset))
+        print("pour l'animal de cet id : ", given_id)
         if len(queryset) > 0: 
             for ind, mail in enumerate(queryset):
                 print(ind, mail)
-                mail.send_auto_mail(data)
+                mail.send_auto_mail(data, given_id)
 
             

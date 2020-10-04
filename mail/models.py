@@ -48,10 +48,14 @@ class Mail(models.Model):
                 if key == False:
                     continue
                 return condition[key][1]
-    @property
-    def modified_text(self):
+    
+    def modified_text(self, given_id=None):
         """takes plain text and returns modified text"""
+        print("-- modified_text pour ", given_id)
         anim = Animal.objects.all()[0]
+        if given_id: 
+            anim = Animal.objects.get(id=given_id)
+            print("given_id reçu >>", anim)
         new_text = self.plain_text
         dict_conversion = converter(anim)
         for key in dict_conversion: 
@@ -66,17 +70,23 @@ class Mail(models.Model):
         # print(new_text)
         new_text = new_text.replace('\r\n', '\\n')
         return new_text
+
     def full_text(self):
         """this function returns a plain text with escaped \n """
         return self.plain_text.replace('\r\n', '\\n')
 
 
-    def send_auto_mail(self, send_to):
+    def send_auto_mail(self, send_to, given_id):
         """this function sends an auto mail according to its values and param """
-        print("from send_auto_mail, I send to : ")
-        print(send_to)
-        send_mail(
-            self.resume, self.modified_text, 'blingstand@hotmail.fr', 
-            ['adrien.clupot@gmail.com'], fail_silently=False)
-        print("send_auto_mail > mail send")
+        text = self.modified_text(given_id)
+        print("-- send_auto_mail, pour cet id : ")
+        print(text)
+        try:
+            send_mail(
+                self.resume, text , 'blingstand@hotmail.fr', 
+                ['adrien.clupot@gmail.com'], fail_silently=False)
+            print(f"send_auto_mail > mail send to {send_to}")
+            pass
+        except Exception as e:
+            raise e
 
