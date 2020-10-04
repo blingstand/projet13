@@ -26,7 +26,7 @@ class ContentMail(forms.Form):
     resume = forms.CharField(max_length=100, label="objet", 
         widget=forms.TextInput(attrs={ 'class' : "w-100 text-center blank",
             'placeholder' : "objet "}))
-    full_text = forms.CharField(max_length=2000, label="contenu",
+    plain_text = forms.CharField(max_length=2000, label="contenu",
         widget=forms.Textarea(attrs={ 
             'id':'body_mail',
             'class' : "w-100 blank pl-3 pr-3",

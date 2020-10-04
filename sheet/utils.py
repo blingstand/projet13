@@ -125,9 +125,14 @@ class UtilsSheet():
             changes = self.find_changes(given_id, dict_values)
             print(changes)
             self.modify_datas(changes, animal, dict_values)
+            can_send_mail = False
             if is_same_owner: 
-                datas = [animal.owner]
+                for change in changes:
+                    if change[0] == "caution": 
+                        can_send_mail = True
+                        datas = [animal.owner]
             else:
+                can_send_mail = True
                 datas = [former_owner,new_owner]
             utm.has_to_send_mail("modif", datas)
             return True, changes

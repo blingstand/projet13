@@ -147,7 +147,7 @@
     const checkIntegrity = function(input){
         let value = {}
         value['title'] = input.value
-        if ("{{mail.title}}" == value){
+        if ("{{mail.title}}" == input.value){
             return
         }
         let url = "{% url 'mail:content' 0 'check_integrity'%}"

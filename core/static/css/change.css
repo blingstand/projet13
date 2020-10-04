@@ -167,6 +167,10 @@
 	    color:white;
 	}
 /* mail */ 
+
+	.mail-index tr td{
+		text-align: center; 
+	}
 	.mail-but{
 		height: 5rem; 
 	}
