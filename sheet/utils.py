@@ -2,7 +2,10 @@ from .models import *
 import datetime
 
 from mail.utils import UtilsMail
+from mail.mail_manager import MailManager
 
+
+mm = MailManager()
 utm = UtilsMail()
 
 class UtilsSheet():
@@ -22,14 +25,14 @@ class UtilsSheet():
             admin, owner = animal.admin_data, animal.owner
             print(animal, ' || ', admin, ' || ', owner)
             other_animal = Animal.objects.filter(owner=owner)
-            print(len(other_animal) , other_animal)
-            utm.has_to_send_mail("delete", [owner], animal.id)
+            print(f"Ce propriétaire possède {len(other_animal)} animaux)")
+            mm.has_to_send_mail("delete", [owner], animal.id)
             animal.delete()
             admin.delete()
             if len(other_animal) < 1 :
                 owner.delete()
                 print(f"Suppression de : {animal}, {admin} et {owner}")
-                continue
+                return
             print(f"/!\ Atention ce propriétaire a plusieurs animaux, seuls les fiches {animal} et {admin}"\
                     " seront effacées.")
     def change_date_format(self, dict_values):
@@ -68,17 +71,16 @@ class UtilsSheet():
                     changes.append((key, elem[1]))
         print("liste des modifications : ", changes)
         return changes
-
-        def change_animal_owner(animal, given_id):
-            """this function modifies the animal.owner and returns the new_owner"""
-            former_owner = animal.owner
-            animal.owner = Owner.objects.get(id=given_id)
-            new_owner = animal.owner
-            if former_owner != new_owner: 
-                animal.save()
-                return new_owner
-            else:
-                raise "Erreur dans sheet.utils.py ligne 92"
+    def change_animal_owner(self, animal, given_id):
+        """this function modifies the animal.owner and returns the new_owner"""
+        former_owner = animal.owner
+        animal.owner = Owner.objects.get(id=given_id)
+        new_owner = animal.owner
+        if former_owner != new_owner: 
+            animal.save()
+            return new_owner
+        else:
+            raise "Erreur dans sheet.utils.py ligne 92"
     def modify_datas(self, changes, animal, dict_values):
         """this functions modifies the data according to change and dict_values"""
         try:    
@@ -134,10 +136,10 @@ class UtilsSheet():
             else:
                 can_send_mail = True
                 datas = [former_owner,new_owner]
-            print("can_send_mail : ", can_send_mail)
-            print("pour : ", given_id)
             if can_send_mail: 
-                utm.has_to_send_mail("modif", datas, given_id)
+                print(can_send_mail)
+                list_dict_datas = mm.has_to_send_mail("modif", datas, given_id)
+                print("> mail envoyé : ", len(datas))
             return True, changes
         except Exception as e:
             return False, e
@@ -216,34 +218,13 @@ class UtilsSheet():
             raise 
     
     """ methodes for Contact """
-
-    def refresh_reminder(self, owner): 
-        """ this function refresh data for mail_reminder and tel reminder """
-        owner.refresh_sum_mail
-        owner.refresh_sum_tel
-    def create_contact(self, owner, dict_values): 
-        """this function creates a new contact for a owner """
-        try:  
-            new_contact = Contact(
-                contact_date = dict_values['contact_date'],
-                resume = dict_values['resume'],
-                full_text = dict_values['full_text'],
-                nature = dict_values['nature'],
-                owner = owner)
-            new_contact.save()
-            counter = 0
-            self.refresh_reminder(owner)
-            return True, new_contact
-        except Exception as e:
-            raise(e)
-            return False, f"problème pour ut.create_contact: {e}"
     def remove_contact(self, list_contact_id):
         """this function identifies contact to remove and remove it """
         try:
             for given_id in list_contact_id:
                 contact = Contact.objects.get(id=given_id)
                 contact.delete()
-            self.refresh_reminder(contact.owner)
+            mm.refresh_reminder(contact.owner)
             return True, f"{contact} a été supprimé."
         except Exception as e:
             return False, f"ut.remove_contact > pas de supression car :\n{e}"
@@ -255,7 +236,7 @@ class UtilsSheet():
             for key in dict_values:
                 setattr(selected_contact, key, dict_values[key])
                 selected_contact.save()
-                self.refresh_reminder(selected_contact.owner)
+                mm.refresh_reminder(selected_contact.owner)
             return True, f"{selected_contact} a bien été modifié."
         except Exception as e:
             return False, f"modify_contact > problème ici : {e}"

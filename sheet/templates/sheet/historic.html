@@ -30,7 +30,7 @@
                  <td>{{contact.contact_date}}</td>
                  <td>{{contact.str_nature}}</td>
                  <td>{{contact.resume}}</td>
-                 <td>{{contact.full_text}}</td>
+                 <td>{{contact.reduced_text|escape}}</td>
              </tr>
              {% endfor %}
          </table>

@@ -15,11 +15,13 @@ from .datas import *
 #from others app 
 from mydashboard.utils import GraphDatas
 from mail.utils import UtilsMail
-
+from mail.mail_manager import MailManager
 # Create your views here.
+ 
+gradat = GraphDatas()
+mm = MailManager()
 ut = UtilsSheet()
 utm = UtilsMail()
-gradat = GraphDatas()
 
 def redirectIndex(request):
     return redirect('sheet:index')
@@ -81,19 +83,16 @@ class AddSheetView(View):
                 }
             return JsonResponse({"data":data}, safe=False)
         if form.is_valid():
-            print("---")
             # print("\t1/ récupération des données ...")
             dict_values = form.from_form()
             # print("\t2/ affichage des données récupérées ...")
-            print(f">{dict_values}")
+            print(f"dict_values >{dict_values}")
             # print("\t3/ Tentative d'enregistrement des données ...")
             status_operation, animal = form.save_new_datas(dict_values)
             owners = Owner.objects.all()
             if status_operation == 1:   
-                success = utm.has_to_send_mail('creation', [animal.owner.mail], animal.id)
-                if success:
-                    print("> un mail a été envoyé suite à cet ajout")
-                print("\t\t*** important *** ")
+                mm.has_to_send_mail('creation', [animal.owner], animal.id)
+                print("> un mail a été envoyé suite à cet ajout")
                 # print("\t4/ Fin de la transaction, retour sur la page sheet.")
                 return redirect("sheet:index")
             else:
@@ -237,7 +236,7 @@ class ContactOwnerView(View):
         self.context["owner"] = owner
         self.context["contacts"] = contacts 
         if action == "add":             
-            success, message = ut.create_contact(owner, dict_values)
+            success, message = mm.create_contact(owner, dict_values)
             if success: 
                 return JsonResponse({"data":f'{success}{message}'}, safe=False)
             print(message)

@@ -121,7 +121,6 @@ class Owner(models.Model):
         sum_mail = len(nature1) + len(nature3) + len(nature5)
         self.mail_reminder = sum_mail
         self.save()
-        print("save change")
         return sum_mail
     @property
     def refresh_sum_tel(self):
@@ -131,7 +130,6 @@ class Owner(models.Model):
         sum_tel = len(nature2) + len(nature4)
         self.tel_reminder = sum_tel
         self.save()
-        print("save change")
         return sum_tel
     
     
@@ -159,3 +157,15 @@ class Contact(models.Model):
         for dic in conversion:
             if dic["nature"] == self.nature: 
                 return dic['str_nature']
+    @property
+    def reduced_text(self):
+        """ this function limits text to 150 characters"""
+        text = self.escaped_charac_text[0:100] + " ..."
+        return text
+
+    @property
+    def escaped_charac_text(self):
+        """ this function escapes \n character """
+        elem = '\\n\\n'
+        text = self.full_text.replace(elem, "\n")
+        return text

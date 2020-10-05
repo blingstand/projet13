@@ -9,7 +9,10 @@ from django.db.utils import IntegrityError
 from .models import *
 from .utils import UtilsSheet
 
+from mail.mail_manager import MailManager
+
 ut = UtilsSheet()
+mm = MailManager()
 
 CHOICES = (
     ("0", "chat"),("1", "chatte"), ("2", "chien"), ("3", "chienne"))
@@ -191,7 +194,7 @@ class SheetForm(forms.Form):
                 "full_text": f"félicitation adoption de {animal.name}({animal.str_species}) + rappel loi sur stérilisation"
             }
             owner.mail_reminder = str(int(owner.mail_reminder) + 1)
-            success, output = ut.create_contact(owner, data)
+            success, output = mm.create_contact(owner, data)
             return success, output
         except Exception as e:
             raise e

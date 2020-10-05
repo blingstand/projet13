@@ -86,7 +86,6 @@ class Mail(models.Model):
                 self.resume, text , 'blingstand@hotmail.fr', 
                 ['adrien.clupot@gmail.com'], fail_silently=False)
             print(f"send_auto_mail > mail send to {send_to}")
-            pass
         except Exception as e:
             raise e
 

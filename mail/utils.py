@@ -6,7 +6,7 @@ import locale
 from .models import Mail
 
 #from others app 
-from sheet.models import Animal, Owner, AdminData
+from sheet.models import Animal, Owner, AdminData, Contact
 
 
 locale.setlocale(locale.LC_TIME,'')
@@ -73,21 +73,7 @@ class UtilsMail():
             mail.delete()
             # print(f"\tMail supprimé.")
 
-    def has_to_send_mail(self, action, data, given_id):
-        """ this function verifies whether a mail should be send according to the action """
-        queryset = ""
-        if action == 'creation': 
-            queryset = Mail.objects.filter(auto_send=True, send_after_creation=True)
-        elif action == 'modif': 
-            queryset = Mail.objects.filter(auto_send=True, send_after_modif=True)
-        elif action == 'delete': 
-            queryset = Mail.objects.filter(auto_send=True, send_after_delete=True)
-        
-        print("has_to_send_mail : ", len(queryset))
-        print("pour l'animal de cet id : ", given_id)
-        if len(queryset) > 0: 
-            for ind, mail in enumerate(queryset):
-                print(ind, mail)
-                mail.send_auto_mail(data, given_id)
+    
+                
 
             
