@@ -49,7 +49,7 @@ class ConnectionView(View):
 
             if new_user is not None:
                 login(request, new_user)
-                return redirect('dashboard:index')
+                return redirect('mydashboard:index')
             messages.info(request, 'Pseudo ou mot de passe incorrect')
             return redirect('user:connection')
         return HttpResponse("Problème dans le formulaire !")
