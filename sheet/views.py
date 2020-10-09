@@ -121,6 +121,7 @@ class AlterSheetView(View):
         owners = Owner.objects.all()
         cno = uts.get_choice_new_owner(owners)
         given_values = uts.get_data_for_alter(given_id)
+        print("AlterSheetView > ", given_values)
         form = SheetForm(request.POST or None, initial=given_values)
         form.fields['select_owner'].widget = forms.Select(choices=cno)
         #I need to get the concerned animal corresponding this given_id
@@ -143,7 +144,6 @@ class AlterSheetView(View):
             print(f"> \t{dict_values}")
             # print("\t3/ Tentative d'enregistrement des données ...")
             success, response = uts.manage_modify_datas(given_id, dict_values)
-            success, response = False, "test"
             print('---end modify_datas')
             if success:
                 print(f'{response} changement(s)')

@@ -21,7 +21,7 @@ class UtilsSheet():
         anim = Animal.objects.get(id=given_id)
         data = {
             'caution' : anim.caution, 
-            'chip' : anim.admin_data, 
+            'chip' : anim.admin_data.chip, 
             'color' : anim.color, 
             'date_of_adoption' : str(anim.date_of_adoption), 
             'date_of_birth' : str(anim.date_of_birth), 
@@ -74,12 +74,16 @@ class UtilsSheet():
         """ 
             this function turns str date into datetime.date
         """    
-        # format_str = '%Y-%m-%d' # The format
-        # for date in ('date_of_birth', 'date_of_adoption', 'date_of_neuter', 'futur_date_of_neuter'):
-        #     if dict_values[date] != "": 
-        #         dict_values[date] = datetime.datetime.strptime(dict_values[date], format_str).date()
-        #     else:
-        #         dict_values[date] = None
+        format_str = '%Y-%m-%d' # The format
+        list_data = ['date_of_birth', 'date_of_adoption']
+        for key in ('date_of_neuter', 'futur_date_of_neuter'): 
+            if key in dict_values: 
+                list_data.append(key)
+        for date in list_data:
+            if dict_values[date] != "": 
+                dict_values[date] = datetime.strptime(dict_values[date], '%Y-%m-%d').date()
+            else:
+                dict_values[date] = None
         return dict_values
     def get_choice_new_owner(self, owners): 
         """this function returns the choice new owner tupple"""
@@ -100,13 +104,11 @@ class UtilsSheet():
         animal = Animal.objects.get(id=given_id)
         # print("la modif concerne : ", animal, animal.admin_data, animal.owner)
         #2/ finds difference between former and new datas
-        loop_animal = ('name', 'date_of_birth', 'race', 'species', 'color', 'date_of_adoption', 'observation',\
+        loop_animal = ('name', 'date_of_birth', 'race', 'species', 'color', 'date_of_adoption',\
           'caution',  'nature_caution'), animal
         loop_admin = ('file', 'chip', 'tatoo', 'is_neutered', 'date_of_neuter', 'futur_date_of_neuter',\
          'status'), animal.admin_data
-        loop_owner = ('owner_name', 'owner_surname','owner_sex',  'phone', 'mail', 'tel_reminder', \
-            'mail_reminder',), animal.owner
-        loop = [loop_animal, loop_admin, loop_owner]
+        loop = [loop_animal, loop_admin]
         changes = []
         dict_values = self.change_date_format(dict_values)
         for elem in loop:
@@ -114,6 +116,8 @@ class UtilsSheet():
                 if key not in dict_values:
                     dict_values[key]=None
                 if getattr(elem[1], key) != dict_values[key]:
+                    print(getattr(elem[1], key) != dict_values[key], type(getattr(elem[1], key)),  type(dict_values[key]))
+                    print(getattr(elem[1], key) != dict_values[key], getattr(elem[1], key),  dict_values[key])
                     changes.append((key, elem[1]))
         print("liste des modifications : ", changes)
         return changes
@@ -157,41 +161,40 @@ class UtilsSheet():
             2/ gets the changes to make
             3/ makes changes
         """
-        try:
+        # try:
 
-            animal = Animal.objects.get(id=given_id)
-            is_same_owner = (dict_values['select_owner'] == str(animal.owner.id))
-            print("test1 : ",is_same_owner )
-            if not is_same_owner:
-                former_owner = animal.owner
-                if int(dict_values['select_owner']) > 0:
-                    new_owner = self.change_animal_owner(animal, dict_values['select_owner'])
-                elif int(dict_values['select_owner']) == 0:
-                    # print("Cas 2 : J'attribue à l'animal un nouveau propriétaire.")
-                    new_owner = self.create_owner(dict_values, return_owner=True)
-                    animal.owner = new_owner
-                    animal.save()
-            #I search for changes
-            changes = self.find_changes(given_id, dict_values)
-            self.modify_datas(changes, animal, dict_values)
-            can_send_mail = False
-            if is_same_owner: 
-                for change in changes:
-                    print("change > ", change[0])
-                    if change[0] == "caution": 
-                        can_send_mail = True
-                        datas = [animal.owner]
-            else:
-                can_send_mail = True
-                datas = [former_owner,new_owner]
-            if can_send_mail: 
-                print(can_send_mail)
-                list_dict_datas = mm.has_to_send_mail("modif", datas, given_id)
-                print("> mail envoyé : ", len(datas))
-            return True, changes
-        except Exception as e:
-            raise e
-            return False, e
+        animal = Animal.objects.get(id=given_id)
+        is_same_owner = (dict_values['select_owner'] == str(animal.owner.id))
+        if not is_same_owner:
+            former_owner = animal.owner
+            if int(dict_values['select_owner']) > 0:
+                new_owner = self.change_animal_owner(animal, dict_values['select_owner'])
+            elif int(dict_values['select_owner']) == 0:
+                # print("Cas 2 : J'attribue à l'animal un nouveau propriétaire.")
+                new_owner = self.create_owner(dict_values, return_owner=True)
+                animal.owner = new_owner
+                animal.save()
+        #I search for changes
+        changes = self.find_changes(given_id, dict_values)
+        self.modify_datas(changes, animal, dict_values)
+        can_send_mail = False
+        if is_same_owner: 
+            for change in changes:
+                print("change > ", change[0])
+                if change[0] == "caution": 
+                    can_send_mail = True
+                    datas = [animal.owner]
+        else:
+            can_send_mail = True
+            datas = [former_owner,new_owner]
+        if can_send_mail: 
+            print(can_send_mail)
+            list_dict_datas = mm.has_to_send_mail("modif", datas, given_id)
+            print("> mail envoyé : ", len(datas))
+        return True, changes
+        # except Exception as e:
+        #     raise e
+        #     return False, e
 
     
     """ methodes for Owner """

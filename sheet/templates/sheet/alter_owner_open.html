@@ -17,7 +17,7 @@
 	
 <section>
 	<p class="curs-pointer back-button" onclick=BackToIndex()>Retour Index</p>
-	<h2 class="mt-3 mb-3 pl-3">Page Nouveau Propriétaire</h2>
+	<h2 class="mt-3 mb-3 pl-3">Modification Fiche Propriétaire</h2>
 	<article class=" bg-grey pt-3 pb-3">
 		<form id='form' class="sheet" action="{% url 'sheet:add_owner'%}" method="post" enctype="multipart/form-data">
 			{% csrf_token %}
@@ -54,7 +54,7 @@
 					<div class="col-1"></div>
 					<div class="col-8">
 						<h4 class="pl-3">Ses adoptions : </h4>
-						<ol class="ml-5 li-oneline">
+						<ol class="ml-5 ">
 							{% for animal in animals %}
 							<li class="curs-pointer" onclick=GoTo({{animal.id}})>  {{animal.name}} - {{animal.species_name}} - {{animal.admin_data.neuter_status}}   </li>
 							{% endfor %}

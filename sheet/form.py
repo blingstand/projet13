@@ -16,7 +16,7 @@ mm = MailManager()
 
 CHOICES = (
     ("0", "chat"),("1", "chatte"), ("2", "chien"), ("3", "chienne"))
-CHOICE_STERIL = ("0","stérile"), ("1","stérilisable"), ("2","sera stérilisable")
+CHOICE_STERIL = ("0","stérilisé"), ("1","stérilisable"), ("2","sera stérilisable")
 CHOICE_SEX = (("0","Homme"), ("1","Femme"))
 CHOICES_NATURE = (("0", "mail automatique"),("1", "mail spa"), ("2", "tel spa"), \
     ("3", "mail propriétaire"), ("4", "tel propriétaire"))
@@ -95,14 +95,14 @@ class SheetForm(forms.Form):
             'placeholder' : "nom proprio", 'name':"Nom"}))
     owner_sex = forms.ChoiceField(label="Sexe", required=False, 
         widget=forms.RadioSelect(attrs={'class' : 'li-oneline very-center', 'name':"Sexe"}), choices=CHOICE_SEX)
-    observation = forms.CharField(required=False, max_length=50, label='observation(s)',
-        widget=forms.TextInput(attrs={ 'title' : "observation(s)",
-            'placeholder' : "observation(s)"}))
+    # observation = forms.CharField(required=False, max_length=50, label='observation(s)',
+    #     widget=forms.TextInput(attrs={ 'title' : "observation(s)",
+            # 'placeholder' : "observation(s)"}))
     phone = forms.CharField(required=False, max_length=15, label='tel', 
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "téléphone",'name':"Téléphone",
             'placeholder' : "téléphone"}))
     race = forms.CharField(required=True, label="race", max_length=30,
-        widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "race de l'animal" ,
+        widget=forms.TextInput(attrs={ 'class' : 'w-10rem', 'title' : "race de l'animal" ,
             'placeholder' : "race de l'animal"}))
     species = forms.ChoiceField(widget=forms.Select(attrs={"class" : "w-10rem lst-none pl-0"}), choices=CHOICES)
     tatoo = forms.CharField(required=False, label='tatouage', 
