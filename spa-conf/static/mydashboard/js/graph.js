@@ -1,4 +1,5 @@
 //123
+let test = "ok"
 // let CreateChart = function(container, datas){
 let CreateChart = function(container){
     // if ([typeof(container),typeof(datas)] == ['string', 'object']){
@@ -35,7 +36,8 @@ let CreateChart = function(container){
             resize: {
                 enabled: true
             },
-            categories: datas['date']
+            // categories: datas['date']
+            categories: ["1", "7", "14", "21", "28"]
         },
         yAxis: {
           height: '80%',
@@ -51,11 +53,11 @@ let CreateChart = function(container){
 
         name: 'Contactés',
         // data: datas['contacted'],
-        data: ['5', '15', '17', '22']
+        data: ['5', '15', '17', '22'],
         color : '#00b4b5',
     }, {
         name: 'A contacté',
-        data: ['25', '25', '27', '27']
+        data: ['25', '25', '27', '27'],
         color : '#555555'
     }]
     });

@@ -7,7 +7,18 @@ html{
 body{
 	height: 100%;
 }
+h2{
+	color: #444E67; 
+	font-weight: bold;
+	}
 /* main */
+	.align-items-space {
+		-ms-flex-align: space-around !important;
+		align-items: flex-start !important;
+		-ms-flex-pack: center !important;
+		justify-content: center !important;
+	}
+
 	.alinea { 
   		text-indent: 2rem;
   		padding-left: 0.5rem;
@@ -17,6 +28,9 @@ body{
 		}
 	.bg-blue{
 		background-color: #00B4B5;
+	}
+	.bg-blue-trans{
+		background-color: rgba(0, 180, 181, 0.5);
 	}
 	.bg-dark-blue{
 		background-color: #444E67;
@@ -45,7 +59,7 @@ body{
 	.curs-pointer{
 		cursor: pointer; }
 	.input-reduced{
-		width: 9rem;
+		width: 8rem;
 	}
 	.input-very-reduced{
 		width: 4rem;}
@@ -67,9 +81,9 @@ body{
 	}
 	.no-a:hover{
 		text-decoration : none;}
-	.section-scrolable{
+	.scrolable{
 		overflow: scroll;
-		max-height: 33rem; 
+		max-height: 25rem; 
 	}
 	.right-part{
 		height: 36rem;
@@ -105,6 +119,26 @@ body{
 	}
 	#graph{
 		height: 20rem;
+	}
+	.container-dash-3-buttons{
+		height: 26rem; }
+	.dash-3-buttons{
+		display:flex;
+		flex-direction: column; 
+		align-items: space-around !important;
+		justify-content: center !important;
+
+	}
+	.dash-3-buttons > div{
+		border : 1px black solid;
+		text-align: center; 
+		margin-bottom: 3rem; 
+		background-color: #fff;
+	}
+	.dash-3-buttons > div:hover{
+		background-color: #d9d9d9;
+		color : #444E67;
+		font-weight: bold;
 	}
 
 	/*---------------------------------*/
@@ -147,14 +181,70 @@ body{
 	}
 
 /* sheet */
+	/* index */
+		#anim_table, #owner_table{
+			padding-left: 1rem;
+			border-collapse: separate;
+			border-spacing: 0 1rem;
+			table-layout: auto; 
+			width: 100%;
+		}
+		#anim_table > tbody > tr{
+			height: 3rem; 
+		}
+		#display, #display2{
+			height:	3rem;
+			width : 12rem;
+			border-radius: 5rem; 
+		}
+		.crud-sheet2, #display2{
+			height: 3rem;
+			background-color: tomato;
+			color:white;
+			font-weight: bold;
+		}
+		#display:hover,.crud-sheet2:hover {
+			background-color: #ff3c1a; 
+			font-weight: bold;
+		}
+		.crud-sheet, #display2{
+			height: 3rem;
+			background-color: #00B4B5;
+			color:#212529;
+			font-weight: bold;
+		}
+		.crud-sheet:hover, #display2:hover{
+			background-color:  #008080;
+			font-weight: bold;
+			color: white;
+		}
 
-	.row1{
-		background-color: red; }
-	
-	.row2{
-		background-color: grey; }
+		.col-name, .col-name2{
+			background-color: #00b4b5;
+			text-align: center; 
+		}
+		.col-name2{
+			background-color: tomato; 
+		}
+		.first-line > td{
+			height: 3rem; 
+		}
+
+		.row1{
+			background-color: #d9d9d9 }
+		
+		.row2{
+			 }
+		td.fitwidth {
+		    width: 16rem;
+		    white-space: nowrap;
+		}
 
 	/* add sheet */
+
+		.add-hr{
+			border: 1px black solid;
+		}
 		.bg-refresh{
 			border: 1px black solid;
 			background-color: #80b3ff;
@@ -165,11 +255,9 @@ body{
 		.bg-refresh:hover{
 			background-color: #1a75ff;
 		}
-		.new-former{
-			margin-left : -1.2rem;
-			padding : 2rem 0;
+		border-white{
+			border: 3px white solid;
 		}
-
 		div.former-owner, div.new-owner{
 			border: 1px black solid;
 			background-color: #80b3ff;
@@ -178,9 +266,40 @@ body{
 		div.former-owner:hover, div.new-owner:hover{
 			background-color: #1a75ff;
 		}
+		img.icon-link{
+			width : 1.2rem; height: auto; 
+		}
+		.new-former{
+			margin-left : -1.2rem;
+			padding : 2rem 0;
+		}
+		.part-add:hover{
+			background-color: #fff;
+			border: 2px #00b4b5 dashed;
+		}
+
+	
 	/* historic */
+		.crud-contact{
+			height: 3rem;
+			width: 9rem;
+		}
+		.crud-contact:hover{
+			background-color: #d9d9d9;
+			color : #444E67;
+			font-weight: bold;
+		}
+
 		.input-object{
-			width: 15rem}
+			width: 15rem
+		}
+		.histo_table{
+			padding-left: 1rem;
+			border-collapse: separate;
+			border-spacing: 0 1rem;
+			table-layout: auto; 
+			width: 100%;
+		}
 
 	/* alter_owner */
 		.text-border{
@@ -188,22 +307,39 @@ body{
 		display: inline-block;
 		width : 8rem;
 		background-color: #fff;}
+		.back-button{
+			background-color: #d9d9d9;
+			color : #444E67;
+		}
+		.back-button:hover{
+			font-weight:bolder;
+		}
 	/* owner_page */
+		#delete-all, #delete{
+			background-color: tomato;
+			color : white; 
+			width: 10rem;
+		}
 		#submit{
 			width: 7rem;}
-		.btn-delete{
-			background-color: red;
-		    border-color: red;
-		    height: 2.4rem;
-		    border-radius: 5px;
-		    width: 7rem;
-		    color:white;
+		
+		#delete-all:hover, #delete:hover{
+			background-color: #ff3c1a;}
+		.own_input > input{
+			text-align: center;
+			width:	15rem;
 		}
+		
 /* mail */ 
 
-	.mail-index tr td{
-		text-align: center; 
+	.mail-index{
+		padding-left: 1rem;
+		border-collapse: separate;
+		border-spacing: 0 1rem;
+		table-layout: auto; 
+		width: 100%;
 	}
+
 	.mail-but{
 		height: 5rem; 
 	}
