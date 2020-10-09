@@ -1,5 +1,6 @@
-<nav>
-	<div class="container d-flex mt-5 mb-5">
+<nav class="bg-grey">
+	<div class="catline"></div>
+	<div class="container d-flex mt-2 mb-2 ">
 		{%load static%}
 		<div class="row">
 			<div class="col-12 text-center photo"><img src="{% static 'img/avatar.png'%}" alt=""></div>
@@ -9,14 +10,16 @@
 			<div class="col-12 text-center label-photo"><a href="{% url 'user:logout'%}">se déconnecter</a></div>
 		</div>
 	</div>
-	<div class="container">
+	<div class="catline"></div>
+	<div class="container mt-3 mb-2 ">
 		<div class="row">
 		<div id="id_nav_mydashboard" class=" col-12 text-center button-verti mb-3 very-center">Tableau de bord</div>
-		<div id="id_nav_sheet" class=" col-12 text-center button-verti mb-3 very-center "><a class="no-a" href="{% url 'sheet:index' %}">Fiches</a></div>
-		<div id="id_nav_mail" class=" col-12 text-center button-verti mb-3 very-center "><a class="no-a" href="{% url 'mail:index' %}">Mails</a></div>
-		<div id="id_nav_info" class=" col-12 text-center button-verti mb-5 very-center "><a class="no-a" href="{% url 'info:index' %}">Informations</a>	</div>
+		<div id="id_nav_sheet" class=" col-12 text-center button-verti mb-3 very-center "> Fiches</div>
+		<div id="id_nav_mail" class=" col-12 text-center button-verti mb-3 very-center ">Mails</div>
+		<div id="id_nav_info" class=" col-12 text-center button-verti mb-1 very-center ">Informations	</div>
 		</div>
 	</div>
+	<div class="catline"></div>
 
 </nav>
 <script>

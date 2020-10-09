@@ -3,17 +3,15 @@
 """
 context_sheet_view = {
     'button_value':[
-        {'name' : 'Afficher Propriétaires',  'id' :'display', 'function' : 'display()'},
-        {'name' : 'Ajouter Animaux',    'id' : 'ajouter', 'function' : 'add()'}, 
-        {'name' : 'Modifier Animaux',   'id' : 'modifier', 'function' : 'alter()'},
-        {'name' : 'Supprimer Animal/Animaux',  'id' : 'supprimer', 'function' : 'remove()'}],
-    'anim_cols':["nom", "stérilisation", "espèce", "race", "propriétaire", "num dossier", \
-        "num tatouage", "num puce"]}
+        {'name' : 'Ajouter',    'id' : 'ajouter', 'function' : 'add()'}, 
+        {'name' : 'Modifier',   'id' : 'modifier', 'function' : 'alter()'},
+        {'name' : 'Supprimer',  'id' : 'supprimer', 'function' : 'remove()'}],
+    'anim_cols':["Nom", "Stérilisation", "Espèce", "Race", "Propriétaire", "Num dossier"]}
 
 context_contact_owner_view = {
             'historic_cols':["Date", "Type", "Titre", "Objet"],
             'button_value':[
                 {'name' : 'Ajouter Prise de Contact',    'id' : 'ajouter', 'function' : 'Add()'}, 
-                {'name' : 'Modifier Prise de Contact',   'id' : 'modifier', 'function' : 'Alter()'},
+                {'name' : 'Modifier Prise <br> de Contact',   'id' : 'modifier', 'function' : 'Alter()'},
                 {'name' : 'Supprimer Prise de Contact',  'id' : 'supprimer', 'function' : 'Remove()'}]
         }

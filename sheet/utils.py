@@ -1,14 +1,48 @@
+#from python
 from .models import *
 import datetime
 
+#from current app 
+from .models import *
+
+#from others apps
 from mail.utils import UtilsMail
 from mail.mail_manager import MailManager
+
 
 
 mm = MailManager()
 utm = UtilsMail()
 
 class UtilsSheet():
+
+    def get_data_for_alter(self, given_id):
+        """this function return a dict values for altersheet from a given id"""
+        anim = Animal.objects.get(id=given_id)
+        data = {
+            'caution' : anim.caution, 
+            'chip' : anim.admin_data, 
+            'color' : anim.color, 
+            'date_of_adoption' : str(anim.date_of_adoption), 
+            'date_of_birth' : str(anim.date_of_birth), 
+            'date_of_neuter' : str(anim.admin_data.date_of_neuter), 
+            'futur_date_of_neuter' : str(anim.admin_data.futur_date_of_neuter), 
+            "file" : anim.admin_data.file,
+            "is_neutered" : anim.admin_data.is_neutered,
+            "select_owner" : anim.owner.id,
+            "mail" : anim.owner.mail,
+            "name" : anim.name,
+            "nature_caution" : anim.nature_caution,
+            "status" : anim.admin_data.status,
+            "owner_name" : anim.owner.owner_name,
+            "owner_surname" : anim.owner.owner_surname,
+            "owner_sex" : anim.owner.owner_sex,
+            "phone" : anim.owner.phone,
+            "race" : anim.race,
+            "species" : anim.species,
+            "tatoo" : anim.admin_data.tatoo}
+        return data
+
     def get_animal_from_given_id(self, given_id):
         animal = Animal.objects.filter(id=given_id)
         return animal 
@@ -35,17 +69,27 @@ class UtilsSheet():
                 return
             print(f"/!\ Atention ce propriétaire a plusieurs animaux, seuls les fiches {animal} et {admin}"\
                     " seront effacées.")
+
     def change_date_format(self, dict_values):
         """ 
             this function turns str date into datetime.date
         """    
-        format_str = '%Y-%m-%d' # The format
-        for date in ('date_of_birth', 'date_of_adoption', 'date_of_neuter', 'futur_date_of_neuter'):
-            if dict_values[date] != "": 
-                dict_values[date] = datetime.datetime.strptime(dict_values[date], format_str).date()
-            else:
-                dict_values[date] = None
+        # format_str = '%Y-%m-%d' # The format
+        # for date in ('date_of_birth', 'date_of_adoption', 'date_of_neuter', 'futur_date_of_neuter'):
+        #     if dict_values[date] != "": 
+        #         dict_values[date] = datetime.datetime.strptime(dict_values[date], format_str).date()
+        #     else:
+        #         dict_values[date] = None
         return dict_values
+    def get_choice_new_owner(self, owners): 
+        """this function returns the choice new owner tupple"""
+        owners = owners.order_by('owner_surname')
+        choice_new_owner = [("0", "-- Nouveau Propriétaire --")]
+        for owner in owners:
+            choice = (str(owner.id), f"{owner.apostrophe} {owner.owner_surname.capitalize()} \
+                {owner.owner_name.capitalize()} (id={owner.id})")
+            choice_new_owner.append(choice)
+        return tuple(choice_new_owner)
     def find_changes(self, given_id, dict_values):
         """ this funtions returns a list of changes 
             1/ it makes a comparison between db class datas and dict_values datas
@@ -67,6 +111,8 @@ class UtilsSheet():
         dict_values = self.change_date_format(dict_values)
         for elem in loop:
             for key in elem[0]: 
+                if key not in dict_values:
+                    dict_values[key]=None
                 if getattr(elem[1], key) != dict_values[key]:
                     changes.append((key, elem[1]))
         print("liste des modifications : ", changes)
@@ -112,13 +158,15 @@ class UtilsSheet():
             3/ makes changes
         """
         try:
+
             animal = Animal.objects.get(id=given_id)
-            is_same_owner = (dict_values['former_owner'] == str(animal.owner.id))
+            is_same_owner = (dict_values['select_owner'] == str(animal.owner.id))
+            print("test1 : ",is_same_owner )
             if not is_same_owner:
                 former_owner = animal.owner
-                if int(dict_values['former_owner']) > 0:
-                    new_owner = self.change_animal_owner(animal, dict_values['former_owner'])
-                elif int(dict_values['former_owner']) == 0:
+                if int(dict_values['select_owner']) > 0:
+                    new_owner = self.change_animal_owner(animal, dict_values['select_owner'])
+                elif int(dict_values['select_owner']) == 0:
                     # print("Cas 2 : J'attribue à l'animal un nouveau propriétaire.")
                     new_owner = self.create_owner(dict_values, return_owner=True)
                     animal.owner = new_owner
@@ -142,23 +190,22 @@ class UtilsSheet():
                 print("> mail envoyé : ", len(datas))
             return True, changes
         except Exception as e:
+            raise e
             return False, e
 
     
     """ methodes for Owner """
     def remove_owner(self, given_ids): 
         """this function removes 1 owner from db if the ctrl is ok"""
-        print("test remove_owner : ", not isinstance(given_ids, list) )
         if not isinstance(given_ids, list): 
             given_ids = [given_ids]
-            print("changement : ", given_ids)
         for given_id in given_ids:
             owner_to_remove = Owner.objects.get(id=given_id)
             if owner_to_remove.number_animal() == 0: 
                 owner_to_remove.delete()
             else:
                 return False, f"{owner_to_remove} n'a pas été effacé(e) car il possède au moins un animal." 
-        return True, f'Le(s) {len(given_ids)} propriétaire(s) a/ont été effacé(s).'
+        return True, f'{len(given_ids)} propriétaire(s) a/ont été effacé(s).'
     
     def check_owner_values(self, dict_values, given_id=None, for_modif=None):
         """ this function verifies the Integrity of data """
@@ -189,9 +236,7 @@ class UtilsSheet():
                     owner_surname=dict_values['owner_surname'],
                     owner_sex=dict_values['owner_sex'],
                     phone=dict_values['phone'],
-                    mail=dict_values['mail'],
-                    mail_reminder=dict_values['mail_reminder'],
-                    tel_reminder=dict_values['tel_reminder'])
+                    mail=dict_values['mail'])
                 ow.save()
                 if return_owner: 
                     return owner

@@ -31,6 +31,7 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 class SheetForm(forms.Form):
     """form to add a new sheet """   
+
     caution = forms.IntegerField(required=True, label='caution', initial='100',
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 
             'title' : 'montant de la caution',
@@ -38,6 +39,9 @@ class SheetForm(forms.Form):
     chip = forms.CharField(required=False,  label='puce',
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : 'num de la puce',
             'placeholder' : "num de la puce"}))
+    color = forms.CharField(required=True, max_length=30, label='Couleur',
+        widget=forms.TextInput(attrs={ 'class' : 'w-10rem', 'title' : "couleur(s) de l'animal",
+            'placeholder' : "couleur(s)"}))
     date_of_adoption = forms.DateField(required=True, label="date d'adoption",
         widget=forms.DateInput(attrs={ 
             'placeholder' : "jj/mm/aaaa ",
@@ -65,13 +69,13 @@ class SheetForm(forms.Form):
     file = forms.CharField(required=False, label='dossier',
         widget=forms.TextInput(attrs={'class' : 'input-reduced',  'title' : "num du dossier",
             'placeholder' : "num du dossier"}))
-    is_neutered = forms.ChoiceField(required=True, 
-        widget=forms.RadioSelect(attrs={"class" : "lst-none pl-0 mb-0"}), 
+    is_neutered = forms.ChoiceField(widget=forms.RadioSelect(attrs={"class" : "li-oneline align-left lst-none pl-0 mb-0"}), 
         choices=(CHOICE_STERIL))
-    mail = forms.EmailField(required=True, max_length=30, label='mail',
+    select_owner= forms.CharField(required=False)
+    mail = forms.EmailField(required=False, max_length=30, label='mail',
         widget=forms.EmailInput(attrs={'class' : 'text-center', 'title' : 'mail' ,
             'placeholder' : "mail", 'name' : 'mail'}))
-    mail_reminder = forms.IntegerField(required=True, label='nb mail',initial='0', 
+    mail_reminder = forms.IntegerField(required=False, label='nb mail',initial='0', 
         widget=forms.NumberInput(attrs={ 'class' : 'input-very-reduced', 'title' : 'nb rappel mail' ,
             'placeholder' : "nb rappel mail",'min':0}))
     name = forms.CharField(required=True, label="Nom de l'animal", max_length=30, 
@@ -82,32 +86,29 @@ class SheetForm(forms.Form):
             "class":"w-10rem"}, choices=CHOICES_CAUTION))
     status = forms.CharField(required=False, max_length=200, 
         widget=forms.Textarea(attrs={ 'title' : "statut de la stérilisation",
-            'placeholder' : "statut de la stérilisation", 'cols':30, 'rows':3}))
-    owner_name = forms.CharField(required=True, label="prénom", max_length=30, 
+            'placeholder' : "statut de la stérilisation", 'cols':55, 'rows':2, 'class':'mb-3'}))
+    owner_name = forms.CharField(required=False, label="prénom", max_length=30, 
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "propriétaire" ,
             'placeholder' : "prénom proprio", 'name':"Prénom"}))
-    owner_surname = forms.CharField(required=True, label="nom", max_length=30,
+    owner_surname = forms.CharField(required=False, label="nom", max_length=30,
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "propriétaire" ,
             'placeholder' : "nom proprio", 'name':"Nom"}))
-    owner_sex = forms.ChoiceField(label="Sexe", required=True, 
+    owner_sex = forms.ChoiceField(label="Sexe", required=False, 
         widget=forms.RadioSelect(attrs={'class' : 'li-oneline very-center', 'name':"Sexe"}), choices=CHOICE_SEX)
     observation = forms.CharField(required=False, max_length=50, label='observation(s)',
         widget=forms.TextInput(attrs={ 'title' : "observation(s)",
             'placeholder' : "observation(s)"}))
-    color = forms.CharField(required=True, max_length=30, label='couleur',
-        widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "couleur(s) de l'animal",
-            'placeholder' : "couleur(s) de l'animal"}))
+    phone = forms.CharField(required=False, max_length=15, label='tel', 
+        widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "téléphone",'name':"Téléphone",
+            'placeholder' : "téléphone"}))
     race = forms.CharField(required=True, label="race", max_length=30,
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "race de l'animal" ,
             'placeholder' : "race de l'animal"}))
-    species = forms.ChoiceField(widget=forms.RadioSelect(attrs={"class" : "lst-none pl-0"}), choices=CHOICES)
+    species = forms.ChoiceField(widget=forms.Select(attrs={"class" : "w-10rem lst-none pl-0"}), choices=CHOICES)
     tatoo = forms.CharField(required=False, label='tatouage', 
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "num de tatouage" ,
             'placeholder' : "num de tatouage"}))
-    phone = forms.CharField(required=True, max_length=15, label='tel', 
-        widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "téléphone",'name':"Téléphone",
-            'placeholder' : "téléphone"}))
-    tel_reminder = forms.IntegerField(required=True, label='nb appel', initial='0', 
+    tel_reminder = forms.IntegerField(required=False, label='nb appel', initial='0', 
         widget=forms.NumberInput(attrs={ 'class' : 'input-very-reduced', 'title' : "nb rappel téléphonique",
             'placeholder' : "nb rappel tel",'min':0, "values":0}))
 
@@ -123,28 +124,9 @@ class SheetForm(forms.Form):
 
     def _handle_owner_class(self, dict_values):
         #already exists or namesake ? 
-        list_owner = dict_values['owner']
-        query = Owner.objects.filter(owner_name=list_owner[1], owner_surname=list_owner[2], phone=list_owner[4], mail=list_owner[5])
-        already_exists = (len(query) != 0)
-        print("_handle_owner_class, already_exists : ", already_exists)
-        if already_exists:
-            # print('Cet utilisateur existe déjà je récupère sa fiche.')
-            print('je retourne : True, ', query[0])
-            return True, query[0]
-        else:
-            # print("Création d'un nouvel utilisateur ...")
-            try: 
-                owner = Owner(*list_owner)
-                owner.save() #this creates id
-                return True, owner
-            except IntegrityError as ie: 
-                print("ici")
-                if "phone" in str(ie):
-                    return False , "Ce téléphone existe déjà dans la base ! Procédure annulée ..."
-                elif "mail" in str(ie):
-                    return False, "Ce mail existe déjà dans la base ! Procédure annulée ... "
-            except Exception as e: 
-                    return False, f"Procédure annulée > Voici le problème({e})"
+        owner = Owner.objects.get(id=dict_values["owner"])
+        print(">>>> ", owner)
+        return True, owner
             
     def _handle_animal_class(self, dict_values):
         #create and save animal classe
@@ -162,12 +144,11 @@ class SheetForm(forms.Form):
         """ returns dictionary of values to fill rows in tables """
         animal = ('name', 'date_of_birth', 'race', 'species', 'color', 'date_of_adoption', 'observation', 'caution', 'nature_caution')
         admin = ('file', 'chip', 'tatoo', 'is_neutered', 'date_of_neuter', 'futur_date_of_neuter', 'status')
-        owner = ('owner_name', 'owner_surname','owner_sex',  'phone', 'mail', 'tel_reminder', 'mail_reminder')
         dict_values=self.cleaned_data
-
+        print("00 >", dict_values['select_owner'])
         # first element have to stay None because it is for auto-id
         animal = [None] + [dict_values[elem] for elem in animal]
-        owner = [None]  + [dict_values[elem] for elem in owner]
+        owner = dict_values['select_owner']
         admin = [None]  + [dict_values[elem] for elem in admin]
 
         dict_values={
@@ -232,7 +213,8 @@ class SheetForm(forms.Form):
             pass
         except Exception as e:
             admin.delete()
-            return "erreur pour animal, effacement données admin", None
+            raise e
+            return "erreur pour owner, effacement données admin", None
         try:
             success3, output = self._handle_animal_class(dict_values)
             if success3:
@@ -270,7 +252,23 @@ class SheetForm(forms.Form):
             return error_msg, None 
 
 
-        
+class JustOwnerForm(forms.Form): 
+    owner_name = forms.CharField(required=True, label="Prénom", max_length=30, 
+        widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "propriétaire" ,
+            'name':"Prénom"}))
+    owner_surname = forms.CharField(required=True, label="Nom", max_length=30,
+        widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "propriétaire" ,
+            'name':"Nom"}))
+    owner_sex = forms.ChoiceField(label="Sexe", required=True, 
+        widget=forms.RadioSelect(attrs={'class' : 'li-oneline very-center', 'name':"Sexe"}), 
+        choices=CHOICE_SEX)
+    mail = forms.EmailField(required=True, max_length=30, label='Mail',
+            widget=forms.EmailInput(attrs={'class' : 'text-center', 'title' : 'mail' ,
+                'name' : 'mail'}))
+    phone = forms.CharField(required=True, max_length=15, label='Tel', 
+            widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 
+                'title' : "téléphone",'name':"Téléphone"}))
+
 class ContactForm(ModelForm):
 
     class Meta:

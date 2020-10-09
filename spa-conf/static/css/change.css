@@ -1,15 +1,40 @@
 /* change.css */
+html{
+	font-family: 'Amatic SC', serif !important; 
+	height: 100%;
+}
 
+body{
+	height: 100%;
+}
 /* main */
+	.alinea { 
+  		text-indent: 2rem;
+  		padding-left: 0.5rem;
+  		}
 	.bg-green{ 
 		background-color: green;
 		}
+	.bg-blue{
+		background-color: #00B4B5;
+	}
+	.bg-dark-blue{
+		background-color: #444E67;
+	}
 	.bg-tomato{
 		background-color: tomato;
 	}
 	.bg-yellow{ 
 		background-color: yellow;
 		}
+	.bg-grey{
+		background-color: #ececec; 
+	}
+	.catline{
+		background: url('../img/titre-chat.png') no-repeat bottom center;
+		height: 1rem; 
+		padding : 1rem 0;
+	}
 	.text-blue{
 		color: blue; 
 	}
@@ -42,8 +67,18 @@
 	}
 	.no-a:hover{
 		text-decoration : none;}
-	.scrolable{
+	.section-scrolable{
 		overflow: scroll;
+		max-height: 33rem; 
+	}
+	.right-part{
+		height: 36rem;
+	}
+	.right-part-bottom{
+		height: 92%;
+	}
+	.right-part-top{
+		height: 8%;
 	}
 	.very-center{
 		display: flex; 
@@ -63,14 +98,10 @@
 
 /* dashboard */
 	.right-part{
-		background: blue;
 		width:  80%;	
 	}
 	.top-right-part{
 		background: green;
-	}
-	article{
-		background-color: yellow;
 	}
 	#graph{
 		height: 20rem;
@@ -81,7 +112,7 @@
 	/*left part*/
 	.left-part{
 		width:  20%;	
-		background: red;	
+		border-right : 2px #cccccc solid;	
 	}
 	.photo > img{
 		width:  10rem;
@@ -93,9 +124,11 @@
 		background-color: white;
 	}
 	.button-verti:hover{
-		border : 0.2rem black dashed;
+		border : 0.1rem white solid;
+		background-color: #00B4B5;
 		cursor: pointer; 
 		font-weight: bold; 
+		color: white;
 	}
 
 /* connexion*/ 
@@ -116,7 +149,7 @@
 /* sheet */
 
 	.row1{
-		background-color: gold; }
+		background-color: red; }
 	
 	.row2{
 		background-color: grey; }
@@ -155,18 +188,22 @@
 		display: inline-block;
 		width : 8rem;
 		background-color: #fff;}
-/* owner_page */
-	#submit{
-		width: 7rem;}
-	.btn-delete{
-		background-color: red;
-	    border-color: red;
-	    height: 2.4rem;
-	    border-radius: 5px;
-	    width: 7rem;
-	    color:white;
-	}
+	/* owner_page */
+		#submit{
+			width: 7rem;}
+		.btn-delete{
+			background-color: red;
+		    border-color: red;
+		    height: 2.4rem;
+		    border-radius: 5px;
+		    width: 7rem;
+		    color:white;
+		}
 /* mail */ 
+
+	.mail-index tr td{
+		text-align: center; 
+	}
 	.mail-but{
 		height: 5rem; 
 	}

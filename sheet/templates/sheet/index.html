@@ -1,57 +1,57 @@
 {% extends 'core/base.html' %}
 {% block content %}
 <section>
-    <h2 class="mt-5 pl-5">Page Fiches</h2>
-    <article class="mt-5 container">
+    <h2 id="title" class="pl-5 pt-2 pb-2">Gestion Fiches ANIMAUX</h2>
+    <article class="mt-3 mb-3 container">
         <div class="row">
             <div class="col-1"></div>
-            {% for elem in button_value %} <!-- affiche les boutons -->
-            <div class="col-2 bg-primary text-center">
-                <button id="{{elem.id}}" onclick="{{elem.function}}">{{elem.name}}</button>
+            <div class="col-4  text-left">
+                <button id="display"  class="bg-tomato text-white" onclick=display()>Afficher Propriétaires</button>
+            </div>
+            {% for elem in button_value %}
+            <div class="col-2 text-center">
+                <button id="{{elem.id}}" class='crud-sheet' onclick="{{elem.function}}">{{elem.name}}</button>
             </div>
             {% endfor %}
             <div class="col-1"></div>
-            <div class="col-12 mb-5 text-center">
-                <button>imprimer</button>
-            </div>
+        </div>
+        <div class="mt-3 scrolable ">
             <form id="my_form" action="" method="" name="my_form">
                 {% csrf_token %} 
                 <table id="anim_table" class=" d-flex">
-                    <tr class="col-12 text-center">
-                        <td>&nbsp;</td>
+                    <tr class=" col-12 text-center first-line">
+                        <td class="col-name">&nbsp;</td>
                         {% for col in anim_cols %}
-                        <td>{{col}}</td>
+                        <td class="col-name"><strong>{{col}}</strong></td>
                         {% endfor %}
                     </tr>
                     {% for animal in animals|dictsort:"name" %}
-                    <tr class="col-12 text-center {% cycle 'row1' 'row2' %}">
+                    <tr class=" text-center {% cycle 'row1' 'row2' %}">
                         <!-- nom sexe/espece status propriétaire num-dossier num-tatoo num-puce -->
                         <td><input type="checkbox" id='{{animal.id}}' name='checkbox' value={{animal.id}}></td>
                         <td>{{animal.name}}</a></td>
-                        <td>{{animal.admin_data.neuter_status}}</td>
+                        <td class="fitwidth">{{animal.admin_data.neuter_status}}</td>
                         <td>{{animal.str_species}}</td>
                         <td>{{animal.race}}</td>
-                        <td>{{animal.owner}} </td>
+                        <td class="fitwidth">{{animal.owner}} </td>
                         <td>{{animal.admin_data.file}}</td>
-                        <td>{{animal.admin_data.tatoo}}</td>
-                        <td>{{animal.admin_data.chip}}</td> 
 
                     </tr>
                     {% endfor %}
                 </table>
                 <table id="owner_table" class=" d-none">
                     <tr class="col-12 text-center">
-                        <td>&nbsp;</td>
-                        <td>Identifiant</td>
-                        <td>Nom</td>
-                        <td>Prénom</td>
-                        <td>Nombre d'animaux</td>
-                        <td>Caution</td>
-                        <td>Tel</td>
-                        <td>Mail</td>
-                        <td>Nb appel</td>
-                        <td>Nb mail</td>
-                        <td>Historique</td>
+                        <td class="col-name"><strong>&nbsp;</strong></td>
+                        <td class="col-name"><strong>Identifiant</strong></td>
+                        <td class="col-name"><strong>Nom</strong></td>
+                        <td class="col-name"><strong>Prénom</strong></td>
+                        <td class="col-name"><strong>Nombre d'animaux</strong></td>
+                        <td class="col-name"><strong>Caution</strong></td>
+                        <td class="col-name"><strong>Tel</strong></td>
+                        <td class="col-name"><strong>Mail</strong></td>
+                        <td class="col-name"><strong>Nb appel</strong></td>
+                        <td class="col-name"><strong>Nb mail</strong></td>
+                        <td class="col-name"><strong>Historique</strong></td>
                     </tr>
                     {% for owner in owners|dictsort:"owner_surname" %}
                     <tr class="col-12 text-center {% cycle 'row1' 'row2' %}">
@@ -62,11 +62,12 @@
                         <td id="id_nb_{{owner.id}}">{{owner.number_animal}}</a></td>
                         <td>{{owner.sum_caution}}€</td>
                         <td>{{owner.phone}}</td>
-                        <td>{{owner.mail}} </td>
+                        <td class="fitwidth"><a href = "mailto:{{owner.mail}}">{{owner.mail}}</a></td>
                         <td>{{owner.tel_reminder}}</td>
                         <td>{{owner.mail_reminder}}</td>                  
-                        <td class="bg-white border-blue">
-                            <a href="{% url 'sheet:contact_owner' owner.id%}">gestion des contact</td></a>                 
+                        <td class="">
+                            <a href="{% url 'sheet:contact_owner' owner.id%}">gestion des contact</a>
+                        </td>                 
                     </tr>
                     {% endfor %}
                 </table>
@@ -77,12 +78,10 @@
 {% load static %}
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 <script type="text/javascript" src='{% static "sheet/js/utils.js" %}'> </script>
-<script type="text/javascript">
-    //**********Modification boostrap **********    
-    let displayButt = document.getElementById('display')
-    displayButt.parentElement.classList.replace('col-2', 'col-4')
+<script type="text/javascript">  
+    
     const form = document.getElementById('my_form');
-
+    const displayButt = document.getElementById('display')
     const UncheckAll = function(){
         //this function unchecks all the checkbox visible and invisible
         for (tr of allTr){
@@ -230,23 +229,35 @@
         let addBut = document.getElementById('ajouter')
         let alterBut = document.getElementById('modifier')
         let removeBut = document.getElementById('supprimer')
+        let title = document.getElementById('title')
         UncheckAll()
 
 
         if (displayButt.textContent == "Afficher Propriétaires"){
             document.getElementById('anim_table').classList.replace('d-flex', 'd-none');
             document.getElementById('owner_table').classList.replace('d-none', 'd-flex');
-            displayButt.innerHTML = "Afficher <br/>Animaux"
-            addBut.innerHTML = "Ajouter Propriétaire"  
-            alterBut.innerHTML = "Modifier Propriétaire"  
-            removeBut.innerHTML = "Supprimer Propriétaire(s)"  
+            displayButt.innerHTML = "Afficher Animaux"
+            addBut.innerHTML = "Ajouter "  
+            alterBut.innerHTML = "Modifier "  
+            removeBut.innerHTML = "Supprimer "  
+            displayButt.id="display2"
+            title.innerHTML="Gestion Fiches PROPRIETAIRES"
+            // addBut.classList.replace('crud-sheet', 'crud-sheet2') 
+            // alterBut.classList.replace("crud-sheet", "crud-sheet2")  
+            // removeBut.classList.replace("crud-sheet", "crud-sheet2")   
         }else{
             document.getElementById('owner_table').classList.replace('d-flex', 'd-none');
             document.getElementById('anim_table').classList.replace('d-none', 'd-flex');
             displayButt.textContent = "Afficher Propriétaires"
-            addBut.innerHTML = "Ajouter Animaux"  
-            alterBut.innerHTML = "Modifier Animaux"  
-            removeBut.innerHTML = "Supprimer Animal/Animaux"
+            addBut.innerHTML = "Ajouter"  
+            alterBut.innerHTML = "Modifier"  
+            removeBut.innerHTML = "Supprimer"
+            displayButt.id="display"
+            title.innerHTML="Gestion Fiches ANIMAUX"
+            // addBut.classList.replace('crud-sheet2', 'crud-sheet') 
+            // alterBut.classList.replace("crud-sheet2", "crud-sheet")  
+            // removeBut.classList.replace("crud-sheet2", "crud-sheet")   
+            
         }
     }
     const displayOwner = function(){

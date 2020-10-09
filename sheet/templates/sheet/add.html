@@ -1,88 +1,83 @@
 {% extends 'core/base.html' %}
 {% block content %}
+{% load static%}
 <section>
-	<h2 class="mt-5 mb-2 pl-5">Page Ajout Fiche</h2>
-	<article class=" bg-blue">
+	<h2 class="mt-3 mb-4 pl-5">Page Ajout Fiche</h2>
+	<article class="">
 		<form class="sheet" action="" method="post" enctype="multipart/form-data">
 			{% csrf_token %}
-			<div class="container">
+			<div class="container border-white">
 				<div class="row">
-					<div class="col-8 bg-yellow container">
-						<div class="row">
-							<div class="col-3 text-center">{{form.name.label}} <br>{{form.name}}</div>
-							<div class="col-3 text-center">{{form.date_of_birth.label}}<br>{{form.date_of_birth}}</div>
-							<div class="col-3 text-center">{{form.date_of_adoption.label}}<br>{{form.date_of_adoption}}</div>
-							<div class="col-3 text-center">{{form.date_of_neuter.label}}<br>{{form.date_of_neuter}}</div>
-						</div>
-						<div class="row">
-							<div class="col-8" >
-								<div class="row">
-									<div class="col-5 bg-primary"> {{form.species}}</div>
-									<div class="col-7 bg-primary" id='inputDateZone' > {{form.is_neutered}}</div>
+					<div class="col-5 container">
+						<div class="row part-add">
+							<h4 class="mt-3 mb-4 pl-5">Animal</h4>
+							<div class="col-12 d-flex">
+								<div class="col-6">
+									<p>{{form.name.label}} : {{form.name}}</p>
+								</div>
+								<div class="col-6">
+									<p>{{form.color.label}} : {{form.color}}</p>
 								</div>
 							</div>
-							<div class="col-4 bg-secondary text-center">
-								<p>{{form.race.label}} {{form.race}}</p>
-								<p>{{form.color.label}}  {{form.color}}</p>
-								<p>{{form.observation.label}} {{form.observation}}</p>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-4 text-center">{{form.file.label}}<br/> {{form.file}}</div>
-							<div class="col-4 text-center">{{form.tatoo.label}}<br/> {{form.tatoo}}</div>
-							<div class="col-4 text-center">{{form.chip.label}}<br/> {{form.chip}}</div>
-						</div>
-						<div class="row">
-							<div class="col-3 text-center">{{form.caution.label}}<br/> {{form.caution}}</div>
-							<div class="col-3 text-center">{{form.nature_caution.label}}<br/> {{form.nature_caution}}</div>
-							<div class="col-3 text-center">{{form.mail_reminder.label}}<br/> {{form.mail_reminder}}</div>
-							<div class="col-3 text-center">{{form.tel_reminder.label}}<br/> {{form.tel_reminder}}</div>
-						</div>
-						<div class=" row d-flex new-former">
-							<div class="col-1"></div>
-							<div class="col-4 new-owner d-flex very-center curs-pointer" onclick="dispNewOwn()">
-								Nouveau propriétaire
-							</div>
-							<div class="col-2"></div>
-
-							<div class="col-4 former-owner d-flex very-center curs-pointer" onclick="CreateSelectOwners()">
-								Ancien propriétaire
-							</div>
-							<div class="col-1"></div>
-
-						</div>
-						<div class="row owner_input d-none">
-							<div class="col-4 text-center">{{form.owner_name.label}}<br/> {{form.owner_name}}</div>
-							<div class="col-4 text-center">{{form.owner_surname.label}}<br/> {{form.owner_surname}}</div>
-							<div class="col-4 text-center">{{form.owner_sex}}</div>
-						</div>
-						<div class="row owner_input d-none">
-							<div class="col-1"></div>
-							<div class="col-4 text-center">{{form.phone.label}}<br/> {{form.phone}}</div>
-							<div class="col-4 mb-2 text-center">{{form.mail.label}}<br/> {{form.mail}}</div>
-							<div class="col-3 mt-4 text-center ">
-								<button class="curs-pointer bg-refresh" onclick="CleanOwnerInput(event)">retour</button>
-							</div>		
-						</div>
-					</div>			
-					<div class="col-4 bg-green">
-						<div class="container">
-							<div class="row">
-								<div class="col-12 text-center">{{form.status}}</div>
-								<div class="col-8"></div>
-								<div class="col-4">
-									<input id="submit" type="submit" class="btn btn-primary big-btn" value="Enregistrer"> 
-									<p id='verif'></p>
+							<div class="col-12 d-flex">
+								<div class="col-6">
+									<p>Espèce :<br> {{form.species}}</p>
 								</div>
-								<div class="col-12">
-									{% if error %}
-									<p> {{error}}</p>
-									{% endif %}
+								<div class="col-6">
+									<p>Race : {{form.race}}</p>
 								</div>
+							</div>
+							<div class="col-12">
+								<hr align=center size=4 width="50%" class="add-hr"/>
+							</div>
+							<div class="col-6">
+								<p class="text-center">Date de naissance : {{form.date_of_birth}}</p>
+							</div>
+							<div class="col-6">
+								<p class="text-center">Date d'adoption : {{form.date_of_adoption}}</p>
+							</div>
+							<div class="col-12">
+								<hr align=center size=4 width="50%" class="add-hr"/>
+							</div>
+							<div class="col-6">
+								<p class="text-center">Caution : {{form.caution}}</p>
+							</div>
+							<div class="col-6">
+								<p class="text-center">Nature : {{form.nature_caution}}</p>
 							</div>
 						</div>
 					</div>
-				</div>			
+					<div class="col-7 container">
+						<div class="row part-add">
+							<h4 class="mt-3 mb-4 pl-5">Admin</h4>
+							<div class="col-12 d-flex">
+								<div class="col-4">Dossier : {{form.file}}</div>
+								<div class="col-4">Puce : {{form.chip}}</div>
+								<div class="col-4">Tatouage : {{form.tatoo}}</div>
+							</div>
+							<div class="col-12">
+								<hr align=center size=4 width="50%" class="add-hr"/>
+							</div>
+							<div class="col-12">
+								<div class="col-12 pl-0">{{form.is_neutered}}</div>
+								<div class="col-12">{{form.status}}</div>
+							</div>
+						</div>
+						<div class="row part-add">
+							<h4 class="mt-3 mb-2 pl-5">Propriétaire</h4>
+							<div class="col-12 d-flex pt-5">
+								<div class="col-9 d-flex very-center curs-pointer  ">
+									{{form.select_owner}} <p class=" pt-3 ml-5"><img class="icon-link" src="{% static 'img/eye.png'%}" onclick="GotoOwner()" alt="eye"></p>
+								</div>
+
+								<div class="col-3 d-flex very-center curs-pointer" >
+									<input id="save" type="submit" class="btn btn-primary big-btn" value="Enregistrer"> 
+								</div>
+							</div>
+							<p id="hint"></p>
+						</div>
+					</div>
+				</div>
 			</div>
 		</form>
 	</article>
@@ -101,14 +96,38 @@
 
 	let is_neutered_button = document.getElementById("id_is_neutered_0")
 	is_neutered_button.checked = true
-	let species0_button = document.getElementById('id_species_0')
-	species0_button.checked = true
-	let owner_sex_button = document.getElementById("id_owner_sex_0")
-	owner_sex_button.checked = true
+	// let owner_sex_button = document.getElementById("id_owner_sex_0")
+	// owner_sex_button.checked = true
 	let divNF = document.getElementsByClassName("new-former")[0]
 	let ownDivs = document.getElementsByClassName('owner_input') //div for input owner
 	let divFormer = document.getElementsByClassName("former-owner")[0] //div for button Ancien Propériétaire
 	let divNew = document.getElementsByClassName("new-owner")[0] //div for button Nouveau Propériétaire
+
+	const GotoOwner = function(){
+		//this function gathers the value of select and open a new window according to this id_value"""
+		select_val = document.getElementById('id_is_new_owner').value
+		const width  = document.body.clientWidth;
+		const height = document.body.clientHeight;
+		let wanted_width = (width * 35)/100
+		let wanted_height = (height * 70)/100
+
+		if (select_val == "0"){
+			url_open = "{% url 'sheet:add_owner_open'%}"
+		}
+		{% for owner in owners %}
+		if (select_val == {{owner.id}}){
+			wanted_width = (width * 65)/100
+			wanted_height = (height * 80)/100
+			url_open = "{% url 'sheet:alter_owner_open' owner.id%}"
+
+		}
+		{% endfor %}
+		document.getElementById('hint').innerHTML="Appuyer sur F5 après toutes sortes de changements"
+		console.log(wanted_width, wanted_height)
+		let spec =  "toolbar=yes,scrollbars=yes,resizable=yes,top=50,left=200,width="
+		spec += wanted_width+",height="+wanted_height
+		window.open(url_open, "_blank", spec);
+	}
 
 	//*** auto fill with today date 
 	const today = function(elem) {
@@ -116,36 +135,42 @@
 		let month = today.getMonth()+1
 		if (month <= 9) {
 			month = '0' + String(month)}
-		let date = today.getDate()+'/'+month+'/'+today.getFullYear();
-		let input = elem.nextElementSibling.nextElementSibling
-		input.value = date
-	}
+			let date = today.getDate()+'/'+month+'/'+today.getFullYear();
+			let input = elem.nextElementSibling.nextElementSibling
+			input.value = date
+		}
 
 	//create an input date for the future date of neuter
-	const appearNewInput = function(){
-		document.getElementById('id_is_neutered_2')
-		let divDate = document.createElement("div");
-		divDate.innerHTML = '{{form.futur_date_of_neuter.label}} &nbsp {{form.futur_date_of_neuter}}'
-		divDate.classList.add("d-none")
-		divDate.id = "divDate"
-		document.getElementById('inputDateZone').appendChild(divDate);
+	const appearNewInput = function(bo){
+		willBe = document.getElementById('id_is_neutered_2')
+		if (bo){
+			willBe.checked = true
+			willBe.parentNode.innerHTML = '<input id="id_is_neutered_2" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="2" checked> sera stérilisable le {{form.futur_date_of_neuter}}.</input>'
+		}else{
+			willBe.parentNode.innerHTML = '<input id="id_is_neutered_2" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="2" > sera stérilisable </input>'
+		}
+		// let divDate = document.createElement("div");
+		// divDate.innerHTML = '{{form.futur_date_of_neuter.label}} &nbsp {{form.futur_date_of_neuter}}'
+		// divDate.classList.add("d-none")
+		// divDate.id = "divDate"
+		// document.getElementById('inputDateZone').appendChild(divDate);
 
 	}
 	const CreateSelectOwners = function(){
 		owners = []
 		{% for owner in owners%}
-			owners.push({
-				'name' : '{{owner}}', 'id' : '{{owner.id}}'
-			})
+		owners.push({
+			'name' : '{{owner}}', 'id' : '{{owner.id}}'
+		})
 		{% endfor%}
 		const whatToDo = function(data){
 			dispNewOwn()
-    		fillBlank(data)
+			fillBlank(data)
 		}
 		SelectOwners(owners, '{% url "sheet:add"%}', whatToDo)
 	}
 	const GiveStartValue = function(){
-		document.getElementById("id_caution").value = 0
+		document.getElementById("id_caution").value = 100
 	}
 	const getInputDate = function(){
 		const allInput = document.getElementsByTagName('input')
@@ -163,38 +188,37 @@
 	//*** event 
 	document.getElementById("id_is_neutered").addEventListener('click', function(e){
 		if(document.getElementById('id_is_neutered_2').checked){
-			document.getElementById('divDate').classList.replace('d-none', "d-flex")
+			appearNewInput(true)
 		}else{
-			document.getElementById('divDate').classList.replace('d-flex', "d-none")
+			appearNewInput(false)
 		}
 	})
-	document.getElementById('submit').addEventListener('click', function(event){
-		//checks data consistency
-		IsNeutered = document.getElementById('id_is_neutered_0').checked
-		willBeNeuterable = document.getElementById('id_is_neutered_2').checked
-		aniHasCaution = document.getElementById('id_caution').value
-		console.log(Number(aniHasCaution) < 1)
-		if (IsNeutered){
-			alert("Si l'animal est déjà stéril, ne pas l'enregistrer.")
-			event.preventDefault()
-		}else{
-			console.log("willBeNeuterable: ", willBeNeuterable)
-			if (willBeNeuterable){
-				if (document.getElementById('id_futur_date_of_neuter').value == ""){
-					alert("Si l'animal n'est pas encore stéril, il faut indiquer quand il le sera.")
-					event.preventDefault()
-					return
-				}
-			}
-			if (aniHasCaution == "" || Number(aniHasCaution) < 1) {
-				alert("Si l'animal n'est pas stéril, il faut une caution.")
-				event.preventDefault()
-			}
-		}
-	});
+	// document.getElementById('submit').addEventListener('click', function(event){
+	// 	//checks data consistency
+	// 	IsNeutered = document.getElementById('id_is_neutered_0').checked
+	// 	willBeNeuterable = document.getElementById('id_is_neutered_2').checked
+	// 	aniHasCaution = document.getElementById('id_caution').value
+	// 	console.log(Number(aniHasCaution) < 1)
+	// 	if (IsNeutered){
+	// 		alert("Si l'animal est déjà stéril, ne pas l'enregistrer.")
+	// 		event.preventDefault()
+	// 	}else{
+	// 		console.log("willBeNeuterable: ", willBeNeuterable)
+	// 		if (willBeNeuterable){
+	// 			if (document.getElementById('id_futur_date_of_neuter').value == ""){
+	// 				alert("Si l'animal n'est pas encore stéril, il faut indiquer quand il le sera.")
+	// 				event.preventDefault()
+	// 				return
+	// 			}
+	// 		}
+	// 		if (aniHasCaution == "" || Number(aniHasCaution) < 1) {
+	// 			alert("Si l'animal n'est pas stéril, il faut une caution.")
+	// 			event.preventDefault()
+	// 		}
+	// 	}
+	// });
 	const main = function(){
 		GiveStartValue()
-		appearNewInput()
 	}
 	main()
 </script>

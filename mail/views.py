@@ -17,7 +17,6 @@ class MailView(View):
         mails = [mail for mail in mails]
         context={
             'button_value':[
-        {'name' : 'imprimer',  'id' :'print', 'function' : 'print()'},
         {'name' : 'ajouter',    'id' : 'add', 'function' : 'Add()'}, 
         {'name' : 'modifier',   'id' : 'alter', 'function' : 'Alter()'},
         {'name' : 'supprimer',  'id' : 'remove', 'function' : 'Remove()'}],

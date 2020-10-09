@@ -1,19 +1,19 @@
 {% extends 'core/base.html' %}
 {% block content %}
-<section class="h-100">
-	<h2 class="mt-5 pl-5">Bienvenu {{name}} sur le dashboard</h2>
-	<article class="h-100 p-3 container ">
-		{% csrf_token %} 
-		<div class="row">
-			<div id='graph' class="graph col-9 bg-primary text-center"></div>
-			<div class="col-3  container">
-				<div class="h-100 bg-primary p-2">
-					<div onclick=owner()  class="bg-secondary mt-3 h-25 d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) devant stériliser">Propriétaires <br> avec obligations : {{nb_owners}}</div>
-					<div onclick=contacted() class="bg-secondary mt-3 h-25 d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) à contacter"> Propriétaires <br> à contacter : {{nb_to_contact}} </div>
-					<div onclick=to_contact() class="bg-secondary mt-3 h-25 d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) contacté(s)">Propriétaires <br> contactés : {{nb_contacted}}</div>
+<section class="h-100 ">
+	<h2 class="mt-3 mb-3 pl-3">
+        Tableau De Bord
+    </h2>
+	<article class="h-100 p-3 container">
+		<div class="h-100 row">
+			<div id='graph' class="h-100 graph col-9 text-center "></div>
+			<div class="col-3 container-dash-3-buttons bg-blue-trans">
+				<div class=" h-100 p-2 dash-3-buttons">
+					<div onclick=owner()  class="mt-3  d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) devant stériliser">Propriétaires <br> avec obligations : {{nb_owners}}</div>
+					<div onclick=contacted() class="mt-3  d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) à contacter"> Propriétaires <br> à contacter : {{nb_to_contact}} </div>
+					<div onclick=to_contact() class="mt-3  d-flex align-items-center justify-content-center curs-pointer" title="propriétaire(s) contacté(s)">Propriétaires <br> contactés : {{nb_contacted}}</div>
 				</div>
 			</div>
-			<div class="col-1"></div>
 		</div>
 		<p>
 
@@ -26,13 +26,14 @@
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script type="text/javascript" src='{% static "mydashboard/js/graph.js" %}'> </script>
 <script type="text/javascript">
-	// const container = 'graph';
+	const container = 'graph';
 	// const datas = {
 	// 	'contacted' :{{datas.cont}},
 	// 	'to contact' : {{datas.toCont}},
 	// 	'date' : {{datas.date|safe}},
 	// };
 	// CreateChart(container, datas);
+	CreateChart(container);
 
 	const owner = function(){
 		//this function sends user to sheet/index.html

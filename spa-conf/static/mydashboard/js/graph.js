@@ -1,9 +1,10 @@
 //123
-let CreateChart = function(container, datas){
-    if ([typeof(container),typeof(datas)] == ['string', 'object']){
-        console.log('graph.js : réception de données au mauvais format')
-    }else{
-        console.log('graph.js : réception de données au bon format')}
+// let CreateChart = function(container, datas){
+let CreateChart = function(container){
+    // if ([typeof(container),typeof(datas)] == ['string', 'object']){
+    //     console.log('graph.js : réception de données au mauvais format')
+    // }else{
+    //     console.log('graph.js : réception de données au bon format')}
     var myChart = Highcharts.chart(container, {
         chart: {
             type: 'column', 
@@ -49,11 +50,12 @@ let CreateChart = function(container, datas){
     series: [{
 
         name: 'Contactés',
-        data: datas['contacted'],
+        // data: datas['contacted'],
+        data: ['5', '15', '17', '22']
         color : '#00b4b5',
     }, {
         name: 'A contacté',
-        data: datas['to contact'],
+        data: ['25', '25', '27', '27']
         color : '#555555'
     }]
     });

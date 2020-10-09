@@ -16,22 +16,17 @@
 
 </head>
 <body class="d-flex">
-	<div class="left-part">
+	<div class="left-part bg-grey">
 		{% include "core/nav.html" %}
 	</div>
 	
-	<div class="right-part">
-		<div class="top-right-part">
+	<div class="right-part bg-grey">
+		<div class="right-part-top mt-2">
 			{% include "core/search.html" %}
 		</div>
-		<div class="bottom-right-part">
+		<div class="right-part-bottom ">
 		{% block content %}{% endblock %}
 		</div>
 	</div>
-	<script>
-		var height=document.getElementsByClassName('right-part')[0].offsetHeight;
-		var height2=document.getElementsByClassName('top-right-part')[0].offsetHeight;
-		document.getElementsByClassName('bottom-right-part')[0].style.height = String(((height-height2)*82)/100)+'px';
-	</script>
 </body>
 </html>

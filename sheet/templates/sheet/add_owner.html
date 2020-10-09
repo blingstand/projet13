@@ -1,43 +1,33 @@
 {% extends 'core/base.html' %}
 {% block content %}
 <section>
-	<p class="curs-pointer" onclick=BackToIndex()>Retour Index</p>
-	<h2 class="mt-5 mb-5 pl-5">Page Ajout Nouvelle Fiche Propriétaire</h2>
-	<article class=" bg-blue">
+	<p class="curs-pointer back-button" onclick=BackToIndex()>Retour Index</p>
+	<h2 class="mt-5 mb-5 pl-5">Page Nouveau Propriétaire</h2>
+	<article class=" bg-grey pt-5 pb-5">
 		<form id='form' class="sheet" action="{% url 'sheet:add_owner'%}" method="post" enctype="multipart/form-data">
 			{% csrf_token %}
 			<div class="container">
 				<div class="row">
-					<div class="col-8 bg-yellow container">
-						<div class="row owner_input d-flex">
-							<div class="col-4 text-center">{{form.owner_name.label}}<br/> {{form.owner_name}}</div>
-							<div class="col-4 text-center">{{form.owner_surname.label}}<br/> {{form.owner_surname}}</div>
-							<div class="col-4 text-center very-center">{{form.owner_sex}}</div>
+					<div class="col-2"></div>
+					<div class="col-8 bg-blue-trans container">
+						<div class="row owner_input d-flex mt-3 mb-3">
+							{% for field in form %}
+							<div class="col-2"></div>
+							<div class="col-2 text-center">{{field.label}}</div>
+							<div class="col-6 text-center own_input">{{field}}</div>
+							<div class="col-2"></div>
+							{% endfor %}
 						</div>
-						<div class="row owner_input">
-							<div class="col-6 text-center">{{form.mail_reminder.label}}<br/> {{form.mail_reminder}}</div>
-							<div class="col-6 text-center">{{form.tel_reminder.label}}<br/> {{form.tel_reminder}}</div>
-						</div>
-						<div class="row owner_input d-flex">
-							<div class="col-1"></div>
-							<div class="col-5 text-center"><p>{{form.phone.label}}</p>{{form.phone}}</div>
-							<div class="col-5 mb-2 text-center"><p>{{form.mail.label}}</p> {{form.mail}}</div>	
-							<div class="col-1"></div>
-						</div>
-						<div class=" row d-flex new-former">
-							<!-- <div class="col-1"></div> -->
-							<div class="col-3"></div>
-							<div class="col-6 new-owner  very-center curs-pointer" onclick="dispNewOwn()">
-								Tout effacer
-							</div>
-							<div class="col-3"></div>
-
-						</div>
-					</div>			
-					<div class="col-4 bg-green d-flex align-items-center">
+					</div>
+					<div class="col-2"></div>
+					<div class="col-2"></div>
+					<div class="col-8  d-flex align-items-center">
 						<div class="container">
-							<div class="row">
-								<div class="col-12 very-center">
+							<div class="row pt-3">
+								<div  class="col-6 very-center curs-pointer" >
+									<button id="delete-all" class="btn big-btn" onclick="dispNewOwn()">Tout effacer</button>
+								</div>
+								<div class="col-6 very-center">
 									<input id="save" type="submit" class="btn btn-primary big-btn" value="Enregistrer"> 
 								</div>
 								<div class="col-12 very-center">
@@ -46,6 +36,7 @@
 							</div>
 						</div>
 					</div>
+					<div class="col-2"></div>
 				</div>			
 			</div>
 		</form>
@@ -68,6 +59,7 @@
 			window.location.href = "{% url 'sheet:index' own=1%}"
 			// window.location.href = window.location.href; 
 		}
+
 
 		const BeforeSubmit = function(){
 			document.getElementById('save').addEventListener('click', function(event){
