@@ -6,17 +6,23 @@ from django.db.utils import IntegrityError
 from .models import *
 
 CHOICES = (
-    ("1", "à la création de la fiche"),
-    ("2", "quand je modifie la valeur de la caution"), 
-    ("3", "à la suppression d'une fiche"),
-    ("4", "quand l'animal a plus de"),
-    ("5", "à cette date : jj/mm/aaaa"))
+    ("1", "à la création de la fiche,"),
+    ("2", "quand je modifie la valeur de la caution,"), 
+    ("3", "à la suppression d'une fiche,"),
+    ("4", "toutes les deux semaines,"),
+    ("5", "quand l'animal a plus de"),
+    ("6", "à cette date : jj/mm/aaaa"))
 
 class SettingsMail(forms.Form):
     """form to add a new mail rule"""
-    frequency = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
-    age = forms.IntegerField(required=False)
-    date = forms.DateField(required=False, widget=forms.DateInput)
+    frequency = forms.ChoiceField(widget=forms.RadioSelect(attrs={"class":"lst-none"}), choices=CHOICES)
+    age = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={'placeholder': 'nb mois', \
+        'class':"w-10rem"}))
+    date = forms.DateField(required=False,
+        widget=forms.DateInput(attrs={ 
+            'type' : 'date',
+            "class":"w-10rem", 
+            'title':"date d'envoi (jj/mm/aaa)"}))
 
 class ContentMail(forms.Form):
     """form to add a new mail content"""
@@ -28,8 +34,9 @@ class ContentMail(forms.Form):
             'placeholder' : "objet "}))
     plain_text = forms.CharField(max_length=2000, label="contenu",
         widget=forms.Textarea(attrs={ 
-            'id':'body_mail',
-            'class' : "w-100 blank pl-3 pr-3",
+            'id':'plain_text',
+            'class' : "w-100 blank p-3 text-justify",
+            'rows': 12,
             'placeholder' : "contenu du mail, pensez à utiliser les touches sur les côtés"}))
 
     

@@ -56,21 +56,33 @@ class ContentView(View):
         print('get', mail_id)
         if mail_id != 0: 
             mail = ut.get_mail_from_id(mail_id)
+            values = {
+            "title" : mail.title,
+            "resume" : mail.resume,
+            "plain_text" : mail.modified_text,
+            }
+            form = ContentMail(initial = values)
             print("avant ut.modify_text")
             print(mail.full_text)
-            context["mail"] = mail 
+            context = {
+            'form' : form, "mail": mail }
         return render(request, 'mail/content.html', context)
 
     def post(self, request, mail_id=0, action=None):
         """ this function deals with the datas from the form"""
         form = ContentMail(request.POST)
         dict_values = request.POST.dict()
-        print("- - - - - ")
+        print("- - - - - datas ")
         print(dict_values)
         print(mail_id, action)
         print("- - - - - ")
         # if dict_values['checkIntegrity'] == '1': 
-
+        if action == 'check_integrity':
+            #check if title is unique
+            queryset = Mail.objects.filter(title=dict_values['title'])
+            if len(queryset) >= 1:
+                return JsonResponse({"data" : "1"}, safe=False) 
+            return JsonResponse({"data" : "0"}, safe=False) 
         #Django form ...
         if mail_id != 0:
             #with mail_id -> mail exists -> alter db 
@@ -88,12 +100,7 @@ class ContentView(View):
             #AJAX request before overview
             print("juste un aperçu")
             return JsonResponse({"data" : mail_id}, safe=False)
-        elif action == 'check_integrity':
-            #check if title is unique
-            queryset = Mail.objects.filter(title=dict_values['title'])
-            if len(queryset) >= 1:
-                return JsonResponse({"data" : "1"}, safe=False) 
-            return JsonResponse({"data" : "0"}, safe=False) 
+        
 
         else:
             return HttpResponse(('Il y a une erreur :/'))
@@ -101,9 +108,14 @@ class ContentView(View):
 class OverviewView(View):
     """ this class handles the views for overview.html """
     def get(self, request, mail_id):
-        form = ContentMail()
-        animal = Animal.objects.all()[0]
         mail = ut.get_mail_from_id(mail_id)
+        values = {
+            "title" : mail.title,
+            "resume" : mail.resume,
+            "plain_text" : mail.modified_text,
+        }
+        form = ContentMail(initial = values)
+        animal = Animal.objects.all()[0]
         context = {
             'form' : form, 'mail' : mail, 'animal' : animal}
         return render(request, 'mail/overview.html', context)

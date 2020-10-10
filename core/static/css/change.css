@@ -86,8 +86,11 @@ h2{
 		max-height: 25rem; 
 	}
 	.right-part{
-		height: 36rem;
+		width:  80%;	
 	}
+	/* .right-part{
+		height: 36rem;
+	} */
 	.right-part-bottom{
 		height: 92%;
 	}
@@ -111,12 +114,7 @@ h2{
 		padding: 0;}
 
 /* dashboard */
-	.right-part{
-		width:  80%;	
-	}
-	.top-right-part{
-		background: green;
-	}
+	
 	#graph{
 		height: 20rem;
 	}
@@ -345,19 +343,20 @@ h2{
 	}
 	
 	/* cns */
-	.cns-choice{	
+	.cns-choice, .sett-choice{	
 		height : 5rem;
 		border : 0.2rem black solid;
 		vertical-align: middle;
 	}
-	.cns-choice:hover{
+	.cns-choice:hover, .sett-choice:hover{
 		border : 0.2rem black dashed;
 		cursor: pointer; 
 		font-weight: bold; 
 	}
-	/* mailsettings */ 
+	/* settings */ 
 
-	/* mailcontent */
+
+	/* content */
 	.button-inclusion{
 		width : auto; 
 		height: 3rem;
@@ -378,3 +377,9 @@ h2{
 		}
 	.button-mail-content:hover{
 		background-color: #00b4b5;}
+	.cont-select{
+		width: 15rem;
+	}
+	.sec-content{
+		height:32rem;
+	}

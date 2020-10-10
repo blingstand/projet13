@@ -49,6 +49,33 @@ class Mail(models.Model):
                     continue
                 return condition[key][1]
     
+    def _get_false_animal(self):
+        """this function returns a fictif animal in order to display an overview"""
+        admin = AdminData(
+            file="filexxx", 
+            chip="chipxxx", 
+            tatoo="tatooxxx",
+            is_neutered= "0",
+            date_of_neuter= datetime(2020,1,2).date(),
+            futur_date_of_neuter= datetime(2021,1,2).date())
+        owner = Owner(
+            owner_name = 'pierre',
+            owner_surname = 'dupont',
+            owner_sex = "0",
+            phone = '1234567890',
+            mail = 'pd@mail.com')
+        animal = Animal(
+            name = "patatin",
+            date_of_birth = datetime(2029,1,2).date(),
+            race = 'bâtard',
+            species = 0,
+            color = 'grey',
+            caution = '100',
+            date_of_adoption = datetime.now().date())
+        anim.owner = owner
+        anim.admin_data = admin
+        return anim
+
     def modified_text(self, given_id=None):
         """takes plain text and returns modified text"""
         print("-- modified_text pour ", given_id)

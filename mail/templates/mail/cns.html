@@ -1,20 +1,29 @@
-{% extends 'core/base.html' %}
+{% extends 'core/base.html' %} 
 {% block content %}
 <section>
-	<h4 id="close" onclick="backmail()" class="curs-pointer">< index</h4>
+	<p class="curs-pointer back-button" onclick=BackToIndex()>Retour Index</p>
+	
 	{% if mail %}
-		<h2 class="mt-5 pl-5">Contenus et règles pour {{mail}}</h2>
+	<h2 class="mt-5 mb-5 pl-5">Contenus et règles pour mail (id={{mail.mail_id}})</h2>
 	{% else %}
-		<h2 class="mt-5 pl-5">Contenus et règles </h2>
+	<h2 class="mt-5 mb-5 pl-5">Contenus et règles </h2>
 	{% endif %}
-	<article class="mt-5 container">
+	<article class=" bg-grey pt-5 pb-5">
 		<div class="row">
-			<div class="col-3 bg-secondary"></div>
-			<div class="col-6">
-				<div class="w-100 mt-5 text-center bg-primary very-center cns-choice" id="content">Contenu du mail </div>
-				<div class="w-100 mb-5 mt-5 text-center bg-primary cns-choice very-center" id="settings">Règle(s) d'envoi </div>
+			<div class="col-2"></div>
+			<div class="col-8 bg-white">
+				<div class="row">
+					<div class="col-1"></div>
+					<div class="col-10 mt-5 text-center bg-blue very-center cns-choice" id="content">Contenu du mail </div>
+					<div class="col-1"></div>
+				</div>
+				<div class="row">
+					<div class="col-1"></div>
+					<div class="col-10 mb-5 mt-5 text-center bg-blue cns-choice very-center" id="settings">Règle(s) d'envoi </div>
+					<div class="col-1"></div>
+				</div>
 			</div>
-			<div class="col-3 bg-secondary"></div>
+			<div class="col-2"></div>
 
 		</div>
 	</article>
@@ -25,19 +34,19 @@
 		content.addEventListener('click', function(){
 			{% if mail %}
 			window.location.href = "{% url 'mail:content'%}"+"/{{mail.mail_id}}"})
-			{% else%}
-			window.location.href = "{% url 'mail:content'%}"});
-			{%endif%}
-		settings.addEventListener('click', function(){
-			{% if mail %}
-			window.location.href = "{% url 'mail:settings'%}"+"/{{mail.mail_id}}";
-			{% else%}
-			alert("Ecrivez le contenu du mail pour accéder aux paramètres.")
-			{%endif%}
-		});
+		{% else%}
+		window.location.href = "{% url 'mail:content'%}"});
+{%endif%}
+settings.addEventListener('click', function(){
+	{% if mail %}
+	window.location.href = "{% url 'mail:settings'%}"+"/{{mail.mail_id}}";
+	{% else%}
+	alert("Ecrivez le contenu du mail pour accéder aux paramètres.")
+	{%endif%}
+});
 
-		const backmail = function(){
-			document.location.href = "{% url 'mail:index'%}"}
-	</script>
+const BackToIndex = function(){
+	document.location.href = "{% url 'mail:index'%}"}
+</script>
 </section>
 {% endblock%}

@@ -4,12 +4,16 @@
 
 {% extends 'core/base.html' %}
 {% block content %}
-<section>
-    <h4 onclick=BackToCNS() class="curs-pointer">< index/CNS</h4>
-    <h2  class="mt-5 pl-5">Contenu du mail </h2>
+<section class="">
+    <p class="curs-pointer back-button" onclick=BackToCNS()()>Retour Index</p>
+    {% if mail %}
+        <h2 class="mt-2 pl-5">Contenu du mail (id={{mail.mail_id}}, titre='{{mail.title}}') </h2>
+    {% else %}
+        <h2 class="mt-2 pl-5">Contenu du mail </h2>
+    {% endif %}
     <article class="mt-5 container">
         <div class="row">
-            <div class="col-8">
+            <div class="col-7 pt-3">
                 <form id="form_mail_skull" action="" method='post'>
                     {% csrf_token %}
                     <div class="row">
@@ -19,18 +23,18 @@
                             <strong>{{field.label}} {{ error|escape }}</strong>
                         </div>
                         {% endfor %}
-                        <div class="col-12">{{field}} </div>
+                        <div class="col-12 mb-3">{{field}} </div>
                         {% endfor %}
                     </div>
                 </form>
             </div>
-            <div class="col-4 bg-green">
-                <div class=" row d-flex justify-content-around  pre-scrollable">
-                    <div>
-                        <p><label class="mb-0" for="sel_animal">Variables de la catégorie Animal</label></p>
-                        <select name="sel_animal" id="id_select_1">
+            <div class="col-5 bg-blue-trans">
+                <div class=" row p-3 mr-1 d-flex justify-content-around  ">
+                    <div class="mt-1 mb-1">
+                        <p><label  for="sel_animal">Variables de la catégorie Animal</label></p>
+                        <select onchange='clickSelectedOption(this)' class="cont-select" name="sel_animal" id="id_select_1">
                             <option>-- Sélectionnez une variable -- </option>
-                            <option onclick=AddInMail(this.value) value="**nom animal**">nom</option>
+                            <option  value="**nom animal**" onclick=AddInMail(this.value)>nom</option>
                             <option onclick=AddInMail(this.value) value="**date de naissance**">date de naissance</option>
                             <option onclick=AddInMail(this.value) value="**race**">race</option>
                             <option onclick=AddInMail(this.value) value="**espèce**">espèce</option>
@@ -39,9 +43,11 @@
                             <option onclick=AddInMail(this.value) value="**caution**">caution</option>
                         </select>
                     </div>
-                    <div>
-                        <p><label class="mb-0" for="sel_owner">Variables de la catégorie Propriétaire</label></p>
-                        <select name="sel_owner" id="id_select_2">
+                    <div class="mt-1 text-center" >
+                        <hr>
+                        <p><label for="sel_owner">Variables de la catégorie Propriétaire</label>
+                        </p>
+                        <select onchange='clickSelectedOption(this)' class="cont-select" name="sel_owner" id="id_select_2" class="mb-2">
                             <option>-- Sélectionnez une variable -- </option>
                             <option onclick=AddInMail(this.value) value="**M./Mme**">M./Mme</option>
                             <option onclick=AddInMail(this.value) value="**nom prop**">nom propriétaire</option>
@@ -53,9 +59,10 @@
                             <option onclick=AddInMail(this.value) value="**nb mails**">nombre de mails</option>
                         </select>
                     </div>
-                    <div>
-                        <p><label class="mb-0" for="sel_admin">Variables de la catégorie Admin</label></p>
-                        <select name="sel_admin" id="id_select_3">
+                    <div class="mb-1" >
+                        <hr>
+                        <p><label class="" for="sel_admin">Variables de la catégorie Admin</label></p>
+                        <select onchange='clickSelectedOption(this)' class="cont-select" name="sel_admin" id="id_select_3">
                             <option>-- Sélectionnez une variable -- </option>
                             <option onclick=AddInMail(this.value) value="**id dossier**">id dossier</option>
                             <option onclick=AddInMail(this.value) value="**id puce**">id puce</option>
@@ -66,7 +73,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="row mt-4 mb-2 d-flex justify-content-around bg-green pre-scrollable">
+                <div class="row m-2 p-3 d-flex justify-content-around bg-white">
 
                     <button class="button-mail-content mt-1 mb-2" onclick='GetOverview()'>Aperçu</button>
                     <button class="button-mail-content mt-1 mb-2" onclick='submit_datas()'>Enregistrer</button>
@@ -81,19 +88,25 @@
 <script type="text/javascript" src='{% static "mail/js/utils.js" %}'> </script>
 
 <script type="text/javascript">
+    let is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+         
+    const clickSelectedOption = function(select) {
+        if(!is_chrome) return;
+        select.options[select.selectedIndex].click();
+    }
     param = GetParam()
     const title = document.getElementById('id_title');
 
     //this function adds expression in body mail when user selects an option
     let AddInMail = function (givenValue){
         // this function adds the value of a button in the mail
-        let body_mail = document.getElementById('body_mail');
-        const startPos = body_mail.selectionStart;
-        const endPos = body_mail.selectionEnd; 
-        body_mail.value = body_mail.value.substring(0, startPos)
+        let plain_text = document.getElementById('plain_text');
+        const startPos = plain_text.selectionStart;
+        const endPos = plain_text.selectionEnd; 
+        plain_text.value = plain_text.value.substring(0, startPos)
         + givenValue
-        + body_mail.value.substring(endPos, body_mail.value.length)
-        body_mail.focus()
+        + plain_text.value.substring(endPos, plain_text.value.length)
+        plain_text.focus()
     }
 
     const BackToCNS = function(){
@@ -107,7 +120,7 @@
         return {
             'title': document.getElementById('id_title').value, 
             'resume': document.getElementById('id_resume').value, 
-            'plain_text': document.getElementById('body_mail').value.replaceAll("\n", "\\n"), 
+            'plain_text': document.getElementById('plain_text').value
         }
     }
 
@@ -134,6 +147,7 @@
                 console.log(newInput)
                 input.value = newInput; 
             }
+            console.log('ce titre est disponible')
         }else if (issue == 1){
             input.style.color = 'red';
             input.title = "Ce titre existe déjà ";
@@ -159,7 +173,7 @@
         }
         sendDatasToServer(value, url, WhatToDo)
     }
-
+    //manages the overview
     const GetOverview = function(){
         //this function organises overview
         //1 get datas
@@ -181,6 +195,7 @@
 
     // //this function sends datas to server to save them
     const submit_datas = function(){
+        alert("submit")
         //check if fields are empty
         const datas = get_data()
         let canSave = true
@@ -210,23 +225,10 @@
         }
         return
     }
-    {% if mail %}
-        const get_field = function(){
-        //returns the 3 blanks to fill
-        const blanks = document.getElementsByClassName('blank')
-        const content = ['{{mail.title}}', '{{mail.resume}}', '{{mail.full_text}}', ] 
-        for (let i = 0 ; i < blanks.length - 1 ; i++){
-            blanks[i].value = content[i]
-        }
-        blanks[2].innerHTML = content[2]
-    }
-    get_field()
-    {% endif %}
 
-    console.log(param)
-    // title.addEventListener('focusout', function(){
-    //     checkIntegrity(title);
-    // })
+    title.addEventListener('focusout', function(){
+        checkIntegrity(title);
+    })
 
 </script>
 {% endblock%}

@@ -15,41 +15,31 @@
 
 </head>
 <body>
-	<article>
-		<p id="close" onclick="close_window()">< Retour</a></p>
-		{%if animal%} 
-		<h3>aperçu de {{mail}} <br>pour la première fiche animal : {{animal}}. </h3>
-		{% else%}
-		<h3>rentrer une fiche animal avant pour avoir un aperçu.</h3>
-		{%endif%} 
+<section class="">
+    <p class="curs-pointer back-button" onclick=close_window()()>Retour Index</p>
+    {% if mail %}
+        <h2 class="mt-2 pl-5">Contenu du mail <br>(id={{mail.mail_id}}, titre='{{mail.title}}') </h2>
+    {% else %}
+        <h2 class="mt-2 pl-5">Contenu du mail </h2>
+    {% endif %}
+    <article class="mt-5 container">
 			<div class="row">
 				<div class="col-12">
 					<form action="" method='post'>{% csrf_token %}
 						<div class="row">
 							{% for field in form %}
-							<div class="col-12 pl-2">{{field}} </div>
+							<div class="col-12 mb-3">{{field}} </div>
 							{% endfor%}
 						</div>
 					</form>
 				</div>
 			</div>
 	</article>
-	<script type="text/javascript">
-		document.getElementById('close').style.cursor = 'pointer'
-		let close_window = function(){
-				close(); 
-			}
-		let get_field = function(){
-			//returns the 3 blanks to fill
-			const blanks = document.getElementsByClassName('blank')
-			const content = ['{{mail.title}}', '{{mail.resume}}', '{{mail.modified_text}}', ] 
-			
-			for (let i = 0 ; i < blanks.length - 1 ; i++){
-				console.log(blanks[i], content[i])
-				blanks[i].value = content[i]}
-			blanks[2].innerHTML = content[2]
-
+</section>
+<script type="text/javascript">
+	let close_window = function(){
+			close(); 
 		}
-		get_field()
-	</script>
+	document.getElementById('plain_text').rows = 8
+</script>
 </body>
