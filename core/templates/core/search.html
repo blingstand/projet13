@@ -2,11 +2,11 @@
 
   <div class="row bg-white">
     <form class="form navbar-right inline-form w-100" 
-    id="" action="" method="POST">
+    id="" action="{% url 'search_bar:search'%}" method="POST">
     <div class="row m-1">
       {% csrf_token %}
       <div class="col-10 text-center">
-        <input type="text" required size="60" />
+        {{search_form.search_input}}
       </div>
       <div class="col-2 text-center">
         <input type="submit" class="btn btn-primary" id="nav-mini-submit" value="Valider"> 

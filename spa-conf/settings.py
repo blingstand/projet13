@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import dj_database_url
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # projets (1), projets/projet13 (2), projets/projet13/spa-conf (3)
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -59,7 +60,8 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'sheet.apps.SheetConfig',
     'mail.apps.MailConfig', 
-    'info.apps.InfoConfig'
+    'info.apps.InfoConfig', 
+    'search_bar.apps.SearchBarConfig'
 ]
 
 
@@ -94,6 +96,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'search_bar.context_processors.search_form'
             ],
         },
     },
