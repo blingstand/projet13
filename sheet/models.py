@@ -98,8 +98,8 @@ class Owner(models.Model):
     def to_contact(self):
         """ this function returns True if last contact is bigger than 1 week """
         contacts = Contact.objects.filter(owner=self).order_by('contact_date')
-        print("list contact pour vérif : ")
-        print(self, [contact.contact_date for contact in contacts])
+        # print("list contact pour vérif : ")
+        # print(self, [contact.contact_date for contact in contacts])
         contacts = [contact for contact in contacts]
         if len(contacts) == 0:
             pass

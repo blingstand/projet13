@@ -1,17 +1,97 @@
-<div class="container">
-
+<div id="top-search" class="container mt-3">
   <div class="row bg-white">
-    <form class="form navbar-right inline-form w-100" 
-    id="" action="{% url 'search_bar:search'%}" method="POST">
-    <div class="row m-1">
-      {% csrf_token %}
-      <div class="col-10 text-center">
-        {{search_form.search_input}}
+    <form class="form navbar-right inline-form w-100" id="" action="{% url 'search_bar:search'%}" method="POST">
+      <div class="row m-1">
+        {% csrf_token %}
+        <div class="col-1"></div>
+        <div class="col-10 text-center">
+          {{search_form.search_input}}
+        </div>
+        <!-- <div class="col-2 text-center">
+          <input type="submit" class="btn btn-primary" id="nav-mini-submit" value="Valider"> 
+        </div> -->
       </div>
-      <div class="col-2 text-center">
-        <input type="submit" class="btn btn-primary" id="nav-mini-submit" value="Valider"> 
+        <div class="col-1"></div>
+      <div id="containerChoice" class='col-12 choice-container'></div>
+      <div id="button_row"class="row">
+        <div class="col-1"></div>
+        <div class="col-3">
+          <p class="text-blue curs-pointer hover-under" id="prop:" onclick=AddTag(this.id)>#Propriétaire</p>
+        </div>
+        <div class="col-3">
+          <p class="text-blue curs-pointer hover-under" id="anim:" onclick=AddTag(this.id)>#Animal</p>
+        </div>
+        <div class="col-3">
+          <p class="text-blue curs-pointer hover-under" id="puce:" onclick=AddTag(this.id)>#Puce</p>
+        </div>
+        <div class="col-2"></div>
       </div>
-    </div>
-  </form> 
+    </form> 
+  </div>
+  <span class="choice-to-select"></span>
 </div>
-</div>
+{% load static%}
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+<script type="text/javascript" src='{% static "sheet/js/utils.js" %}'> </script>
+<script>
+  let searchBox = document.getElementById('top-search')
+  let button_row = document.getElementById('button_row')
+  let searchInput = document.getElementById('id_search_input')
+  let WhatToDo
+  let containerChoice = ""
+  const send_to_url = "{% url 'search_bar:search'%}"
+
+  const AddTag = function(givenValue){
+    searchInput.value = givenValue
+    searchInput.focus()
+  }
+  const openChoice = function(choices){
+    //this function opens a div that contains choices for the input
+    containerChoice = document.getElementById('containerChoice')
+    console.log(choices, choices=="0" )
+    if (choices=="0"){
+      containerChoice.innerHTML = ""
+      return
+      }
+    else if (choices.length >=5){
+      choices = choices.splice(0,4)
+    }
+    text = ""
+    for (choice of choices){
+      if (text.length > 0){
+        text = text +"<br/><span class='choice-to-select' id='"+choice.id+"' onclick = GoTo()>" + choice.str + "</span>" 
+      }else{
+        text = text +"<span class='choice-to-select' id='"+choice.id+"' onclick = GoTo()>" + choice.str + "</span>" 
+      }
+      containerChoice.innerHTML = text
+    }
+
+    
+  }
+  const GoTo = function(e){
+    e = window.event
+    fiveFirst = searchInput.value.slice(0,5)
+    if (fiveFirst == "prop:"){
+      url_to_go = "{% url 'sheet:index' 1 %}/"+ "search:prop/" + e.target.id
+    }else{
+      url_to_go = "{% url 'sheet:index' 0 %}/"+ "search:anim/" + e.target.id
+    }
+
+    window.location.href = url_to_go
+  }
+  searchInput.onclick = function(){
+    if (searchInput.value.length == 0){
+      searchInput.value = 'puce:'
+      searchInput.focus()
+    }
+  }
+  searchInput.onkeyup = function(e){
+    value = {"value" : searchInput.value}
+    
+    WhatToDo = function(response){
+      console.log(response)
+      openChoice(response) 
+    }
+    sendDatasToServer(value, send_to_url, WhatToDo)
+  }
+</script>

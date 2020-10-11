@@ -82,9 +82,7 @@
 		</form>
 	</article>
 </section>
-{% load static %}
-<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-<script type="text/javascript" src='{% static "sheet/js/utils.js" %}'> </script>
+
 <script type="text/javascript">
 	/* *** plan ***
 	1/ User select new or former owner
@@ -103,9 +101,20 @@
 	let divFormer = document.getElementsByClassName("former-owner")[0] //div for button Ancien Propériétaire
 	let divNew = document.getElementsByClassName("new-owner")[0] //div for button Nouveau Propériétaire
 
+	let is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+         
+    const clickSelectedOption = function(select) {
+        if(!is_chrome) return;
+        select.options[select.selectedIndex].click();
+        if (select.selectedIndex == "0" || select.selectedIndex == "1") {
+        	document.getElementById("id_caution").value = 100
+        }else{
+        	document.getElementById("id_caution").value = 200
+        }
+    }
 	const GotoOwner = function(){
 		//this function gathers the value of select and open a new window according to this id_value"""
-		select_val = document.getElementById('id_is_new_owner').value
+		select_val = document.getElementById('id_select_owner').value
 		const width  = document.body.clientWidth;
 		const height = document.body.clientHeight;
 		let wanted_width = (width * 35)/100
@@ -127,6 +136,8 @@
 		let spec =  "toolbar=yes,scrollbars=yes,resizable=yes,top=50,left=200,width="
 		spec += wanted_width+",height="+wanted_height
 		window.open(url_open, "_blank", spec);
+		confirm("On continue ?")
+		window.location.href = window.location.href
 	}
 
 	//*** auto fill with today date 
@@ -156,6 +167,7 @@
 		// document.getElementById('inputDateZone').appendChild(divDate);
 
 	}
+
 	const CreateSelectOwners = function(){
 		owners = []
 		{% for owner in owners%}
@@ -193,30 +205,6 @@
 			appearNewInput(false)
 		}
 	})
-	// document.getElementById('submit').addEventListener('click', function(event){
-	// 	//checks data consistency
-	// 	IsNeutered = document.getElementById('id_is_neutered_0').checked
-	// 	willBeNeuterable = document.getElementById('id_is_neutered_2').checked
-	// 	aniHasCaution = document.getElementById('id_caution').value
-	// 	console.log(Number(aniHasCaution) < 1)
-	// 	if (IsNeutered){
-	// 		alert("Si l'animal est déjà stéril, ne pas l'enregistrer.")
-	// 		event.preventDefault()
-	// 	}else{
-	// 		console.log("willBeNeuterable: ", willBeNeuterable)
-	// 		if (willBeNeuterable){
-	// 			if (document.getElementById('id_futur_date_of_neuter').value == ""){
-	// 				alert("Si l'animal n'est pas encore stéril, il faut indiquer quand il le sera.")
-	// 				event.preventDefault()
-	// 				return
-	// 			}
-	// 		}
-	// 		if (aniHasCaution == "" || Number(aniHasCaution) < 1) {
-	// 			alert("Si l'animal n'est pas stéril, il faut une caution.")
-	// 			event.preventDefault()
-	// 		}
-	// 	}
-	// });
 	const main = function(){
 		GiveStartValue()
 	}

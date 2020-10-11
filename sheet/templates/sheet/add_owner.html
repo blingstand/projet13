@@ -42,62 +42,59 @@
 		</form>
 	</article>
 </section>
-	{% load static %}
-	<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-	<script type="text/javascript" src='{% static "sheet/js/utils.js" %}'> </script>
-	<script type="text/javascript">
-		/* *** plan ***
-		1/ User select new or former owner
-		2/ 	A. new displays Ownerform
-		2/ 	B. former displays select with owner in option
-		3/ Client sends Ajax request to get more infos about selected owner id
-		4/ Client receives info, success > display ownerform and fill it
-		*/
+<script type="text/javascript">
+	/* *** plan ***
+	1/ User select new or former owner
+	2/ 	A. new displays Ownerform
+	2/ 	B. former displays select with owner in option
+	3/ Client sends Ajax request to get more infos about selected owner id
+	4/ Client receives info, success > display ownerform and fill it
+	*/
 
-		const phoneNumber = document.getElementById('id_phone')
-		const BackToIndex = function(){
-			window.location.href = "{% url 'sheet:index' own=1%}"
-			// window.location.href = window.location.href; 
-		}
+	const phoneNumber = document.getElementById('id_phone')
+	const BackToIndex = function(){
+		window.location.href = "{% url 'sheet:index' own=1%}"
+		// window.location.href = window.location.href; 
+	}
 
 
-		const BeforeSubmit = function(){
-			document.getElementById('save').addEventListener('click', function(event){
-				// event.preventDefault()
-				let verif = document.getElementById('verif')
-				verif.innerHTML = ""
-				nodes = document.querySelectorAll('input[type=text]')
-				inputs = Array.from(nodes)
-				inputs.splice(0,1)
-				console.log(inputs)
-				if (CheckPhoneNumber() != true){
+	const BeforeSubmit = function(){
+		document.getElementById('save').addEventListener('click', function(event){
+			// event.preventDefault()
+			let verif = document.getElementById('verif')
+			verif.innerHTML = ""
+			nodes = document.querySelectorAll('input[type=text]')
+			inputs = Array.from(nodes)
+			inputs.splice(0,1)
+			console.log(inputs)
+			if (CheckPhoneNumber() != true){
+				event.preventDefault()
+				alert("Format numéro de téléphone : invalide")
+				return
+			}
+			for (input of inputs){
+				if (input.value == 0){
+					alert("Tous les champs doivent être remplis.")
 					event.preventDefault()
-					alert("Format numéro de téléphone : invalide")
 					return
 				}
-				for (input of inputs){
-					if (input.value == 0){
-						alert("Tous les champs doivent être remplis.")
-						event.preventDefault()
-						return
-					}
-				}
-			})	
-		}
-		const CheckPhoneNumber = function(){
-			const reg_telephone = /^(\+\d+(\s|-))?0\d(\s|-|\.)?(\d{2}(\s|-|\.)?){4}$/
-			if (phoneNumber.value.match(reg_telephone)){
-				return true
-			}else{
-				return false
 			}
+		})	
+	}
+	const CheckPhoneNumber = function(){
+		const reg_telephone = /^(\+\d+(\s|-))?0\d(\s|-|\.)?(\d{2}(\s|-|\.)?){4}$/
+		if (phoneNumber.value.match(reg_telephone)){
+			return true
+		}else{
+			return false
 		}
-		BeforeSubmit()
-		{% if error %}
-		document.getElementById('verif').innerHTML = "{{error}}"
-		{% endif %}
+	}
+	BeforeSubmit()
+	{% if error %}
+	document.getElementById('verif').innerHTML = "{{error}}"
+	{% endif %}
 
 
-	</script>
+</script>
 {% endblock  %}
 

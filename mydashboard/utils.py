@@ -32,9 +32,9 @@ class GraphDatas():
     		elif len(contact) > 1:
     			last_contact = contact[-1].contact_date
     		else:
-    			print("******get_list_datas" )
-    			print(f"je vire {owner}, car il n'a pas de contact")
-    			print("******get_list_datas" )
+    			# print("******get_list_datas" )
+    			# print(f"je vire {owner}, car il n'a pas de contact")
+    			# print("******get_list_datas" )
     			continue
     		new_dict['owner'] = owner
     		new_dict['date_of_adoption'] = date_of_adoption

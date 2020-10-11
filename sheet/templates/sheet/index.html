@@ -75,11 +75,10 @@
         </div>
     </article>
 </section>
-{% load static %}
-<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-<script type="text/javascript" src='{% static "sheet/js/utils.js" %}'> </script>
 <script type="text/javascript">  
-    
+    const trRow1 = Array.from(document.getElementsByClassName('row1'));
+    const trRow2 = Array.from(document.getElementsByClassName('row2'));
+    const allTr = trRow1.concat(trRow2)
     const form = document.getElementById('my_form');
     const displayButt = document.getElementById('display')
     const UncheckAll = function(){
@@ -88,8 +87,6 @@
             tr.children[0].firstChild.checked = false
         }
     }
-
-
     const isForAnimal = function(){
         return displayButt.textContent == "Afficher Propriétaires"
     }
@@ -100,7 +97,7 @@
             tr = Array.from(tr.children)
             tr.splice(0,1)
             for (child of tr){
-                child.addEventListener('click', function(e){
+                child.onclick = function(e){
                     let target = e.target.parentElement.children[0].firstChild;
                     console.log(e.target.tagName)
                     if (target.checked == true){
@@ -108,8 +105,8 @@
                     }else{
                         target.checked=true;
                     }
-                });
-                child.addEventListener('dblclick', function(e){
+                };
+                child.ondblclick = function(e){
                     // this event opens alter page for animal or owner
                     targid = e.target.parentElement.children[0].firstChild.id
                     if (isForAnimal()){
@@ -125,7 +122,7 @@
                         }
                         {% endfor %}
                     }
-                });
+                };
             }
         }
     }

@@ -37,8 +37,7 @@
     </article>
 </section>
 {% load static%}
-<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-<script type="text/javascript" src='{% static "mail/js/utils.js" %}'> </script>
+
 <script type="text/javascript">
     const auto = document.getElementById('auto')
     const formSettings = document.getElementById('formSettings')
@@ -50,10 +49,10 @@
         BackCNS(pageName, "{% url 'mail:cns'%}")
     }
     //for ajax
-    const csrfSafeMethod = function(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
+    // const csrfSafeMethod = function(method) {
+    //     // these HTTP methods do not require CSRF protection
+    //     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    // }
 
     //*****toggle form
     //display form

@@ -28,12 +28,12 @@ def redirectIndex(request):
 class SheetView(View):
     #the sheet view page
     context= context_sheet_view
-    def get(self, request, own=0, search=0):
+    def get(self, request, own=0, action=None, search=0):
         #get the data from database
+        print(f"own={own}, action={action}, search={search}")
         animals = Animal.objects.all()
-        if search == 0: 
-            owners = Owner.objects.all()
-        else:  
+        owners = Owner.objects.all()
+        if action == "display":  
             list_owners, list_contacted, list_to_contact = gradat.get_list_for_search
             if search == 1:
                 owners = list_owners
@@ -41,6 +41,10 @@ class SheetView(View):
                 owners = list_contacted
             elif search == 3: 
                 owners = list_to_contact
+        elif action == "search:prop":
+            owners = Owner.objects.get(id=search),
+        elif action == "search:anim": 
+            animals = Animal.objects.get(id=search),
         self.context['animals'] = animals
         self.context['owners'] = list(owners)
         self.context['disp_owners'] = own 

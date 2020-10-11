@@ -27,26 +27,26 @@
 
 		</div>
 	</article>
-	<script type="text/javascript">
-		content = document.getElementById('content')
-		settings = document.getElementById('settings')
+</section>
+<script type="text/javascript">
+	content = document.getElementById('content')
+	settings = document.getElementById('settings')
 
-		content.addEventListener('click', function(){
-			{% if mail %}
-			window.location.href = "{% url 'mail:content'%}"+"/{{mail.mail_id}}"})
-		{% else%}
-		window.location.href = "{% url 'mail:content'%}"});
-{%endif%}
-settings.addEventListener('click', function(){
+	content.addEventListener('click', function(){
+		{% if mail %}
+		window.location.href = "{% url 'mail:content'%}"+"/{{mail.mail_id}}"})
+	{% else%}
+	window.location.href = "{% url 'mail:content'%}"});
+	{%endif%}
+	settings.addEventListener('click', function(){
 	{% if mail %}
 	window.location.href = "{% url 'mail:settings'%}"+"/{{mail.mail_id}}";
 	{% else%}
 	alert("Ecrivez le contenu du mail pour accéder aux paramètres.")
 	{%endif%}
-});
+	});
 
-const BackToIndex = function(){
+	const BackToIndex = function(){
 	document.location.href = "{% url 'mail:index'%}"}
 </script>
-</section>
 {% endblock%}

@@ -45,13 +45,13 @@
 	</article>
 </section>
 {% load static%}
-<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-<script type="text/javascript" src='{% static "sheet/js/utils.js" %}'> </script>
 <script type="text/javascript">
 	// let trRow1 = Array.from(document.getElementsByClassName('row1'));
  //    let trRow2 = Array.from(document.getElementsByClassName('row2'));
  //    allTr = trRow1.concat(trRow2)
-	
+	const trRow1 = Array.from(document.getElementsByClassName('row1'));
+    const trRow2 = Array.from(document.getElementsByClassName('row2'));
+    const allTr = trRow1.concat(trRow2)
 	const Add = function(){
 		//this function redirects to page to add a new mail 
 		window.location.href="{% url 'mail:cns'%}"

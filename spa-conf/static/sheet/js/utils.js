@@ -16,6 +16,8 @@
 	const trRow1 = Array.from(document.getElementsByClassName('row1'));
     const trRow2 = Array.from(document.getElementsByClassName('row2'));
     const allTr = trRow1.concat(trRow2)
+    console.log(allTr)
+    let csrfSafeMethod
 
 /***** functions */
 	//clean owner input and display form like beginning
@@ -45,7 +47,7 @@
 	const sendDatasToServer = function(value, url, whatToDo){
 		// this functions fills the inputs with the given data from animal
 		//AJAX
-		const csrfSafeMethod = function(method) {
+		csrfSafeMethod = function(method) {
 	    	// these HTTP methods do not require CSRF protection
 	    	return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 	    }

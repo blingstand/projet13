@@ -236,7 +236,7 @@ class UtilsSheet():
             if success:
                 ow = Owner(
                     owner_name=dict_values['owner_name'],
-                    owner_surname=dict_values['owner_surname'],
+                    owner_surname=dict_values['owner_surname'].upper(),
                     owner_sex=dict_values['owner_sex'],
                     phone=dict_values['phone'],
                     mail=dict_values['mail'])
@@ -257,6 +257,7 @@ class UtilsSheet():
             if success:
                 for key in dict_values: 
                     setattr(owner, key, dict_values[key])
+                    owner.owner_surname = owner.owner_surname.upper()
                     owner.save()
                 return True, "Modifications effectuées."
             else: 

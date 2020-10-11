@@ -31,14 +31,13 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 class SheetForm(forms.Form):
     """form to add a new sheet """   
-
     caution = forms.IntegerField(required=True, label='caution', initial='100',
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 
             'title' : 'montant de la caution',
             'placeholder' : "montant (sans €)"}))
     chip = forms.CharField(required=False,  label='puce',
-        widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : 'num de la puce',
-            'placeholder' : "num de la puce"}))
+        widget=forms.TextInput(attrs={ 'class' : 'w-10rem', 'title' : 'num de la puce',
+            'placeholder' : "num de la puce", 'maxlength':"15"}))
     color = forms.CharField(required=True, max_length=30, label='Couleur',
         widget=forms.TextInput(attrs={ 'class' : 'w-10rem', 'title' : "couleur(s) de l'animal",
             'placeholder' : "couleur(s)"}))
@@ -104,7 +103,8 @@ class SheetForm(forms.Form):
     race = forms.CharField(required=True, label="race", max_length=30,
         widget=forms.TextInput(attrs={ 'class' : 'w-10rem', 'title' : "race de l'animal" ,
             'placeholder' : "race de l'animal"}))
-    species = forms.ChoiceField(widget=forms.Select(attrs={"class" : "w-10rem lst-none pl-0"}), choices=CHOICES)
+    species = forms.ChoiceField(widget=forms.Select(attrs={"class" : "w-10rem lst-none pl-0", 
+        'onchange':'clickSelectedOption(this)'}), choices=CHOICES)
     tatoo = forms.CharField(required=False, label='tatouage', 
         widget=forms.TextInput(attrs={ 'class' : 'input-reduced', 'title' : "num de tatouage" ,
             'placeholder' : "num de tatouage"}))
@@ -142,7 +142,7 @@ class SheetForm(forms.Form):
 
     def from_form(self, ):
         """ returns dictionary of values to fill rows in tables """
-        animal = ('name', 'date_of_birth', 'race', 'species', 'color', 'date_of_adoption', 'observation', 'caution', 'nature_caution')
+        animal = ('name', 'date_of_birth', 'race', 'species', 'color', 'date_of_adoption', 'caution', 'nature_caution')
         admin = ('file', 'chip', 'tatoo', 'is_neutered', 'date_of_neuter', 'futur_date_of_neuter', 'status')
         dict_values=self.cleaned_data
         print("00 >", dict_values['select_owner'])
@@ -222,6 +222,7 @@ class SheetForm(forms.Form):
                 animal = output
                 animal.admin_data = admin
                 animal.owner = owner
+                animal.name = animal.name.upper()
                 animal.save()
                 # print('- données pour animal ok ')
             else:
