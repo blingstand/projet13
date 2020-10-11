@@ -13,10 +13,6 @@
 /***** variables */
 	const url = window.location.href
 	const csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-	const trRow1 = Array.from(document.getElementsByClassName('row1'));
-    const trRow2 = Array.from(document.getElementsByClassName('row2'));
-    const allTr = trRow1.concat(trRow2)
-    console.log(allTr)
     let csrfSafeMethod
 
 /***** functions */

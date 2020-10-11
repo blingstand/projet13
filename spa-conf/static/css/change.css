@@ -392,18 +392,19 @@ h2{
 /* search_bar*/
 
 	.choice-container{
-		background-color: tomato;
+		background-color: #ececec ;
 		/* display: inline; */
-		float:left;
-		z-index: 10; 
 		max-height : 8rem;
-		overflow-y: scroll; 
+		overflow-y: hidden; 
 		padding-left: 2rem;
-		cursor: pointer; 
+		cursor: pointer;
+		width: 75%; 
 	}
 	.choice-to-select:hover{
 		width: 100%;
-		border: 1px black solid;
+		background-color: #fff;
+		font-weight: bold; 
+		width: 100%;
 	}
 	#id_search_input{
 		height: 2.5rem;
