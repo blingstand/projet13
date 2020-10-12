@@ -86,8 +86,8 @@ h2{
 	.no-a:hover{
 		text-decoration : none;}
 	
-	.scrolable{
-		overflow: scroll;
+	.scrolable-y{
+		overflow-y: scroll;
 		max-height: 25rem; 
 	}
 	.right-part{

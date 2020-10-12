@@ -24,16 +24,12 @@ class UtilsMail():
         return new_mail.mail_id
 
     def alter_db(self, dict_values, given_id): 
-        print("alter db")
         dv2 = dict_values.copy()
         dv2.pop('csrfmiddlewaretoken', None)
         mail = Mail.objects.get(mail_id=given_id)
         for key in dv2: 
             setattr(mail, key, dv2[key])
-            print(key, getattr(mail, key))
-            print("********")
         mail.save()
-        print(mail.modified_text)
         return mail
 
     def get_mail_from_id(self, mail_id):
@@ -50,13 +46,10 @@ class UtilsMail():
         # print(f"changement auto_send pour {mail.auto_send}")
 
     def auto_send_false(self, mail):
-        keys = 'send_after_creation','send_after_modif',
+        keys = 'send_after_creation','send_after_modif', 'send_after_delete', \
+        'send_when_neuterable','send_every_2_weeks'
         for key in keys:
             setattr(mail, key, False)
-
-        keys = 'send_when_x_month','send_at_this_date'
-        for key in keys:
-            setattr(mail, key, None)
 
     def drop_mail(self, given_id):
         """ this functions drops sheets in the db

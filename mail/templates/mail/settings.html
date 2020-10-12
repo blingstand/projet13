@@ -1,7 +1,7 @@
 {% extends 'core/base.html' %}
 {% block content %}
 <section class="">
-    <p class="curs-pointer back-button" onclick=BackToCNS()()>Retour Index</p>
+    <p class="curs-pointer back-button" onclick=BackToCNS()>Retour CNS</p>
     {% if mail %}
         <h2 class="mt-2 pl-5">Règle(s) d'envoi pour mail (id={{mail.mail_id}}, titre='{{mail.title}}') </h2>
     {% else %}
@@ -36,8 +36,7 @@
         </div>
     </article>
 </section>
-{% load static%}
-
+<script type="text/javascript" src='/static/mail/js/utils.js'> </script>
 <script type="text/javascript">
     const auto = document.getElementById('auto')
     const formSettings = document.getElementById('formSettings')
@@ -48,174 +47,51 @@
         pageName = 'settings'
         BackCNS(pageName, "{% url 'mail:cns'%}")
     }
-    //for ajax
-    // const csrfSafeMethod = function(method) {
-    //     // these HTTP methods do not require CSRF protection
-    //     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    // }
 
     //*****toggle form
     //display form
     const appearChoice = function(){
-        $.ajaxSetup({
-            beforeSend: function (xhr, settings) {
-                // if not safe, set csrftoken
-                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
-            }
-        }); 
-        $.ajax( 
-        { 
-            type:"POST", 
-            url: "{% url 'mail:settings'%}", 
-            dataType: 'json',
-            data: {'ajax':Number(1), 'mail_id':param, 'auto_send':1},
-            success: function (res) {
+        value = {'ajax':Number(1), 'mail_id':param, 'auto_send':1}
+        urlAppChoice = "{% url 'mail:settings'%}"
+        whatToDo = function(){
             auto.textContent = "Je souhaite envoyer ce mail automatiquement ..."
-            formSettings.classList.remove("d-none");
-            formSettings.classList.add("d-flex");
+            formSettings.classList.replace("d-none", "d-flex");
             document.getElementById('id_frequency_0').checked = true; 
-            },
-            error: function (res) {
-                alert("erreur lors de l'envoie de données");
-                console.log(res.status);
-                console.log(res.error);
-            }
-        });
+        }
+        sendDatasToServer(value, url, whatToDo)
     }
     //remove form
     const disappearChoice = function(){
-        $.ajaxSetup({
-            beforeSend: function (xhr, settings) {
-                // if not safe, set csrftoken
-                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
-            }
-        }); 
-        $.ajax({ 
-            type:"POST", 
-            url: "{% url 'mail:settings'%}", 
-            dataType: 'json',
-            data: {'ajax':Number(1), 'mail_id':param, 'auto_send':0},
-            success: function (res) {
-                auto.textContent = "Je ne souhaite pas envoyer ce mail automatiquement."
-                formSettings.classList.remove("d-flex");
-                formSettings.classList.add("d-none");
-                
-            },
-            error: function (res) {
-                alert("erreur lors de l'envoie de données");
-                console.log(res.status);
-                console.log(res.error);
-            }
-        })
+        value = {'ajax':Number(1), 'mail_id':param, 'auto_send':0}
+        urlAppChoice = "{% url 'mail:settings'%}"
+        whatToDo = function(){
+            auto.textContent = "Je ne souhaite pas envoyer ce mail automatiquement ..."
+            formSettings.classList.replace("d-flex", "d-none");
+            document.getElementById('id_frequency_0').checked = true; 
+        }
+        sendDatasToServer(value, url, whatToDo) 
     }
     //choose display or remove
-    auto.onclick = function () {
-        console.log(auto.style.backgroundColor)
-        console.log(auto.style.backgroundColor == 'tomato')
-        
+    auto.onclick = function () {        
         if (auto.style.backgroundColor == "tomato"){
             appearChoice();
             auto.style.backgroundColor = '#00B4B5'
         }
         else{
-            console.log("chgt color")
             disappearChoice();
             auto.style.backgroundColor = "tomato"
         }
     };
 
-    //****** additionnal input for id_frequency_4
-    const getAdditionnalInputForFreq4 = function(){
-        inputMonth = document.getElementById('id_frequency_4')
-        inputMonth.parentNode.innerHTML = '<input type="radio" name="frequency" value="4" required="" id="id_frequency_2"> quand l\'animal a plus de {{form.age}} mois.</input>'
-        ageField =  document.getElementById('id_age')
-        ageField.style.width="5rem"
-        const button1 = ageField.previousSibling.previousElementSibling
-        ageField.onclick = () => {
-            button1.checked = true
-        }
-        return button1
-    }
-    //****** additionnal input for id_frequency_5
-    const getAdditionnalInputForFreq5 = function(){
-        inputDate = document.getElementById('id_frequency_5')
-        inputDate.parentNode.innerHTML = '<input type="radio" name="frequency" value="5" required="" id="id_frequency_3"> à la date du {{form.date}}</input>'
-        dateField =  document.getElementById('id_date')
-        const button2 = dateField.previousSibling.previousElementSibling
-        dateField.onclick = () => {
-            button2.checked = true
-        }
-        return button2
-    }
-    //******ctrl before send form
-    const activeCTRL = function(but5, but6){
-        formSettings.addEventListener("submit", function (e) {
-            //check the mail
-            let verif = document.getElementById('verif'); 
-            but1 = document.getElementById('id_frequency_0')
-            but2 = document.getElementById('id_frequency_1')
-            but3 = document.getElementById('id_frequency_2')
-            but4 = document.getElementById('id_frequency_3')
-            console.log('but1 : ',but1.checked);
-            console.log('but2 : ',but2.checked);
-            console.log('but3 : ',but3.checked);
-            console.log('but4 : ',but4.checked);
-            console.log('but5 : ',but5.checked);
-            if (but1.checked || but2.checked || but3.checked || but4.checked){
-                ageField.value = ""
-                dateField.value = ""
-
-            }
-            else if (but4.checked){
-                if (ageField.value > 0 ){
-                    //pass
-                } else{
-                    console.log('age :', ageField.value)
-                    verif.textContent = "rempli l'âge du champ en rouge";
-                    ageField.style.border = "2px red solid";
-                    ageField.style.color = "red";
-                    e.preventDefault()
-                }
-            }
-            else if (but5.checked){
-                const regex_date = /^([0-2]\d|3[0-1])\/(0\d|1[0-2])\/(\d{4})$/; 
-                if (regex_date.test(dateField.value)){
-                    //pass
-                } else{
-                    verifText = dateField.value + " n'est pas une date au format jj/mm/aaa"
-                    verif.textContent = verifText ;
-                    dateField.style.border = "2px red solid";
-                    dateField.style.color = "red";
-                    e.preventDefault();
-                    return
-                }
-            }
-        })
-    }
     
     //******fill the form
     const fillForm = function(){
-        keys = ['{{mail.send_after_creation}}', '{{mail.send_after_modif}}', '{{mail.send_after_delete}}']
-        keys2 = ['{{mail.send_when_x_month}}', '{{mail.send_at_this_date}}']
+        keys = ['{{mail.send_after_creation}}', '{{mail.send_after_modif}}', '{{mail.send_after_delete}}','{{mail.send_every_2_weeks}}', '{{mail.send_when_neuterable}}']
         for (index in keys){
             if (keys[index] != 'False'){
                 document.getElementById('id_frequency_'+index).checked = true;
                 break; 
             };
-        }
-        for (index in keys2){
-            if (keys2[index] != 'None'){
-                console.log(keys2[index]);
-
-                elem = document.getElementById('id_frequency_'+(Number(index)+2));
-                elem.checked = true;
-                elem.nextElementSibling.value = keys2[index] ;
-                break;
-            }
         }
     }
 
@@ -230,15 +106,13 @@
         disappearChoice();
         auto.style.backgroundColor = colors[1];
         {% endif%}
-        const butt5 = getAdditionnalInputForFreq4()
-        const butt6 = getAdditionnalInputForFreq5()
-        auto.classList.remove("d-none");
-        auto.classList.add("d-flex");
+        // auto.classList.replace("d-none", "d-flex");
+        
         fillForm()
-        activeCTRL(butt5, butt6)
     }
     $(document).ready(function() { 
-        main() });
+        main() 
+    });
 
 </script>
 

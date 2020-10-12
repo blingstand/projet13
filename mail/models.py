@@ -7,10 +7,10 @@ from django.db import models
 from django.core.mail import send_mail
 
 #from app
-from mail.data import converter
+from mail.data import converter_data
 
 #from other app
-from sheet.models import Animal
+from sheet.models import *
 # ut = Utils() 
 
 locale.setlocale(locale.LC_TIME,'')
@@ -24,8 +24,8 @@ class Mail(models.Model):
     send_after_creation = models.BooleanField(blank=True,default=False)
     send_after_delete = models.BooleanField(blank=True,default=False)
     send_after_modif = models.BooleanField(blank=True,default=False)
-    send_when_x_month = models.IntegerField(blank=True,default=None, null=True)
-    send_at_this_date = models.DateField(blank=True, default=None, null=True)
+    send_every_2_weeks = models.BooleanField(blank=True,default=False)
+    send_when_neuterable = models.BooleanField(blank=True,default=False)
 
     def __str__(self):
         if self.mail_id is not None: 
@@ -38,8 +38,8 @@ class Mail(models.Model):
             self.send_after_creation : (bool, 'à la création de la fiche'),
             self.send_after_modif : (bool, 'à la modification de la fiche'),
             self.send_after_delete : (bool, 'à la supression de la fiche'),
-            self.send_when_x_month : (int, f"pour les {self.send_when_x_month} mois de l'animal"),
-            self.send_at_this_date : (datetime.datetime, f'à la date du {self.send_at_this_date}')}
+            self.send_when_neuterable : (bool, 'à la supression de la fiche'),
+            self.send_every_2_weeks : (bool, 'à la supression de la fiche')}
 
         if self.auto_send == False: 
             return None
@@ -51,40 +51,47 @@ class Mail(models.Model):
     
     def _get_false_animal(self):
         """this function returns a fictif animal in order to display an overview"""
-        admin = AdminData(
-            file="filexxx", 
-            chip="chipxxx", 
-            tatoo="tatooxxx",
-            is_neutered= "0",
-            date_of_neuter= datetime(2020,1,2).date(),
-            futur_date_of_neuter= datetime(2021,1,2).date())
-        owner = Owner(
-            owner_name = 'pierre',
-            owner_surname = 'dupont',
-            owner_sex = "0",
-            phone = '1234567890',
-            mail = 'pd@mail.com')
-        animal = Animal(
-            name = "patatin",
-            date_of_birth = datetime(2029,1,2).date(),
-            race = 'bâtard',
-            species = 0,
-            color = 'grey',
-            caution = '100',
-            date_of_adoption = datetime.now().date())
-        anim.owner = owner
-        anim.admin_data = admin
-        return anim
+        already_exists = Animal.objects.filter(name="patatin")
+        if len(already_exists)==0: 
+            admin = AdminData(
+                file="filexxx", 
+                chip="chipxxx", 
+                tatoo="tatooxxx",
+                is_neutered= "0",
+                date_of_neuter= datetime(2020,1,2).date(),
+                futur_date_of_neuter= datetime(2021,1,2).date())
+            owner = Owner(
+                owner_name = 'pierre',
+                owner_surname = 'dupont',
+                owner_sex = "0",
+                phone = '1234567890',
+                mail = 'pd@mail.com')
+
+            anim = Animal(
+                name = "patatin",
+                date_of_birth = datetime(2029,1,2).date(),
+                race = 'bâtard',
+                species = 0,
+                color = 'grey',
+                caution = '100',
+                date_of_adoption = datetime.now().date())
+            owner.save()
+            admin.save()
+            anim.save()
+            anim.owner = owner
+            anim.admin_data = admin
+            anim.save()
+
+            return anim
+        return already_exists[0]
 
     def modified_text(self, given_id=None):
         """takes plain text and returns modified text"""
-        print("-- modified_text pour ", given_id)
-        anim = Animal.objects.all()[0]
+        anim = self._get_false_animal()
         if given_id: 
             anim = Animal.objects.get(id=given_id)
-            print("given_id reçu >>", anim)
         new_text = self.plain_text
-        dict_conversion = converter(anim)
+        dict_conversion = converter_data(anim)
         for key in dict_conversion: 
             if key == '**date de stérilisation**':
                 pass
@@ -106,13 +113,13 @@ class Mail(models.Model):
     def send_auto_mail(self, send_to, given_id):
         """this function sends an auto mail according to its values and param """
         text = self.modified_text(given_id)
-        print("-- send_auto_mail, pour cet id : ")
         print(text)
         try:
             send_mail(
                 self.resume, text , 'blingstand@hotmail.fr', 
                 ['adrien.clupot@gmail.com'], fail_silently=False)
             print(f"send_auto_mail > mail send to {send_to}")
+            print("//*protection*\\\\ : mail redirigé vers adrien.clupot@gmail.com")
         except Exception as e:
             raise e
 

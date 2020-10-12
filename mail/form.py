@@ -10,19 +10,11 @@ CHOICES = (
     ("2", "quand je modifie la valeur de la caution,"), 
     ("3", "à la suppression d'une fiche,"),
     ("4", "toutes les deux semaines,"),
-    ("5", "quand l'animal a plus de"),
-    ("6", "à cette date : jj/mm/aaaa"))
+    ("5", "quand l'animal devient stérilisable."))
 
 class SettingsMail(forms.Form):
     """form to add a new mail rule"""
     frequency = forms.ChoiceField(widget=forms.RadioSelect(attrs={"class":"lst-none"}), choices=CHOICES)
-    age = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={'placeholder': 'nb mois', \
-        'class':"w-10rem"}))
-    date = forms.DateField(required=False,
-        widget=forms.DateInput(attrs={ 
-            'type' : 'date',
-            "class":"w-10rem", 
-            'title':"date d'envoi (jj/mm/aaa)"}))
 
 class ContentMail(forms.Form):
     """form to add a new mail content"""

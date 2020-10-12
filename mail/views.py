@@ -53,17 +53,14 @@ class ContentView(View):
         form = ContentMail()
         context = {
             'form' : form}
-        print('get', mail_id)
         if mail_id != 0: 
             mail = ut.get_mail_from_id(mail_id)
             values = {
             "title" : mail.title,
             "resume" : mail.resume,
-            "plain_text" : mail.modified_text,
+            "plain_text" : mail.plain_text,
             }
             form = ContentMail(initial = values)
-            print("avant ut.modify_text")
-            print(mail.full_text)
             context = {
             'form' : form, "mail": mail }
         return render(request, 'mail/content.html', context)
@@ -86,7 +83,6 @@ class ContentView(View):
         #Django form ...
         if mail_id != 0:
             #with mail_id -> mail exists -> alter db 
-            print('alter db')
             mail = ut.alter_db(dict_values, mail_id)
         else:
             #no mail_id -> create a new mail
@@ -108,6 +104,7 @@ class ContentView(View):
 class OverviewView(View):
     """ this class handles the views for overview.html """
     def get(self, request, mail_id):
+        print("GET overview")
         mail = ut.get_mail_from_id(mail_id)
         values = {
             "title" : mail.title,
@@ -128,6 +125,7 @@ class SettingsView(View):
         if mail_id: 
             mail = ut.get_mail_from_id(mail_id)
             context["mail"] = mail 
+            print(mail.send_every_2_weeks)
         return render(request, 'mail/settings.html', context)
 
     def post(self, request, mail_id=None):
@@ -146,22 +144,22 @@ class SettingsView(View):
             mail = ut.get_mail_from_id(mail_id)
             ut.change_auto_send(mail, True)
             ut.auto_send_false(mail)
-
-            age, date= form.cleaned_data["age"], form.cleaned_data["date"]
             if form.cleaned_data["frequency"] == "1": 
+                print("changement pour send_after_creation ")
                 mail.send_after_creation = True
             elif form.cleaned_data["frequency"] == "2": 
+                print("changement pour send_after_modif ")
                 mail.send_after_modif = True
             elif form.cleaned_data["frequency"] == "3": 
+                print("changement pour send_after_delete ")
                 mail.send_after_delete = True
-                print("changement pour à la destruction de la fiche")
-            elif form.cleaned_data["frequency"] == "4": 
-                mail.send_when_x_month = age
+            elif form.cleaned_data["frequency"] == "4":
+                print("changement pour send_every_2_weeks ")
+                mail.send_every_2_weeks = True
             elif form.cleaned_data["frequency"] == "5": 
-                mail.send_at_this_date = date
-            
+                print("changement pour send_when_neuterable ")
+                mail.send_when_neuterable = True
             mail.save()
-            print(mail.auto_send)
             context = {'mail' : mail}
             return render(request, 'mail/cns.html', context)
         context = {'form' : form}
