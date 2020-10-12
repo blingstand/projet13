@@ -33,10 +33,6 @@ class SheetView(View):
         print(f"own={own}, action={action}, search={search}")
         animals = Animal.objects.all()
         owners = Owner.objects.all()
-        for owner in owners:
-            owner.owner_name = owner.owner_name.capitalize()
-            owner.save()
-            print(owner.owner_name, owner.owner_surname)
         if action == "display":  
             list_owners, list_contacted, list_to_contact = gradat.get_list_for_search
             if search == 1:
@@ -190,7 +186,8 @@ class AlterOwnerSheetView(View):
         """this function handles post request for alter_owner page"""
         print(f"action :", action)
         form = JustOwnerForm(request.POST or None)
-        context = {'form':form}
+        selected_owner = Owner.objects.get(id=given_id)
+        context = {"selected_owner":selected_owner,'form':form}
         dict_values = request.POST.dict()
         del dict_values['csrfmiddlewaretoken']
         if action == "delete":
@@ -285,12 +282,11 @@ class ContactOwnerView(View):
             print(message)
         return render(request, "sheet/historic.html", self.context)
 
-
 class AddOwnerOpenSheetView(View):
 
     def get(self, request):
         """this function handles the get request for add_owner page"""
-        print(">>>OPEN")
+        print(">>>OPEN add")
         form = JustOwnerForm()
         context = {'form':form}
         return render(request, "sheet/add_owner_open.html", context)
@@ -298,7 +294,7 @@ class AddOwnerOpenSheetView(View):
         
     def post(self, request):
         """this function handles the post request for add_owner page"""
-        print(">>>OPEN")
+        print(">>>OPEN add" )
         form = JustOwnerForm(request.POST)
         print(form.fields)
         context = {'form':form}
@@ -321,7 +317,7 @@ class AddOwnerOpenSheetView(View):
 class AlterOwnerOpenSheetView(View): 
     def get(self, request, given_id, action=None):
         """this function handles get request for alter_owner page"""
-        print(">>>OPEN")
+        print(">>>OPEN alter")
         selected_owner = Owner.objects.get(id=given_id)
         initial_dict = { 
         "owner_name" :  selected_owner.owner_name,
@@ -338,7 +334,7 @@ class AlterOwnerOpenSheetView(View):
         
     def post(self, request, given_id, action=None):
         """this function handles post request for alter_owner page"""
-        print(">>>OPEN")
+        print(">>>OPEN alter")
         print(f"action :", action)
         form = JustOwnerForm(request.POST or None)
         context = {'form':form}
@@ -347,14 +343,14 @@ class AlterOwnerOpenSheetView(View):
         if action == "modify": 
             success, message = uts.modify_owner(given_id, dict_values)
             if success:
-                print(message)
+                print("1", message)
                 return HttpResponse('<script type="text/javascript">window.close()</script>')  
             else: 
                 context['error'] = message
                 print(" * * *")
                 print(context)
                 print(" * * *")
-                return render(request, "sheet/alter_owner.html", context)
+                return render(request, "sheet/alter_owner_open.html", context)
         elif action == "delete":
             success, message = uts.remove_owner(given_id)
             print(success, message)

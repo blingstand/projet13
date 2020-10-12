@@ -258,7 +258,7 @@ class UtilsSheet():
                 for key in dict_values: 
                     setattr(owner, key, dict_values[key])
                     owner.owner_surname = owner.owner_surname.upper()
-                    owner.owner_name = owner.owner_name.upper()
+                    owner.owner_name = owner.owner_name.capitalize()
                     owner.save()
                 return True, "Modifications effectuées."
             else: 

@@ -4,7 +4,7 @@
 	<p class="curs-pointer back-button" onclick=BackToIndex()>Retour Index</p>
 	<h2 class="mt-3 mb-3 pl-3">Modification Fiche Propriétaire</h2>
 	<article class=" bg-grey pt-3 pb-3">
-		<form id='form' class="sheet" action="{% url 'sheet:add_owner'%}" method="post" enctype="multipart/form-data">
+		<form id='form' class="sheet" action="{% url 'sheet:alter_owner' selected_owner.id %}" method="post" enctype="multipart/form-data">
 			{% csrf_token %}
 			<div class="container">
 				<div class="row">
@@ -97,7 +97,7 @@
 	}
 	const Modify = function(){
 		form = document.getElementById('form')
-		form.action = url + '/modify'
+		form.action = "{% url 'sheet:alter_owner' selected_owner.id 'modify' %}"
 		form.submit()
 	}
 
