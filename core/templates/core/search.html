@@ -11,8 +11,11 @@
           <input type="submit" class="btn btn-primary" id="nav-mini-submit" value="Valider"> 
         </div> -->
       </div>
+      <div class="row m-1">
         <div class="col-1"></div>
-      <div id="containerChoice" class='col-12 choice-container'></div>
+        <div id="containerChoice" class='col-10 choice-container'></div>
+        <div class="col-1"></div>
+      </div>
       <div id="button_row"class="row">
         <div class="col-1"></div>
         <div class="col-3">
@@ -52,7 +55,7 @@
     if (choices=="0"){
       containerChoice.innerHTML = ""
       return
-      }
+    }
     else if (choices.length >=5){
       choices = choices.splice(0,4)
     }

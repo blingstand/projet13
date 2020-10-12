@@ -33,6 +33,10 @@ class SheetView(View):
         print(f"own={own}, action={action}, search={search}")
         animals = Animal.objects.all()
         owners = Owner.objects.all()
+        for owner in owners:
+            owner.owner_name = owner.owner_name.capitalize()
+            owner.save()
+            print(owner.owner_name, owner.owner_surname)
         if action == "display":  
             list_owners, list_contacted, list_to_contact = gradat.get_list_for_search
             if search == 1:
@@ -92,6 +96,7 @@ class AddSheetView(View):
                 }
             return JsonResponse({"data":data}, safe=False)
         if form.is_valid():
+            print('form is valid')
             # print("\t1/ récupération des données ...")
             dict_values = form.from_form()
             # print("\t2/ affichage des données récupérées ...")

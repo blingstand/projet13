@@ -235,7 +235,7 @@ class UtilsSheet():
             success, message = self.check_owner_values(dict_values)
             if success:
                 ow = Owner(
-                    owner_name=dict_values['owner_name'],
+                    owner_name=dict_values['owner_name'].capitalize(),
                     owner_surname=dict_values['owner_surname'].upper(),
                     owner_sex=dict_values['owner_sex'],
                     phone=dict_values['phone'],
@@ -258,6 +258,7 @@ class UtilsSheet():
                 for key in dict_values: 
                     setattr(owner, key, dict_values[key])
                     owner.owner_surname = owner.owner_surname.upper()
+                    owner.owner_name = owner.owner_name.upper()
                     owner.save()
                 return True, "Modifications effectuées."
             else: 

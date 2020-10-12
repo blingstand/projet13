@@ -393,10 +393,9 @@ h2{
 
 	.choice-container{
 		background-color: #ececec ;
-		/* display: inline; */
 		max-height : 8rem;
 		overflow-y: hidden; 
-		padding-left: 2rem;
+		margin-left: 1rem;
 		cursor: pointer;
 		width: 75%; 
 	}
