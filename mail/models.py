@@ -5,6 +5,8 @@ import locale
 #from django 
 from django.db import models
 from django.core.mail import send_mail
+from django.template.loader import get_template
+from django.template import Context
 
 #from app
 from mail.data import converter_data
@@ -109,15 +111,27 @@ class Mail(models.Model):
         """this function returns a plain text with escaped \n """
         return self.plain_text.replace('\r\n', '\\n')
 
+    def text_mail_template(self, given_id): 
+        """this function returns a list of modified_text element"""
+        modified_text = self.modified_text(given_id).split('\\n')
+        for elem in modified_text: 
+            if len(elem) < 1: 
+                modified_text.remove(elem)
+        return modified_text
 
     def send_auto_mail(self, send_to, given_id):
         """this function sends an auto mail according to its values and param """
-        text = self.modified_text(given_id)
-        print(text)
+        modified_text = self.text_mail_template(given_id)
+        html_mail = get_template('mail/mail_template.html')
+        context = {"text" : modified_text}
+        html_content = html_mail.render(context)
         try:
             send_mail(
-                self.resume, text , 'blingstand@hotmail.fr', 
-                ['adrien.clupot@gmail.com'], fail_silently=False)
+                subject=self.resume, 
+                message=None , 
+                from_email='blingstand@hotmail.fr', 
+                recipient_list=['adrien.clupot@gmail.com'],
+                html_message=html_content, fail_silently=False)
             print(f"send_auto_mail > mail send to {send_to}")
             print("//*protection*\\\\ : mail redirigé vers adrien.clupot@gmail.com")
         except Exception as e:

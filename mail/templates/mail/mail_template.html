@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+  <link href='https://fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css'>
+  {% load static %}
+  <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet" type="text/css" >
+  <link rel="stylesheet" href="{% static 'css/change.css'%}">
+  <link rel="icon" href="{% static 'img/favicon.png'%}">
+</head> 
+<body leftmargin="0"  topmargin="0" marginheight="0" marginwidth="0">
+  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <!-- espace avant logo -->
+      <tr>
+        <td height="10" style="font-size: 5rem; line-height: 5rem;" ></td>
+      </tr>
+      <tr>
+        {% if text %}
+        <td align="left" style="font-family: Merriweather Sans,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji; text-align: left; font-size: 1rem; color: black; mso-line-height-rule: exactly; line-height: 1rem" >
+          {% for line in text %}
+          <p>{{line}} </p> 
+          {% endfor %}
+        </td>
+        {% endif %}
+      </tr>
+      <tr>
+      <tr>
+        <td background="https://goopics.net/i/D7wV3" bgcolor="#00B4B5" valign="top" align="center" style="text-align: center" width="50%">
+          <img src="https://i.goopics.net/D7wV3.png"  width="100" border="0" />
+        </td>
+      </tr> 
+      <!-- espace après logo -->
+      <tr>
+        <td height="30" style="font-size: 2rem; line-height: 2rem;" > </td>
+      </tr>
+      <tr>
+        <td height="30" style="font-size: 5rem; line-height: 5rem;" > </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>

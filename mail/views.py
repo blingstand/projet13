@@ -21,7 +21,17 @@ class MailView(View):
         {'name' : 'modifier',   'id' : 'alter', 'function' : 'Alter()'},
         {'name' : 'supprimer',  'id' : 'remove', 'function' : 'Remove()'}],
             'mails' : mails}
+        # #test
+        # from datetime import datetime
+        # mail = Mail.objects.get(send_when_neuterable=True)
+        # anim = Animal.objects.filter(name="patatin")[0]
+        # print("anim >> ", anim)
+        # mail.modified_text = mail.modified_text(anim.id).replace('\\n', "<br/>")
+        # print("modified_text >> ",mail.modified_text)
+        # context['mail'] = mail
+        # # mail.modified_text = mail.modified_text.replace('\\n', '<br>')
         return render(request, 'mail/index.html', context)
+        #test
 
     def post(self, request):
         """receives data to pass to deals with the dropSheet function"""
