@@ -149,7 +149,7 @@
 			let date = today.getDate()+'/'+month+'/'+today.getFullYear();
 			let input = elem.nextElementSibling.nextElementSibling
 			input.value = date
-		}
+		} 
 
 	//create an input date for the dates of neuter
 	const appearNewDateInput = function(nb){
@@ -172,20 +172,8 @@
 			is_neuter.parentNode.innerHTML = '<input id="id_is_neutered_0" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="0">stéril</input>'
 			willBe.parentNode.innerHTML = '<input id="id_is_neutered_2" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="2" > sera stérilisable </input>'
 		}
-
-	const CreateSelectOwners = function(){
-		owners = []
-		{% for owner in owners%}
-		owners.push({
-			'name' : '{{owner}}', 'id' : '{{owner.id}}'
-		})
-		{% endfor%}
-		const whatToDo = function(data){
-			dispNewOwn()
-			fillBlank(data)
-		}
-		SelectOwners(owners, '{% url "sheet:add"%}', whatToDo)
 	}
+
 	const GiveStartValue = function(){
 		document.getElementById("id_caution").value = 100
 	}
@@ -203,13 +191,24 @@
 		return allInputDate
 	}
 	//*** event 
-	document.getElementById("id_is_neutered").addEventListener('click', function(e){
-		if(document.getElementById('id_is_neutered_2').checked){
-			appearNewInput(true)
+	document.getElementById('id_is_neutered_0').parentNode.onclick = function(e){
+		if (e.target.name == "date_of_neuter"){
+			return
 		}else{
-			appearNewInput(false)
+			appearNewDateInput("0")
 		}
-	})
+	}
+	document.getElementById('id_is_neutered_1').parentNode.onclick = function(){
+
+		appearNewDateInput("1")
+	}
+	document.getElementById('id_is_neutered_2').parentNode.onclick = function(e){
+		if (e.target.name == "futur_date_of_neuter"){
+			return
+		}else{
+			appearNewDateInput("2")
+		}
+	}
 	const main = function(){
 		GiveStartValue()
 	}
