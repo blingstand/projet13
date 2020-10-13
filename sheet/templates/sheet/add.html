@@ -151,22 +151,27 @@
 			input.value = date
 		}
 
-	//create an input date for the future date of neuter
-	const appearNewInput = function(bo){
+	//create an input date for the dates of neuter
+	const appearNewDateInput = function(nb){
+		is_neuter = document.getElementById('id_is_neutered_0')
 		willBe = document.getElementById('id_is_neutered_2')
-		if (bo){
+		if (nb == "0"){
+			is_neuter.checked = true
+			is_neuter.parentNode.innerHTML = '<input id="id_is_neutered_0" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="2" checked> stérilisé le {{form.date_of_neuter}}.</input>'
+			willBe.parentNode.innerHTML = '<input id="id_is_neutered_2" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="2" > sera stérilisable </input>'
+			return true
+		}
+		else if (nb == "2"){
 			willBe.checked = true
 			willBe.parentNode.innerHTML = '<input id="id_is_neutered_2" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="2" checked> sera stérilisable le {{form.futur_date_of_neuter}}.</input>'
+			is_neuter.parentNode.innerHTML = '<input id="id_is_neutered_0" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="0">stéril</input>'
+			return true
 		}else{
+			is_neuter.checked = false
+			willBe.checked = false
+			is_neuter.parentNode.innerHTML = '<input id="id_is_neutered_0" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="0">stéril</input>'
 			willBe.parentNode.innerHTML = '<input id="id_is_neutered_2" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="2" > sera stérilisable </input>'
 		}
-		// let divDate = document.createElement("div");
-		// divDate.innerHTML = '{{form.futur_date_of_neuter.label}} &nbsp {{form.futur_date_of_neuter}}'
-		// divDate.classList.add("d-none")
-		// divDate.id = "divDate"
-		// document.getElementById('inputDateZone').appendChild(divDate);
-
-	}
 
 	const CreateSelectOwners = function(){
 		owners = []

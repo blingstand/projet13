@@ -26,14 +26,14 @@ class Command(BaseCommand):
                     print(f"- {anim.owner.owner_name} {anim.owner.owner_surname} pour lui dire "\
                     f"que son/sa {anim.str_species} {anim.name} peut maintenant être stérilisé.")
                     print(f"Je vais utiliser cette adresse mail : {anim.owner.mail}")
-        mail = Mail.objects.filter(send_when_neuterable=True)
-        mail = Mail.objects.all()
-        print(mail)
-        if mail : 
-            print(f"Je vais utiliser ce modèle de mail : {mail[0].title}")
-            print(f'\trésumé :', mail[0].resume)
-            print(f'\tcontenu :', mail[0].modified_text(anim.id))
-            mail[0].send_auto_mail(anim.owner.mail, anim.id)
+                    mail = Mail.objects.filter(send_when_neuterable=True)
+                    mail = Mail.objects.all()
+                    print(mail)
+                    if mail : 
+                        print(f"Je vais utiliser ce modèle de mail : {mail[0].title}")
+                        print(f'\trésumé :', mail[0].resume)
+                        print(f'\tcontenu :', mail[0].modified_text(anim.id))
+                        mail[0].send_auto_mail(anim.owner.mail, anim.id)
 
     def handle(self, *args, **options):
         """throws the drop_db function"""
