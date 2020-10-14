@@ -14,14 +14,20 @@ from .utils import GraphDatas
 class MyDashboardView(View):
     def get(self, request):
         """display dashboard"""
+        print("--- get ---\n")
         gradat = GraphDatas()
+        date, list_to_contact, list_contacted = gradat.get_list_datas
         if request.user.is_authenticated:
-            dict_value = gradat.get_list_datas
             owners, to_contact, contacted = gradat.get_list_for_search
-            context={
+            context={ 
+                "date" : date,
                 'nb_owners': len(owners),
                 'nb_contacted':len(contacted),
-                'nb_to_contact':len(to_contact)}
+                'nb_to_contact':len(to_contact), 
+                'list_to_contact':list_to_contact, 
+                'list_contacted' : list_contacted,
+                }
+            print("\n--- end ---")
             return render(request, "dashboard/index.html", context)
         return redirect('user:connection')
     def error_404(request, exception):

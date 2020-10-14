@@ -2,11 +2,11 @@
 {% block content %}
 <section>
     <p class="curs-pointer back-button" onclick=BackToIndex()>Retour Index</p>
-    <h2 class="mt-3 mb-3 pl-3">
+    <h2 class="mt-3 mb-1 pl-3">
         Historique des contacts pour {{owner.owner_name}} {{owner.owner_surname}}
     </h2>
-    <article class="mt-3 container">
-        <div class="row  mt-5 mb-5">
+    <article class="mt-2 mb-3 container histo-article scrolable-y">
+        <div class="row  mt-2 mb-5">
             <div class="col-5"></div>
             {% for elem in button_value %} <!-- affiche les boutons -->
             <div class="col-2  text-center">
@@ -16,7 +16,7 @@
             <div class="col-1"></div>
 
         </div>
-        <div class="row scrolable">
+        <div class="row">
             <table id="histo_table" class="">
                 <tr class="col-12 text-center">
                     <td  class="col-name">&nbsp;</td>
@@ -45,6 +45,9 @@
     > functions,
     > events,
     */
+    const trRow1 = Array.from(document.getElementsByClassName('row1'));
+    const trRow2 = Array.from(document.getElementsByClassName('row2'));
+    const allTr = trRow1.concat(trRow2)
     let table = document.getElementById('histo_table')
     const form = document.getElementById('my_form')
 

@@ -79,9 +79,9 @@ class ContentView(View):
         """ this function deals with the datas from the form"""
         form = ContentMail(request.POST)
         dict_values = request.POST.dict()
-        print("- - - - - datas ")
-        print(dict_values)
-        print(mail_id, action)
+        print("- - - - - post ")
+        print(f'mail_id : {mail_id}, action : {action}')
+        print("values :\n", dict_values)
         print("- - - - - ")
         # if dict_values['checkIntegrity'] == '1': 
         if action == 'check_integrity':
@@ -92,6 +92,7 @@ class ContentView(View):
             return JsonResponse({"data" : "0"}, safe=False) 
         #Django form ...
         if mail_id != 0:
+            print('alter pour id = ', mail_id)
             #with mail_id -> mail exists -> alter db 
             mail = ut.alter_db(dict_values, mail_id)
         else:
@@ -101,7 +102,7 @@ class ContentView(View):
             mail = ut.get_mail_from_id(mail_id)
         if action == None:
             context = {'mail' : mail}
-            return render(request, 'mail/cns.html', context)
+            return redirect('mail:cns', mail_id=mail.mail_id)
         elif action == 'overview': 
             #AJAX request before overview
             print("juste un aperçu")
@@ -135,7 +136,6 @@ class SettingsView(View):
         if mail_id: 
             mail = ut.get_mail_from_id(mail_id)
             context["mail"] = mail 
-            print(mail.send_every_2_weeks)
         return render(request, 'mail/settings.html', context)
 
     def post(self, request, mail_id=None):

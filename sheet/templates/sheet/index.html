@@ -2,7 +2,7 @@
 {% block content %}
 <section>
     <h2 id="title" class="pl-5 pt-2 pb-2">Gestion Fiches ANIMAUX</h2>
-    <article class="mt-3 mb-3 container">
+    <article class="mt-3 mb-3 container scrolable-y">
         <div class="row">
             <div class="col-1"></div>
             <div class="col-4  text-left">
@@ -15,7 +15,7 @@
             {% endfor %}
             <div class="col-1"></div>
         </div>
-        <div class="mt-3 scrolable ">
+        <div class="mt-3  ">
             <form id="my_form" action="" method="" name="my_form">
                 {% csrf_token %} 
                 <table id="anim_table" class=" d-flex">

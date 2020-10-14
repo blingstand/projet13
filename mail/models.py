@@ -92,14 +92,13 @@ class Mail(models.Model):
         anim = self._get_false_animal()
         if given_id: 
             anim = Animal.objects.get(id=given_id)
+            print("test : ", anim)
         new_text = self.plain_text
         dict_conversion = converter_data(anim)
         for key in dict_conversion: 
             if key == '**date de stérilisation**':
                 pass
-                # print("before :")
-                # print(new_text)
-            if dict_conversion[key] == "": 
+            if dict_conversion[key] == None: 
                 dict_conversion[key] = f" {key} = vide"
             new_text = new_text.replace(key, dict_conversion[key])
 

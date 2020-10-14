@@ -14,50 +14,59 @@ from sheet.models import *
 class GraphDatas():
     """ All the datas that graph needs to be built """
     def __init__(self):
-    	self.anim_with_caution = Animal.objects.filter(caution__gt=0)
+        self.anim_with_caution = Animal.objects.filter(caution__gt=0)
+        self.now = datetime.now().date()
+        self.year, self.month = self.now.year , self.now.month
+        self.day = self.now.day
+        self.list_imp_date = [1, 7, 14, 21, 28]
+        self.two_weeks = timedelta(days = 14)
+        self.owners = list(Owner.objects.all())
 
     @property
     def get_list_datas(self):
-    	""" this functions returns a list of dict. 
-    	Each dict contains owner, date_of_adoption, last_contact
-    	"""
-    	list_datas = []
-    	for anim in self.anim_with_caution:
-    		new_dict = {}
-    		owner = anim.owner
-    		date_of_adoption = anim.date_of_adoption
-    		contact = Contact.objects.filter(owner=owner)
-    		if len(contact) > 0:
-    			last_contact = contact[0].contact_date
-    		elif len(contact) > 1:
-    			last_contact = contact[-1].contact_date
-    		else:
-    			# print("******get_list_datas" )
-    			# print(f"je vire {owner}, car il n'a pas de contact")
-    			# print("******get_list_datas" )
-    			continue
-    		new_dict['owner'] = owner
-    		new_dict['date_of_adoption'] = date_of_adoption
-    		new_dict['to_contact'] = owner.to_contact
-    		if len(list_datas) >= 1:
-    			if not new_dict['owner'] in [dict_data['owner'] for dict_data in list_datas]:
-    				list_datas.append(new_dict)
-    		else:
-    			list_datas.append(new_dict)
-    	return list_datas
+        """ this functions returns a list of dict. 
+        Each dict contains owner, date_of_adoption, last_contact
+        """
+        print("nous sommes le : ", self.day)
+        print("relevé pour le mois de : ", self.now.strftime("%B"))
+        
+        list_to_contact_final, list_contacted_final = [], []
+        print(len(self.owners), "propriétaires avec obligations")
+        for imp_dat in self.list_imp_date: 
+            print("--\nA la date du :  ", imp_dat, self.now.strftime("%B"))
+            if imp_dat > self.day :
+                list_to_contact_final.append(0)
+                list_contacted_final.append(0) 
+            else:
+                list_to_contact, list_contacted = [], [] 
+                for owner in self.owners:
+                    if owner.last_contact != None :
+                        if owner.last_contact.contact_date + self.two_weeks > datetime(self.year, self.month, imp_dat).date():
+                            list_contacted.append(owner)
+                            continue
+                    list_to_contact.append(owner)
+                    continue
+                print("à contacter : ", len(list_to_contact))
+                print("contactés : ", len(list_contacted))
+                list_to_contact_final.append(len(list_to_contact))
+                list_contacted_final.append(len(list_contacted)) 
+        print("FINAL")
+        print("list_to_contact_final : ", list_to_contact_final)
+        print("list_contacted_final : ", list_contacted_final)
+
+        return self.now.strftime("%B %Y"), list_to_contact_final, list_contacted_final
     @property
     def get_list_for_search(self):
-    	"""this function returns all the owners with caution"""
-    	datas = self.get_list_datas
-    	list_owner, list_to_contact, list_contacted = [], [], []
-    	for data in datas: 
-    		if data["owner"] not in list_owner:
-    			list_owner.append(data['owner'])
-    			if data['owner'].to_contact:
-    				list_to_contact.append(data['owner'])
-    			else:
-    				list_contacted.append(data['owner'])
-    	return list_owner, list_to_contact, list_contacted
+        """this function returns all the owners with caution"""
+        list_to_contact, list_contacted = [], []
+        for owner in self.owners: 
+            if owner.last_contact:
+                if owner.last_contact.contact_date + self.two_weeks > self.now:
+                    list_contacted.append(owner)
+                    continue
+            list_to_contact.append(owner)
+        print(self.owners, list_to_contact, list_contacted)
+        return self.owners, list_to_contact, list_contacted
 
 
     # def getPrevData(self):

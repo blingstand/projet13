@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 
 #from django 
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone
 
 
@@ -94,13 +95,23 @@ class Owner(models.Model):
         for caution in all_cautions:
             total += int(caution) 
         return total
+
+    @property
+    def last_contact(self):
+
+        contacts = Contact.objects.filter(Q(owner=self, nature=3) | Q(owner=self, nature=4))
+        contacts = contacts.order_by('-contact_date')
+        if len(contacts) > 0:
+            return contacts[0]
+        return None
+
+
     @property
     def to_contact(self):
         """ this function returns True if last contact is bigger than 1 week """
         contacts = Contact.objects.filter(owner=self).order_by('contact_date')
         # print("list contact pour vérif : ")
         # print(self, [contact.contact_date for contact in contacts])
-        contacts = [contact for contact in contacts]
         if len(contacts) == 0:
             pass
         else: 

@@ -11,7 +11,7 @@ context_sheet_view = {
 context_contact_owner_view = {
             'historic_cols':["Date", "Type", "Titre", "Objet"],
             'button_value':[
-                {'name' : 'Ajouter Prise de Contact',    'id' : 'ajouter', 'function' : 'Add()'}, 
-                {'name' : 'Modifier Prise <br> de Contact',   'id' : 'modifier', 'function' : 'Alter()'},
-                {'name' : 'Supprimer Prise de Contact',  'id' : 'supprimer', 'function' : 'Remove()'}]
+                {'name' : 'Ajouter',    'id' : 'ajouter', 'function' : 'Add()'}, 
+                {'name' : 'Modifier ',   'id' : 'modifier', 'function' : 'Alter()'},
+                {'name' : 'Supprimer',  'id' : 'supprimer', 'function' : 'Remove()'}]
         }

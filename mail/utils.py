@@ -15,7 +15,7 @@ class UtilsMail():
     """ class full of usefull functions"""
     def save_datas(self,dict_values):
         new_mail = Mail(
-            title=dict_values['title'],
+            title=dict_values['title'], 
             resume=dict_values['resume'],
             plain_text=dict_values['plain_text'])
         print("Utils.save_data : Voici ce que je vais enregistrer :")

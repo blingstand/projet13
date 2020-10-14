@@ -33,6 +33,8 @@ class SheetView(View):
         print(f"own={own}, action={action}, search={search}")
         animals = Animal.objects.all()
         owners = Owner.objects.all()
+        ow = Owner.objects.get(id=35)
+        print(ow.owner_name, ow.last_contact)
         if action == "display":  
             list_owners, list_contacted, list_to_contact = gradat.get_list_for_search
             if search == 1:
