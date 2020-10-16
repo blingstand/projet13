@@ -98,7 +98,6 @@ class Owner(models.Model):
 
     @property
     def last_contact(self):
-
         contacts = Contact.objects.filter(Q(owner=self, nature=3) | Q(owner=self, nature=4))
         contacts = contacts.order_by('-contact_date')
         if len(contacts) > 0:

@@ -92,7 +92,6 @@ class Mail(models.Model):
         anim = self._get_false_animal()
         if given_id: 
             anim = Animal.objects.get(id=given_id)
-            print("test : ", anim)
         new_text = self.plain_text
         dict_conversion = converter_data(anim)
         for key in dict_conversion: 
@@ -112,7 +111,10 @@ class Mail(models.Model):
 
     def text_mail_template(self, given_id): 
         """this function returns a list of modified_text element"""
-        modified_text = self.modified_text(given_id).split('\\n')
+        modified_text = self.modified_text(given_id).split('\n')
+        print("after split")
+        print(modified_text)
+        print(">>>>>")
         for elem in modified_text: 
             if len(elem) < 1: 
                 modified_text.remove(elem)
@@ -122,6 +124,7 @@ class Mail(models.Model):
         """this function sends an auto mail according to its values and param """
         modified_text = self.text_mail_template(given_id)
         html_mail = get_template('mail/mail_template.html')
+        print(">> modified text : ", modified_text)
         context = {"text" : modified_text}
         html_content = html_mail.render(context)
         try:

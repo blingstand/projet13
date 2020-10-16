@@ -58,14 +58,15 @@ class GraphDatas():
     @property
     def get_list_for_search(self):
         """this function returns all the owners with caution"""
+        print('start')
         list_to_contact, list_contacted = [], []
         for owner in self.owners: 
             if owner.last_contact:
                 if owner.last_contact.contact_date + self.two_weeks > self.now:
                     list_contacted.append(owner)
-                    continue
+                    continue 
             list_to_contact.append(owner)
-        print(self.owners, list_to_contact, list_contacted)
+        print("get_list_for_search returns",self.owners, list_to_contact, list_contacted )
         return self.owners, list_to_contact, list_contacted
 
 

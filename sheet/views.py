@@ -1,4 +1,4 @@
-#rajouter un ordre dans ma list animals
+#rajouter un ordre dans ma list animals 
 #from django 
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -30,13 +30,12 @@ class SheetView(View):
     context= context_sheet_view
     def get(self, request, own=0, action=None, search=0):
         #get the data from database
-        print(f"own={own}, action={action}, search={search}")
+        print(f"get own={own}, action={action}, search={search}")
         animals = Animal.objects.all()
         owners = Owner.objects.all()
-        ow = Owner.objects.get(id=35)
-        print(ow.owner_name, ow.last_contact)
-        if action == "display":  
-            list_owners, list_contacted, list_to_contact = gradat.get_list_for_search
+        if action == "display": 
+            list_owners, list_contacted, list_to_contact = gradat.get_list_for_search()
+            print('dans view : ', gradat.get_list_for_search())
             if search == 1:
                 owners = list_owners
             if search == 2: 
@@ -57,10 +56,11 @@ class SheetView(View):
         if own == 0: 
             print("demande de suppression pour au moins un animal |", given_id )
             ut.drop_sheet(given_id)
+            return redirect("sheet:index",own='0')
         else: 
             print("demande de suppression pour au moins un humain |", given_id )
             ut.remove_owner(given_id)
-        return redirect("sheet:index",own='1')
+            return redirect("sheet:index",own='1')
         
 class AddSheetView(View): 
     #the add sheet page
@@ -79,20 +79,7 @@ class AddSheetView(View):
         cno = uts.get_choice_new_owner(owners)
         form = SheetForm(request.POST or None)
         form.fields['select_owner'].widget = forms.Select(choices=cno)
-        dict_values = {'ask_owner_data':"0"}
-        dict_values.update(request.POST.dict())
 
-        if dict_values["ask_owner_data"] == "1":
-            selected_owner = Owner.objects.get(id=dict_values["owner_id"])
-            print(selected_owner)
-            data = {
-                "name":selected_owner.owner_name,
-                "surname":selected_owner.owner_surname,
-                "sex":selected_owner.owner_sex,
-                "phone":selected_owner.phone,
-                "mail":selected_owner.mail,
-                }
-            return JsonResponse({"data":data}, safe=False)
         if form.is_valid():
             print('form is valid')
             # print("\t1/ récupération des données ...")
@@ -103,8 +90,7 @@ class AddSheetView(View):
             status_operation, animal = form.save_new_datas(dict_values)
             if status_operation == 1:   
                 mm.has_to_send_mail('creation', [animal.owner], animal.id)
-                print("> un mail a été envoyé suite à cet ajout")
-                # print("\t4/ Fin de la transaction, retour sur la page sheet.")
+                print(f"> un mail a été envoyé suite à cet ajout à {animal.owner.mail}")
                 return redirect("sheet:index")
             else:
                 print('Echec, raison :')
@@ -181,7 +167,6 @@ class AlterOwnerSheetView(View):
         form = JustOwnerForm(request.POST or None, initial = initial_dict)
         animals = Animal.objects.filter(owner=selected_owner)
         context = {"selected_owner":selected_owner, 'form':form, 'animals':animals}
-        print(context)
         return render(request, "sheet/alter_owner.html", context)
         
     def post(self, request, given_id, action=None):
@@ -191,15 +176,15 @@ class AlterOwnerSheetView(View):
         selected_owner = Owner.objects.get(id=given_id)
         context = {"selected_owner":selected_owner,'form':form}
         dict_values = request.POST.dict()
-        del dict_values['csrfmiddlewaretoken']
         if action == "delete":
+            print("demande suppression de Owner dont id = ", given_id)
             success, message = uts.remove_owner(given_id)
-            print(success, message)
             if success: 
                 return redirect("sheet:index", own=1)
             else: 
                 return HttpResponse(message)
         elif action == "modify": 
+            del dict_values['csrfmiddlewaretoken']
             success, message = uts.modify_owner(given_id, dict_values)
             if success:
                 print(message)
@@ -210,7 +195,6 @@ class AlterOwnerSheetView(View):
                 print(context)
                 print(" * * *")
                 return render(request, "sheet/alter_owner.html", context)
-        return redirect("sheet:index", own=1)
 
 class AddOwnerSheetView(View):
     """this class handles get and post for alter_owner page"""
@@ -229,6 +213,7 @@ class AddOwnerSheetView(View):
         del dict_values['csrfmiddlewaretoken']
         print(dict_values)
         if form.is_valid:
+            print("form is valid")
             success, message = uts.create_owner(dict_values)
             if success: 
                 return redirect("sheet:index", own=1)

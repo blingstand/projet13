@@ -8,9 +8,10 @@ from django.test import TestCase
 from django.urls import reverse
 
 #from app
-from .utils import UtilsMail
-from .models import Mail
-from .views import *
+from mail.utils import UtilsMail
+from mail.models import Mail
+from mail.views import *
+from mail.data import change_date_format as cdf
 
 #from other apps
 from sheet.models import Animal, AdminData, Owner
@@ -55,6 +56,26 @@ def get_one_sheet():
     animal.save()
     return (animal, admin, owner)
 
+class TestMailModels(TestCase):
+
+    def test_get_condition(self): 
+        """test if returns str_condition when auto_send == True"""
+        get_mail(1)
+        mail = Mail.objects.all()[0]
+        self.assertEqual(mail.get_condition(), None)
+        print("**********")
+        mail.auto_send = True
+        mail.send_after_creation = True
+        is_str = mail.get_condition()
+        self.assertTrue(isinstance(is_str, str))
+
+class TestMailData(TestCase):
+    
+    def test_change_date_format(self):
+        """test if returns a str when a datetime is given"""
+        date = datetime.now().date()
+        is_str = cdf(date)
+        self.assertTrue(isinstance(is_str, str))
 
 class TestMailView(TestCase):
     def setUp(self):

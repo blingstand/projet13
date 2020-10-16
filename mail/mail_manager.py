@@ -48,7 +48,7 @@ class MailManager():
         """ this function verifies, send and trace
         verifies whether a mail should be send according to parameters 
         """
-        print("has_to_send_mail")
+        # print("has_to_send_mail")
         list_mail = ""        
         if action == 'creation': 
             list_mail = Mail.objects.filter(auto_send=True, send_after_creation=True)
@@ -56,8 +56,8 @@ class MailManager():
             list_mail = Mail.objects.filter(auto_send=True, send_after_modif=True)
         elif action == 'delete': 
             list_mail = Mail.objects.filter(auto_send=True, send_after_delete=True)
-        print("has_to_send_mail : ", len(list_mail), " trouvé")
-        print("pour l'animal de cet id : ", given_id)
+        # print("has_to_send_mail : ", len(list_mail), " trouvé")
+        # print("pour l'animal de cet id : ", given_id)
         if len(list_mail) > 0: 
             self.send_and_trace(given_id, list_mail, list_owner)
             

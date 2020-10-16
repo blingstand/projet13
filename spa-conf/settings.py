@@ -61,7 +61,9 @@ INSTALLED_APPS = [
     'sheet.apps.SheetConfig',
     'mail.apps.MailConfig', 
     'info.apps.InfoConfig', 
-    'search_bar.apps.SearchBarConfig'
+    'search_bar.apps.SearchBarConfig', 
+    "django_nose", 
+    "tests.apps.TestsConfig"
 ]
 
 
@@ -138,6 +140,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+#for django-nose
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-tests',
+    '--cover-package=sheet, mail, mydashboard',
+    '--cover-html'
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

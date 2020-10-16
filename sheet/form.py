@@ -114,7 +114,7 @@ class SheetForm(forms.Form):
 
     def _handle_admin_class(self, dict_values):
         #create and save admin classe
-        list_admin = dict_values['admin']
+        list_admin = [elem if elem != "None" else None for elem in dict_values['admin']]
         admin = AdminData(*list_admin)
         queryset = AdminData.objects.filter(chip=admin.chip,file=admin.file, tatoo=admin.tatoo)
         same_in_db = len(AdminData.objects.filter(chip=admin.chip,file=admin.file, tatoo=admin.tatoo)) > 0
@@ -125,7 +125,6 @@ class SheetForm(forms.Form):
     def _handle_owner_class(self, dict_values):
         #already exists or namesake ? 
         owner = Owner.objects.get(id=dict_values["owner"])
-        print(">>>> ", owner)
         return True, owner
             
     def _handle_animal_class(self, dict_values):
@@ -150,7 +149,6 @@ class SheetForm(forms.Form):
         animal = [None] + [dict_values[elem] for elem in animal]
         owner = dict_values['select_owner']
         admin = [None]  + [dict_values[elem] for elem in admin]
-
         dict_values={
             'animal':animal,
             'admin':admin,
@@ -195,7 +193,7 @@ class SheetForm(forms.Form):
             # print('- données pour admin ok ')
         except Exception as e:
             print("***")
-            print("ERROR : ", e)
+            print("ERROR admin: ", e)
             print("***")
             error_msg = output
             return error_msg, None

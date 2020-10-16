@@ -1,4 +1,4 @@
-#from python
+#from python 
 from .models import *
 import datetime
 
@@ -66,8 +66,8 @@ class UtilsSheet():
             if len(other_animal) < 1 :
                 owner.delete()
                 print(f"Suppression de : {animal}, {admin} et {owner}")
-                return
-            print(f"/!\ Atention ce propriétaire a plusieurs animaux, seuls les fiches {animal} et {admin}"\
+            else:
+                print(f"/!\ Atention ce propriétaire a plusieurs animaux, seuls les fiches {animal} et {admin}"\
                     " seront effacées.")
 
     def change_date_format(self, dict_values):
@@ -80,7 +80,7 @@ class UtilsSheet():
             if key in dict_values: 
                 list_data.append(key)
         for date in list_data:
-            if dict_values[date] != "": 
+            if dict_values[date] not in ["", 'None']: 
                 dict_values[date] = datetime.strptime(dict_values[date], '%Y-%m-%d').date()
             else:
                 dict_values[date] = None
@@ -116,21 +116,19 @@ class UtilsSheet():
                 if key not in dict_values:
                     dict_values[key]=None
                 if getattr(elem[1], key) != dict_values[key]:
-                    print(getattr(elem[1], key) != dict_values[key], type(getattr(elem[1], key)),  type(dict_values[key]))
-                    print(getattr(elem[1], key) != dict_values[key], getattr(elem[1], key),  dict_values[key])
-                    changes.append((key, elem[1]))
-        print("liste des modifications : ", changes)
+                   changes.append((key, elem[1]))
         return changes
     def change_animal_owner(self, animal, given_id):
         """this function modifies the animal.owner and returns the new_owner"""
         former_owner = animal.owner
         animal.owner = Owner.objects.get(id=given_id)
         new_owner = animal.owner
+        print("if change_animal_owner :", former_owner != new_owner )
         if former_owner != new_owner: 
             animal.save()
             return new_owner
         else:
-            raise "Erreur dans sheet.utils.py ligne 92"
+            print("Erreur dans sheet.utils.py ligne 92")
     def modify_datas(self, changes, animal, dict_values):
         """this functions modifies the data according to change and dict_values"""
         try:    
@@ -162,14 +160,16 @@ class UtilsSheet():
             3/ makes changes
         """
         # try:
-
         animal = Animal.objects.get(id=given_id)
         is_same_owner = (dict_values['select_owner'] == str(animal.owner.id))
+        print(is_same_owner)
         if not is_same_owner:
             former_owner = animal.owner
             if int(dict_values['select_owner']) > 0:
+                print("changement de proprio")
                 new_owner = self.change_animal_owner(animal, dict_values['select_owner'])
             elif int(dict_values['select_owner']) == 0:
+                print("case2")
                 # print("Cas 2 : J'attribue à l'animal un nouveau propriétaire.")
                 new_owner = self.create_owner(dict_values, return_owner=True)
                 animal.owner = new_owner
@@ -180,7 +180,6 @@ class UtilsSheet():
         can_send_mail = False
         if is_same_owner: 
             for change in changes:
-                print("change > ", change[0])
                 if change[0] == "caution": 
                     can_send_mail = True
                     datas = [animal.owner]
@@ -188,9 +187,7 @@ class UtilsSheet():
             can_send_mail = True
             datas = [former_owner,new_owner]
         if can_send_mail: 
-            print(can_send_mail)
             list_dict_datas = mm.has_to_send_mail("modif", datas, given_id)
-            print("> mail envoyé : ", len(datas))
         return True, changes
         # except Exception as e:
         #     raise e
@@ -242,7 +239,7 @@ class UtilsSheet():
                     mail=dict_values['mail'])
                 ow.save()
                 if return_owner: 
-                    return owner
+                    return ow
                 return True, f"création de {ow.owner_name} réussie"
             else: 
                 return success, message
@@ -264,8 +261,7 @@ class UtilsSheet():
             else: 
                 return success, message
         except Exception as e:
-            # return False, f"une erreur a été rencontrée : {e}"
-            raise 
+            return False, f"une erreur a été rencontrée : {e}"
     
     """ methodes for Contact """
     def remove_contact(self, list_contact_id):

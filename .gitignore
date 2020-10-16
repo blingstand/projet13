@@ -3,4 +3,6 @@ env/
 hidden/
 sendgrid.env
 secret.py
+.coverage
+cover/
 
