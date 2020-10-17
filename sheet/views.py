@@ -34,8 +34,7 @@ class SheetView(View):
         animals = Animal.objects.all()
         owners = Owner.objects.all()
         if action == "display": 
-            list_owners, list_contacted, list_to_contact = gradat.get_list_for_search()
-            print('dans view : ', gradat.get_list_for_search())
+            list_owners, list_contacted, list_to_contact = gradat.get_list_for_search
             if search == 1:
                 owners = list_owners
             if search == 2: 

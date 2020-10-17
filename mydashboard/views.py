@@ -29,6 +29,7 @@ class MyDashboardView(View):
                 'list_to_contact':list_to_contact, 
                 'list_contacted' : list_contacted,
                 }
+            print(context)
             print("\n--- end ---")
             return render(request, "dashboard/index.html", context)
         return redirect('user:connection')
