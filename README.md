@@ -1,17 +1,25 @@
 # Projet 13 : Projet final 
 *********************
+    Resumé : Il s'agit du prototype d'une application créée dans le but de prouver qu'il peut  faire gagner du temps. Il dispose des fonctionnalités suivantes:
+    1. Vue d'ensemble sur le travail à faire > dashboard avec graphique
+    2. Accès simplifié aux fiches à traiter grâce à une barre de recherche
+    3. Envoi de mail auto sous certaines conditions qui sont modifiables. 
+    4. Scheduler qui survieille quotidiennement l'envoi de mail à des dates précises.
+    Ce prototype est déployé et proposé à l'association afin qu'elle puisse tester et adapter l'outil avant d'investir dans un serveur. 
 
 Ce projet a été créé pour répondre aux exigence du projet 13 de la formation Openclassroom parcours Python. Il s'agit de mettre en oeuvre toutes mes compétences pour répondre aux besoins d'une association que je souhaite aider. Dans mon cas le [centre spa](https://www.spa24bergerac.org/) de ma ville.
 
 Ma démarche a consisté à aller à la rencontre de ce centre et de me renseigner sur la manière dont il travaille. Lors de la présentation j'ai remarqué quelques points sur lesquels je pouvais faire gagner du temps au secrétariat en automatisant certaines tâches dans leur journée. A savoir : 
 * mettre en évidence le travail à faire dans la journée, 
 * donner rapidement accès à des données, 
-* automatiser l'envoi de mail suite à une modification de la base.
+* automatiser l'envoi de mail sous certaines conditions.
 
-L'appication que je propose à cette association traite du suivi de la stérilisation suite à une adoption. Légalement une personne doit stériliser l'animal qu'elle acquiert. Dans certain cas cette stérilisation doit avoir lieue après l'adoption. Cela nécessite un suivi qui peut être chronophage. Mon application veut limiter ce temps à effectuer du suivi en limitant l'action humaine a des tâches complexes et en la libérant des tâches répétitives. 
+Context : L'appication que je propose à cette association traite du suivi de la stérilisation suite à une adoption. Légalement une personne doit stériliser l'animal qu'elle acquiert. Dans certain cas cette stérilisation doit avoir lieue après l'adoption. Cela nécessite un suivi qui peut être chronophage. Mon application veut limiter ce temps à effectuer du suivi en limitant l'action humaine a des tâches complexes et en la libérant des tâches répétitives. 
 
 Développé avec Python 3.8, Django 3.1.1
-Hébergé sur [Heroku](https://www.heroku.com/)
+Hébergé sur [Heroku](https://www.heroku.com/) avec les addons: 
+* [sendgrid](https://devcenter.heroku.com/articles/sendgrid)
+* [scheduler](https://devcenter.heroku.com/articles/scheduler)
 
 # Table des matières
 (utilisateur)
@@ -85,11 +93,13 @@ En parcourant mon projet vous verrez plusieurs applications:
 
 ## Tests
 
-<!-- J'ai organisé mes tests de la manière suivante. Ils sont tous regroupés dans le dossier [test](https://github.com/blingstand/projet8/tree/master/test). Vous trouverez à l'intérieur un test pour chaque application. Au debut du testxxx.py vous aurez les tests unitaires et ensuite les tests d'intégrations. Seuls les tests de validation se trouvent séparés car j'ai jugé qu'ils n'appartenait non pas à une seule mais à toutes les applications.
+J'ai organisé mes tests de la manière suivante. Ils sont tous regroupés dans le dossier [tests](https://github.com/blingstand/projet13/tree/master/tests). Vous trouverez à l'intérieur un test pour chaque application. 
 
-Remarque : django-nose est installé sur ce projet ce qui signifie que le niveau de couverture des tests sera consultable. J'ai volontairement laissé le dossier cover pour mon correcteur Openclassrooms.  -->
+Remarque : django-nose est installé sur ce projet ce qui signifie que le niveau de couverture des tests sera consultable. J'ai volontairement laissé le dossier cover à l'attention de mon correcteur Openclassrooms.  -->
 
 Pour lancer les tests, c'est très simple tapez : 
 
     $ python manage.py test #lance tous les tests (codés pour le moment)
-    $ python manage.py test test.test_user #lance que les tests de l'app user  (codés pour le moment)
+    $ python manage.py test test.test_mail #lance que les tests de l'app mail uniquement
+
+Note : Les réglages pour l'affichage de django-nose se trouvent dans [settings](https://github.com/blingstand/projet13/blob/master/spa-conf/settings.py) ligne 143
