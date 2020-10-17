@@ -40,8 +40,8 @@ class Mail(models.Model):
             self.send_after_creation : (bool, 'à la création de la fiche'),
             self.send_after_modif : (bool, 'à la modification de la fiche'),
             self.send_after_delete : (bool, 'à la supression de la fiche'),
-            self.send_when_neuterable : (bool, 'à la supression de la fiche'),
-            self.send_every_2_weeks : (bool, 'à la supression de la fiche')}
+            self.send_when_neuterable : (bool, "quand l'animal sera stérilisable"),
+            self.send_every_2_weeks : (bool, 'envoie toute les deux semaines')}
 
         if self.auto_send == False: 
             return None
@@ -110,8 +110,12 @@ class Mail(models.Model):
         return self.plain_text.replace('\r\n', '\\n')
 
     def text_mail_template(self, given_id): 
-        """this function returns a list of modified_text element"""
-        modified_text = self.modified_text(given_id).split('\n')
+        """this function returns a list of modified_text element
+        ["Bonjour Monsieur GROUSSO Camille\\nS"""
+        if self.modified_text(given_id).find('\n'):
+            modified_text = self.modified_text(given_id).split('\n')
+        if self.modified_text(given_id).find('\\n'):
+            modified_text = self.modified_text(given_id).split('\\n')
         print("after split")
         print(modified_text)
         print(">>>>>")

@@ -9,7 +9,7 @@ CHOICES = (
     ("1", "à la création de la fiche,"),
     ("2", "quand je modifie la valeur de la caution,"), 
     ("3", "à la suppression d'une fiche,"),
-    ("4", "toutes les deux semaines,"),
+    ("4", "toutes les deux semaines,(fonctionalité à vernir)"),
     ("5", "quand l'animal devient stérilisable."))
 
 class SettingsMail(forms.Form):
