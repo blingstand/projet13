@@ -1,11 +1,11 @@
-# Projet 13 : Projet final 
+# Projet 13 : [Projet final](https://spa-bergerac.herokuapp.com/spa/mydashboard/) 
 *********************
-    Resumé : Il s'agit du prototype d'une application créée dans le but de prouver qu'il peut  faire gagner du temps. Il dispose des fonctionnalités suivantes:
+    *Resumé : Il s'agit du prototype d'une application créée dans le but de prouver qu'il peut  faire gagner du temps. Il dispose des fonctionnalités suivantes:
     1. Vue d'ensemble sur le travail à faire > dashboard avec graphique
     2. Accès simplifié aux fiches à traiter grâce à une barre de recherche
     3. Envoi de mail auto sous certaines conditions qui sont modifiables. 
     4. Scheduler qui survieille quotidiennement l'envoi de mail à des dates précises.
-    Ce prototype est déployé et proposé à l'association afin qu'elle puisse tester et adapter l'outil avant d'investir dans un serveur. 
+    Ce prototype est déployé et proposé à l'association afin qu'elle puisse tester et adapter l'outil avant d'investir dans un serveur.*
 
 Ce projet a été créé pour répondre aux exigence du projet 13 de la formation Openclassroom parcours Python. Il s'agit de mettre en oeuvre toutes mes compétences pour répondre aux besoins d'une association que je souhaite aider. Dans mon cas le [centre spa](https://www.spa24bergerac.org/) de ma ville.
 
