@@ -90,6 +90,10 @@ h2{
 		overflow-y: scroll;
 		max-height: 25rem; 
 	}
+	.max-scrolable-y{
+		overflow-y: scroll;
+		max-height: 33rem; 
+	}
 	.right-part{
 		width:  80%;	
 	}

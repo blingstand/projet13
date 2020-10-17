@@ -52,7 +52,6 @@ let CreateChart = function(container, datas){
     series: [{
 
         name: 'Contactés',
-        // data: datas['contacted'],
         data: datas['col1'],
         color : '#00b4b5',
     }, {

@@ -19,6 +19,8 @@ class MyDashboardView(View):
         date, list_to_contact, list_contacted = gradat.get_list_datas
         if request.user.is_authenticated:
             owners, to_contact, contacted = gradat.get_list_for_search
+            print("*****")
+            print(f"returned : \n{owners}, \n{to_contact}, \n{contacted}")
             context={ 
                 "date" : date,
                 'nb_owners': len(owners),

@@ -68,7 +68,7 @@ class AddSheetView(View):
         #displays the page
         owners = Owner.objects.all()
         cno = uts.get_choice_new_owner(owners)
-        form = SheetForm()
+        form = SheetForm(request.POST or None)
         form.fields['select_owner'].widget = forms.Select(choices=cno)
         context = {'form' : form, "owners" : owners}
         return render(request, 'sheet/add.html', context)

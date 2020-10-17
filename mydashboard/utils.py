@@ -66,7 +66,7 @@ class GraphDatas():
                     list_contacted.append(owner)
                     continue 
             list_to_contact.append(owner)
-        print("get_list_for_search returns",self.owners, list_to_contact, list_contacted )
+        
         return self.owners, list_to_contact, list_contacted
 
 
