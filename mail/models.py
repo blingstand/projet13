@@ -92,6 +92,8 @@ class Mail(models.Model):
             new_text = new_text.replace(key, dict_conversion[key])
         # print(new_text)
         new_text = new_text.replace('\r\n', '\\n')
+        if not given_id: 
+            anim.delete()
         return new_text
     def full_text(self):
         """this function returns a plain text with escaped \n """

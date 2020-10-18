@@ -13,7 +13,7 @@ class Command(BaseCommand):
     """ this class manages the parameters you can pass to python manage.py"""
     help = "this command displays the name of animal and the futur date fo their neuter"
 
-    def _fdon(self):
+    def _fdon(self): 
         """drops the datas"""
         print(f"Mission du {datetime.now().date()}: ")
         print(f"Je dois envoyer un mail à : ")
@@ -26,8 +26,7 @@ class Command(BaseCommand):
                     print(f"- {anim.owner.owner_name} {anim.owner.owner_surname} pour lui dire "\
                     f"que son/sa {anim.str_species} {anim.name} peut maintenant être stérilisé.")
                     print(f"Je vais utiliser cette adresse mail : {anim.owner.mail}")
-                    mail = Mail.objects.filter(send_when_neuterable=True)
-                    mail = Mail.objects.all()
+                    mail = Mail.objects.filter(send_when_neuterable=True, auto_send=True)
                     print(mail)
                     if mail : 
                         print(f"Je vais utiliser ce modèle de mail : {mail[0].title}")

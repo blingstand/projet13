@@ -45,6 +45,8 @@ class UtilsMail():
         'send_when_neuterable','send_every_2_weeks'
         for key in keys:
             setattr(mail, key, False)
+            print(key, " : ", getattr(mail, key))
+            mail.save()
     def drop_mail(self, given_id):
         """ this functions drops mail from db"""
         print("drop_mail", given_id)

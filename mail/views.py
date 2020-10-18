@@ -151,8 +151,9 @@ class SettingsView(View):
                 # print("changement pour send_every_2_weeks ")
                 mail.send_every_2_weeks = True
             elif form.cleaned_data["frequency"] == "5":
-                # print("changement pour send_when_neuterable ")
+                print("changement pour send_when_neuterable ")
                 mail.send_when_neuterable = True
+
             mail.save()
             context = {'mail' : mail}
             return render(request, 'mail/cns.html', context)
