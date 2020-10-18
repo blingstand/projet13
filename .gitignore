@@ -4,4 +4,6 @@ hidden/
 sendgrid.env
 secret.py
 .coverage
+p13_clupot_adrien/
+slide.odp
 

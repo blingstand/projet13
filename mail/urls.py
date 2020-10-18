@@ -1,9 +1,9 @@
-from django.contrib import admin
-from django.urls import path, include
+""" urls for mail app"""
+from django.urls import path
 
+from .views import MailView, CNSView, ContentView, SettingsView, OverviewView
+APP_NAME = 'dashboard'
 
-from .views import * 
-app_name = 'dashboard' 
 urlpatterns = [
     path('', MailView.as_view(), name='index'),
     path('cns', CNSView.as_view(), name='cns'),
