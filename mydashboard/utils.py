@@ -20,8 +20,15 @@ class GraphDatas():
         self.day = self.now.day
         self.list_imp_date = [1, 7, 14, 21, 28]
         self.two_weeks = timedelta(days = 14)
-        self.owners = list(Owner.objects.all())
+        self.owners = self.get_owners_with_obligations()
 
+        print("self.owners = ", self.owners)
+
+    def get_owners_with_obligations(self):
+        """ returns list owners with caution"""
+        owners = [owner if owner.sum_caution > 0 else 'vide' for owner in Owner.objects.all()]
+        owners = list(filter(lambda exp: exp != "vide", owners))
+        return owners
     @property
     def get_list_datas(self):
         """ this functions returns a list of dict. 
@@ -38,7 +45,7 @@ class GraphDatas():
                 list_to_contact_final.append(0)
                 list_contacted_final.append(0) 
             else:
-                list_to_contact, list_contacted = [], [] 
+                list_to_contact, list_contacted = [], []
                 for owner in self.owners:
                     if owner.last_contact != None :
                         if owner.last_contact.contact_date + self.two_weeks > datetime(self.year, self.month, imp_dat).date():
