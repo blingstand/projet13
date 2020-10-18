@@ -91,6 +91,11 @@
         return displayButt.textContent == "Afficher Propriétaires"
     }
     //click on line means checkbox checked
+    window.onload = function(){
+        if (localStorage.length != 0 ){
+            localStorage.clear()
+        }
+    }
     const activClickEvent = function(){
         for (tr of allTr){
             tr.style.cursor = 'pointer'; 

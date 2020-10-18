@@ -4,7 +4,7 @@
 <section>
 	<h2 class="mt-3 mb-4 pl-5">Modification Fiche</h2>
 	<article class="">
-		<form class="sheet" action="" method="post" enctype="multipart/form-data">
+		<form id="my_form" class="sheet" action="" method="post" enctype="multipart/form-data">
 			{% if error %}
 				<p class="bg-tomato alinea"><strong>>>>> Problème dans le formulaire : {{error}}</strong></p>
 			{% endif %}
@@ -74,7 +74,7 @@
 									{{form.select_owner}} <p class=" pt-3 ml-5"><img class="icon-link" src="{% static 'img/eye.png'%}" onclick="GotoOwner()" alt="eye"></p>
 								</div>
 								<div class="col-3 d-flex very-center curs-pointer" >
-									<input id="save" type="submit" class="btn btn-primary big-btn" value="Enregistrer"> 
+									<input id="save" type="submit" class="btn btn-primary big-btn"  value="Enregistrer"> 
 								</div>
 							</div>
 						</div>
@@ -103,6 +103,11 @@
 	let don = false
 	let fdon = false
 
+	$('#my_form').submit(function() {
+    	localStorage.clear()
+		return true; // return false to cancel form action
+	});
+
 	const GotoOwner = function(){
 		//this function gathers the value of select and open a new window according to this id_value"""
 		select_val = document.getElementById('id_select_owner').value
@@ -122,17 +127,12 @@
 
 		}
 		{% endfor %}
-		document.getElementById('hint').innerHTML="Appuyer sur F5 après toutes sortes de changements"
+
 		console.log(wanted_width, wanted_height)
 		let spec =  "toolbar=yes,scrollbars=yes,resizable=yes,top=50,left=200,width="
 		spec += wanted_width+",height="+wanted_height
 		window.open(url_open, "_blank", spec);
-		alert("On continue ?")
-		window.location.href = window.location.href
-	}
-
-	window.onbeforeunload = function() {
-    	for (v of variables){
+		for (v of variables){
     		localStorage.setItem(v, $('#id_'+v).val());
     	}
     	for (elem of ["is_neutered_0", "is_neutered_1", "is_neutered_2"]){
@@ -140,8 +140,7 @@
 				localStorage.setItem("is_neutered", $('#id_'+elem).val())
 			}
     	}
-    	
-    }
+	}
     window.onload = function() {
     	document.getElementById('hint').innerHTML="Appuyer sur F5 après tout changement"
     	for (v of variables){
@@ -151,8 +150,7 @@
 	    	}
 	    	if (localStorage.getItem(v) !== null) $('#id_'+v).val(localStorage.getItem(v));
     	}
-	    // var color = ;
-	    // if (name !== null) $('#id_color').val(color);
+    	localStorage.clear()
 	}
 	//create an input date for the dates of neuter
 	const appearNewDateInput = function(nb){

@@ -4,7 +4,7 @@
 <section>
 	<h2 class="mt-3 mb-4 pl-5">Page Ajout Fiche</h2>
 	<article class="">
-		<form class="sheet" action="" method="post" enctype="multipart/form-data">
+		<form id="my_form" class="sheet" action="" method="post" enctype="multipart/form-data">
 			{% csrf_token %}
 			<div class="container border-white">
 				<div class="row">
@@ -112,7 +112,11 @@
         	document.getElementById("id_caution").value = 200
         }
     }
-    window.onbeforeunload = function() {
+    $('#my_form').submit(function() {
+    	localStorage.clear()
+		return true; // return false to cancel form action
+	});
+		window.onbeforeunload = function() {
     	for (v of variables){
     		localStorage.setItem(v, $('#id_'+v).val());
     	}
@@ -123,6 +127,7 @@
     	}
     	
     }
+
     window.onload = function() {
     	document.getElementById('hint').innerHTML="Appuyer sur F5 après tout changement"
     	for (v of variables){
@@ -132,8 +137,6 @@
 	    	}
 	    	if (localStorage.getItem(v) !== null) $('#id_'+v).val(localStorage.getItem(v));
     	}
-	    // var color = ;
-	    // if (name !== null) $('#id_color').val(color);
 	}
 	const GotoOwner = function(){
 		//this function gathers the value of select and open a new window according to this id_value"""
