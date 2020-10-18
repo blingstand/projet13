@@ -117,7 +117,8 @@ class AlterSheetView(View):
         #I need to get the concerned animal corresponding this given_id
         animal = utils_sheet.get_animal_from_given_id(given_id)[0]
         owners = Owner.objects.all()
-        context = {'form' : form, 'animal' : animal,  "owners" : owners}
+        context = {'form' : form, 'animal' : animal,  "owners" : owners, 
+        "given_values":given_values}
         return render(request, 'sheet/alter.html', context)
 
     def post(self, request, given_id):

@@ -39,7 +39,7 @@ SECRET_KEY = '7691-0!3k#_q=4&l4s*-qs^d42+n8vi5f&6$2vedf*cc4g13fg'
 
 if os.environ.get('ENV') == 'PRODUCTION':
     # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = True
+    DEBUG = False
     ALLOWED_HOSTS = ["spa-bergerac.herokuapp.com"]
 else:
     ALLOWED_HOSTS = ["*"]
@@ -62,7 +62,7 @@ INSTALLED_APPS = [
     'mail.apps.MailConfig', 
     'info.apps.InfoConfig', 
     'search_bar.apps.SearchBarConfig', 
-    # "django_nose", 
+    "django_nose", 
     "tests.apps.TestsConfig"
 ]
 
@@ -142,12 +142,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 #for django-nose
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-# NOSE_ARGS = [
-#     '--with-coverage',
-#     '--cover-tests',
-#     '--cover-package=sheet, mail, mydashboard',
-#     '--cover-html'
-# ]
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-tests',
+    '--cover-package=sheet, mail, mydashboard',
+    '--cover-html'
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

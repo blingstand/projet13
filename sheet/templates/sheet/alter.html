@@ -142,6 +142,11 @@
     	}
 	}
     window.onload = function() {
+    	alert(localStorage.length)
+    	appearNewDateInput("{{given_values.is_neutered}}")
+    	if (localStorage.length == 0){
+    		return
+    	}
     	document.getElementById('hint').innerHTML="Appuyer sur F5 après tout changement"
     	for (v of variables){
     		if (v == "is_neutered"){
