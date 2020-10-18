@@ -66,9 +66,10 @@
 								<div class="col-12">{{form.status}}</div>
 							</div>
 						</div>
-						<div class="row part-add">
-							<h4 class="mt-3 mb-2 pl-5">Propriétaire</h4>
-							<div class="col-12 d-flex pt-2 pb-4">
+						<div class=" part-add">
+							<h4 class="mt-3 pl-5">Propriétaire</h4>
+							<p class="pl-5" id="hint"></p>
+							<div class="col-12 d-flex pt-1">
 								<div class="col-9 d-flex very-center curs-pointer  ">
 									{{form.select_owner}} <p class=" pt-3 ml-5"><img class="icon-link" src="{% static 'img/eye.png'%}" onclick="GotoOwner()" alt="eye"></p>
 								</div>
@@ -76,7 +77,6 @@
 									<input id="save" type="submit" class="btn btn-primary big-btn" value="Enregistrer"> 
 								</div>
 							</div>
-							<p id="hint"></p>
 						</div>
 					</div>
 				</div>
@@ -99,7 +99,6 @@
 	let ownDivs = document.getElementsByClassName('owner_input') //div for input owner
 	let divFormer = document.getElementsByClassName("former-owner")[0] //div for button Ancien Propériétaire
 	let divNew = document.getElementsByClassName("new-owner")[0] //div for button Nouveau Propériétaire
-
 	/***/
 	let don = false
 	let fdon = false
@@ -132,14 +131,36 @@
 		window.location.href = window.location.href
 	}
 
-
+	window.onbeforeunload = function() {
+    	for (v of variables){
+    		localStorage.setItem(v, $('#id_'+v).val());
+    	}
+    	for (elem of ["is_neutered_0", "is_neutered_1", "is_neutered_2"]){
+			if ($('#id_'+elem).is(':checked')){
+				localStorage.setItem("is_neutered", $('#id_'+elem).val())
+			}
+    	}
+    	
+    }
+    window.onload = function() {
+    	document.getElementById('hint').innerHTML="Appuyer sur F5 après tout changement"
+    	for (v of variables){
+    		if (v == "is_neutered"){
+		    	$('#id_is_neutered_'+localStorage.getItem(v)).prop( "checked", true);
+		    	appearNewDateInput(localStorage.getItem(v))
+	    	}
+	    	if (localStorage.getItem(v) !== null) $('#id_'+v).val(localStorage.getItem(v));
+    	}
+	    // var color = ;
+	    // if (name !== null) $('#id_color').val(color);
+	}
 	//create an input date for the dates of neuter
 	const appearNewDateInput = function(nb){
 		is_neuter = document.getElementById('id_is_neutered_0')
 		willBe = document.getElementById('id_is_neutered_2')
 		if (nb == "0"){
 			is_neuter.checked = true
-			is_neuter.parentNode.innerHTML = '<input id="id_is_neutered_0" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="2" checked> stérilisé le {{form.date_of_neuter}}.</input>'
+			is_neuter.parentNode.innerHTML = '<input id="id_is_neutered_0" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="0" checked> stérilisé le {{form.date_of_neuter}}.</input>'
 			willBe.parentNode.innerHTML = '<input id="id_is_neutered_2" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="2" > sera stérilisable </input>'
 			return true
 		}

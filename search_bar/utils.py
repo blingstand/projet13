@@ -21,6 +21,7 @@ class Utils():
 				return list_response
 		
 		elif five_first == "anim:":
+			print("five_first > anims", five_first)
 			anims = Animal.objects.filter(name__contains=rest).order_by('name')
 			if anims:
 				for anim in anims : 
@@ -30,6 +31,7 @@ class Utils():
 				return list_response
 		
 		elif five_first == "puce:":
+			print("five_first > anims", five_first)
 			admins = AdminData.objects.filter(chip__contains=rest)
 			if admins:
 				for admin in admins : 

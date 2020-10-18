@@ -14,6 +14,10 @@
 	const url = window.location.href
 	const csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
     let csrfSafeMethod
+    let variables = ["name", "color", "species", "race", 
+    "date_of_birth", "date_of_adoption", "caution", "nature_caution", 
+    "file", "chip", "tatoo", "is_neutered", "date_of_neuter", 
+    "futur_date_of_neuter", "status", "select_owner"]
 
 /***** functions */
 	//clean owner input and display form like beginning
