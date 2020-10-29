@@ -42,6 +42,7 @@ if os.environ.get('ENV') == 'PRODUCTION':
     DEBUG = False
     ALLOWED_HOSTS = ["spa-bergerac.herokuapp.com"]
 else:
+    print("ENV = development")
     ALLOWED_HOSTS = ["*"]
     DEBUG = True
 
@@ -57,7 +58,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mydashboard.apps.MyDashboardConfig',
     'user.apps.UserConfig',
-    'core.apps.CoreConfig',
+    'spa_core.apps.SPACoreConfig',
     'sheet.apps.SheetConfig',
     'mail.apps.MailConfig', 
     'info.apps.InfoConfig', 
@@ -89,7 +90,7 @@ TEMPLATES = [
             os.path.join(ROOT_DIR, 'user/templates'),
             os.path.join(ROOT_DIR, 'dashboard/templates'),
             os.path.join(ROOT_DIR, 'spa-conf/templates'),
-            os.path.join(ROOT_DIR, 'core/templates'),
+            os.path.join(ROOT_DIR, 'spa_core/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -178,7 +179,7 @@ STATICFILES_DIRS = (
         os.path.join(BASE_DIR, 'sheet/static'),
         os.path.join(BASE_DIR, 'mail/static'),
         os.path.join(BASE_DIR, 'mydashboard/static'),
-        os.path.join(BASE_DIR, 'core/static'),
+        os.path.join(BASE_DIR, 'spa_core/static'),
     )
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',

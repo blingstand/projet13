@@ -14,7 +14,7 @@ urlpatterns = [
     path('spa/admin/', admin.site.urls),
     path('', include(("mydashboard.urls", 'index'), namespace='index')),
     path('spa/mydashboard/', include(("mydashboard.urls", 'mydashboard'), namespace="mydashboard")),
-    path('spa/core/', include(("core.urls", 'core'), namespace="core")),
+    path('spa/spa_core/', include(("spa_core.urls", 'spa_core'), namespace="spa_core")),
     path('spa/search_bar/', include(("search_bar.urls", 'search_bar'), namespace="search_bar")),
     path('spa/mail/', include(("mail.urls", 'mail'), namespace="mail")),
     path('spa/sheet/', include(("sheet.urls", 'sheet'), namespace="sheet")),

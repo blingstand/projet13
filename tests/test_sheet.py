@@ -80,7 +80,7 @@ def create_contact(qtt):
     owner = Owner.objects.all()[0]
     for elem in range(qtt): 
         new_contact = Contact(
-            contact_date = "2020-10-16",
+            contact_date = datetime.now().date(),
             resume = f"resume n°{elem}",
             full_text = f"full_text n°{elem}",
             nature = "0",
@@ -764,7 +764,8 @@ class TestModelsSheet(TestCase):
         self.assertEqual(owner.last_contact.nature, contact.nature)
 
     def test_to_contact(self):
-        """test if to_contact property can return what I expect"""
+        """test if to_contact property can return what 
+        I expect(see assert...)"""
         get_one_entry()
         owner = Owner.objects.all()[0]
         self.assertEqual(owner.to_contact, None)

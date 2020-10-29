@@ -131,7 +131,10 @@ class Owner(models.Model):
             if len(contacts) > 1:
                 last_contact = contacts[-1].contact_date
             now = datetime.now().date()
-            more_than_a_week = (now) >= (last_contact + timedelta(weeks=1))
+            more_than_a_week = now >= (last_contact + timedelta(weeks=1))
+            print("is more_than_a_week >", now, " >= ", last_contact + timedelta(weeks=1))
+            print("is more_than_a_week >", type(now), " >= ", type(last_contact + timedelta(weeks=1)))
+            print(more_than_a_week)
             if more_than_a_week:
                 return True
             return False

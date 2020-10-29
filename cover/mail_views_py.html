@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
-    <title>Coverage for mail/views.py: 99%</title>
+    <title>Coverage for mail/views.py: 97%</title>
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="jquery.min.js"></script>
     <script type="text/javascript" src="jquery.hotkeys.js"></script>
@@ -17,13 +17,13 @@
 <div id="header">
     <div class="content">
         <h1>Coverage for <b>mail/views.py</b> :
-            <span class="pc_cov">99%</span>
+            <span class="pc_cov">97%</span>
         </h1>
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
         <h2 class="stats">
-            112 statements &nbsp;
-            <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">111 run</button>
-            <button type="button" class="mis show_mis shortkey_m button_toggle_mis" title="Toggle lines missing">1 missing</button>
+            113 statements &nbsp;
+            <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">110 run</button>
+            <button type="button" class="mis show_mis shortkey_m button_toggle_mis" title="Toggle lines missing">3 missing</button>
             <button type="button" class="exc show_exc shortkey_x button_toggle_exc" title="Toggle lines excluded">0 excluded</button>
         </h2>
     </div>
@@ -204,23 +204,24 @@
     <p id="t151" class="pln"><span class="n"><a href="#t151">151</a></span><span class="t">                <span class="com"># print("changement pour send_every_2_weeks ")</span>&nbsp;</span><span class="r"></span></p>
     <p id="t152" class="run"><span class="n"><a href="#t152">152</a></span><span class="t">                <span class="nam">mail</span><span class="op">.</span><span class="nam">send_every_2_weeks</span> <span class="op">=</span> <span class="key">True</span>&nbsp;</span><span class="r"></span></p>
     <p id="t153" class="run"><span class="n"><a href="#t153">153</a></span><span class="t">            <span class="key">elif</span> <span class="nam">form</span><span class="op">.</span><span class="nam">cleaned_data</span><span class="op">[</span><span class="str">"frequency"</span><span class="op">]</span> <span class="op">==</span> <span class="str">"5"</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t154" class="pln"><span class="n"><a href="#t154">154</a></span><span class="t">                <span class="com"># print("changement pour send_when_neuterable ")</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t154" class="run"><span class="n"><a href="#t154">154</a></span><span class="t">                <span class="nam">print</span><span class="op">(</span><span class="str">"changement pour send_when_neuterable "</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t155" class="run"><span class="n"><a href="#t155">155</a></span><span class="t">                <span class="nam">mail</span><span class="op">.</span><span class="nam">send_when_neuterable</span> <span class="op">=</span> <span class="key">True</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t156" class="run"><span class="n"><a href="#t156">156</a></span><span class="t">            <span class="nam">mail</span><span class="op">.</span><span class="nam">save</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t157" class="run"><span class="n"><a href="#t157">157</a></span><span class="t">            <span class="nam">context</span> <span class="op">=</span> <span class="op">{</span><span class="str">'mail'</span> <span class="op">:</span> <span class="nam">mail</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t158" class="run"><span class="n"><a href="#t158">158</a></span><span class="t">            <span class="key">return</span> <span class="nam">render</span><span class="op">(</span><span class="nam">request</span><span class="op">,</span> <span class="str">'mail/cns.html'</span><span class="op">,</span> <span class="nam">context</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t159" class="pln"><span class="n"><a href="#t159">159</a></span><span class="t">        <span class="com"># print("error")</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t160" class="pln"><span class="n"><a href="#t160">160</a></span><span class="t">        <span class="com"># print(form.errors.items())</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t161" class="pln"><span class="n"><a href="#t161">161</a></span><span class="t">        <span class="com"># print(f"\ndebug : {request.POST}")</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t162" class="run"><span class="n"><a href="#t162">162</a></span><span class="t">        <span class="nam">context</span> <span class="op">=</span> <span class="op">{</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t163" class="pln"><span class="n"><a href="#t163">163</a></span><span class="t">            <span class="str">'form'</span> <span class="op">:</span> <span class="nam">form</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t164" class="run"><span class="n"><a href="#t164">164</a></span><span class="t">        <span class="key">return</span> <span class="nam">render</span><span class="op">(</span><span class="nam">request</span><span class="op">,</span> <span class="str">'mail/settings.html'</span><span class="op">,</span> <span class="nam">context</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t156" class="pln"><span class="n"><a href="#t156">156</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p id="t157" class="run"><span class="n"><a href="#t157">157</a></span><span class="t">            <span class="nam">mail</span><span class="op">.</span><span class="nam">save</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t158" class="run"><span class="n"><a href="#t158">158</a></span><span class="t">            <span class="nam">context</span> <span class="op">=</span> <span class="op">{</span><span class="str">'mail'</span> <span class="op">:</span> <span class="nam">mail</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t159" class="run"><span class="n"><a href="#t159">159</a></span><span class="t">            <span class="key">return</span> <span class="nam">render</span><span class="op">(</span><span class="nam">request</span><span class="op">,</span> <span class="str">'mail/cns.html'</span><span class="op">,</span> <span class="nam">context</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t160" class="pln"><span class="n"><a href="#t160">160</a></span><span class="t">        <span class="com"># print("error")</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t161" class="pln"><span class="n"><a href="#t161">161</a></span><span class="t">        <span class="com"># print(form.errors.items())</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t162" class="pln"><span class="n"><a href="#t162">162</a></span><span class="t">        <span class="com"># print(f"\ndebug : {request.POST}")</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t163" class="mis show_mis"><span class="n"><a href="#t163">163</a></span><span class="t">        <span class="nam">context</span> <span class="op">=</span> <span class="op">{</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t164" class="pln"><span class="n"><a href="#t164">164</a></span><span class="t">            <span class="str">'form'</span> <span class="op">:</span> <span class="nam">form</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t165" class="mis show_mis"><span class="n"><a href="#t165">165</a></span><span class="t">        <span class="key">return</span> <span class="nam">render</span><span class="op">(</span><span class="nam">request</span><span class="op">,</span> <span class="str">'mail/settings.html'</span><span class="op">,</span> <span class="nam">context</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </div>
 <div id="footer">
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.3</a>,
-            created at 2020-10-18 22:35 +0200
+            created at 2020-10-29 10:07 +0100
         </p>
     </div>
 </div>
