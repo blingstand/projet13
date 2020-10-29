@@ -15,13 +15,13 @@ import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # projets (1), projets/projet13 (2), projets/projet13/spa-conf (3)
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(PROJECT_ROOT) 
+ROOT_DIR = os.path.dirname(BASE_DIR)
 
-# print("1", ROOT_DIR)
-# print("2", BASE_DIR)
-# print("3", PROJECT_ROOT)
+print("1", ROOT_DIR)
+print("2", BASE_DIR)
+print("3", PROJECT_ROOT)
 
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 
