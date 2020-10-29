@@ -46,9 +46,10 @@ class ConnectionView(View):
             username = us_form.cleaned_data['username']
             password = us_form.cleaned_data['password']
             new_user = authenticate(username=username, password=password)
-
+            print(new_user)
             if new_user is not None:
                 login(request, new_user)
+                print("success")
                 return redirect('mydashboard:index')
             messages.info(request, 'Pseudo ou mot de passe incorrect')
             return redirect('user:connection')

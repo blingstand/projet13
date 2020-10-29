@@ -22,8 +22,10 @@
 	</article>
 </section>
 {% load static %}
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script type="text/javascript" src='{% static "mydashboard/js/graph.js" %}'> </script>
+<script type="text/javascript" src='{% static "spa_core/js/highcharts.js" %}'>
+</script>
+<script type="text/javascript" src='{% static "spa_core/js/graph.js" %}'> 
+</script>
 <script type="text/javascript">
 	const container = 'graph';
 	const datas = {

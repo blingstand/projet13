@@ -143,12 +143,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 #for django-nose
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-tests',
-    '--cover-package=sheet, mail, mydashboard',
-    '--cover-html'
-]
+# NOSE_ARGS = [
+#     '--with-coverage',
+#     '--cover-tests',
+#     '--cover-package=sheet, mail, mydashboard',
+#     '--cover-html'
+# ]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -170,15 +170,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
+
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 
 DATE_FORMAT = '%m/%d/%Y'
 
 STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, 'sheet/static'),
-        os.path.join(BASE_DIR, 'mail/static'),
-        os.path.join(BASE_DIR, 'mydashboard/static'),
         os.path.join(BASE_DIR, 'spa_core/static'),
     )
 STATICFILES_FINDERS = (
