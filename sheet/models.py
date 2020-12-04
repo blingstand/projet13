@@ -88,9 +88,9 @@ class Owner(models.Model):
     def __str__(self):
         """ this function modifies str owner class object """
         if self.owner_sex == "0":
-            return f'Monsieur {self.owner_surname.upper()} {self.owner_name}'
+            return f'M. {self.owner_surname.upper()} {self.owner_name}'
         else:
-            return f'Madame {self.owner_surname.upper()} {self.owner_name}'
+            return f'Mme {self.owner_surname.upper()} {self.owner_name}'
     @property
     def apostrophe(self):
         """ this function displays human readable owner_sex"""
@@ -98,6 +98,15 @@ class Owner(models.Model):
             return 'Monsieur'
         else:
             return 'Madame'
+
+    @property
+    def small_apostrophe(self):
+        """ this function displays human readable owner_sex"""
+        if self.owner_sex == "0":
+            return 'M.'
+        else:
+            return 'Mme'
+    
     def number_animal(self):
         """ this function returns how many animals belong to this owner """
         animal = Animal.objects.filter(owner=self)

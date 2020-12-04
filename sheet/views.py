@@ -47,7 +47,10 @@ class SheetView(View):
         self.context['animals'] = animals
         self.context['owners'] = list(owners)
         self.context['disp_owners'] = own
+        self.context['top_columns_anim'] = top_columns_anim
+        self.context['top_columns_owner'] = top_columns_owner
         return render(request, 'sheet/index.html', self.context)
+
     def post(self, request, own, search=0):
         """receives data to pass to deals with the dropSheet function"""
         given_id = request.POST.getlist('checkbox')
@@ -56,6 +59,7 @@ class SheetView(View):
             utils_sheet.drop_sheet(given_id)
             return redirect("sheet:index",own='0')
         # print("demande de suppression pour au moins un humain |", given_id )
+        given_id = [gid[2:] for gid in given_id]
         utils_sheet.remove_owner(given_id)
         return redirect("sheet:index",own='1')
 
@@ -238,7 +242,7 @@ class ContactOwnerView(View):
         print(request.POST.getlist('id_check[]'))
         print("\t>Je reçois une demande de type : ", action)
         dict_values = request.POST.dict()
-        # print(f"t>Je  reçois {len(dict_values)} données: ", dict_values)
+        print(f"t>Je  reçois {len(dict_values)} données: ", dict_values)
         owner = Owner.objects.get(id=given_id)
         contacts = Contact.objects.filter(owner=owner)
         self.context["owner"] = owner
@@ -256,10 +260,12 @@ class ContactOwnerView(View):
             if success:
                 return JsonResponse({"data":f'{success}{message}'}, safe=False)
         elif action == "modify":
-            # print(dict_values)
+            # print("alors je modifie et ...")
             success, message = utils_sheet.modify_contact(dict_values)
+            print(success, message)
             if success:
-                # print(message)
+                # print("je retourne : ", message)
+
                 return JsonResponse({"data":f'{success}{message}'}, safe=False)
             # print(message)
         return render(request, "sheet/historic.html", self.context)

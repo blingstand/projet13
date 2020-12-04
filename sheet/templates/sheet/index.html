@@ -1,80 +1,69 @@
-{% extends 'core/base.html' %}
+{% extends 'spa_core/base.html' %} 
 {% block content %}
-<section>
-    <h2 id="title" class="pl-5 pt-2 pb-2">Gestion Fiches ANIMAUX</h2>
-    <article class="mt-3 mb-3 container scrolable-y">
-        <div class="row">
-            <div class="col-1"></div>
-            <div class="col-4  text-left">
-                <button id="display"  class="bg-tomato text-white" onclick=display()>Afficher Propriétaires</button>
-            </div>
+<h2 id="title" class="">Gestion Fiches ANIMAUX </h2>
+<article class="art-sheet-index">
+    <div class="container-button">
+        <div class="container-button-toggle">
+            <button id="display"  class="bg-tomato text-white" onclick=display()>Afficher Propriétaires</button>
+        </div>
+        <div class="container-button-cud">
             {% for elem in button_value %}
-            <div class="col-2 text-center">
-                <button id="{{elem.id}}" class='crud-sheet' onclick="{{elem.function}}">{{elem.name}}</button>
+            <button id="{{elem.id}}" class='crud-sheet' onclick="{{elem.function}}">{{elem.name}}</button>
+            {% endfor %}
+        </div>
+    </div>
+    <form id="my_form" action="" method="" name="my_form">
+        {% csrf_token %} 
+        <div id="anim_table" class="table d-block ">
+            
+            <div class="row-title">
+                {% for top_column in top_columns_anim %}
+                <div class="col-name"><strong>{{top_column | safe}}</strong></div>
+                {% endfor %}
+            </div>
+            <div class="scrollable-part">
+                {% for animal in animals|dictsort:"name" %}
+                <div class=" {% cycle 'row1' 'row2' %}">
+                    <!-- nom sexe/espece status propriétaire num-dossier num-tatoo num-puce -->
+                    <div class="container-checkbox"><input type="checkbox" id='{{animal.id}}' name='checkbox' value={{animal.id}}></div>
+                    <div>{{animal.name}}</a></div>
+                    <div>{{animal.admin_data.neuter_status}}</div>
+                    <div>{{animal.str_species}}</div>
+                    <div>{{animal.race}}</div>
+                    <div>{{animal.owner}} </div>
+                    <div>{{animal.admin_data.file}}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div id="owner_table" class="d-none">
+            <div class="">
+                {% for top_column in top_columns_owner%}
+                <div class="col-name"><strong>{{top_column}}</strong></div>
+                {% endfor%}
+            </div>
+            {% for owner in owners|dictsort:"owner_surname" %}
+            <div class=" {% cycle 'row1' 'row2' %}">
+                <div class="container-checkbox">
+                    <input type="checkbox" id='ow{{owner.id}}' name='checkbox' value={{owner.id}}></div>
+                <div>{{owner.id}}</a></div>
+                <div id="id_surname_{{owner.id}}">{{owner.owner_surname}}</a></div>
+                <div id="id_name_{{owner.id}}">{{owner.owner_name}}</a></div>
+                <div id="id_nb_{{owner.id}}">{{owner.number_animal}}</a></div>
+                <div>{{owner.sum_caution}}€</div>
+                <div>{{owner.phone}}</div>
+                <div class="bigger"><a href = "mailto:{{owner.mail}}">{{owner.mail}}</a></div>
+                <div>{{owner.tel_reminder}}</div>
+                <div>{{owner.mail_reminder}}</div>                  
+                <div class="">
+                    <a id="id_contact_{{owner.id}}" href="{% url 'sheet:contact_owner' owner.id%}">gestion des contacts</a>
+                </div>                 
             </div>
             {% endfor %}
-            <div class="col-1"></div>
         </div>
-        <div class="mt-3  ">
-            <form id="my_form" action="" method="" name="my_form">
-                {% csrf_token %} 
-                <table id="anim_table" class=" d-flex">
-                    <tr class=" col-12 text-center first-line">
-                        <td class="col-name">&nbsp;</td>
-                        {% for col in anim_cols %}
-                        <td class="col-name"><strong>{{col}}</strong></td>
-                        {% endfor %}
-                    </tr>
-                    {% for animal in animals|dictsort:"name" %}
-                    <tr class=" text-center {% cycle 'row1' 'row2' %}">
-                        <!-- nom sexe/espece status propriétaire num-dossier num-tatoo num-puce -->
-                        <td><input type="checkbox" id='{{animal.id}}' name='checkbox' value={{animal.id}}></td>
-                        <td>{{animal.name}}</a></td>
-                        <td class="fitwidth">{{animal.admin_data.neuter_status}}</td>
-                        <td>{{animal.str_species}}</td>
-                        <td>{{animal.race}}</td>
-                        <td class="fitwidth">{{animal.owner}} </td>
-                        <td>{{animal.admin_data.file}}</td>
+    </form>
+</article>
 
-                    </tr>
-                    {% endfor %}
-                </table>
-                <table id="owner_table" class=" d-none">
-                    <tr class="col-12 text-center">
-                        <td class="col-name"><strong>&nbsp;</strong></td>
-                        <td class="col-name"><strong>Identifiant</strong></td>
-                        <td class="col-name"><strong>Nom</strong></td>
-                        <td class="col-name"><strong>Prénom</strong></td>
-                        <td class="col-name"><strong>Nombre d'animaux</strong></td>
-                        <td class="col-name"><strong>Caution</strong></td>
-                        <td class="col-name"><strong>Tel</strong></td>
-                        <td class="col-name"><strong>Mail</strong></td>
-                        <td class="col-name"><strong>Nb appel</strong></td>
-                        <td class="col-name"><strong>Nb mail</strong></td>
-                        <td class="col-name"><strong>Historique</strong></td>
-                    </tr>
-                    {% for owner in owners|dictsort:"owner_surname" %}
-                    <tr class="col-12 text-center {% cycle 'row1' 'row2' %}">
-                        <td><input type="checkbox" id='{{owner.id}}' name='checkbox' value={{owner.id}}></td>
-                        <td>{{owner.id}}</a></td>
-                        <td id="id_surname_{{owner.id}}">{{owner.owner_surname}}</a></td>
-                        <td id="id_name_{{owner.id}}">{{owner.owner_name}}</a></td>
-                        <td id="id_nb_{{owner.id}}">{{owner.number_animal}}</a></td>
-                        <td>{{owner.sum_caution}}€</td>
-                        <td>{{owner.phone}}</td>
-                        <td class="fitwidth"><a href = "mailto:{{owner.mail}}">{{owner.mail}}</a></td>
-                        <td>{{owner.tel_reminder}}</td>
-                        <td>{{owner.mail_reminder}}</td>                  
-                        <td class="">
-                            <a href="{% url 'sheet:contact_owner' owner.id%}">gestion des contact</a>
-                        </td>                 
-                    </tr>
-                    {% endfor %}
-                </table>
-            </form>
-        </div>
-    </article>
-</section>
 <script type="text/javascript">  
     const trRow1 = Array.from(document.getElementsByClassName('row1'));
     const trRow2 = Array.from(document.getElementsByClassName('row2'));
@@ -138,7 +127,7 @@
         }else{
             add_page = "{% url 'sheet:add_owner' %}"
         }
-            window.location.href = add_page; 
+        window.location.href = add_page; 
     }
     function alter(){
         //check whether only 1 sheet is selected
@@ -161,7 +150,7 @@
                     {% endfor %}
                 }else{
                     {% for owner in owners %}
-                    if (id_selected == "{{owner.id}}"){
+                    if (id_selected == "ow{{owner.id}}"){
                         window.location.href = "{%url 'sheet:alter_owner' owner.id%}"
                     }
                     {% endfor %}
@@ -172,61 +161,61 @@
 
         }
 
-    function remove(){
-        const checkbox = document.querySelectorAll('input[type=checkbox]');
-        let count = 0; 
-        let toDelete = []
-        for (i=0; i < checkbox.length; i ++){
-            if (checkbox[i].checked){
-                toDelete.push(checkbox[i])
-                count ++;
+        function remove(){
+            const checkbox = document.querySelectorAll('input[type=checkbox]');
+            let count = 0; 
+            let toDelete = []
+            for (i=0; i < checkbox.length; i ++){
+                if (checkbox[i].checked){
+                    toDelete.push(checkbox[i])
+                    count ++;
+                }
             }
-        }
-        if (count == 0){
-            alert('sélectionnez au moins une fiche à supprimer !')
-        }else {
-            ToDelete = Array.from(toDelete)
-            let msg = 'Confirmez-vous la suppression de '+ count + ' éléments :'
-            let name = ""
-            let response = false
-            if (isForAnimal()){
-                let specie = ""
-                for (elem of toDelete){
-                    name = elem.parentElement.nextElementSibling.textContent
-                    specie = elem.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.textContent
-                    msg = msg + "\n  >" + name + " - " + specie;
-                }
-                response = confirm(msg);
-                if (response){
-                    form.setAttribute('action', "{% url 'sheet:index' own=0%}");
-                    form.setAttribute('method', "POST");
-                    form.submit()
-                }
-            }else{
-                let nb_animaux = ""
-                let surname = ""
-                for (elem of toDelete){
-                    nb_animaux = document.getElementById('id_nb_'+elem.id).textContent
-                    name = document.getElementById('id_name_'+elem.id).textContent
-                    surname = document.getElementById('id_surname_'+elem.id).textContent
-                    if (nb_animaux != 0){
-                        alert("Ce propriétaire ("+ name +" "+surname+") est lié à au moins une fiche animal. Il ne peut être suppprimé !")
-                        return
+            if (count == 0){
+                alert('sélectionnez au moins une fiche à supprimer !')
+            }else {
+                ToDelete = Array.from(toDelete)
+                let msg = 'Confirmez-vous la suppression de '+ count + ' éléments :'
+                let name = ""
+                let response = false
+                if (isForAnimal()){
+                    let specie = ""
+                    for (elem of toDelete){
+                        name = elem.parentElement.nextElementSibling.textContent
+                        specie = elem.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.textContent
+                        msg = msg + "\n  >" + name + " - " + specie;
                     }
-                    msg = msg + "\n  > " + name + " " + surname + " ("+nb_animaux+" animal).";
-                }
-                response = confirm(msg);
-                if (response){
-                    form.setAttribute('action', "{% url 'sheet:index' own=1%}");
-                    form.setAttribute('method', "POST");
-                    form.submit()
-                }
+                    response = confirm(msg);
+                    if (response){
+                        form.setAttribute('action', "{% url 'sheet:index' own=0%}");
+                        form.setAttribute('method', "POST");
+                        form.submit()
+                    }
+                }else{
+                    let nb_animaux = ""
+                    let surname = ""
+                    for (elem of toDelete){
+                        nb_animaux = document.getElementById('id_nb_'+elem.id).textContent
+                        name = document.getElementById('id_name_'+elem.id).textContent
+                        surname = document.getElementById('id_surname_'+elem.id).textContent
+                        if (nb_animaux != 0){
+                            alert("Ce propriétaire ("+ name +" "+surname+") est lié à au moins une fiche animal. Il ne peut être suppprimé !")
+                            return
+                        }
+                        msg = msg + "\n  > " + name + " " + surname + " ("+nb_animaux+" animal).";
+                    }
+                    response = confirm(msg);
+                    if (response){
+                        form.setAttribute('action', "{% url 'sheet:index' own=1%}");
+                        form.setAttribute('method', "POST");
+                        form.submit()
+                    }
 
+                }
             }
+            form.setAttribute('action', "");
         }
-        form.setAttribute('action', "");
-    }
-    const display= function(){
+        const display= function(){
         //display owner and change button value
         let addBut = document.getElementById('ajouter')
         let alterBut = document.getElementById('modifier')

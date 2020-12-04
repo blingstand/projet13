@@ -12,7 +12,7 @@
 
 /***** variables */
 	const url = window.location.href
-	const csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+	let csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
     let csrfSafeMethod
     let variables = ["name", "color", "species", "race", 
     "date_of_birth", "date_of_adoption", "caution", "nature_caution", 
@@ -46,6 +46,9 @@
 	// displays owner form with data from ajax request 
 	const sendDatasToServer = function(value, url, whatToDo){
 		// this functions fills the inputs with the given data from animal
+		csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+		alert(csrftoken)
+		return
 		//AJAX
 		csrfSafeMethod = function(method) {
 	    	// these HTTP methods do not require CSRF protection

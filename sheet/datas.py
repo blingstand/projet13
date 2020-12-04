@@ -6,7 +6,7 @@ context_sheet_view = {
         {'name' : 'Ajouter',    'id' : 'ajouter', 'function' : 'add()'}, 
         {'name' : 'Modifier',   'id' : 'modifier', 'function' : 'alter()'},
         {'name' : 'Supprimer',  'id' : 'supprimer', 'function' : 'remove()'}],
-    'anim_cols':["Nom", "Stérilisation", "Espèce", "Race", "Propriétaire", "Num dossier"]}
+    }
 
 context_contact_owner_view = {
             'historic_cols':["Date", "Type", "Titre", "Objet"],
@@ -15,3 +15,11 @@ context_contact_owner_view = {
                 {'name' : 'Modifier ',   'id' : 'modifier', 'function' : 'Alter()'},
                 {'name' : 'Supprimer',  'id' : 'supprimer', 'function' : 'Remove()'}]
         }
+
+
+top_columns_anim = ["&nbsp;", "Nom", "Stérilisation", "Espèce", "Race", "Propriétaire", "Num dossier"]
+
+top_columns_owner = [
+    "&nbsp", "Identifiant", "Nom", "Prénom", "Nombre d'animaux", "Caution", "Tel", "Mail", 
+    "Nb appel", "Nb mail", "Historique"
+]

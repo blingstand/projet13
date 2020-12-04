@@ -1,4 +1,4 @@
-{% extends 'core/base.html' %}
+{% extends 'spa_core/base.html' %} 
 {% block content %}
 {% load static%}
 <section>
@@ -67,8 +67,8 @@
 							<h4 class="mt-3 pl-5">Propriétaire</h4>
 							<p class="pl-5" id="hint"></p>
 							<div class="col-12 d-flex pt-1">
-								<div class="col-9 d-flex very-center curs-pointer  ">
-									{{form.select_owner}} <p class=" pt-3 ml-5"><img class="icon-link" src="{% static 'spa_core/img/eye.png'%}" onclick="GotoOwner()" alt="eye"></p>
+								<div  class="col-9 d-flex very-center curs-pointer  ">
+									{{form.select_owner}} <p class=" pt-3 ml-5"><img id="eye" class="icon-link" src="{% static 'spa_core/img/eye.png'%}" onclick="GotoOwner()" alt="eye"></p>
 								</div>
 
 								<div class="col-3 d-flex very-center curs-pointer" >

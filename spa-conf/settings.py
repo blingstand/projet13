@@ -19,9 +19,9 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(PROJECT_ROOT) 
 ROOT_DIR = os.path.dirname(BASE_DIR)
 
-print("1", ROOT_DIR)
-print("2", BASE_DIR)
-print("3", PROJECT_ROOT)
+# print("1", ROOT_DIR)
+# print("2", BASE_DIR)
+# print("3", PROJECT_ROOT)
 
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 
@@ -63,7 +63,7 @@ INSTALLED_APPS = [
     'mail.apps.MailConfig', 
     'info.apps.InfoConfig', 
     'search_bar.apps.SearchBarConfig', 
-    "django_nose", 
+    # "django_nose", 
     "tests.apps.TestsConfig"
 ]
 
@@ -142,7 +142,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 #for django-nose
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+# TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 # NOSE_ARGS = [
 #     '--with-coverage',
 #     '--cover-tests',

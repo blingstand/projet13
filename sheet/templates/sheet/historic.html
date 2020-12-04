@@ -1,4 +1,4 @@
-{% extends 'core/base.html' %}
+{% extends 'spa_core/base.html' %} 
 {% block content %}
 <section>
     <p class="curs-pointer back-button" onclick=BackToIndex()>Retour Index</p>
@@ -26,7 +26,7 @@
                 </tr>
                 {% for contact in contacts|dictsort:"contact_date"%}
                 <tr id="tr_{{forloop.counter}}"class="col-12 text-center {% cycle 'row1' 'row2' %}">
-                 <td><input type="checkbox" id='{{contact.id}}' name='checkbox' title="{{contact.id}}" value={{contact.id}}></td>
+                 <td><input type="checkbox" id='id_contact_{{contact.id}}' name='checkbox' title="{{contact.id}}" value={{contact.id}}></td>
                  <td>{{contact.contact_date}}</td>
                  <td>{{contact.str_nature}}</td>
                  <td>{{contact.resume}}</td>
@@ -37,14 +37,13 @@
      </div>
  </article>
 </section>
-{% load static %}
-
 <script type="text/javascript">
     /* plan
     > variables,
     > functions,
     > events,
     */
+    console.log(csrftoken)
     const trRow1 = Array.from(document.getElementsByClassName('row1'));
     const trRow2 = Array.from(document.getElementsByClassName('row2'));
     const allTr = trRow1.concat(trRow2)
@@ -59,7 +58,7 @@
         allTd = document.querySelectorAll('tr')
         return allTd.length
     }
-    const GetDatas = function(counter, action, idModif){
+    const GetDatasAndWrite = function(counter, action, idModif){
         keys = ["contact_date", "nature", "resume", "full_text"]
         ids = ["id_date_"+counter, "id_select_"+counter, "id_title_"+counter, "id_area_"+counter]
         console.log(ids)
@@ -77,6 +76,7 @@
 
         }else if (action == 'modify'){
             value['id_modif'] = idModif
+
             sendDatasToServer(value, "{% url 'sheet:contact_owner' owner.id 'modify'%}", whatToDo)
         }
 
@@ -127,6 +127,13 @@
         tr.appendChild(tdCheck)
         tdCheck.appendChild(checkbox)
 
+        // add csrf_token
+        csrfToken = document.createElement('input')
+        csrfToken.type = "hidden"
+        csrfToken.name = "csrfmiddlewaretoken"
+        csrfToken.value = "{{csrf_token}}"
+        tdCheck.appendChild(csrfToken)
+        
         for (elem of ["input","select","input","textarea"]){
             td = document.createElement('td')
             td.classList.add('text-center')
@@ -139,10 +146,11 @@
         lastTD.classList.add('text-center')
         but = document.createElement('button')
         but.innerHTML = "valider"
+        but.id = "submit"
         but.onclick = function(event){
             e = event || window.event;
             e.preventDefault()
-            GetDatas(counter, 'add')
+            GetDatasAndWrite(counter, 'add')
 
         }
         tr.appendChild(lastTD) 
@@ -161,6 +169,7 @@
                 count ++;
             }
         }
+        console.log(toDelete)
         return [toDelete, count]
     }
     const Remove = function(){
@@ -176,7 +185,7 @@
                 date = elem.parentElement.nextElementSibling.textContent
                 title = elem.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.textContent
                 msg = msg + "\n  >" + date + " - " + title;
-                idToDelete.push(elem.id)
+                idToDelete.push(elem.id.slice(11))
             }
             console.log(idToDelete)
             response = confirm(msg);
@@ -218,7 +227,7 @@
             e = event || window.event;
             console.log(e)
             e.preventDefault()
-            GetDatas(counter, 'modify', idSelected)
+            GetDatasAndWrite(counter, 'modify', idSelected)
         }
     }
     const Alter = function(){
@@ -234,9 +243,9 @@
         let values = []
         let tr = elemSelected.parentElement.parentElement
         tr.classList.add('d-none')
-        values = GetValuesFromOwner(elemSelected.id)
+        values = GetValuesFromOwner(elemSelected.id.slice(11))
         Add()
-        FillInput(values, elemSelected.id)
+        FillInput(values, elemSelected.id.slice(11))
     }
     const activClickEvent = function(){
         for (tr of allTr){
