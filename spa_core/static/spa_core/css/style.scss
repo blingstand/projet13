@@ -1,0 +1,58 @@
+@import "libs/color.scss";
+@import "libs/loops.scss";
+@import "libs/responsive.scss";
+@import "libs/utils.scss";
+
+@import "split/dashboard.scss";
+@import "split/nav.scss";
+@import "split/right-part-top.scss";
+@import "split/sheet-index.scss";
+@import "split/sheet-add-anim.scss";
+
+*, ::before, ::after {
+	box-sizing: border-box; 
+	margin:  0;
+	padding:  0; 
+}
+/* 123 */ 
+body{
+	display: grid;
+	grid-template-columns: 20vw 80vw;
+	height: 100vh;
+	overflow: hidden;
+	.part{
+		height: 100vh; 
+	}
+	.left-part{
+		grid-column: 1; 
+	}
+	.right-part{
+		background-color: #fff;
+		grid-column: 2; 
+
+		.right-part-bottom{
+			display: grid;
+			grid-template-rows: 0.1fr auto; 
+			height: 100%;
+			h2{
+				text-align: center; 
+				font-size: 2rem; 
+				margin-bottom: 2rem; 
+			}
+		}
+	}
+}
+
+nav{
+	@include load_nav(); 
+}
+
+.right-part{
+	@include load-right-part-top();
+}
+
+.right-part-bottom{		
+	@include load-dashboard(); 
+	@include load-sheet-index(); 
+	@include load-sheet-add-anim(); 
+}

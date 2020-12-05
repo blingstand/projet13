@@ -1,0 +1,22 @@
+$small: 500px;
+$medium: 768px;
+$big: 1024px;
+$udge: 1600px;
+
+$mobile:"only screen and (max-width: #{$small}) ";
+$tablet-and-lower: 'only screen and (max-width: #{$medium})' ;
+$tablet-landscape: 'only screen and (min-width: #{$medium + 1})' ;
+$laptop: 'only screen and (min-width: #{$big})' ;
+$desktop: 'only screen and (min-width: #{$udge})' ;
+
+$media_query: (
+	$mobile: 10px, $tablet-and-lower: 15px, $tablet-landscape: 14px,
+	$laptop: 16px, $desktop: 25px);
+
+@each $name_mq, $size_font in $media_query {
+	@media #{$name_mq}{
+		html{
+			font-size: $size-font; 
+		}
+	}
+}

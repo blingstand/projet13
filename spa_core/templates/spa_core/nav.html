@@ -1,0 +1,43 @@
+<nav class="bg-grey">
+	<div class="catline"></div>
+	<div class="container-avatar">
+		{%load static%}
+		<div class="avatar">
+			<img src="{% static 'spa_core/img/avatar.png'%}" alt="">
+		</div>
+		{% if name%}
+		<div class="label-avatar"> Bienvenu {{name}} </div>
+		{% endif%}
+		<div class="logout">
+			<a href="{% url 'user:logout'%}">se déconnecter</a>
+		</div>
+	</div>
+	<div class="catline"></div>
+	<div class="container-nav-button">
+
+		<div id="id_nav_mydashboard" class="nav-button">
+			Tableau de bord
+		</div>
+		<div id="id_nav_sheet" class="nav-button">
+			Fiches
+		</div>
+		<div id="id_nav_mail" class="nav-button">
+			Mails
+		</div>
+		<div id="id_nav_info" class="nav-button">
+			Informations	
+		</div>
+	</div>
+	<div class="catline"></div>
+
+</nav>
+<script>
+	navElem = ['id_nav_mydashboard', 'id_nav_sheet', 'id_nav_mail', 'id_nav_info']
+	href =["{% url 'mydashboard:index' %}", "{% url 'sheet:index' %}", "{% url 'mail:index' %}", "{% url 'info:index' %}"]
+
+	for (let i = 0; i < navElem.length; i++){
+		document.getElementById(navElem[i]).addEventListener('click', function(){
+			window.location.href = href[i]
+		})
+	}
+</script>

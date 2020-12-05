@@ -1,21 +1,21 @@
 {% extends 'spa_core/base.html' %} 
 {% block content %}
-<section class="sec-dashboard">
-	<article class="art-dashboard">
-		<h2 class="">
-			Tableau De Bord pour le mois : {{date}}
-		</h2>
-		<div class="container-dashboard">
-			<div id='graph' class="graph"></div>
-			<div class="container-button">
-					<div onclick=owner()  class="" title="propriétaire(s) devant stériliser">Propriétaires <br> avec obligations : {{nb_owners}}</div>
-					<div onclick=contacted() class="" title="propriétaire(s) à contacter"> Propriétaires <br> à contacter : {{nb_to_contact}} </div>
-					<div onclick=to_contact() class="" title="propriétaire(s) contacté(s)">Propriétaires <br> contactés : {{nb_contacted}}
-					</div>
+
+<h2 class="">
+	Tableau De Bord pour le mois : {{date}}
+</h2>
+<article class="art-dashboard">
+	<div class="container-dashboard">
+		<div id='graph' class="graph"></div>
+		<div class="container-button">
+			<div onclick=owner()  class="" title="propriétaire(s) devant stériliser">Propriétaires <br> avec obligations : {{nb_owners}}</div>
+			<div onclick=contacted() class="" title="propriétaire(s) à contacter"> Propriétaires <br> à contacter : {{nb_to_contact}} </div>
+			<div onclick=to_contact() class="" title="propriétaire(s) contacté(s)">Propriétaires <br> contactés : {{nb_contacted}}
 			</div>
 		</div>
-	</article>
-</section>
+	</div>
+</article>
+
 {% load static %}
 <script type="text/javascript" src='{% static "spa_core/js/highcharts.js" %}'>
 </script>

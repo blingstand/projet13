@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>SPA suivi stérilisation</title>
+  {% load static %}
+<!-- 	<link href="{% static 'spa_core/css/bootstrap.min.css'%}" rel="stylesheet" type="text/css" > -->
+	<!-- <link rel="stylesheet" href="{% static 'spa_core/css/change.css'%}"> -->
+	<link rel="stylesheet" href="{% static 'spa_core/css/style.css'%}">
+	<link rel="icon" href="{% static 'spa_core/img/favicon.png'%}">
+	<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src='{% static "spa_core/js/utils.js" %}'> </script>
+
+
+</head>
+<body class="">
+	<div class="left-part bg-grey">
+		{% include "spa_core/nav.html" %}
+	</div>
+	
+	<div class="right-part bg-grey">
+		<div class="right-part-top ">
+			{% include "spa_core/search.html" %}
+		</div>
+		<div class="right-part-bottom ">
+		{% block content %}{% endblock %}
+		</div>
+	</div>
+</body>
+</html>

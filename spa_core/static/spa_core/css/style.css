@@ -1,0 +1,411 @@
+.bg-green {
+  background-color: green;
+}
+
+.bg-blue-trans {
+  background-color: rgba(0, 180, 181, 0.5);
+}
+
+.bg-dark-blue {
+  background-color: #444E67;
+}
+
+.bg-primary {
+  background-color: #00b4b5 !important;
+}
+
+.bg-thrid-color {
+  background-color: tomato !important;
+}
+
+.bg-yellow {
+  background-color: yellow;
+}
+
+.bg-grey {
+  background-color: #ececec;
+}
+
+.table-with-2-col {
+  display: grid;
+  grid-template-columns: 2rem repeat(1, 1fr);
+}
+
+.table-with-3-col {
+  display: grid;
+  grid-template-columns: 2rem repeat(2, 1fr);
+}
+
+.table-with-4-col {
+  display: grid;
+  grid-template-columns: 2rem repeat(3, 1fr);
+}
+
+.table-with-5-col {
+  display: grid;
+  grid-template-columns: 2rem repeat(4, 1fr);
+}
+
+.table-with-6-col {
+  display: grid;
+  grid-template-columns: 2rem repeat(5, 1fr);
+}
+
+.table-with-7-col {
+  display: grid;
+  grid-template-columns: 2rem repeat(6, 1fr);
+}
+
+.table-with-8-col {
+  display: grid;
+  grid-template-columns: 2rem repeat(7, 1fr);
+}
+
+.table-with-9-col {
+  display: grid;
+  grid-template-columns: 2rem repeat(8, 1fr);
+}
+
+.table-with-10-col {
+  display: grid;
+  grid-template-columns: 2rem repeat(9, 1fr);
+}
+
+.table-with-11-col {
+  display: grid;
+  grid-template-columns: 2rem repeat(10, 1fr);
+}
+
+@media only screen and (max-width: 500px) {
+  html {
+    font-size: 10px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+}
+@media only screen and (min-width: 769px) {
+  html {
+    font-size: 14px;
+  }
+}
+@media only screen and (min-width: 1024px) {
+  html {
+    font-size: 16px;
+  }
+}
+@media only screen and (min-width: 1600px) {
+  html {
+    font-size: 25px;
+  }
+}
+.d-flex {
+  display: flex !important;
+}
+
+.d-block {
+  display: block !important;
+}
+
+.d-none {
+  display: none !important;
+}
+
+.content-centered, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1 .container-checkbox, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 .container-checkbox, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2, .right-part-bottom .art-sheet-index form .table .row-title .col-name, .right-part-bottom .art-sheet-index form, .right-part-bottom .art-sheet-index .container-button .container-button-toggle {
+  display: grid;
+  place-items: center;
+}
+
+.btn-sheet-index, .right-part-bottom .art-sheet-index .container-button .container-button-cud button, .right-part-bottom .art-sheet-index .container-button .container-button-toggle #display {
+  height: 2rem;
+  font-size: 1.2rem;
+  border-radius: 2rem;
+}
+.btn-sheet-index:hover, .right-part-bottom .art-sheet-index .container-button .container-button-cud button:hover, .right-part-bottom .art-sheet-index .container-button .container-button-toggle #display:hover {
+  cursor: pointer;
+}
+
+.shape-table-anim, .right-part-bottom .art-sheet-index form #anim_table .row-title, .right-part-bottom .art-sheet-index form #anim_table .row1, .right-part-bottom .art-sheet-index form #anim_table .row2, .shape-table-owner, .right-part-bottom .art-sheet-index form #owner_table .row-title, .right-part-bottom .art-sheet-index form #owner_table .row1, .right-part-bottom .art-sheet-index form #owner_table .row2 {
+  display: grid;
+  grid-template-columns: 4% 12% 26% 9% 14% 22% 1fr;
+  grid-column-gap: 2px;
+}
+
+.shape-table-owner, .right-part-bottom .art-sheet-index form #owner_table .row-title, .right-part-bottom .art-sheet-index form #owner_table .row1, .right-part-bottom .art-sheet-index form #owner_table .row2 {
+  grid-template-columns: 4% 8% 10% 10% 7% 7% 10% 19% 5% 5% 1fr;
+}
+
+*, ::before, ::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 123 */
+body {
+  display: grid;
+  grid-template-columns: 20vw 80vw;
+  height: 100vh;
+  overflow: hidden;
+}
+body .part {
+  height: 100vh;
+}
+body .left-part {
+  grid-column: 1;
+}
+body .right-part {
+  background-color: #fff;
+  grid-column: 2;
+}
+body .right-part .right-part-bottom {
+  display: grid;
+  grid-template-rows: 0.1fr auto;
+  height: 100%;
+}
+body .right-part .right-part-bottom h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+nav {
+  border-right: 1px black solid;
+  display: grid;
+  height: 100vh;
+  grid-template-rows: auto 40vh auto 40vh auto;
+}
+nav .catline {
+  background: url("../img/titre-chat.png") no-repeat bottom center;
+  height: 1rem;
+  padding: 1rem 0;
+}
+nav .container-avatar {
+  display: grid;
+  height: 100%;
+  grid-template-rows: 80% 10% 10%;
+  place-items: center;
+}
+nav .container-avatar .avatar img {
+  height: 10rem;
+}
+nav .container-avatar .logout {
+  font-size: 2rem;
+}
+nav .container-nav-button .nav-button {
+  border: 1px white solid;
+  border-radius: 2rem;
+  background-color: #fff;
+  text-align: center;
+  width: 80%;
+  margin: 2rem auto;
+  font-size: 1.5rem;
+}
+nav .container-nav-button .nav-button:hover {
+  border: 3px black solid;
+  cursor: pointer;
+}
+
+.right-part {
+  height: 100vh;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 20vh 80vh;
+}
+.right-part .right-part-top .container-search-bar {
+  width: 100%;
+  height: 100%;
+  margin: 1% 0;
+  overflow: hidden;
+  text-align: center;
+}
+.right-part .right-part-top .container-search-bar #id_search_input {
+  height: 5vh;
+  width: 80%;
+  border-radius: 1rem 1rem 0 0;
+  font-size: 2rem;
+  padding: 0 2rem;
+}
+.right-part .right-part-top .container-search-bar #id_search_input:hover {
+  border: 3px black solid;
+  cursor: pointer;
+}
+.right-part .right-part-top .container-search-bar .container-hashtag {
+  height: 5vh;
+  width: 100%;
+  margin-top: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.right-part .right-part-top .container-search-bar .container-hashtag .hashtag {
+  margin-top: 1.5rem;
+  flex: 0 1 150px;
+  color: blue;
+  font-size: 1.5rem;
+}
+.right-part .right-part-top .container-search-bar .container-hashtag .hashtag:hover {
+  cursor: pointer;
+  color: #000099;
+}
+.right-part .right-part-top .container-search-bar .propositions {
+  display: none;
+  background-color: #fff;
+  border: 3px black solid;
+  width: 80%;
+  padding: 0 2rem;
+  border-radius: 0 0 2rem 2rem;
+  z-index: 100;
+  position: relative;
+  top: -5vh;
+  left: 10%;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.right-part .right-part-top .container-search-bar .propositions span {
+  display: grid;
+  place-items: center;
+  flex: 1 1 25%;
+  height: 3rem;
+}
+.right-part .right-part-top .container-search-bar .propositions span:hover {
+  background-color: #75cfd0;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.right-part-bottom .art-dashboard {
+  height: 100%;
+}
+.right-part-bottom .art-dashboard .container-dashboard {
+  display: grid;
+  margin-left: 10px;
+  grid-template-columns: 60% 1fr;
+  grid-column-gap: 10px;
+  height: 100%;
+}
+.right-part-bottom .art-dashboard .container-dashboard .graph {
+  height: 80%;
+  border: 2px black solid;
+  border-radius: 2rem 2rem 0 0;
+}
+.right-part-bottom .art-dashboard .container-dashboard .container-button {
+  height: 80%;
+  display: grid;
+  place-items: center;
+}
+.right-part-bottom .art-dashboard .container-dashboard .container-button div {
+  background-color: #ececec;
+  width: 50%;
+  border: 3px white solide;
+  text-align: center;
+  border-radius: 2rem;
+}
+.right-part-bottom .art-dashboard .container-dashboard .container-button div:hover {
+  background-color: #00b4b5;
+  font-weight: bold;
+  cursor: pointer;
+}
+.right-part-bottom .art-sheet-index {
+  display: grid;
+  grid-template-rows: 4rem 1fr;
+}
+.right-part-bottom .art-sheet-index .container-button {
+  width: 100%;
+  background-color: #ececec;
+  display: grid;
+  grid-auto-columns: 40% 1fr;
+  grid-column-gap: 10px;
+}
+.right-part-bottom .art-sheet-index .container-button .container-button-toggle {
+  grid-column: 1;
+}
+.right-part-bottom .art-sheet-index .container-button .container-button-toggle #display {
+  width: 15rem;
+  background-color: tomato;
+}
+.right-part-bottom .art-sheet-index .container-button .container-button-cud {
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.right-part-bottom .art-sheet-index .container-button .container-button-cud button {
+  flex: 0 1 7rem;
+  /*  No stretching: */
+  margin: auto 2rem;
+}
+.right-part-bottom .art-sheet-index .container-button .container-button-cud button:hover {
+  background-color: #00b4b5;
+}
+.right-part-bottom .art-sheet-index .container-button .container-button-cud .owner-part:hover {
+  background-color: tomato;
+}
+.right-part-bottom .art-sheet-index form {
+  margin-top: 1rem;
+  width: 95%;
+  margin: 1rem auto;
+}
+.right-part-bottom .art-sheet-index form #anim_table .col-name {
+  background-color: #00b4b5;
+}
+.right-part-bottom .art-sheet-index form #owner_table .col-name {
+  background-color: tomato;
+}
+.right-part-bottom .art-sheet-index form .table {
+  width: 100%;
+  /* Hide scrollbar for Chrome, Safari and Opera */
+}
+.right-part-bottom .art-sheet-index form .table .row-title .col-name {
+  height: 2.5rem;
+  border-right: 2px white solid;
+}
+.right-part-bottom .art-sheet-index form .table .scrollable-part::-webkit-scrollbar {
+  display: none;
+}
+.right-part-bottom .art-sheet-index form .table .scrollable-part {
+  margin-top: 0.5rem;
+  height: 45vh;
+  width: 100%;
+  overflow: scroll;
+  border: 1px black solid;
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+.right-part-bottom .art-sheet-index form .table .scrollable-part .row1, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 {
+  font-size: 0.9rem;
+  background-color: #b5ffff;
+  margin-bottom: 5px;
+}
+.right-part-bottom .art-sheet-index form .table .scrollable-part .row1 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 div {
+  cursor: pointer;
+  border-right: 2px white solid;
+  text-indent: 5px;
+  width: 100%;
+  height: 100%;
+}
+.right-part-bottom .art-sheet-index form .table .scrollable-part .row2 {
+  background-color: white;
+}
+.right-part-bottom article form .container-full-form {
+  display: grid;
+  grid-template-columns: 40% 1fr;
+  grid-gap: 1rem;
+}
+.right-part-bottom article form .container-full-form .container-form-left-part {
+  grid-column: 1;
+  background-color: #00b4b5;
+}
+.right-part-bottom article form .container-full-form .container-form-right-part {
+  grid-column: 2;
+  background-color: #ececec;
+  display: grid;
+  grid-template-rows: repeat 2, 1fr;
+}
+
+/*# sourceMappingURL=style.css.map */

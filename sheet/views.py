@@ -26,7 +26,6 @@ def redirect_index(request):
     return redirect('sheet:index')
 class SheetView(View):
     """class for page index sheet"""
-    context= context_sheet_view
     def get(self, request, own=0, action=None, search=0):
         #get the data from database
         print(f"get own={own}, action={action}, search={search}")
@@ -44,22 +43,24 @@ class SheetView(View):
             owners = Owner.objects.get(id=search),
         elif action == "search:anim":
             animals = Animal.objects.get(id=search),
-        self.context['animals'] = animals
-        self.context['owners'] = list(owners)
-        self.context['disp_owners'] = own
-        self.context['top_columns_anim'] = top_columns_anim
-        self.context['top_columns_owner'] = top_columns_owner
-        return render(request, 'sheet/index.html', self.context)
+        context = {
+            'animals' : animals, 'owners': list(owners), 'disp_owners': own, 
+            'top_columns_anim': top_columns_anim, 'top_columns_owner': top_columns_owner, 
+            'button_value': button_value
+            }
+        return render(request, 'sheet/index.html', context)
 
     def post(self, request, own, search=0):
         """receives data to pass to deals with the dropSheet function"""
         given_id = request.POST.getlist('checkbox')
+        print("***************")
+        print(given_id, own)
+
         if own == 0:
-            # print("demande de suppression pour au moins un animal |", given_id )
             utils_sheet.drop_sheet(given_id)
             return redirect("sheet:index",own='0')
-        # print("demande de suppression pour au moins un humain |", given_id )
-        given_id = [gid[2:] for gid in given_id]
+
+        print("***************")
         utils_sheet.remove_owner(given_id)
         return redirect("sheet:index",own='1')
 
@@ -228,14 +229,14 @@ class AddOwnerSheetView(View):
 
 class ContactOwnerView(View):
     """class for page historic"""
-    context = context_contact_owner_view
     def get(self, request, given_id=None, action=None):
         """this method displays historic of contact for a given owner """
         owner = Owner.objects.get(id=given_id)
         contacts = Contact.objects.filter(owner=owner)
-        self.context["owner"] = owner
-        self.context["contacts"] = contacts
-        return render(request, "sheet/historic.html", self.context)
+        context = {
+            "owner": owner, "contacts": contacts, 'historic_cols': historic_cols
+        }
+        return render(request, "sheet/historic.html", context)
 
     def post(self, request, given_id=None, action=None):
         """this method handles a post request for the  historic of contact page """
