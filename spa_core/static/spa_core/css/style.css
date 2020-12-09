@@ -1,3 +1,4 @@
+/* 123 */
 .bg-green {
   background-color: green;
 }
@@ -113,17 +114,34 @@
   display: none !important;
 }
 
-.content-centered, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1 .container-checkbox, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 .container-checkbox, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2, .right-part-bottom .art-sheet-index form .table .row-title .col-name, .right-part-bottom .art-sheet-index form, .right-part-bottom .art-sheet-index .container-button .container-button-toggle {
+.catline {
+  background: url("../img/titre-chat.png") no-repeat bottom center;
+  height: 2rem;
+  padding: 1rem 0;
+}
+
+.content-centered, .add-owner-open .container-animals, .add-owner-open .form-add-owner-open .container-fields .line, .add-owner-open h2, .container-overview .container-button, .container-overview .overview .field, .right-part-bottom .mail-settings .container-form .form-settings .container-input, .right-part-bottom .mail-settings .container-form, .right-part-bottom .mail-settings .container-wish .wish, .right-part-bottom .mail-settings .container-wish, .right-part-bottom .mail-content .right-part .container-buttons, .right-part-bottom .mail-content .right-part .container-tools .tool, .right-part-bottom .mail-content .right-part .container-tools, .right-part-bottom .mail-content .left-part .field, .right-part-bottom .cns .container-button, .right-part-bottom .mail-index .mail-table .scrollable-part .row1 .cell, .right-part-bottom .mail-index .mail-table .scrollable-part .row2 .cell, .right-part-bottom .mail-index .mail-table .mail-table-title .col-name, .right-part-bottom .historic .historic-table .scrollable-part .row1 .cell, .right-part-bottom .historic .historic-table .scrollable-part .row2 .cell, .right-part-bottom .historic .historic-table .historic-table-title .col-name, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .content-pictures, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-candidates p, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-candidates, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .selected-candidate, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-owners, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-top .part-1 .top-bottom p, .right-part-bottom .form-anim .title, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1 .container-checkbox, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 .container-checkbox, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2, .right-part-bottom .art-sheet-index form .table .row-title .col-name, .right-part-bottom .art-sheet-index form, .right-part-bottom .art-sheet-index .container-button .container-button-toggle {
   display: grid;
   place-items: center;
 }
 
-.btn-sheet-index, .right-part-bottom .art-sheet-index .container-button .container-button-cud button, .right-part-bottom .art-sheet-index .container-button .container-button-toggle #display {
+.back-button {
+  transition: transform 1s 0.2s;
+  cursor: pointer;
+}
+.back-button:hover {
+  font-weight: bold;
+  text-decoration: underline;
+  transform: scale(1.1) translateX(5vw);
+  color: blue;
+}
+
+.btn-sheet-index, .right-part-bottom .mail-index .container-button button, .right-part-bottom .historic .container-button-cud button, .right-part-bottom .art-sheet-index .container-button .container-button-cud button, .right-part-bottom .art-sheet-index .container-button .container-button-toggle #display {
   height: 2rem;
   font-size: 1.2rem;
   border-radius: 2rem;
 }
-.btn-sheet-index:hover, .right-part-bottom .art-sheet-index .container-button .container-button-cud button:hover, .right-part-bottom .art-sheet-index .container-button .container-button-toggle #display:hover {
+.btn-sheet-index:hover, .right-part-bottom .mail-index .container-button button:hover, .right-part-bottom .historic .container-button-cud button:hover, .right-part-bottom .art-sheet-index .container-button .container-button-cud button:hover, .right-part-bottom .art-sheet-index .container-button .container-button-toggle #display:hover {
   cursor: pointer;
 }
 
@@ -143,12 +161,14 @@
   padding: 0;
 }
 
-/* 123 */
 body {
   display: grid;
   grid-template-columns: 20vw 80vw;
   height: 100vh;
   overflow: hidden;
+}
+body input:focus, body textarea:focus, body select:focus {
+  outline: none;
 }
 body .part {
   height: 100vh;
@@ -176,11 +196,6 @@ nav {
   display: grid;
   height: 100vh;
   grid-template-rows: auto 40vh auto 40vh auto;
-}
-nav .catline {
-  background: url("../img/titre-chat.png") no-repeat bottom center;
-  height: 1rem;
-  padding: 1rem 0;
 }
 nav .container-avatar {
   display: grid;
@@ -392,20 +407,615 @@ nav .container-nav-button .nav-button:hover {
 .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 {
   background-color: white;
 }
-.right-part-bottom article form .container-full-form {
-  display: grid;
-  grid-template-columns: 40% 1fr;
-  grid-gap: 1rem;
+.right-part-bottom .form-anim input, .right-part-bottom .form-anim select {
+  background-color: #fff;
+  height: 2rem;
+  width: 89%;
+  border-radius: 1rem 1rem 0 0;
+  text-align: center;
+  font-size: 0.8rem;
+  text-transform: uppercase;
 }
-.right-part-bottom article form .container-full-form .container-form-left-part {
+.right-part-bottom .form-anim select {
+  padding-left: 1rem;
+}
+.right-part-bottom .form-anim .left, .right-part-bottom .form-anim .right {
+  background-color: #fff;
+  text-align: center;
+  padding: 0.7rem;
+}
+.right-part-bottom .form-anim .left {
   grid-column: 1;
+}
+.right-part-bottom .form-anim .right {
+  grid-column: 2;
+}
+.right-part-bottom .form-anim .title {
+  transition: border-radius 2s;
+  border-radius: 0;
+}
+.right-part-bottom .form-anim .part-1, .right-part-bottom .form-anim .part-2, .right-part-bottom .form-anim .part-3, .right-part-bottom .form-anim .part-4 {
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.right-part-bottom .form-anim .part-2 {
+  grid-row: 4;
+}
+.right-part-bottom .form-anim .part-3 {
+  grid-row: 6;
+}
+.right-part-bottom .form-anim .part-4 {
+  grid-row: 8;
+}
+.right-part-bottom .form-anim .line {
+  height: 0.2rem;
+  background-color: black;
+  margin: 0rem auto;
+  width: 60%;
+}
+.right-part-bottom .form-anim .container-full-form {
+  display: grid;
+  grid-template-columns: 1rem 40% 1fr 1rem;
+  grid-gap: 1rem;
+  height: 65vh;
+  transition: all 2s;
+}
+.right-part-bottom .form-anim .container-full-form .error-displayed-title {
+  border: 2px black dotted;
+  background-color: red !important;
+  font-size: 2rem;
+}
+.right-part-bottom .form-anim .container-full-form .error-displayed-input {
+  border: 4px red solid;
+  background-color: #ff9999 !important;
+}
+.right-part-bottom .form-anim .container-full-form .title {
   background-color: #00b4b5;
 }
-.right-part-bottom article form .container-full-form .container-form-right-part {
+.right-part-bottom .form-anim .container-full-form .container-form-left-part {
   grid-column: 2;
-  background-color: #ececec;
   display: grid;
-  grid-template-rows: repeat 2, 1fr;
+  grid-template-rows: 3rem 21% 0.2rem 21% 0.2rem 21% 0.2rem 1fr;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-left-part:hover .title, .right-part-bottom .form-anim .container-full-form .container-form-right-part-top:hover .title, .right-part-bottom .form-anim .container-full-form .container-form-right-part-bottom:hover .title {
+  border-radius: 2rem 2rem 0 0;
+  background-color: #68c4c4;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part {
+  grid-column: 3;
+  background-color: white;
+  display: grid;
+  grid-template-rows: 18rem 1fr;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-top {
+  grid-row: 1;
+  display: grid;
+  grid-template-rows: 3rem 5rem 0.2rem 4rem 0.2rem 1fr;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-top .part-1 {
+  grid-template-columns: repeat(3, 1fr);
+  padding-bottom: 1rem;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-top .part-1 .top-bottom {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  grid-template-rows: repeat(2, 1fr);
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-top .part-2 {
+  grid-template-columns: 1fr;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-top .part-2 #id_is_neutered {
+  list-style-type: none;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  grid-template-columns: repeat(3, 1fr);
+  list-style-type: none;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-top .part-2 #id_is_neutered li {
+  height: 100%;
+  width: 100%;
+  white-space: nowrap;
+  display: grid;
+  place-items: center;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-top .part-2 #id_is_neutered li input[type=radio] {
+  height: inherit;
+  width: inherit;
+  margin: 0 0.5rem;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-top .part-2 #id_is_neutered li .date-of-neuter {
+  background-color: #fff;
+  height: 1.5rem;
+  width: 89%;
+  border-radius: 1rem 1rem 0 0;
+  text-align: center;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-top .part-3 {
+  grid-template-columns: 1fr;
+  place-items: center;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-top .part-3 #id_status {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  height: 70%;
+  width: 86%;
+  border-radius: 1rem 1rem 0 0;
+  padding: 1rem;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom {
+  height: 20vh;
+  display: grid;
+  grid-template-rows: 3rem 1rem 1fr;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom #hint {
+  text-decoration: italic;
+  font-size: 0.7rem;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line {
+  display: grid;
+  place-items: center;
+  grid-template-columns: 1fr 12% 27%;
+  grid-column-gap: 0.5rem;
+  height: 9vh;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-owners {
+  width: 100%;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-owners input, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-owners .selected-candidate {
+  width: 100%;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .selected-candidate {
+  background-color: #fff;
+  border: 1px black solid;
+  border-radius: 1rem 1rem 0 0;
+  text-align: center;
+  height: 2rem;
+  cursor: pointer;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-candidates {
+  background-color: #fff;
+  border-radius: 1rem 1rem 0 0;
+  width: 24vw;
+  min-height: 4rem;
+  position: fixed;
+  bottom: 5px;
+  transform: translateY(-14vh);
+  border: 1px black solid;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-candidates > p {
+  border-radius: 1rem 1rem 0 0;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-candidates p {
+  width: 100%;
+  height: 100%;
+  transition: background 0.7s;
+  overflow: hidden;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-candidates p:hover {
+  cursor: pointer;
+  background-color: #00b4b5;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line #id_select_owner {
+  border-radius: 0 0 1rem 1rem;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .content-pictures {
+  width: 100%;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .content-pictures .icon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-save {
+  width: 100%;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-save #save {
+  cursor: pointer;
+}
+.right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-save #save:hover {
+  background-color: #00b4b5;
+  color: white;
+}
+.right-part-bottom .title-historic {
+  margin-bottom: 0 !important;
+}
+.right-part-bottom .historic {
+  display: grid;
+  grid-template-rows: 5rem 1fr;
+  grid-template-columns: 1fr;
+}
+.right-part-bottom .historic .container-button-cud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.right-part-bottom .historic .container-button-cud button {
+  flex: 0 1 7rem;
+  /*  No stretching: */
+  margin: auto 2rem;
+}
+.right-part-bottom .historic .container-button-cud button:hover {
+  background-color: #00b4b5;
+}
+.right-part-bottom .historic .historic-table {
+  display: grid;
+  grid-template-rows: 2rem 1fr;
+  width: 95%;
+  margin: 0 auto;
+}
+.right-part-bottom .historic .historic-table .historic-table-title {
+  background-color: #00b4b5;
+  display: grid;
+  grid-template-columns: 2rem 8rem 9rem 12rem 1fr;
+  grid-gap: 3px 5px;
+  text-align: center;
+}
+.right-part-bottom .historic .historic-table .scrollable-part {
+  height: 50vh;
+  overflow: hidden;
+}
+.right-part-bottom .historic .historic-table .scrollable-part .row1, .right-part-bottom .historic .historic-table .scrollable-part .row2 {
+  display: grid;
+  grid-template-columns: 2rem 8rem 9rem 12rem 1fr;
+  grid-gap: 3px 5px;
+}
+.right-part-bottom .historic .historic-table .scrollable-part .row1 .last-cell, .right-part-bottom .historic .historic-table .scrollable-part .row2 .last-cell {
+  text-align: justify;
+  text-indent: 1rem;
+  padding-right: 0.5rem;
+}
+.right-part-bottom .historic .historic-table .scrollable-part .row2 {
+  background-color: #b5ffff;
+}
+.right-part-bottom .mail-index {
+  display: grid;
+  grid-template-rows: 5rem 1fr;
+}
+.right-part-bottom .mail-index .container-button {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.right-part-bottom .mail-index .container-button button {
+  flex: 0 1 7rem;
+  /*  No stretching: */
+  margin: auto 2rem;
+}
+.right-part-bottom .mail-index .container-button button:hover {
+  background-color: #00b4b5;
+}
+.right-part-bottom .mail-index .mail-table {
+  display: grid;
+  grid-template-rows: 2rem 1fr;
+  width: 95%;
+  margin: 0 auto;
+}
+.right-part-bottom .mail-index .mail-table .mail-table-title {
+  background-color: #00b4b5;
+  display: grid;
+  grid-template-columns: 2rem 5rem 5rem 15rem 1fr;
+  grid-gap: 3px 5px;
+  text-align: center;
+}
+.right-part-bottom .mail-index .mail-table .scrollable-part {
+  height: 50vh;
+  overflow: hidden;
+}
+.right-part-bottom .mail-index .mail-table .scrollable-part .row1, .right-part-bottom .mail-index .mail-table .scrollable-part .row2 {
+  display: grid;
+  grid-template-columns: 2rem 5rem 5rem 15rem 1fr;
+  grid-gap: 3px 5px;
+}
+.right-part-bottom .mail-index .mail-table .scrollable-part .row1 .last-cell, .right-part-bottom .mail-index .mail-table .scrollable-part .row2 .last-cell {
+  text-align: justify;
+  text-indent: 1rem;
+  padding-right: 0.5rem;
+}
+.right-part-bottom .mail-index .mail-table .scrollable-part .row2 {
+  background-color: #b5ffff;
+}
+.right-part-bottom .cns {
+  display: grid;
+  grid-template-columns: 15vw 1fr 15vw;
+}
+.right-part-bottom .cns .container-button {
+  grid-column: 2;
+  background-color: #00b4b5;
+  height: 55vh;
+  border-radius: 5rem;
+}
+.right-part-bottom .cns .container-button button {
+  border-radius: 2rem;
+  width: 18rem;
+  height: 5rem;
+  font-size: 2rem;
+  cursor: pointer;
+}
+.right-part-bottom .cns .container-button button:hover {
+  background-color: tomato;
+  color: white;
+  font-weight: bold;
+}
+.right-part-bottom .mail-content {
+  display: grid;
+  grid-template-columns: 70% 1fr;
+  height: 65vh;
+  overflow: hidden;
+}
+.right-part-bottom .mail-content .left-part {
+  display: grid;
+  grid-template-rows: 10% 10% 1fr;
+  background-color: #00b4b5;
+  height: 65vh;
+}
+.right-part-bottom .mail-content .left-part .field input[type=text] {
+  border-radius: 0;
+  width: 90%;
+  border: 1px black solid;
+}
+.right-part-bottom .mail-content .left-part .field:last-child {
+  display: grid;
+}
+.right-part-bottom .mail-content .left-part .field:last-child textarea {
+  place-items: center;
+  border: 1px black solid;
+  height: 50vh;
+  width: 90%;
+  font-size: 1rem;
+  padding: 1rem;
+}
+.right-part-bottom .mail-content .right-part {
+  background-color: #ececec;
+  height: 65vh;
+  display: grid;
+  grid-template-rows: 10% 45vh 1fr 10%;
+}
+.right-part-bottom .mail-content .right-part .container-tools {
+  grid-row: 2;
+}
+.right-part-bottom .mail-content .right-part .container-tools .tool label {
+  margin-bottom: 0.7rem;
+}
+.right-part-bottom .mail-content .right-part .container-tools .tool select {
+  font-size: 0.6rem;
+  width: 14rem;
+  cursor: pointer;
+}
+.right-part-bottom .mail-content .right-part .container-tools .tool select:hover {
+  font-weight: bold;
+}
+.right-part-bottom .mail-content .right-part .container-buttons {
+  grid-row: 3;
+  grid-template-columns: repeat(2, 1fr);
+}
+.right-part-bottom .mail-content .right-part .container-buttons button {
+  width: 7rem;
+  height: 3rem;
+  border-radius: 2rem;
+  background-color: tomato;
+  font-size: 1rem;
+  color: white;
+  cursor: pointer;
+}
+.right-part-bottom .mail-content .right-part .container-buttons button:hover {
+  font-weight: bold;
+}
+.right-part-bottom .mail-content .right-part .container-buttons button:last-child {
+  background-color: #00b4b5;
+}
+.right-part-bottom header h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+.right-part-bottom header h2 .title-info {
+  font-size: 1.5rem;
+  font-style: italic;
+}
+.right-part-bottom .mail-settings {
+  height: 60vh;
+  background-color: #ececec;
+}
+.right-part-bottom .mail-settings .container-wish {
+  width: 100%;
+}
+.right-part-bottom .mail-settings .container-wish .wish {
+  width: 70%;
+  height: 4rem;
+  background-color: tomato;
+  border-radius: 2rem 2rem 0 0;
+  padding: 1rem;
+  cursor: pointer;
+}
+.right-part-bottom .mail-settings .container-form {
+  width: 100%;
+}
+.right-part-bottom .mail-settings .container-form .form-settings {
+  background-color: #00b4b5;
+  width: 70%;
+  display: grid;
+  grid-template-rows: 1fr 4rem;
+}
+.right-part-bottom .mail-settings .container-form .form-settings ul#id_frequency {
+  list-style-type: none;
+  padding: 1rem 0;
+}
+.right-part-bottom .mail-settings .container-form .form-settings ul#id_frequency li {
+  font-size: 1.5rem;
+}
+.right-part-bottom .mail-settings .container-form .form-settings ul#id_frequency li:hover {
+  font-weight: bold;
+}
+.right-part-bottom .mail-settings .container-form .form-settings ul#id_frequency li input[type=radio] {
+  margin: 0 1rem;
+}
+.right-part-bottom .mail-settings .container-form .form-settings ul#id_frequency li label {
+  cursor: pointer;
+}
+.right-part-bottom .mail-settings .container-form .form-settings .container-input {
+  width: 100%;
+  height: 100%;
+  background-color: tomato;
+}
+.right-part-bottom .mail-settings .container-form .form-settings .container-input input[type=submit] {
+  width: 12rem;
+  height: 3rem;
+  background-color: #fff;
+  border-radius: 0 0 2rem 2rem;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+.container-overview {
+  grid-column: span 2;
+  display: grid;
+  grid-template-rows: 7rem 1fr 4rem;
+}
+.container-overview header {
+  height: 100%;
+  background-color: #00b4b5;
+}
+.container-overview header h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+.container-overview header h2 .title-info {
+  font-size: 1.5rem;
+  font-style: italic;
+}
+.container-overview .overview {
+  display: grid;
+  grid-template-rows: 10% 10% 1fr;
+  background-color: #00b4b5;
+  height: 80vh;
+  background-color: #ececec;
+}
+.container-overview .overview .field input[type=text] {
+  border-radius: 0;
+  width: 90%;
+  height: 2rem;
+  font-size: 1.3rem;
+  border: 1px black solid;
+  padding: 0 1rem;
+}
+.container-overview .overview .field:last-child {
+  display: grid;
+}
+.container-overview .overview .field:last-child textarea {
+  place-items: center;
+  border: 1px black solid;
+  height: 60vh;
+  width: 90%;
+  font-size: 1.3rem;
+  padding: 1rem;
+}
+.container-overview .container-button {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+.container-overview .container-button button {
+  grid-column: 5;
+  cursor: pointer;
+  height: 3rem;
+  width: 12rem;
+  background-color: tomato;
+  color: white;
+  font-size: 1.8rem;
+}
+.container-overview .container-button button:hover {
+  font-weight: bold;
+}
+
+.add-owner-open {
+  display: grid;
+  grid-template-rows: 5rem 1fr 8rem;
+  width: 100vw;
+  height: 100vh;
+}
+.add-owner-open h2 {
+  grid-row: 1;
+  background-color: #00b4b5;
+}
+.add-owner-open .form-add-owner-open {
+  background-color: #ececec;
+  grid-row: 2;
+  display: grid;
+  grid-template-rows: 75% 1fr;
+}
+.add-owner-open .form-add-owner-open .container-fields {
+  display: grid;
+  grid-template-rows: repeat(5, 1fr);
+}
+.add-owner-open .form-add-owner-open .container-fields .line {
+  display: grid;
+  grid-template-columns: 40% 1fr;
+}
+.add-owner-open .form-add-owner-open .container-fields .line .field-left {
+  grid-column: 1;
+}
+.add-owner-open .form-add-owner-open .container-fields .line .field-right, .add-owner-open .form-add-owner-open .container-fields .line #id_owner_sex {
+  grid-column: 2;
+  width: 100%;
+}
+.add-owner-open .form-add-owner-open .container-fields .line .field-right input[type=text], .add-owner-open .form-add-owner-open .container-fields .line .field-right input[type=email], .add-owner-open .form-add-owner-open .container-fields .line #id_owner_sex input[type=text], .add-owner-open .form-add-owner-open .container-fields .line #id_owner_sex input[type=email] {
+  height: 2rem;
+  width: 16rem;
+  text-transform: uppercase;
+  border-radius: 1rem 1rem 0 0;
+  text-align: center;
+}
+.add-owner-open .form-add-owner-open .container-fields .line .field-right input[type=email], .add-owner-open .form-add-owner-open .container-fields .line #id_owner_sex input[type=email] {
+  text-transform: none;
+}
+.add-owner-open .form-add-owner-open .container-fields .line #id_owner_sex {
+  list-style-type: none;
+  display: flex;
+  width: 80%;
+  margin: 0 auto;
+}
+.add-owner-open .form-add-owner-open .container-fields .line #id_owner_sex #id_owner_sex_1 {
+  margin-left: 2rem;
+}
+.add-owner-open .form-add-owner-open .container-buttons {
+  background-color: green;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
+  place-items: center;
+}
+.add-owner-open .form-add-owner-open .container-buttons button, .add-owner-open .form-add-owner-open .container-buttons input[type=submit] {
+  height: 3rem;
+  width: 12rem;
+  text-transform: uppercase;
+  border-radius: 1rem 1rem 0 0;
+  background-color: #00b4b5;
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+}
+.add-owner-open .form-add-owner-open .container-buttons button:hover, .add-owner-open .form-add-owner-open .container-buttons input[type=submit]:hover {
+  font-weight: bold;
+}
+.add-owner-open .form-add-owner-open .container-buttons button {
+  background-color: tomato;
+}
+.add-owner-open .container-animals {
+  background-color: #ececec;
+  list-style-type: none;
+}
+.add-owner-open .container-animals li {
+  font-size: 1.5rem;
+}
+.add-owner-open .container-animals li:hover {
+  cursor: pointer;
+  font-weight: bold;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -1,118 +1,134 @@
 {% extends 'spa_core/base.html' %} 
 {% block content %}
 <section class="">
-    <p class="curs-pointer back-button" onclick=BackToCNS()>Retour CNS</p>
-    {% if mail %}
-        <h2 class="mt-2 pl-5">Règle(s) d'envoi pour mail (id={{mail.mail_id}}, titre='{{mail.title}}') </h2>
-    {% else %}
-        <h2 class="mt-2 pl-5">Règle(s) d'envoi </h2>
-    {% endif %}
-    <article class="mt-5 container">
-        <div class="row">
-            <div class="col-1 "></div>
-            <div class="col-10 bg-white">
-                <div class=" mt-5 mb-5 text-center bg-tomato very-center sett-choice d-flex" id="auto">Je ne souhaite pas envoyer ce mail automatiquement ... </div>
-                <form action="" method="post" id='formSettings' class="d-none">{% csrf_token %}
-                    <div class="col-12 d-flex">
-                        {%for field in form%}
-                        {% for error in field.errors %}
-                        <div class="alert alert-danger">
-                            <strong>{{field.label}} {{ error|escape }}</strong>
-                        </div>
-                        {% endfor %}
-                        {% endfor %}
-                        <div class="col-1"></div>
-                        <div class="col-8 bg-blue-trans pt-3 mb-3 ">{{form.frequency}}</div>
-                        <div class="col-3 very-center">
-                            <input type="submit"class="btn btn-primary big-btn" value="Enregistrer">
-                            <p id="verif"></p>
-                        </div>
-                    </div>
-                </form>
-
+    <header>
+        <p class="back-button" onclick=BackToCNS()>Retour CNS</p>
+        {% if mail %}
+        <h2 class="">Règle(s) d'envoi pour mail <br><span class="title-info"> (id={{mail.mail_id}}, titre='{{mail.title}}')</span> </h2>
+        {% else %}
+        <h2 class="">Règle(s) d'envoi </h2>
+        {% endif %}
+    </header>
+    <article class="mail-settings">
+        <div class="container-wish">
+            <div class="wish" id="wish">Je ne souhaite pas envoyer ce mail automatiquement ... 
             </div>
-            <div class="col-1 "></div>
-
+        </div>
+        <div class="container-form">
+            <form action="" method="post" id='formSettings' class="form-settings d-none">{% csrf_token %}
+                {{form.frequency}}
+                <div class="container-input">
+                    <input type="submit"class="btn btn-primary big-btn" value="Enregistrer">
+                    <p id="verif"></p>
+                </div>
+            </form>
         </div>
     </article>
 </section>
-<script type="text/javascript" src='/static/mail/js/utils.js'> </script>
 <script type="text/javascript">
-    const auto = document.getElementById('auto')
+
+    //###################
+    //#### VARIABLES ####
+    //###################
+    const wish = document.getElementById('wish')
     const formSettings = document.getElementById('formSettings')
-    const colors = ['#00B4B5', 'tomato'];
     let count = 0
     param = GetParam()
+
+    
+    //###################
+    //#### FUNCTIONS ####
+    //###################
+
     const BackToCNS = function(){
         pageName = 'settings'
         BackCNS(pageName, "{% url 'mail:cns'%}")
     }
 
-    //*****toggle form
-    //display form
-    const appearChoice = function(){
-        value = {'ajax':Number(1), 'mail_id':param, 'auto_send':1}
+    // //******fill the form
+    // const fillForm = function(){
+    //     keys = ['{{mail.send_after_creation}}', '{{mail.send_after_modif}}', '{{mail.send_after_delete}}','{{mail.send_every_2_weeks}}', '{{mail.send_when_neuterable}}']
+    //     for (index in keys){
+    //         if (keys[index] != 'False'){
+    //             document.getElementById('id_frequency_'+index).checked = true;
+    //             break; 
+    //         };
+    //     }
+    // }
+    //displays form + changes auto_send value in db for 1
+    const AppearChoice = () => {
+        console.log("Appear : j'envoie 1 au serveur")
+        value = {'ajax':1, 'mail_id':param, 'auto_send':1}
         urlAppChoice = "{% url 'mail:settings'%}"
         whatToDo = function(){
-            auto.textContent = "Je souhaite envoyer ce mail automatiquement ..."
-            formSettings.classList.replace("d-none", "d-flex");
+            wish.textContent = "Je souhaite envoyer ce mail automatiquement ..."
+            formSettings.classList.remove("d-none");
             document.getElementById('id_frequency_0').checked = true; 
         }
         sendDatasToServer(value, url, whatToDo)
+        return true
     }
-    //remove form
-    const disappearChoice = function(){
-        value = {'ajax':Number(1), 'mail_id':param, 'auto_send':0}
+
+    //hides form + changes auto_send value in db for 0
+    const DisappearChoice = () => {
+        console.log("DisAppear : j'envoie 0 au serveur")
+        value = {'ajax':1, 'mail_id':param, 'auto_send':0}
         urlAppChoice = "{% url 'mail:settings'%}"
         whatToDo = function(){
-            auto.textContent = "Je ne souhaite pas envoyer ce mail automatiquement ..."
-            formSettings.classList.replace("d-flex", "d-none");
+            wish.textContent = "Je ne souhaite pas envoyer ce mail automatiquement ..."
+            formSettings.classList.add("d-none");
             document.getElementById('id_frequency_0').checked = true; 
         }
         sendDatasToServer(value, url, whatToDo) 
+        return false
     }
+    const ChangeAutoSend = () => {
+        autoSend = localStorage.autoSend
+        if (autoSend == 0 ){
+            newAutoSend = AppearChoice()
+            
+        }else{
+            newAutoSend = DisappearChoice()
+        }
+        localStorage.setItem("autoSend", newAutoSend) 
+        console.log("localStorage : " + localStorage.autoSend )
+    }
+    //###################
+    //####  EVENTS   ####
+    //###################
     //choose display or remove
-    auto.onclick = function () {        
-        if (auto.style.backgroundColor == "tomato"){
-            appearChoice();
-            auto.style.backgroundColor = '#00B4B5'
-        }
-        else{
-            disappearChoice();
-            auto.style.backgroundColor = "tomato"
-        }
+    wish.onclick = function () {  
+        ChangeAutoSend()
     };
-
-    
-    //******fill the form
-    const fillForm = function(){
-        keys = ['{{mail.send_after_creation}}', '{{mail.send_after_modif}}', '{{mail.send_after_delete}}','{{mail.send_every_2_weeks}}', '{{mail.send_when_neuterable}}']
-        for (index in keys){
-            if (keys[index] != 'False'){
-                document.getElementById('id_frequency_'+index).checked = true;
-                break; 
-            };
+    window.onload = () => {
+        console.log('le serveur envoie : {{ mail.auto_send_js }} ')
+        autoSend = "{{ mail.auto_send_js }}"
+        localStorage.setItem("autoSend", autoSend) 
+        if (autoSend == 0){
+            console.log("je ne veux pas voir le form ")
+            formSettings.classList.add("d-none");
+        }else{
+            console.log("je veux voir le form ")
+            formSettings.classList.remove("d-none");
         }
     }
-
-
-    let main = function() {
-        {% if mail.auto_send%}
-        auto.textContent = "Je souhaite envoyer ce mail automatiquement ..."
-        formSettings.classList.remove("d-none");
-        formSettings.classList.add("d-flex");
-        auto.style.backgroundColor = colors[0];
-        {% else %}
-        disappearChoice();
-        auto.style.backgroundColor = colors[1];
-        {% endif%}
-        // auto.classList.replace("d-none", "d-flex");
-        
-        fillForm()
-    }
-    $(document).ready(function() { 
-        main() 
-    });
+    // let main = function() {
+    //     {% if mail.auto_send%}
+    //     wish.textContent = "Je souhaite envoyer ce mail automatiquement ..."
+    //     formSettings.classList.remove("d-none");
+    //     formSettings.classList.add("d-flex");
+    //     wish.style.backgroundColor = colors[0];
+    //     {% else %}
+    //     DisappearChoice();
+    //     wish.style.backgroundColor = colors[1];
+    //     {% endif%}
+    // // auto.classList.replace("d-none", "d-flex");
+    
+    // fillForm()
+    // }
+    // $(document).ready(function() { 
+    //     main() 
+    // });
 
 </script>
 

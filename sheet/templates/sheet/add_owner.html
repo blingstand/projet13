@@ -1,47 +1,47 @@
 {% extends 'spa_core/base.html' %} 
 {% block content %}
-<section>
-	<p class="curs-pointer back-button" onclick=BackToIndex()>Retour Index</p>
-	<h2 class="mt-5 mb-5 pl-5">Page Nouveau Propriétaire</h2>
-	<article class=" bg-grey pt-5 pb-5">
-		<form id='form' class="sheet" action="{% url 'sheet:add_owner'%}" method="post" enctype="multipart/form-data">
-			{% csrf_token %}
-			<div class="container">
-				<div class="row">
-					<div class="col-2"></div>
-					<div class="col-8 bg-blue-trans container">
-						<div class="row owner_input d-flex mt-3 mb-3">
-							{% for field in form %}
-							<div class="col-2"></div>
-							<div class="col-2 text-center">{{field.label}}</div>
-							<div class="col-6 text-center own_input">{{field}}</div>
-							<div class="col-2"></div>
-							{% endfor %}
-						</div>
+
+<p class="curs-pointer back-button" onclick=BackToIndex()>Retour Index</p>
+<h2 class="mt-5 mb-5 pl-5">Page Nouveau Propriétaire</h2>
+<article class=" bg-grey pt-5 pb-5">
+	<form id='form' class="sheet" action="{% url 'sheet:add_owner'%}" method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		<div class="container">
+			<div class="row">
+				<div class="col-2"></div>
+				<div class="col-8 bg-blue-trans container">
+					<div class="row owner_input d-flex mt-3 mb-3">
+						{% for field in form %}
+						<div class="col-2"></div>
+						<div class="col-2 text-center">{{field.label}}</div>
+						<div class="col-6 text-center own_input">{{field}}</div>
+						<div class="col-2"></div>
+						{% endfor %}
 					</div>
-					<div class="col-2"></div>
-					<div class="col-2"></div>
-					<div class="col-8  d-flex align-items-center">
-						<div class="container">
-							<div class="row pt-3">
-								<div  class="col-6 very-center curs-pointer" >
-									<button id="delete-all" class="btn big-btn" onclick="dispNewOwn()">Tout effacer</button>
-								</div>
-								<div class="col-6 very-center">
-									<input id="save" type="submit" class="btn btn-primary big-btn" value="Enregistrer"> 
-								</div>
-								<div class="col-12 very-center">
-									<p id='verif' class="alert-secondary"></p>
-								</div>
+				</div>
+				<div class="col-2"></div>
+				<div class="col-2"></div>
+				<div class="col-8  d-flex align-items-center">
+					<div class="container">
+						<div class="row pt-3">
+							<div  class="col-6 very-center curs-pointer" >
+								<button id="delete-all" class="btn big-btn" onclick="dispNewOwn()">Tout effacer</button>
+							</div>
+							<div class="col-6 very-center">
+								<input id="save" type="submit" class="btn btn-primary big-btn" value="Enregistrer"> 
+							</div>
+							<div class="col-12 very-center">
+								<p id='verif' class="alert-secondary"></p>
 							</div>
 						</div>
 					</div>
-					<div class="col-2"></div>
-				</div>			
-			</div>
-		</form>
-	</article>
-</section>
+				</div>
+				<div class="col-2"></div>
+			</div>			
+		</div>
+	</form>
+</article>
+
 <script type="text/javascript">
 	/* *** plan ***
 	1/ User select new or former owner

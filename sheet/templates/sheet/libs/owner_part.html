@@ -1,0 +1,14 @@
+{% load static%}
+<h4 class="title" name="owner">Propriétaire</h4>
+<div class="last-line">
+	<div id="container-owners" class="container-owners">
+	{{form.select_owner}} 
+	</div>
+	<p class="content-pictures">
+		<img id="plus" title="Nouveau Propriétaire"class="icon" src="{% static 'spa_core/img/plus.png'%}" alt="plus">
+		<img id="eye" title="Aperçu"class="icon d-none" src="{% static 'spa_core/img/eye.png'%}" alt="eye">
+	</p>
+	<p class="container-save">
+		<input id="save" type="submit" class="" value="{{submit_btn}}"> 
+	</p>
+</div>

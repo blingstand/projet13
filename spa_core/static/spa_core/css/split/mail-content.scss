@@ -1,0 +1,81 @@
+@mixin load-mail-content(){
+	$max_height : 65vh ;
+	.mail-content{
+		display: grid;
+		grid-template-columns: 70% 1fr; 
+		height: $max_height;
+		overflow: hidden;
+		.left-part{
+			display: grid;
+			grid-template-rows: 10% 10% 1fr; 
+			background-color: $primary;
+			height: $max_height;
+			.alert-danger{}
+			.field{
+				@extend .content-centered; 
+				input[type="text"]{
+					border-radius: 0; 
+					width: 90%;
+					border: 1px black solid;
+				}
+				&:last-child{
+					display:grid;
+					textarea{
+						place-items: center; 
+						border: 1px black solid;
+						height: 50vh;
+						width: 90%;
+						font-size: 1rem; 
+						padding: 1rem;
+					}
+				}
+			}
+		}
+
+		.right-part{
+			background-color: $secondary;
+			height: $max_height;
+			display: grid;
+			grid-template-rows: 10% 45vh 1fr 10%;
+			.container-tools{
+				grid-row: 2;
+				@extend .content-centered; 
+				.tool{
+					@extend .content-centered; 
+					label{
+						margin-bottom: 0.7rem; 
+					}
+					select{
+						font-size: 0.6rem; 
+						width: 14rem;
+						cursor: pointer; 
+						&:hover{
+							font-weight: bold; 
+						}
+
+					}
+				}
+			}
+			.container-buttons{
+				grid-row: 3;
+				@extend .content-centered; 
+				grid-template-columns: repeat(2, 1fr);
+				button{
+					width: 7rem;
+					height: 3rem;
+					border-radius: 2rem; 
+					background-color: $third-color;
+					font-size: 1rem; 
+					color: white; 
+					cursor: pointer; 
+					&:hover{
+						font-weight: bold;
+					}
+					&:last-child{
+						background-color: $primary;
+					}
+				}
+			}
+		}
+	}
+}

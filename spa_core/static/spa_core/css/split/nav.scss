@@ -3,11 +3,7 @@
 	display: grid;
 	height: 100vh;
 	grid-template-rows: auto 40vh auto 40vh auto; 
-	.catline{
-		background: url('../img/titre-chat.png') no-repeat bottom center;
-		height: 1rem; 
-		padding : 1rem 0;
-	}
+	
 	.container-avatar{
 		display: grid;
 		height: 100%;

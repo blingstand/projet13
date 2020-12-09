@@ -1,0 +1,91 @@
+@mixin load-sheet-form-owner-open(){
+	.add-owner-open{
+		display:grid;
+		grid-template-rows: 5rem 1fr 8rem;
+		width: 100vw;
+		height: 100vh;
+		h2{
+			grid-row: 1; 
+			@extend .content-centered; 
+			background-color: $primary;
+		}
+		.form-add-owner-open{
+			background-color:  $secondary;
+			grid-row:2; 
+			display:grid;
+			grid-template-rows: 75% 1fr;
+			.container-fields{
+				display:grid;
+				grid-template-rows: repeat(5, 1fr);
+				.line{
+					display:grid;
+					grid-template-columns: 40% 1fr;
+					@extend .content-centered; 
+					.field-left{
+						grid-column: 1;
+					}
+					.field-right, #id_owner_sex{ 
+						grid-column: 2;
+						width: 100%;
+						input[type="text"], input[type="email"]{
+							height: 2rem;
+							width: 16rem;
+							text-transform: uppercase;
+							border-radius: 1rem 1rem 0 0; 
+							text-align: center; 
+						}
+						input[type="email"]{
+							text-transform: none; 
+						}
+					}
+					#id_owner_sex{
+						list-style-type: none;
+						display: flex;
+						width: 80%;
+						margin: 0 auto;
+						#id_owner_sex_1{
+							margin-left: 2rem; 
+						} 
+					}
+				}
+
+			}
+			.container-buttons{
+				background-color: green;
+				display:grid;
+				grid-template-columns: repeat(2, 1fr);
+				grid-template-rows: 1fr;
+				place-items: center; 
+				button, input[type="submit"]{
+					height: 3rem;
+					width: 12rem; 
+					text-transform: uppercase;
+					border-radius: 1rem 1rem 0 0; 
+					background-color: $primary;
+					font-size: 1.5rem;
+					color: white;
+					cursor: pointer;
+					&:hover{
+						font-weight: bold; 
+					}
+				}
+				button{
+					background-color: $third_color;
+				}
+			}
+
+		}
+		.container-animals{
+			background-color: $secondary;
+			list-style-type: none;
+			@extend .content-centered; 
+			li{
+				font-size: 1.5rem;
+				&:hover{
+					cursor: pointer;
+					font-weight: bold;
+				}
+			}
+		}
+	}
+}

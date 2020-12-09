@@ -9,6 +9,7 @@ from sheet.models import Animal
 from .models import Mail
 from .form import SettingsMail, ContentMail
 from .utils import UtilsMail
+from .data import options_animal, options_owner, options_admin
 ut = UtilsMail()
 # Create your views here.
 class MailView(View):
@@ -48,11 +49,12 @@ class CNSView(View):
         return render(request, 'mail/cns.html', context)
 class ContentView(View):
     """ this class handles the content of an automatic mail"""
+    context = {"options_animal": options_animal, "options_owner": options_owner, "options_admin": options_admin, }
     def get(self, request, mail_id=0):
         """ this function displays the form"""
+        print("- - - - - get ")
         form = ContentMail()
-        context = {
-            'form' : form}
+        
         if mail_id != 0:
             mail = ut.get_mail_from_id(mail_id)
             values = {
@@ -61,9 +63,12 @@ class ContentView(View):
             "plain_text" : mail.plain_text,
             }
             form = ContentMail(initial = values)
-            context = {
-            'form' : form, "mail": mail }
-        return render(request, 'mail/content.html', context)
+            self.context["mail"] = mail
+            print(dir(form))
+            print(form.initial)
+        self.context['form'] = form
+        return render(request, 'mail/content.html', self.context)
+   
     def post(self, request, mail_id=0, action=None):
         """ this function deals with the datas from the form"""
         dict_values = request.POST.dict()
@@ -83,6 +88,7 @@ class ContentView(View):
             print('alter pour id = ', mail_id)
             #with mail_id -> mail exists -> alter db
             mail = ut.alter_db(dict_values, mail_id)
+            print(mail)
         else:
             #no mail_id -> create a new mail
             print('save')
@@ -113,27 +119,31 @@ class OverviewView(View):
         return render(request, 'mail/overview.html', context)
 class SettingsView(View):
     """ class for settings page"""
-    def get(self, request, mail_id=None):
+    def get(self, request, mail_id):
         """ response different if gets mail id"""
+        print("--- get SettingsView -----" )
+        mail = ut.get_mail_from_id(mail_id)
+        checked_value = ut.get_checked_value(mail)
         form = SettingsMail()
-        context = {
-            'form' : form}
-        if mail_id:
-            mail = ut.get_mail_from_id(mail_id)
-            context["mail"] = mail
+        context = {"mail": mail, "form": form}
+        print("\t" , mail, "auto_send", mail.auto_send_js)
         return render(request, 'mail/settings.html', context)
     def post(self, request, mail_id=None):
         """ can manage ajax req and form """
+        print("--- post SettingsView -----" )
         form = SettingsMail(request.POST)
         dict_values = {'ajax':'0'}
         dict_values.update(request.POST.dict())
+        print("\tajax : " ,dict_values['ajax'])
+       
         if dict_values['ajax'] == "1":
             mail = ut.get_mail_from_id(dict_values['mail_id'])
             ut.change_auto_send(mail, (dict_values['auto_send']))
             if dict_values['auto_send'] == "1":
                 mail.send_after_creation = True
                 mail.save()
-            return JsonResponse({"chgt" : "saved"}, safe=False)
+            print('\tauto_send : ', mail.auto_send)
+            return JsonResponse({"auto_send" : dict_values['auto_send']}, safe=False)
         if form.is_valid():
             mail = ut.get_mail_from_id(mail_id)
             ut.change_auto_send(mail, True)

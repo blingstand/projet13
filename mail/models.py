@@ -29,6 +29,17 @@ class Mail(models.Model):
         if self.mail_id is not None:
             return f'mail{self.mail_id} (titre: {self.title})'
         return f'mail(titre: {self.title})'
+
+    @property
+    def auto_send_js(self):
+        """ adapt auto_sendtojs"""
+        if self.auto_send == True:
+            return 1 
+        return 0
+    @property
+    def get_checked_for_form(self):
+        return self._get_checked_for_form
+    
     def get_condition(self):
         """this function returns a condition(str) if auto_send = true, else returns None"""
         condition = {
@@ -79,9 +90,10 @@ class Mail(models.Model):
         return already_exists[0]
     def modified_text(self, given_id=None):
         """takes plain text and returns modified text"""
-        anim = self._get_false_animal()
         if given_id:
             anim = Animal.objects.get(id=given_id)
+        else:
+            anim = self._get_false_animal()
         new_text = self.plain_text
         dict_conversion = converter_data(anim)
         for key in dict_conversion:
@@ -93,7 +105,11 @@ class Mail(models.Model):
         # print(new_text)
         new_text = new_text.replace('\r\n', '\\n')
         if not given_id: 
+            owner = anim.owner
+            admin = anim.admin_data
             anim.delete()
+            owner.delete()
+            admin.delete()
         return new_text
     def full_text(self):
         """this function returns a plain text with escaped \n """

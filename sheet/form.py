@@ -49,21 +49,21 @@ class SheetForm(forms.Form):
         widget=forms.DateInput(attrs={
             'placeholder' : "jj/mm/aaaa",
             'type' : 'date',
-             "class":"w-10rem",
+             "class":"date-of-neuter",
              'title':"date de stérilisation (jj/mm/aaa)"}))
     futur_date_of_neuter = forms.DateField(required=False, label="dès le : ",
         widget=forms.DateInput(attrs={
             'placeholder' : "jj/mm/aaaa",
             'type' : 'date',
-            "class":"w-10rem",
+            "class":"date-of-neuter",
             'title':"stérilisable à partir du (jj/mm/aaa)"}))
     file = forms.CharField(required=False, label='dossier',
         widget=forms.TextInput(attrs={'class' : 'input-reduced',  'title' : "num du dossier",
             'placeholder' : "num du dossier"}))
-    is_neutered = forms.ChoiceField(widget=forms.RadioSelect(
-        attrs={"class" : "li-oneline align-left lst-none pl-0 mb-0"}),
+    is_neutered = forms.ChoiceField(widget=forms.RadioSelect(),
         choices=(CHOICE_STERIL))
-    select_owner= forms.CharField(required=False)
+    select_owner= forms.CharField(required=False, widget=forms.TextInput(
+        attrs={'class': 'select_owner', 'title' : "nom d'un propriéraire", 'placeholder' : "entrez le nom d'un propriéraire"}))
     mail = forms.EmailField(required=False, max_length=30, label='mail',
         widget=forms.EmailInput(attrs={'class' : 'text-center', 'title' : 'mail' ,
             'placeholder' : "mail", 'name' : 'mail'}))
@@ -108,17 +108,28 @@ class SheetForm(forms.Form):
         widget=forms.NumberInput(attrs={
             'class' : 'input-very-reduced', 'title' : "nb rappel téléphonique",
             'placeholder' : "nb rappel tel",'min':0, "values":0}))
+
+    def find_mistake_for_admin(self, admin):
+        """ searches the mistake that can create duplicate"""
+        same_in_db = len(AdminData.objects.filter(file=admin.file)) > 0
+        if same_in_db:
+            return "file"
+        same_in_db = len(AdminData.objects.filter(chip=admin.chip)) > 0
+        if same_in_db:
+            return "chip"
+        same_in_db = len(AdminData.objects.filter(tatoo=admin.tatoo)) > 0
+        return "tatoo"
+
     def _handle_admin_class(self, dict_values):
         """create admin classe"""
         list_admin = [elem if elem != "None" else None for elem in dict_values['admin']]
         admin = AdminData(*list_admin)
-        same_in_db = len(AdminData.objects.filter(
-            chip=admin.chip,
-            file=admin.file,
-            tatoo=admin.tatoo)) > 0
+        same_in_db = len(AdminData.objects.filter(file=admin.file, chip=admin.chip, tatoo=admin.tatoo)) > 0
         if same_in_db:
-            return False, f"Erreur : ce dossier admin existe déjà dans la base,"\
-            " risque de doublon, procédure annulée !"
+            mistake = self.find_mistake_for_admin(admin)
+            return False, {"alert": f"Erreur : ce dossier admin existe déjà dans la base,"\
+                                " risque de doublon, procédure annulée !",\
+                                "target": mistake, "zone": "admin"}
         return True, admin
     def _handle_owner_class(self, dict_values):
         """get concerned owner"""

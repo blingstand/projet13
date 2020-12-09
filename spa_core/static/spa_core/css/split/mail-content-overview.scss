@@ -1,0 +1,67 @@
+@mixin load-mail-content-overview{
+	.container-overview{
+		grid-column: span 2;
+		display: grid;
+		grid-template-rows: 7rem 1fr 4rem;
+		header{
+			height: 100%; 
+			background-color: $primary;
+			h2{
+				text-align: center; 
+				font-size: 2rem; 
+				margin-bottom: 2rem; 
+				.title-info{
+					font-size: 1.5rem; 
+					font-style: italic; 
+				}
+			}
+		}
+		.overview{
+			display: grid;
+			grid-template-rows: 10% 10% 1fr; 
+			background-color: $primary;
+			height: 80vh;
+			background-color: $secondary;
+			.alert-danger{}
+			.field{
+				@extend .content-centered; 
+				input[type="text"]{
+					border-radius: 0; 
+					width: 90%;
+					height: 2rem;
+					font-size: 1.3rem; 
+					border: 1px black solid;
+					padding: 0 1rem; 
+				}
+				&:last-child{
+					display:grid;
+					textarea{
+						place-items: center; 
+						border: 1px black solid;
+						height: 60vh;
+						width: 90%;
+						font-size: 1.3rem; 
+						padding: 1rem;
+					}
+				}
+			}
+		}
+		.container-button{
+			display:grid;
+			grid-template-columns: repeat(5, 1fr);
+			@extend .content-centered; 
+			button{
+				grid-column: 5;
+				cursor: pointer;
+				height: 3rem;
+				width : 12rem;
+				background-color: $third_color;
+				color: white; 
+				font-size: 1.8rem; 
+				&:hover{
+					font-weight: bold; 
+				}
+			}
+		}
+	}
+}

@@ -3,6 +3,8 @@ def change_date_format(date):
         if date is not None: 
             return date.strftime('%A %d %B %Y')
         return ""
+
+
 def converter_data(anim):     
     converter = {
             '**caution**' : f'{anim.caution}€', 
@@ -28,3 +30,31 @@ def converter_data(anim):
             '**race**' : f'race : {anim.race}', 
             } 
     return converter
+
+options_animal = (
+    { "content" : "**nom animal**", "visible": "nom"},
+    { "content" : "**date de naissance**", "visible": "date de naissance"},
+    { "content" : "**race**", "visible": "race"},
+    { "content" : "**espèce**", "visible": "espèce"},
+    { "content" : "**couleur**", "visible": "couleur"},
+    { "content" : "**date d'adoption**", "visible": "date d'adoption"},
+    { "content" : "**caution**", "visible": "caution"},
+    )
+options_owner = (
+    { "content" : "**M./Mme**", "visible" : "M./Mme" }, 
+    { "content" : "**nom prop**", "visible" : "nom propriétaire" }, 
+    { "content" : "**prénom prop**", "visible" : "prénom propriétaire" }, 
+    { "content" : "**tel**", "visible" : "téléphone" }, 
+    { "content" : "**caution totale**", "visible" : "caution totale" }, 
+    { "content" : "**mail**", "visible" : "mail" }, 
+    { "content" : "**nb appels**", "visible" : "nombre d'appels" }, 
+    { "content" : "**nb mails**", "visible" : "nombre de mails" }, 
+    )
+options_admin = (
+   { "content" : "**id dossier**", "visible" : "id dossier" },
+   { "content" : "**id puce**", "visible" : "id puce" },
+   { "content" : "**id tatouage**", "visible" : "id tatouage" },
+   { "content" : "**état stérilisation**", "visible" : "état stérilisation" },
+   { "content" : "**date de stérilisation**", "visible" : "date de stérilisation" },
+   { "content" : "**date future stérilisation**", "visible" : "futur date stérilisation" },
+    )

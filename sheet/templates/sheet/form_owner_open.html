@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>{{title}}</title>
+	{% load static %}
+	<link rel="stylesheet" href="{% static 'spa_core/css/style.css'%}">
+	<link rel="icon" href="{% static 'spa_core/img/favicon.png'%}">
+</head>
+<body>
+	<section class="add-owner-open">
+		<h2 class="">{{title}}</h2>
+		<form id='form' class="form-add-owner-open" action="{% url 'sheet:add_owner_open'%}" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="container-fields">
+				{% for field in form %}
+				<div class="line line-{{forloop.counter}}">
+					{% if field.label == "Sexe" %}
+					<p class="field-left">{{field.label}}</p>
+					{{field}}
+					{% else %}
+					<p class="field-left">{{field.label}}</p>
+					<p class="field-right">{{field}}</p>
+					{% endif %}
+				</div>
+				{% endfor %}
+			</div>
+			<div class="container-buttons">
+				<div class="container-remove">
+					<button id="delete-all" class="btn big-btn">Tout effacer</button>
+				</div>
+				<div class="container-submit">
+					<input id="save" type="submit" class="btn btn-primary big-btn" value="{{submit_btn}}"> 
+				</div>
+				<div class="container-verif">
+					<p id='verif' class="alert-secondary"></p>
+				</div>
+			</div>
+		</form>
+		<ol class="container-animals ">
+			{% for animal in animals %}
+			<li class="" onclick=GoTo({{animal.id}})>  {{animal.name}} - {{animal.species_name}} - {{animal.admin_data.neuter_status}}   </li>
+			{% endfor %}
+		</ol>
+
+	</section>
+
+	<script type="text/javascript">
+	/* *** plan ***
+	1/ User select new or former owner
+	2/ 	A. new displays Ownerform
+	2/ 	B. former displays select with owner in option
+	3/ Client sends Ajax request to get more infos about selected owner id
+	4/ Client receives info, success > display ownerform and fill it
+	*/
+
+    //###################
+    //#### VARIABLES ####
+    //###################
+
+	const phoneNumber = document.getElementById('id_phone')
+	const deleteAllBtn = document.getElementById('delete-all')
+	const submitBtn = document.getElementById('save')
+	const form = document.getElementById('form')
+
+    //###################
+    //#### FUNCTIONS ####
+    //###################
+	const BeforeSubmit = function(){
+		document.getElementById('save').addEventListener('click', function(event){
+			// event.preventDefault()
+			let verif = document.getElementById('verif')
+			verif.innerHTML = ""
+			nodes = document.querySelectorAll('input[type=text]')
+			inputs = Array.from(nodes)
+			inputs.splice(0,1)
+			console.log(inputs)
+			for (input of inputs){
+				if (input.value == 0){
+					alert("Tous les champs doivent être remplis.")
+					event.preventDefault()
+					return
+				}
+			}
+			if (CheckPhoneNumber() != true){
+				event.preventDefault()
+				alert("Format numéro de téléphone : invalide")
+				return
+			}
+		})	
+	}
+	const CheckPhoneNumber = function(){
+		const reg_telephone = /^(\+\d+(\s|-))?0\d(\s|-|\.)?(\d{2}(\s|-|\.)?){4}$/
+		if (phoneNumber.value.match(reg_telephone)){
+			return true
+		}else{
+			return false
+		}
+	}
+	const GoTo = function(given_id){
+		window.location.href = "{% url 'sheet:alter' 123%}".replace('123', given_id)
+		
+	}
+	const UpdateEntry = () => {
+		form.setAttribute('action', "{% url 'sheet:alter_owner_open' 123 %}".replace('123', '{{selected_owner.id}}' || '123'))
+		console.log(form)
+	}
+	const CreateEntry = () => {
+		form.setAttribute('action', "{% url 'sheet:add_owner_open'%}")
+		console.log(form)
+	}
+    //###################
+    //####  EVENTS   ####
+    //###################
+	
+    deleteAllBtn.onclick = (e) =>{
+    	//remove all value from the input
+    	e.preventDefault()
+    	allInput = document.getElementsByTagName('input')
+    	console.log(allInput)
+    	allInput.splice(7,1)
+    	allInput.splice(3,2)
+    	allInput.splice(0,1)
+    	allInput.forEach((input)=>{ input.value = ""})
+
+    }
+
+    form.onsubmit = () =>{
+    	(submitBtn.value == 'Modifier') ? UpdateEntry(): CreateNewEntry()
+    	console.log(form)
+    }
+
+    console.log(form)
+	BeforeSubmit()
+	{% if error %}
+	document.getElementById('verif').innerHTML = "{{error}}"
+	{% endif %}
+
+
+</script>
+</body>

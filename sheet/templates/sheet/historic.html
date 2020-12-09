@@ -1,42 +1,38 @@
 {% extends 'spa_core/base.html' %} 
 {% block content %}
-<section>
-    <p class="curs-pointer back-button" onclick=BackToIndex()>Retour Index</p>
-    <h2 class="mt-3 mb-1 pl-3">
-        Historique des contacts pour {{owner.owner_name}} {{owner.owner_surname}}
+<header>
+    <p class="back-button" onclick=BackToIndex()>Retour Index</p>
+    <h2 class="title-historic">
+        Historique des contacts pour {{owner}}
     </h2>
-    <article class="mt-2 mb-3 container histo-article scrolable-y">
-        <div class="row  mt-2 mb-5">
-            <div class="col-5"></div>
-            {% for elem in button_value %} <!-- affiche les boutons -->
-            <div class="col-2  text-center">
-                <button id="{{elem.id}}" class="crud-contact" onclick="{{elem.function}}">{{elem.name|safe}}</button>
-            </div>
-            {% endfor %}
-            <div class="col-1"></div>
+</header>
+<article class="historic">
 
+    <div class="container-button-cud">
+        {% include "./libs/cud_btn.html"%}
+    </div>
+
+    <div class="historic-table">
+        <div class="historic-table-title">
+            <div  class="col-name">&nbsp;</div>
+            {% for col in historic_cols %}
+            <div  class="col-name"><strong>{{col}}</strong></div>
+            {% endfor %}
         </div>
-        <div class="row">
-            <table id="histo_table" class="">
-                <tr class="col-12 text-center">
-                    <td  class="col-name">&nbsp;</td>
-                    {% for col in historic_cols %}
-                    <td  class="col-name"><strong>{{col}}</strong></td>
-                    {% endfor %}
-                </tr>
-                {% for contact in contacts|dictsort:"contact_date"%}
-                <tr id="tr_{{forloop.counter}}"class="col-12 text-center {% cycle 'row1' 'row2' %}">
-                 <td><input type="checkbox" id='id_contact_{{contact.id}}' name='checkbox' title="{{contact.id}}" value={{contact.id}}></td>
-                 <td>{{contact.contact_date}}</td>
-                 <td>{{contact.str_nature}}</td>
-                 <td>{{contact.resume}}</td>
-                 <td>{{contact.reduced_text|escape}}</td>
-             </tr>
-             {% endfor %}
-         </table>
-     </div>
- </article>
-</section>
+        <div class="scrollable-part">
+            {% for contact in contacts|dictsort:"contact_date"%}
+            <div id="tr_{{forloop.counter}}"class=" {% cycle 'row1' 'row2' %}">
+                <div class="cell"><input type="checkbox" id='id_contact_{{contact.id}}' name='checkbox' title="{{contact.id}}" value={{contact.id}}></div>
+                <div class="cell">{{contact.contact_date}}</div>
+                <div class="cell">{{contact.str_nature}}</div>
+                <div class="cell">{{contact.resume}}</div>
+                <div class="last-cell">{{contact.reduced_text|escape}}</div>
+           </div>
+           {% endfor %}
+       </div>
+   </div>
+</article>
+
 <script type="text/javascript">
     /* plan
     > variables,

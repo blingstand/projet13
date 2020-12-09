@@ -1,0 +1,59 @@
+$shape_table_mail: 2rem 5rem 5rem 15rem 1fr;
+@mixin load-mail-index(){
+	.mail-index{
+		display: grid;
+		grid-template-rows: 5rem 1fr; 
+		.container-button{
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			button{
+				flex: 0 1 7rem; /*  No stretching: */
+				margin: auto 2rem;
+				@extend .btn-sheet-index;
+				&:hover{
+					background-color: $primary;
+				}
+			}
+		}
+		.mail-table{
+			display: grid;
+			grid-template-rows: 2rem 1fr;
+			width: 95%;
+    		margin: 0 auto;
+			.mail-table-title{
+				background-color: $primary;
+				display: grid;
+				grid-template-columns: $shape_table_mail; 
+				grid-gap: 3px 5px; 
+				text-align: center; 
+				.col-name{
+					@extend .content-centered
+				}
+			}
+			.scrollable-part{
+				height: 50vh;
+				overflow: hidden;
+
+				.row1, .row2{
+					display: grid;
+					grid-template-columns: $shape_table_mail; 
+					grid-gap: 3px 5px; 
+
+					.cell{
+						@extend .content-centered; 
+					}
+					.last-cell{
+						text-align: justify;
+						text-indent: 1rem; 
+						padding-right: 0.5rem;
+					}
+				}
+				.row2{
+					background-color: lighten($primary, 50);
+
+				}
+			}
+		}
+	}
+}

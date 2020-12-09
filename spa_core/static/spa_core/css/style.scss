@@ -1,25 +1,39 @@
+/* 123 */ 
 @import "libs/color.scss";
 @import "libs/loops.scss";
 @import "libs/responsive.scss";
 @import "libs/utils.scss";
 
+@import "split/cud-btn.scss";
 @import "split/dashboard.scss";
+@import "split/historic.scss";
+@import "split/mail-cns.scss";
+@import "split/mail-content.scss";
+@import "split/mail-content-overview.scss";
+@import "split/mail-settings.scss";
+@import "split/mail-index.scss";
 @import "split/nav.scss";
 @import "split/right-part-top.scss";
 @import "split/sheet-index.scss";
-@import "split/sheet-add-anim.scss";
+@import "split/sheet-form-anim.scss";
+@import "split/sheet-form-owner-open.scss";
+
 
 *, ::before, ::after {
 	box-sizing: border-box; 
 	margin:  0;
 	padding:  0; 
 }
-/* 123 */ 
+
 body{
+
 	display: grid;
 	grid-template-columns: 20vw 80vw;
 	height: 100vh;
 	overflow: hidden;
+	input:focus, textarea:focus, select:focus{
+		outline: none;
+	}
 	.part{
 		height: 100vh; 
 	}
@@ -54,5 +68,13 @@ nav{
 .right-part-bottom{		
 	@include load-dashboard(); 
 	@include load-sheet-index(); 
-	@include load-sheet-add-anim(); 
+	@include load-sheet-form-anim(); 
+	@include load-historic(); 
+	@include load-mail-index(); 
+	@include load-mail-cns(); 
+	@include load-mail-content(); 
+	@include load-mail-settings(); 
 }
+
+@include load-mail-content-overview(); 
+@include load-sheet-form-owner-open(); 

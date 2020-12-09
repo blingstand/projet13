@@ -29,17 +29,17 @@
     //#### FUNCTION  ####
     //###################
 
-    const AddTag = function(givenValue){
-    //this function fills the searchbar with given value 
-    searchInput.value = givenValue
-    searchInput.focus()
-}
+    const AddTag = (givenValue) => {
+        //this function fills the searchbar with given value 
+        searchInput.value = givenValue
+        searchInput.focus()
+    }
 
-const openChoice = function(choices){
+    const openChoice = (choices) => {
         //this function opens a div that contains choices to fill the searchbar
         console.log(choices, choices=="0" )
         if (choices=="0"){
-            containerPropositions.innerHTML = ""
+            propositions.innerHTML = ""
             return
         }
         else if (choices.length >=5){
@@ -93,13 +93,13 @@ const openChoice = function(choices){
     
     searchInput.onkeyup = function(e){
         value = {"value" : searchInput.value
+        }
+        console.log(value)
+        WhatToDo = function(response){
+            console.log(response)
+            openChoice(response) 
+        }
+        
+        sendDatasToServer(value, send_to_url, WhatToDo)
     }
-
-    WhatToDo = function(response){
-        console.log(response)
-        openChoice(response) 
-    }
-    
-    sendDatasToServer(value, send_to_url, WhatToDo)
-}
 </script>

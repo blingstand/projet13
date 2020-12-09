@@ -1,98 +1,91 @@
-<!-- in this page we can find : 
-    - AJAX for overview, 
-    - JS for input checking -->
 
 {% extends 'spa_core/base.html' %} 
 {% block content %}
-<section class="">
-    <p class="curs-pointer back-button" onclick=BackToCNS()()>Retour CNS</p>
+<header>
+    <p class="back-button" onclick=BackToCNS()()>Retour CNS</p>
     {% if mail %}
-        <h2 class="mt-2 pl-5">Contenu du mail (id={{mail.mail_id}}, titre='{{mail.title}}') </h2>
+    <h2 class="title-mail-content">Contenu du mail (id={{mail.mail_id}}, titre='{{mail.title}}') </h2>
     {% else %}
-        <h2 class="mt-2 pl-5">Contenu du mail </h2>
+    <h2 class="title-mail-content">Contenu du mail </h2>
     {% endif %}
-    <article class="mt-3 container">
-        <div class="row">
-            <div class="col-7 pt-3">
-                <form id="form_mail_skull" action="" method='post'>
-                    {% csrf_token %}
-                    <div class="row">
-                        {%for field in form%}
-                        {% for error in field.errors %}
-                        <div class="alert alert-danger">
-                            <strong>{{field.label}} {{ error|escape }}</strong>
-                        </div>
-                        {% endfor %}
-                        <div class="col-12 mb-3">{{field}} </div>
-                        {% endfor %}
-                    </div>
-                </form>
-            </div>
-            <div class="col-5 bg-blue-trans">
-                <div class=" row p-3 mr-1 d-flex justify-content-around  ">
-                    <div class="mt-1 mb-1">
-                        <p><label  for="sel_animal">Variables de la catégorie Animal</label></p>
-                        <select onchange='clickSelectedOption(this)' class="cont-select" name="sel_animal" id="id_select_1">
-                            <option>-- Sélectionnez une variable -- </option>
-                            <option  value="**nom animal**" onclick=AddInMail(this.value)>nom</option>
-                            <option onclick=AddInMail(this.value) value="**date de naissance**">date de naissance</option>
-                            <option onclick=AddInMail(this.value) value="**race**">race</option>
-                            <option onclick=AddInMail(this.value) value="**espèce**">espèce</option>
-                            <option onclick=AddInMail(this.value) value="**couleur**">couleur</option>
-                            <option onclick=AddInMail(this.value) value="**date d'adoption**">date d'adoption</option>
-                            <option onclick=AddInMail(this.value) value="**caution**">caution</option>
-                        </select>
-                    </div>
-                    <div class="mt-1 text-center" >
-                        <hr>
-                        <p><label for="sel_owner">Variables de la catégorie Propriétaire</label>
-                        </p>
-                        <select onchange='clickSelectedOption(this)' class="cont-select" name="sel_owner" id="id_select_2" class="mb-2">
-                            <option>-- Sélectionnez une variable -- </option>
-                            <option onclick=AddInMail(this.value) value="**M./Mme**">M./Mme</option>
-                            <option onclick=AddInMail(this.value) value="**nom prop**">nom propriétaire</option>
-                            <option onclick=AddInMail(this.value) value="**prénom prop**">prénom propriétaire</option>
-                            <option onclick=AddInMail(this.value) value="**tel**">téléphone</option>
-                            <option onclick=AddInMail(this.value) value="**caution totale**">caution totale</option>
-                            <option onclick=AddInMail(this.value) value="**mail**">mail</option>
-                            <option onclick=AddInMail(this.value) value="**nb appels**">nombre d'appels</option>
-                            <option onclick=AddInMail(this.value) value="**nb mails**">nombre de mails</option>
-                        </select>
-                    </div>
-                    <div class="mb-1" >
-                        <hr>
-                        <p><label class="" for="sel_admin">Variables de la catégorie Admin</label></p>
-                        <select onchange='clickSelectedOption(this)' class="cont-select" name="sel_admin" id="id_select_3">
-                            <option>-- Sélectionnez une variable -- </option>
-                            <option onclick=AddInMail(this.value) value="**id dossier**">id dossier</option>
-                            <option onclick=AddInMail(this.value) value="**id puce**">id puce</option>
-                            <option onclick=AddInMail(this.value) value="**id tatouage**">id tatouage</option>
-                            <option onclick=AddInMail(this.value) value="**état stérilisation**">état stérilisation</option>
-                            <option onclick=AddInMail(this.value) value="**date de stérilisation**">date de stérilisation</option>
-                            <option onclick=AddInMail(this.value) value="**date future stérilisation**">futur date de stérilisation</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row mt-1 ml-3 mr-3 d-flex justify-content-around bg-white">
+</header>
+<article class="mail-content">
 
-                    <button class="button-mail-content mt-1 mb-2" onclick='GetOverview()'>Aperçu</button>
-                    <button class="button-mail-content mt-1 mb-2" onclick='submit_datas()'>Enregistrer</button>
-                </div>
+    <form id="form_mail_skull" class="left-part" action="" method='post'>
+        {% csrf_token %}
+        {%for field in form%}
+        {% for error in field.errors %}
+        <div class="alert alert-danger">
+            <strong>{{field.label}} {{ error|escape }}</strong>
+        </div>
+        {% endfor %}
+        <div class="field">{{field}} </div>
+        {% endfor %}
+    </form>
+
+    <div class="right-part">
+        <div class=" container-tools  ">
+            <div class="tool">
+                <label  for="sel_animal">Variables de la catégorie Animal</label>
+                <select onchange='clickSelectedOption(this)' class="cont-select" name="sel_animal" id="id_select_1">
+                    <option>-- Sélectionnez une variable -- </option>
+                    {% for option in options_animal%}
+                    <option onclick=AddInMail(this.value) value="{{option.content}}">{{option.visible}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="tool" >
+                <label for="sel_owner">Variables de la catégorie Propriétaire</label>
+                <select onchange='clickSelectedOption(this)' class="cont-select" name="sel_owner" id="id_select_2" class="mb-2">
+                    <option>-- Sélectionnez une variable -- </option>
+                    {% for option in options_owner%}
+                    <option onclick=AddInMail(this.value) value="{{option.content}}">{{option.visible}}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+            <div class="tool" >
+                <label class="" for="sel_admin">Variables de la catégorie Admin</label>
+                <select onchange='clickSelectedOption(this)' class="cont-select" name="sel_admin" id="id_select_3">
+                    <option>-- Sélectionnez une variable -- </option>
+                    {% for option in options_admin%}
+                    <option onclick=AddInMail(this.value) value="{{option.content}}">{{option.visible}}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
-        <div class="col-1 bg-secondary"></div>
-    </article>
-</section>
-<script type="text/javascript" src='/static/mail/js/utils.js'> </script>
+        <div class="container-buttons">
+            <button id="overview" class="" >Aperçu</button>
+            <button id="save" class="" >Enregistrer</button>
+        </div>
+    </div>
+</div>
+</article>
+
 <script type="text/javascript">
+    //###################
+    //#### VARIABLES ####
+    //###################
+
     let is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-         
+    param = GetParam()
+    const title = document.getElementById('id_title');
+    const width  = document.body.clientWidth;
+    const height = document.body.clientHeight;
+
+    //buttons
+    overviewBtn = document.getElementById('overview')
+    submitBtn = document.getElementById('save')
+    
+    //###################
+    //#### FUNCTIONS ####
+    //###################
+
+    //requirement for chrome
     const clickSelectedOption = function(select) {
         if(!is_chrome) return;
         select.options[select.selectedIndex].click();
     }
-    param = GetParam()
-    const title = document.getElementById('id_title');
 
     //this function adds expression in body mail when user selects an option
     let AddInMail = function (givenValue){
@@ -106,36 +99,35 @@
         plain_text.focus()
     }
 
+    //this function sends user to cns page
     const BackToCNS = function(){
-        //this function sends user to cns page
         let pageName = 'content'
         BackCNS(pageName, "{% url 'mail:cns'%}")
 
     }
-    //this function takes the datas from title, object and body
-    const get_data = function(){
-        return {
-            'title': document.getElementById('id_title').value, 
-            'resume': document.getElementById('id_resume').value, 
-            'plain_text': document.getElementById('plain_text').value
+    //this function takes the datas from title, object and body, raise error if one is empty
+    const Get_data = function(){
+        data = {
+            title: document.getElementById('id_title').value, 
+            resume: document.getElementById('id_resume').value, 
+            plain_text: document.getElementById('plain_text').value
         }
+        return Array.from(Object.values(data)).indexOf('') != -1 ? false : data
     }
 
     //this function opens a new window for overview
     let OpenOverview = function(mail_id){
-        //open a new window for the overview
-        const width  = document.body.clientWidth;
-        const height = document.body.clientHeight;
         let wanted_width = (width * 50)/100
         let wanted_height = (height * 80)/100
         let spec =  "toolbar=yes,scrollbars=yes,resizable=yes,top=100,left=200,width="
-        spec += wanted_width+",height="+wanted_height
-        window.open("{% url 'mail:overview'%}"+mail_id, "_blank", spec);
-        window.location.href = "{% url 'mail:content'%}/"+mail_id
+        spec += wanted_width+",height=" + wanted_height
+        window.open("{% url 'mail:overview'%}" + mail_id, "_blank", spec);
+        window.location.href = "{% url 'mail:content'%}/" + mail_id
     }
 
     //this functions handles reaction to integrity problem
     const ReactProblem = function(input, issue){
+        console.log("ReactProblem > issue: " + issue)
         if (issue == 0){
             input.style.color = 'black';
             if (input.value.search('pb') != -1){
@@ -143,57 +135,49 @@
                 newInput = input.value.replace(' (pb : Ce titre existe déjà)', '')
                 console.log(newInput)
                 input.value = newInput; 
+                console.log('ce titre est disponible')
+                return false
             }
             console.log('ce titre est disponible')
+            return true
         }else if (issue == 1){
             input.style.color = 'red';
             input.title = "Ce titre existe déjà ";
             if (input.value.search('pb') == -1){
                 input.value += ' (pb : Ce titre existe déjà)'
             }
+            return false
         }
     }
 
-    //this function verifies if this title is available in db
+    //this function checks if this title is available in db
     const checkIntegrity = function(input){
         let value = {}
         value['title'] = input.value
         if ("{{mail.title}}" == input.value){
-            return
+            return true
         }
         let url = "{% url 'mail:content' 0 'check_integrity'%}"
         if (param != 'content'){
             url = "{% url 'mail:content' %}/" + param + "/check_integrity" 
         }
-        const WhatToDo = function(issue){
-            ReactProblem(input, issue)
+        const WhatToDo = async function(issue){
+            isFixed = await ReactProblem(input, issue)
+            console.log('je retourne isFixed : ', isFixed)
+            return isFixed
         }
         sendDatasToServer(value, url, WhatToDo)
     }
-    //manages the overview
-    const GetOverview = function(){
-        //this function organises overview
-        //1 get datas
-        let value = get_data()
-        console.log(value)
-        let url = "{% url 'mail:content' 0 'overview'%}"
-        if (param != 'content'){
-            console.log('test')
-            console.log(param)
-            value['mail_id']=param
-            url = "{% url 'mail:content' %}/" + param + "/overview" 
+    
 
-        } 
-        const WhatToDo = function(mail_id){
-            OpenOverview(mail_id)
-        }
-        sendDatasToServer(value, url, WhatToDo)
-    }
-
-    // //this function sends datas to server to save them
-    const submit_datas = function(){
+    //this function sends datas to server to save them
+    const Submit = function(){
         //check if fields are empty
-        const datas = get_data()
+        const datas = Get_data()
+        if (!datas){
+            alert("Remplissez tous les champs")
+            return
+        }
         let canSave = true
         const keys = ['title', 'resume', 'plain_text']
         const frenchKeys = ['titre', 'objet', 'message']
@@ -222,9 +206,44 @@
         return
     }
 
-    title.addEventListener('focusout', function(){
+    //manages the overview
+    const GetOverview = function(){
+        console.log('--GetOverview--')
+        const datas = Get_data()
+        if (!data){
+            alert("Remplissez tous les champs")
+            return
+        }
+        console.log(data)
+        let url = "{% url 'mail:content' 0 'overview'%}"
+        if (param != 'content'){
+            console.log('test')
+            console.log(param)
+            data['mail_id']=param
+            url = "{% url 'mail:content' %}/" + param + "/overview" 
+
+        } 
+        const WhatToDo = function(mail_id){
+            OpenOverview(mail_id)
+        }
+        sendDatasToServer(data, url, WhatToDo)
+    }
+    //###################
+    //####  EVENTS   ####
+    //###################
+
+    //overview
+    overviewBtn.onclick = () => {
+        console.log('je lance overview')
+        GetOverview()
+    }
+    //submit
+    submitBtn.onclick = () => {
+        Submit()
+    }
+    title.onfocusout = (e) => {
         checkIntegrity(title);
-    })
+    }
 
 </script>
 {% endblock%}

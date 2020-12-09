@@ -1,44 +1,34 @@
-/* maj 1.1
-	this script is working for 
-	sheet/
-		add.html
-		alter.html
-
-	plan :
-	> variables
-	> fonctions
-	> events
-*/
+/* from spa_core */
 
 /***** variables */
-	const url = window.location.href
-	let csrftoken ="{{csrf_token}}"
-    let csrfSafeMethod
-    let variables = ["name", "color", "species", "race", 
-    "date_of_birth", "date_of_adoption", "caution", "nature_caution", 
-    "file", "chip", "tatoo", "is_neutered", "date_of_neuter", 
-    "futur_date_of_neuter", "status", "select_owner"]
-	let param = ""
+const url = window.location.href
+let csrftoken ="{{csrf_token}}"
+let csrfSafeMethod
+let variables = ["name", "color", "species", "race", 
+"date_of_birth", "date_of_adoption", "caution", "nature_caution", 
+"file", "chip", "tatoo", "is_neutered", "date_of_neuter", 
+"futur_date_of_neuter", "status", "select_owner"]
+let param = ""
 
 /***** functions */
 
-	const BackCNS = function (pageName,destination){
-	    param = GetParam()
-	    newPage = url.split('/')
-	    idContent = newPage.indexOf(pageName)
-	    if (param != pageName){
+const BackCNS = function (pageName,destination){
+	param = GetParam()
+	newPage = url.split('/')
+	idContent = newPage.indexOf(pageName)
+	if (param != pageName){
 	        //fullPath - content - mail_id + cns
 	        window.location.href = destination+"/"+ param
 	    }else{
-	        let response = true
-	        if (pageName == "content"){
-	            response = confirm("Si vous quittez vous perdrez ce qui n'a pas été sauvegardé. Continuer ?")
-	        }
-	        if (response){
-	            newPage.splice(idContent,1, "cns")
-	            newPage = newPage.join('/')
-	            window.location.href = destination
-	        }
+	    	let response = true
+	    	if (pageName == "content"){
+	    		response = confirm("Si vous quittez vous perdrez ce qui n'a pas été sauvegardé. Continuer ?")
+	    	}
+	    	if (response){
+	    		newPage.splice(idContent,1, "cns")
+	    		newPage = newPage.join('/')
+	    		window.location.href = destination
+	    	}
 	    }       
 	}
 	//clean owner input and display form like beginning
@@ -62,6 +52,17 @@
 		for (div of ownDivs){
 			div.classList.replace("d-flex", "d-none")
 		}
+	}
+
+	const OpenSmallPageOwner = (url_open) =>{
+		//open an adittionnal page to add / modify owner datas
+		const width  = document.body.clientWidth;
+		const height = document.body.clientHeight;
+		let wanted_width = (width * 35)/100
+		let wanted_height = (height * 70)/100
+		let spec =  "toolbar=yes,scrollbars=yes,resizable=yes,top=50,left=200,width="
+		spec += wanted_width+",height="+wanted_height
+		window.open(url_open, "_blank", spec);
 	}
 
 	// displays owner form with data from ajax request 
@@ -94,13 +95,13 @@
 	    		}else{
 	    			whatToDo()
 	    		}
-	            
-	        },
-	        error: function (res) {
-	        	alert("erreur lors de l'envoie de données");
-	        	console.log(res.status);
-	        	console.log(res.error);
-	        }
+
+	    	},
+	    	error: function (res) {
+	    		alert("erreur lors de l'envoie de données");
+	    		console.log(res.status);
+	    		console.log(res.error);
+	    	}
 	    })			
 	}
 	// Owner form
@@ -166,24 +167,24 @@
 			option.onclick = function(event){
 				value = {'ask_owner_data':"1", 'owner_id':event.target.value}
 				sendDatasToServer( value, url, whatToDo)}
-			option.innerHTML = owner.name
-			select.appendChild(option)
+				option.innerHTML = owner.name
+				select.appendChild(option)
+			}
+			returnChoice = document.createElement('button')
+			returnChoice.id = "id_return"
+			returnChoice.textContent = "Retour"
+			returnChoice.onclick = function(event){
+				event.preventDefault()
+				CleanOwnerInput(event)
+			}
+			divNF.appendChild(returnChoice)
+
+
 		}
-		returnChoice = document.createElement('button')
-		returnChoice.id = "id_return"
-		returnChoice.textContent = "Retour"
-		returnChoice.onclick = function(event){
-			event.preventDefault()
-			CleanOwnerInput(event)
-		}
-		divNF.appendChild(returnChoice)
 
-
-	}
-
-/***** events */
-if (document.getElementById('submit')){
-	document.getElementById('submit').addEventListener('click', function(event){
+		/***** events */
+		if (document.getElementById('submit')){
+			document.getElementById('submit').addEventListener('click', function(event){
 		//checks data consistency
 		IsNeutered = document.getElementById('id_is_neutered_0').checked
 		willBeNeuterable = document.getElementById('id_is_neutered_2').checked
@@ -207,11 +208,11 @@ if (document.getElementById('submit')){
 			}
 		}
 	});
-}
-if (document.getElementById('id_species')){
-	document.getElementById('id_species').addEventListener('click', function(){
-		if (document.getElementById('id_species_0').checked || document.getElementById('id_species_1').checked){
-			document.getElementById('id_caution').value = "100"
-		}else{
-			document.getElementById('id_caution').value = "200"
-		}})}
+		}
+		if (document.getElementById('id_species')){
+			document.getElementById('id_species').addEventListener('click', function(){
+				if (document.getElementById('id_species_0').checked || document.getElementById('id_species_1').checked){
+					document.getElementById('id_caution').value = "100"
+				}else{
+					document.getElementById('id_caution').value = "200"
+				}})}

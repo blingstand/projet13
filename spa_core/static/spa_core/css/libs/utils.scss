@@ -7,3 +7,23 @@
 .d-none{
 	display: none !important;
 }
+.catline{
+	background: url('../img/titre-chat.png') no-repeat bottom center;
+	height: 2rem; 
+	padding : 1rem 0;
+}
+
+.content-centered{
+	display:grid; 
+	place-items: center; 
+}
+.back-button{
+	transition: transform 1s 0.2s;
+	cursor: pointer;
+	&:hover{
+		font-weight: bold; 
+		text-decoration: underline;
+		transform: scale(1.10) translateX(5vw);
+		color: blue;
+	}
+}

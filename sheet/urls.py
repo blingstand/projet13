@@ -26,8 +26,6 @@ urlpatterns = [
     path('index/alter_owner/<int:given_id>/<str:action>', \
         AlterOwnerSheetView.as_view(), name='alter_owner'),
     #
-    path('index/alter_owner_open/<int:given_id>/<str:action>', \
-        AlterOwnerOpenSheetView.as_view(), name='alter_owner_open'),
     path('index/alter_owner_open/<int:given_id>/', \
         AlterOwnerOpenSheetView.as_view(), name='alter_owner_open'),
     #

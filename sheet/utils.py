@@ -285,3 +285,22 @@ class UtilsSheet():
             return True, f"{selected_contact} a bien été modifié."
         except Exception as exc:
             return False, f"modify_contact > problème ici : {exc}"
+
+    def create_owner_list(self): 
+        """return a list of all the owner in db"""
+        owners = Owner.objects.all()
+        owner_list = [ {'str': str(owner), 'id': owner.id} for owner in owners]
+        return owner_list
+
+    def search_owner(self, data):
+        """ makes a search in a list and returns a list a potential correct values """
+        owner_list = self.create_owner_list()
+        given_value = data['value'].lower()
+        list_candidates = []
+        for owner in owner_list:
+            if given_value in owner['str'].lower(): 
+                list_candidates.append(owner)
+                if len(list_candidates) >= 5:
+                    return list_candidates
+        return list_candidates
+
