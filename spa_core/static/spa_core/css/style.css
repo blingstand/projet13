@@ -120,7 +120,7 @@
   padding: 1rem 0;
 }
 
-.content-centered, .add-owner-open .container-animals, .add-owner-open .form-add-owner-open .container-fields .line, .add-owner-open h2, .container-overview .container-button, .container-overview .overview .field, .right-part-bottom .mail-settings .container-form .form-settings .container-input, .right-part-bottom .mail-settings .container-form, .right-part-bottom .mail-settings .container-wish .wish, .right-part-bottom .mail-settings .container-wish, .right-part-bottom .mail-content .right-part .container-buttons, .right-part-bottom .mail-content .right-part .container-tools .tool, .right-part-bottom .mail-content .right-part .container-tools, .right-part-bottom .mail-content .left-part .field, .right-part-bottom .cns .container-button, .right-part-bottom .mail-index .mail-table .scrollable-part .row1 .cell, .right-part-bottom .mail-index .mail-table .scrollable-part .row2 .cell, .right-part-bottom .mail-index .mail-table .mail-table-title .col-name, .right-part-bottom .historic .historic-table .scrollable-part .row1 .cell, .right-part-bottom .historic .historic-table .scrollable-part .row2 .cell, .right-part-bottom .historic .historic-table .historic-table-title .col-name, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .content-pictures, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-candidates p, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-candidates, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .selected-candidate, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-owners, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-top .part-1 .top-bottom p, .right-part-bottom .form-anim .title, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1 .container-checkbox, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 .container-checkbox, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2, .right-part-bottom .art-sheet-index form .table .row-title .col-name, .right-part-bottom .art-sheet-index form, .right-part-bottom .art-sheet-index .container-button .container-button-toggle {
+.content-centered, .connection .grp-connection .form-connection, .connection .grp-connection .title, .connection .grp-connection, .connection, .add-owner-open .container-animals, .add-owner-open .form-add-owner-open .container-fields .line, .add-owner-open h2, .container-overview .container-button, .container-overview .overview .field, .right-part-bottom .info .faq, .right-part-bottom .info .tuto, .right-part-bottom .info .legal-notice, .right-part-bottom .info .github-link, .right-part-bottom .info .container-about, .right-part-bottom .mail-settings .container-input, .right-part-bottom .mail-settings .wish, .right-part-bottom .mail-settings .container-top, .right-part-bottom .mail-settings .container-middle, .right-part-bottom .mail-settings .container-bot, .right-part-bottom .mail-content .right-part .container-buttons, .right-part-bottom .mail-content .right-part .container-tools .tool, .right-part-bottom .mail-content .right-part .container-tools, .right-part-bottom .mail-content .left-part .field, .right-part-bottom .cns .container-button, .right-part-bottom .mail-index .mail-table .scrollable-part .row1 .cell, .right-part-bottom .mail-index .mail-table .scrollable-part .row2 .cell, .right-part-bottom .mail-index .mail-table .mail-table-title .col-name, .right-part-bottom .historic .historic-table .scrollable-part .row1 .cell, .right-part-bottom .historic .historic-table .scrollable-part .row2 .cell, .right-part-bottom .historic .historic-table .historic-table-title .col-name, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .content-pictures, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-candidates p, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-candidates, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .selected-candidate, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-owners, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-top .part-1 .top-bottom p, .right-part-bottom .form-anim .title, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1 .container-checkbox, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 .container-checkbox, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2, .right-part-bottom .art-sheet-index form .table .row-title .col-name, .right-part-bottom .art-sheet-index form, .right-part-bottom .art-sheet-index .container-button .container-button-toggle {
   display: grid;
   place-items: center;
 }
@@ -700,7 +700,7 @@ nav .container-nav-button .nav-button:hover {
 .right-part-bottom .mail-index .mail-table .mail-table-title {
   background-color: #00b4b5;
   display: grid;
-  grid-template-columns: 2rem 5rem 5rem 15rem 1fr;
+  grid-template-columns: 2rem 16rem 5rem 15rem 1fr;
   grid-gap: 3px 5px;
   text-align: center;
 }
@@ -710,8 +710,9 @@ nav .container-nav-button .nav-button:hover {
 }
 .right-part-bottom .mail-index .mail-table .scrollable-part .row1, .right-part-bottom .mail-index .mail-table .scrollable-part .row2 {
   display: grid;
-  grid-template-columns: 2rem 5rem 5rem 15rem 1fr;
+  grid-template-columns: 2rem 16rem 5rem 15rem 1fr;
   grid-gap: 3px 5px;
+  min-height: 2.5rem;
 }
 .right-part-bottom .mail-index .mail-table .scrollable-part .row1 .last-cell, .right-part-bottom .mail-index .mail-table .scrollable-part .row2 .last-cell {
   text-align: justify;
@@ -756,8 +757,10 @@ nav .container-nav-button .nav-button:hover {
   height: 65vh;
 }
 .right-part-bottom .mail-content .left-part .field input[type=text] {
-  border-radius: 0;
+  border-radius: 1rem 1rem 0 0;
+  padding: 0 1rem;
   width: 90%;
+  height: 2rem;
   border: 1px black solid;
 }
 .right-part-bottom .mail-content .left-part .field:last-child {
@@ -784,8 +787,11 @@ nav .container-nav-button .nav-button:hover {
   margin-bottom: 0.7rem;
 }
 .right-part-bottom .mail-content .right-part .container-tools .tool select {
+  border-radius: 1rem 1rem 0 0;
   font-size: 0.6rem;
   width: 14rem;
+  font-size: 0.9rem;
+  height: 2rem;
   cursor: pointer;
 }
 .right-part-bottom .mail-content .right-part .container-tools .tool select:hover {
@@ -810,6 +816,9 @@ nav .container-nav-button .nav-button:hover {
 .right-part-bottom .mail-content .right-part .container-buttons button:last-child {
   background-color: #00b4b5;
 }
+.right-part-bottom header {
+  background-color: #ececec;
+}
 .right-part-bottom header h2 {
   text-align: center;
   font-size: 2rem;
@@ -823,10 +832,17 @@ nav .container-nav-button .nav-button:hover {
   height: 60vh;
   background-color: #ececec;
 }
-.right-part-bottom .mail-settings .container-wish {
+.right-part-bottom .mail-settings .container-top, .right-part-bottom .mail-settings .container-middle, .right-part-bottom .mail-settings .container-bot {
   width: 100%;
 }
-.right-part-bottom .mail-settings .container-wish .wish {
+.right-part-bottom .mail-settings .container-top {
+  margin-bottom: 0.5rem;
+}
+.right-part-bottom .mail-settings .container-bot {
+  margin-top: 0.5rem;
+}
+.right-part-bottom .mail-settings .wish {
+  border: 1px black solid;
   width: 70%;
   height: 4rem;
   background-color: tomato;
@@ -834,37 +850,36 @@ nav .container-nav-button .nav-button:hover {
   padding: 1rem;
   cursor: pointer;
 }
-.right-part-bottom .mail-settings .container-form {
-  width: 100%;
-}
-.right-part-bottom .mail-settings .container-form .form-settings {
+.right-part-bottom .mail-settings .form-settings {
   background-color: #00b4b5;
-  width: 70%;
+  width: 66%;
   display: grid;
-  grid-template-rows: 1fr 4rem;
 }
-.right-part-bottom .mail-settings .container-form .form-settings ul#id_frequency {
+.right-part-bottom .mail-settings .form-settings ul#id_condition {
   list-style-type: none;
   padding: 1rem 0;
 }
-.right-part-bottom .mail-settings .container-form .form-settings ul#id_frequency li {
+.right-part-bottom .mail-settings .form-settings ul#id_condition li {
   font-size: 1.5rem;
 }
-.right-part-bottom .mail-settings .container-form .form-settings ul#id_frequency li:hover {
+.right-part-bottom .mail-settings .form-settings ul#id_condition li:hover {
   font-weight: bold;
 }
-.right-part-bottom .mail-settings .container-form .form-settings ul#id_frequency li input[type=radio] {
+.right-part-bottom .mail-settings .form-settings ul#id_condition li input[type=radio] {
   margin: 0 1rem;
+  height: 1rem;
+  width: 1rem;
 }
-.right-part-bottom .mail-settings .container-form .form-settings ul#id_frequency li label {
+.right-part-bottom .mail-settings .form-settings ul#id_condition li label {
   cursor: pointer;
 }
-.right-part-bottom .mail-settings .container-form .form-settings .container-input {
-  width: 100%;
-  height: 100%;
+.right-part-bottom .mail-settings .container-input {
+  border: 1px black solid;
+  width: 70%;
+  height: 4rem;
   background-color: tomato;
 }
-.right-part-bottom .mail-settings .container-form .form-settings .container-input input[type=submit] {
+.right-part-bottom .mail-settings .container-input input[type=submit] {
   width: 12rem;
   height: 3rem;
   background-color: #fff;
@@ -872,6 +887,76 @@ nav .container-nav-button .nav-button:hover {
   font-size: 1.3rem;
   cursor: pointer;
 }
+.right-part-bottom .info {
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+}
+.right-part-bottom .info .faq {
+  grid-row: 1;
+  grid-column: 1;
+}
+.right-part-bottom .info .tuto {
+  grid-row: 1;
+  grid-column: 2;
+}
+.right-part-bottom .info .legal-notice {
+  grid-row: 2;
+  grid-column: 1;
+}
+.right-part-bottom .info .github-link {
+  grid-row: 2;
+  grid-column: 2;
+}
+.right-part-bottom .info .container-about {
+  grid-row: 3;
+  grid-column: 1/3;
+}
+.right-part-bottom .info .faq, .right-part-bottom .info .tuto, .right-part-bottom .info .legal-notice, .right-part-bottom .info .github-link, .right-part-bottom .info .container-about {
+  text-align: center;
+  background-color: #ececec;
+  width: 100%;
+  height: 20vh;
+}
+.right-part-bottom .info .faq p:hover, .right-part-bottom .info .faq a:hover, .right-part-bottom .info .tuto p:hover, .right-part-bottom .info .tuto a:hover, .right-part-bottom .info .legal-notice p:hover, .right-part-bottom .info .legal-notice a:hover, .right-part-bottom .info .github-link p:hover, .right-part-bottom .info .github-link a:hover, .right-part-bottom .info .container-about p:hover, .right-part-bottom .info .container-about a:hover {
+  font-weight: bold;
+}
+.right-part-bottom .info .faq, .right-part-bottom .info .tuto, .right-part-bottom .info .container-about {
+  background-color: #00b4b5;
+}
+.right-part-bottom .legal-notice {
+  background-color: #ececec;
+}
+.right-part-bottom .legal-notice .title {
+  padding-left: 5rem;
+  background-color: #00b4b5;
+  height: 4rem;
+  display: grid;
+  grid-template-rows: 1rem 2rem 1rem;
+  margin: 1rem 0;
+  cursor: pointer;
+  width: 80%;
+}
+.right-part-bottom .legal-notice .title h1 {
+  grid-row: 2;
+}
+.right-part-bottom .legal-notice .container-top .container, .right-part-bottom .legal-notice .container-mid .container, .right-part-bottom .legal-notice .container-bot .container {
+  display: none;
+}
+.right-part-bottom .legal-notice .container-top .text-content, .right-part-bottom .legal-notice .container-mid .text-content, .right-part-bottom .legal-notice .container-bot .text-content {
+  text-indent: 1rem;
+  margin-bottom: 0.5rem;
+}
+.right-part-bottom .legal-notice .container-top ol, .right-part-bottom .legal-notice .container-mid ol, .right-part-bottom .legal-notice .container-bot ol {
+  background-color: #82feff;
+  margin-left: 5rem;
+  padding: 0.4rem 1rem;
+  list-style-type: none;
+}
+.right-part-bottom .legal-notice .container-top ol li, .right-part-bottom .legal-notice .container-mid ol li, .right-part-bottom .legal-notice .container-bot ol li {
+  padding-bottom: 0.4rem;
+}
+
 .container-overview {
   grid-column: span 2;
   display: grid;
@@ -1016,6 +1101,51 @@ nav .container-nav-button .nav-button:hover {
 .add-owner-open .container-animals li:hover {
   cursor: pointer;
   font-weight: bold;
+}
+
+.connection {
+  font-size: 1.5rem;
+  grid-column: 1/3;
+  width: 100vw;
+  height: 100vh;
+}
+.connection .grp-connection {
+  height: 70vh;
+  width: 45vw;
+  background-color: #00b4b5;
+  display: grid;
+  border-radius: 2rem 2rem 0 0;
+  grid-template-rows: repeat(10, 0.1fr);
+  grid-template-columns: 5rem 1fr 5rem;
+}
+.connection .grp-connection .title {
+  grid-row: 2;
+  grid-column: 2;
+  border-radius: 2rem 2rem 0 0;
+  background-color: tomato;
+  width: 100%;
+  height: 100%;
+}
+.connection .grp-connection .form-connection {
+  grid-row: 4/10;
+  grid-column: 2;
+  background-color: tomato;
+  width: 100%;
+  height: 100%;
+}
+.connection .grp-connection .form-connection .line-1, .connection .grp-connection .form-connection .line-2, .connection .grp-connection .form-connection .container-submit {
+  text-align: center;
+}
+.connection .grp-connection .form-connection .line-1 input, .connection .grp-connection .form-connection .line-2 input, .connection .grp-connection .form-connection .container-submit input {
+  width: 12rem;
+  text-align: center;
+  height: 2rem;
+  font-size: 1.5rem;
+  background-color: #fff;
+  border-radius: 1rem 1rem 0 0;
+}
+.connection .grp-connection .form-connection .container-submit input {
+  height: 2rem;
 }
 
 /*# sourceMappingURL=style.css.map */

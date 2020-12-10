@@ -17,6 +17,9 @@
 @import "split/sheet-index.scss";
 @import "split/sheet-form-anim.scss";
 @import "split/sheet-form-owner-open.scss";
+@import "split/info";
+@import "split/info-legal-notice";
+@import "split/connection";
 
 
 *, ::before, ::after {
@@ -74,7 +77,11 @@ nav{
 	@include load-mail-cns(); 
 	@include load-mail-content(); 
 	@include load-mail-settings(); 
+	@include load-info(); 
+	@include load-legal-notice(); 
 }
 
 @include load-mail-content-overview(); 
 @include load-sheet-form-owner-open(); 
+@include load-connection(); 
+

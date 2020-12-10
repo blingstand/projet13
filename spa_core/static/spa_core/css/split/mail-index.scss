@@ -1,4 +1,4 @@
-$shape_table_mail: 2rem 5rem 5rem 15rem 1fr;
+$shape_table_mail: 2rem 16rem 5rem 15rem 1fr;
 @mixin load-mail-index(){
 	.mail-index{
 		display: grid;
@@ -39,6 +39,7 @@ $shape_table_mail: 2rem 5rem 5rem 15rem 1fr;
 					display: grid;
 					grid-template-columns: $shape_table_mail; 
 					grid-gap: 3px 5px; 
+					min-height: 2.5rem; 
 
 					.cell{
 						@extend .content-centered; 

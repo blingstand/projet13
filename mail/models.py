@@ -16,15 +16,11 @@ locale.setlocale(locale.LC_TIME,'')
 class Mail(models.Model):
     """ manages the mail model """
     mail_id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=50, unique=True)
+    title = models.CharField(max_length=100, unique=True)
     resume = models.CharField(blank=True, max_length=120)
     plain_text = models.TextField(blank=True)
     auto_send = models.BooleanField(blank=True,default=False)
-    send_after_creation = models.BooleanField(blank=True,default=False)
-    send_after_delete = models.BooleanField(blank=True,default=False)
-    send_after_modif = models.BooleanField(blank=True,default=False)
-    send_every_2_weeks = models.BooleanField(blank=True,default=False)
-    send_when_neuterable = models.BooleanField(blank=True,default=False)
+    condition = models.IntegerField(blank=True, null=True)
     def __str__(self):
         if self.mail_id is not None:
             return f'mail{self.mail_id} (titre: {self.title})'
@@ -36,25 +32,26 @@ class Mail(models.Model):
         if self.auto_send == True:
             return 1 
         return 0
-    @property
-    def get_checked_for_form(self):
-        return self._get_checked_for_form
     
+    @staticmethod
+    def str_condition_form_choices():
+        str_condition = ("à la création de la fiche,", 
+            "à la création de la fiche si l'animal n'est pas stéril,",
+            "quand je modifie la valeur de la caution,",
+            "à la suppression d'une fiche,",
+            "toutes les deux semaines,",
+            "quand l'animal devient stérilisable.")
+        list_condition = [(str(count+1), condition) for count, condition in enumerate(str_condition)]
+        return tuple(list_condition)
+    @property
     def get_condition(self):
         """this function returns a condition(str) if auto_send = true, else returns None"""
-        condition = {
-            self.send_after_creation : (bool, 'à la création de la fiche'),
-            self.send_after_modif : (bool, 'à la modification de la fiche'),
-            self.send_after_delete : (bool, 'à la supression de la fiche'),
-            self.send_when_neuterable : (bool, "quand l'animal sera stérilisable"),
-            self.send_every_2_weeks : (bool, 'envoie toute les deux semaines')}
-        if not self.auto_send:
-            return None
-        for key in condition:
-            if isinstance(key, condition[key][0]):
-                if not key:
-                    continue
-                return condition[key][1]
+        conditions = self.str_condition_form_choices()
+        for condition in conditions:
+            if condition[0] == str(self.condition): 
+                return condition[1]
+
+
     def _get_false_animal(self):
         """this function returns a fictif animal in order to display an overview"""
         already_exists = Animal.objects.filter(name="patatin")

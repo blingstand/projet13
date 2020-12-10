@@ -1,30 +1,33 @@
 {% extends 'spa_core/base.html' %} 
 {% block content %}
-<section class="">
-    <header>
-        <p class="back-button" onclick=BackToCNS()>Retour CNS</p>
-        {% if mail %}
-        <h2 class="">Règle(s) d'envoi pour mail <br><span class="title-info"> (id={{mail.mail_id}}, titre='{{mail.title}}')</span> </h2>
-        {% else %}
-        <h2 class="">Règle(s) d'envoi </h2>
-        {% endif %}
-    </header>
-    <article class="mail-settings">
-        <div class="container-wish">
-            <div class="wish" id="wish">Je ne souhaite pas envoyer ce mail automatiquement ... 
-            </div>
+
+<header>
+    <p class="back-button" onclick=BackToCNS()>Retour CNS</p>
+    {% if mail %}
+    <h2 class="">Règle(s) d'envoi pour mail <br><span class="title-info"> (id={{mail.mail_id}}, titre='{{mail.title}}')</span> </h2>
+    {% else %}
+    <h2 class="">Règle(s) d'envoi </h2>
+    {% endif %}
+</header>
+<article class="mail-settings">
+    <div class="container-top">
+        <div class="wish" id="wish">
         </div>
-        <div class="container-form">
-            <form action="" method="post" id='formSettings' class="form-settings d-none">{% csrf_token %}
-                {{form.frequency}}
-                <div class="container-input">
-                    <input type="submit"class="btn btn-primary big-btn" value="Enregistrer">
-                    <p id="verif"></p>
-                </div>
-            </form>
+    </div>
+    <div class="container-middle">
+        <form action="" method="post" id='formSettings' class="form-settings d-none">{% csrf_token %}
+            {{form }}
+        </form>
+    </div>
+    <div class="container-bot">
+        <div class="container-input">
+            <input id="submit" type="submit"class="btn btn-primary big-btn" value="Enregistrer">
+            <p id="verif"></p>
         </div>
-    </article>
-</section>
+    </div>
+</div>
+</article>
+
 <script type="text/javascript">
 
     //###################
@@ -33,6 +36,7 @@
     const wish = document.getElementById('wish')
     const formSettings = document.getElementById('formSettings')
     let count = 0
+    const submitBtn = document.getElementById('submit') 
     param = GetParam()
 
     
@@ -44,43 +48,29 @@
         pageName = 'settings'
         BackCNS(pageName, "{% url 'mail:cns'%}")
     }
-
-    // //******fill the form
-    // const fillForm = function(){
-    //     keys = ['{{mail.send_after_creation}}', '{{mail.send_after_modif}}', '{{mail.send_after_delete}}','{{mail.send_every_2_weeks}}', '{{mail.send_when_neuterable}}']
-    //     for (index in keys){
-    //         if (keys[index] != 'False'){
-    //             document.getElementById('id_frequency_'+index).checked = true;
-    //             break; 
-    //         };
-    //     }
-    // }
-    //displays form + changes auto_send value in db for 1
     const AppearChoice = () => {
         console.log("Appear : j'envoie 1 au serveur")
-        value = {'ajax':1, 'mail_id':param, 'auto_send':1}
+        value = {'ajax':1, 'auto_send':1}
         urlAppChoice = "{% url 'mail:settings'%}"
         whatToDo = function(){
             wish.textContent = "Je souhaite envoyer ce mail automatiquement ..."
             formSettings.classList.remove("d-none");
-            document.getElementById('id_frequency_0').checked = true; 
         }
         sendDatasToServer(value, url, whatToDo)
-        return true
+        return 1
     }
 
     //hides form + changes auto_send value in db for 0
     const DisappearChoice = () => {
         console.log("DisAppear : j'envoie 0 au serveur")
-        value = {'ajax':1, 'mail_id':param, 'auto_send':0}
+        value = {'ajax':1, 'auto_send':0}
         urlAppChoice = "{% url 'mail:settings'%}"
         whatToDo = function(){
             wish.textContent = "Je ne souhaite pas envoyer ce mail automatiquement ..."
             formSettings.classList.add("d-none");
-            document.getElementById('id_frequency_0').checked = true; 
         }
         sendDatasToServer(value, url, whatToDo) 
-        return false
+        return 0
     }
     const ChangeAutoSend = () => {
         autoSend = localStorage.autoSend
@@ -93,13 +83,25 @@
         localStorage.setItem("autoSend", newAutoSend) 
         console.log("localStorage : " + localStorage.autoSend )
     }
+
+    const SubmitformSettings = () => {
+        console.log(formSettings)
+        formSettings.setAttribute('action', "{% url 'mail:settings'%}/"+param);
+        formSettings.setAttribute('method', "POST");
+        formSettings.submit()
+    }
     //###################
     //####  EVENTS   ####
     //###################
     //choose display or remove
     wish.onclick = function () {  
         ChangeAutoSend()
+        wish.classList.toggle('bg-primary')
     };
+
+    submitBtn.onclick = () => {
+        SubmitformSettings()
+    }
     window.onload = () => {
         console.log('le serveur envoie : {{ mail.auto_send_js }} ')
         autoSend = "{{ mail.auto_send_js }}"
@@ -110,6 +112,8 @@
         }else{
             console.log("je veux voir le form ")
             formSettings.classList.remove("d-none");
+            wish.classList.toggle('bg-primary')
+            wish.textContent = "Je souhaite envoyer ce mail automatiquement ..."
         }
     }
     // let main = function() {

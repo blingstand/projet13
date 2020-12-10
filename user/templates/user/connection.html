@@ -10,47 +10,36 @@
 	<title>SPA suivi stérilisation</title>
 	{% load static %}
 	<link href="{% static 'spa_core/css/bootstrap.min.css'%}" rel="stylesheet" type="text/css" >
-	<link rel="stylesheet" href="{% static 'spa_core/css/change.css'%}">
+	<link rel="stylesheet" href="{% static 'spa_core/css/style.css'%}">
 
 </head>
 <body>
-	
-	<section class="section-connection">
-		<div class="container">
-			<div class="row">
-				<div class="col-3"></div>
-				<div class="col-6 cont-form">
-					<h1 class="text-center mt-4">page connexion</h1>
-					<form class="opac-white-background" action="" method="POST">
-						{% csrf_token %}
-						<div class="form-row pt-5">
-							<div class="col-lg-3 text-center">Pseudo</div >     
-							<div class="col-lg-9 text-center">{{ us_form.username}}</div >      
-						</div>
-						<div class="form-row pt-5">
-							<div class="col-lg-3 text-center">Mot de passe </div >
-							<div class="col-lg-9 text-center">{{us_form.password}}</div >
-						</div>
-						<div class="row mt-5">
-							<div class="col-lg-2"></div>
-							<div class="col-lg-8 text-center">
-								<input type="submit" id="id_submit" class="btn btn-primary big-btn mb-4" value="Se connecter">
-							</div>
-							<div class="col-lg-2"></div>
-							<!-- nouvelle ligne -->
-							<div class="col-lg-2"></div>
-							<div class="col-lg-8 text-center">
-								{% if error %}
-								<p><strong>Utilisateur inconnu ou mauvais de mot de passe.</strong></p>
-								{% endif %}
-							</div>
-							<div class="col-lg-2"></div>
-						</div>
-					</form>
+	<article class="connection">
+		<div class="grp-connection">
+			<h1 class="title">Page de Connexion</h1>
+			<form class="form-connection" action="" method="POST">
+				{% csrf_token %}
+				<div class="line-1">
+					<div class="">Pseudo</div >     
+					<div class="">{{ us_form.username}}</div >      
 				</div>
-				<div class="col-3"></div>
+				<div class="line-2">
+					<div class="">Mot de passe</div >     
+					<div class="">{{ us_form.password}}</div >      
+				</div>
+
+				<div class="container-submit">
+					<input type="submit" id="id_submit" class="btn btn-primary big-btn mb-4" value="Se connecter">
+				</div>
 			</div>
+		</form>
+		{% if error %}
+		<div class="container-error">
+			<p><strong>Utilisateur inconnu ou mauvais de mot de passe.</strong></p>
 		</div>
-	</section>
+		{% endif %}
+
+	</div>
+</article>
 </body>
 </html>

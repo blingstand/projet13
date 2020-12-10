@@ -1,0 +1,55 @@
+@mixin load_connection(){
+	.connection{
+		font-size: 1.5rem; 
+		grid-column: 1/3; 
+		width: 100vw;
+		height: 100vh;
+		@extend .content-centered; 
+		.grp-connection{
+			height : 70vh;
+			width: 45vw;
+			background-color: $primary;
+			display: grid;
+			border-radius: 2rem 2rem 0 0 ;
+			grid-template-rows: repeat(10, 0.10fr);
+			grid-template-columns: 5rem 1fr 5rem;
+			@extend .content-centered; 
+			.title{
+				grid-row: 2;
+				grid-column: 2;
+				border-radius: 2rem 2rem 0 0 ;
+				background-color: $third_color;
+				@extend .content-centered; 
+				width: 100%;
+				height: 100%; 
+			}
+			.form-connection{
+				grid-row: 4/10;
+				grid-column: 2;
+				background-color: $third_color;
+				@extend .content-centered; 
+				width: 100%;
+				height: 100%;
+				.line-1, .line-2, .container-submit{
+					text-align: center; 
+					input{
+						width: 12rem;
+						text-align: center; 
+						height: 2rem;
+						font-size: 1.5rem; 
+						background-color: #fff;
+						border-radius: 1rem 1rem 0 0 ;
+
+					}
+				}
+				.container-submit{
+					input{
+						height: 2rem;
+					}
+				}
+				.container-subit{}
+
+			}
+		}
+	}
+}

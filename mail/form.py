@@ -5,20 +5,21 @@ from django.db.utils import IntegrityError
 
 from .models import *
 
-CHOICES = (
-    ("1", "à la création de la fiche,"),
-    ("2", "quand je modifie la valeur de la caution,"), 
-    ("3", "à la suppression d'une fiche,"),
-    ("4", "toutes les deux semaines,(fonctionalité à vernir)"),
-    ("5", "quand l'animal devient stérilisable."))
 
-class SettingsMail(forms.Form):
-    """form to add a new mail rule"""
-    frequency = forms.ChoiceField(widget=forms.RadioSelect(attrs={"class":"lst-none"}), choices=CHOICES)
+CHOICES = Mail.str_condition_form_choices()
+class SettingsMail(forms.ModelForm):
+    class Meta: 
+        model = Mail
+        fields = ('condition', )
+        widgets = {
+        'condition': forms.RadioSelect(choices=CHOICES),
+        }
+        """form to add a new mail rule"""
+    # frequency = forms.ChoiceField(widget=forms.RadioSelect(attrs={"class":"lst-none"}), choices=CHOICES)
 
 class ContentMail(forms.Form):
     """form to add a new mail content"""
-    title = forms.CharField(max_length=30, label="titre",
+    title = forms.CharField(max_length=100, label="titre",
         widget=forms.TextInput(attrs={ 'class' : "w-100 text-center blank",
             'placeholder' : "titre du mail"}))
     resume = forms.CharField(max_length=100, label="objet", 
@@ -31,4 +32,4 @@ class ContentMail(forms.Form):
             'rows': 20,
             'placeholder' : "contenu du mail, pensez à utiliser les touches sur les côtés"}))
 
-    
+        

@@ -24,6 +24,7 @@ class MailView(View):
         {'name' : 'modifier',   'id' : 'alter', 'function' : 'Alter()'},
         {'name' : 'supprimer',  'id' : 'remove', 'function' : 'Remove()'}],
             'mails' : mails}
+        print(mails[0].get_condition)
         return render(request, 'mail/index.html', context)
         #test
     def post(self, request):
@@ -123,53 +124,32 @@ class SettingsView(View):
         """ response different if gets mail id"""
         print("--- get SettingsView -----" )
         mail = ut.get_mail_from_id(mail_id)
-        checked_value = ut.get_checked_value(mail)
-        form = SettingsMail()
+        form = SettingsMail(initial={'condition' : mail.condition})
         context = {"mail": mail, "form": form}
         print("\t" , mail, "auto_send", mail.auto_send_js)
+        print("\t" , mail.condition, "*****")
         return render(request, 'mail/settings.html', context)
-    def post(self, request, mail_id=None):
+    def post(self, request, mail_id):
         """ can manage ajax req and form """
         print("--- post SettingsView -----" )
-        form = SettingsMail(request.POST)
+        mail = ut.get_mail_from_id(mail_id)
+        form = SettingsMail(request.POST, )
         dict_values = {'ajax':'0'}
         dict_values.update(request.POST.dict())
         print("\tajax : " ,dict_values['ajax'])
        
-        if dict_values['ajax'] == "1":
-            mail = ut.get_mail_from_id(dict_values['mail_id'])
+        if dict_values['ajax'] == "1": #change auto send 
             ut.change_auto_send(mail, (dict_values['auto_send']))
-            if dict_values['auto_send'] == "1":
-                mail.send_after_creation = True
-                mail.save()
             print('\tauto_send : ', mail.auto_send)
             return JsonResponse({"auto_send" : dict_values['auto_send']}, safe=False)
-        if form.is_valid():
-            mail = ut.get_mail_from_id(mail_id)
-            ut.change_auto_send(mail, True)
-            ut.auto_send_false(mail)
-            if form.cleaned_data["frequency"] == "1":
-                # print("changement pour send_after_creation ")
-                mail.send_after_creation = True
-            elif form.cleaned_data["frequency"] == "2":
-                # print("changement pour send_after_modif ")
-                mail.send_after_modif = True
-            elif form.cleaned_data["frequency"] == "3":
-                # print("changement pour send_after_delete ")
-                mail.send_after_delete = True
-            elif form.cleaned_data["frequency"] == "4":
-                # print("changement pour send_every_2_weeks ")
-                mail.send_every_2_weeks = True
-            elif form.cleaned_data["frequency"] == "5":
-                print("changement pour send_when_neuterable ")
-                mail.send_when_neuterable = True
-
+        
+        if form.is_valid():                     #means 1 condition is selected
+            mail.send_after_creation = True     #auto_send activated
+            mail.condition = form.cleaned_data["condition"]
             mail.save()
             context = {'mail' : mail}
             return render(request, 'mail/cns.html', context)
-        # print("error")
-        # print(form.errors.items())
-        # print(f"\ndebug : {request.POST}")
+      
         context = {
             'form' : form}
         return render(request, 'mail/settings.html', context)
