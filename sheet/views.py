@@ -29,6 +29,11 @@ class SheetView(View):
     
     def get(self, request, own=0, action=None, search=0):
         #get the data from database
+        print( f"\n------- {self.__class__.__name__}/get -------")
+        print(f"own={own}, action={action}, search={search}\n")
+
+
+
         print(f"get own={own}, action={action}, search={search}")
         animals = Animal.objects.all()
         owners = Owner.objects.all()
