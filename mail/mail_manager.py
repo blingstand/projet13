@@ -43,17 +43,10 @@ class MailManager():
             for owner in list_owner :
                 mail.send_auto_mail(owner, given_id)
                 self.create_contact(owner, dict_datas)
-    def has_to_send_mail(self, action, list_owner, given_id):
-        """ this function verifies, send and trace
-        verifies whether a mail should be send according to parameters
+    def has_to_send_mail(self, given_condition, list_owner, given_id):
+        """ selects the corresponding mail and triggers 
+        self.send_and_trace
         """
-        # print("has_to_send_mail")
-        list_mail = ""
-        if action == 'creation':
-            list_mail = Mail.objects.filter(auto_send=True, send_after_creation=True)
-        elif action == 'modif':
-            list_mail = Mail.objects.filter(auto_send=True, send_after_modif=True)
-        elif action == 'delete':
-            list_mail = Mail.objects.filter(auto_send=True, send_after_delete=True)
+        list_mail = Mail.objects.filter(condition=given_condition)
         if len(list_mail) > 0:
             self.send_and_trace(given_id, list_mail, list_owner)

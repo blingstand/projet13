@@ -22,7 +22,6 @@ class GraphDatas():
         self.two_weeks = timedelta(days = 14)
         self.owners = self.get_owners_with_obligations()
 
-        print("self.owners = ", self.owners)
 
     def get_owners_with_obligations(self):
         """ returns list owners with caution"""

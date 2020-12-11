@@ -79,6 +79,7 @@
 			background-color: $secondary;
 			list-style-type: none;
 			@extend .content-centered; 
+			overflow-y: scroll;
 			li{
 				font-size: 1.5rem;
 				&:hover{
@@ -88,4 +89,8 @@
 			}
 		}
 	}
+	.no-pet{
+		grid-template-rows: 5rem 1fr 4rem; 
+	}
+
 }

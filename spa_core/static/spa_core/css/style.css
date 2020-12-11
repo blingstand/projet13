@@ -1094,6 +1094,7 @@ nav .container-nav-button .nav-button:hover {
 .add-owner-open .container-animals {
   background-color: #ececec;
   list-style-type: none;
+  overflow-y: scroll;
 }
 .add-owner-open .container-animals li {
   font-size: 1.5rem;
@@ -1101,6 +1102,10 @@ nav .container-nav-button .nav-button:hover {
 .add-owner-open .container-animals li:hover {
   cursor: pointer;
   font-weight: bold;
+}
+
+.no-pet {
+  grid-template-rows: 5rem 1fr 4rem;
 }
 
 .connection {

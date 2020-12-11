@@ -11,115 +11,73 @@ from mydashboard.utils import GraphDatas
 from mail.mail_manager import MailManager
 
 #from current app
-from .models import Animal, Owner, Contact
 from .form import SheetForm, JustOwnerForm
+from .models import Animal, Owner, Contact
 from .utils import UtilsSheet
 from .datas import *
+from .build_get import BuilderGet
+from .build_post import BuilderPost
 
 # Create your views here.
 
 gradat = GraphDatas()
 mail_manager = MailManager()
 utils_sheet = UtilsSheet()
+g_builder = BuilderGet()
+p_builder = BuilderPost()
 
 def redirect_index(request):
     return redirect('sheet:index')
 class SheetView(View):
     """class for page index sheet"""
-    
+    context = {'top_columns_anim': top_columns_anim, 'top_columns_owner': top_columns_owner, 
+            'button_value': button_value}
     def get(self, request, own=0, action=None, search=0):
-        #get the data from database
+        """3 actions :
+            1/ displays anim sheet list from db 
+            2/ displays owner sheet list from db 
+            3/ displays result of search 
+        """
         print( f"\n------- {self.__class__.__name__}/get -------")
-        print(f"own={own}, action={action}, search={search}\n")
+        print(f"own={own}, action={action}, search={search}")
 
-
-
-        print(f"get own={own}, action={action}, search={search}")
-        animals = Animal.objects.all()
-        owners = Owner.objects.all()
-        if action == "display":
-            list_owners, list_contacted, list_to_contact = gradat.get_list_for_search
-            if search == 1:
-                owners = list_owners
-            if search == 2:
-                owners = list_contacted
-            elif search == 3:
-                owners = list_to_contact
-        elif action == "search:prop":
-            owners = Owner.objects.get(id=search),
-        elif action == "search:anim":
-            animals = Animal.objects.get(id=search),
-        context = {
-            'animals' : animals, 'owners': list(owners), 'disp_owners': own, 
-            'top_columns_anim': top_columns_anim, 'top_columns_owner': top_columns_owner, 
-            'button_value': button_value
-            }
-        return render(request, 'sheet/index.html', context)
+        add_context = g_builder.for_sheet_view(own, action, search)
+        self.context.update(add_context)
+        # input( f"le server envoie :\n{self.context}\n")
+        return render(request, 'sheet/index.html', self.context)
 
     def post(self, request, own, search=0):
-        """receives data to pass to deals with the dropSheet function"""
+        """receives data and triggers dropSheet(data)"""
         given_id = request.POST.getlist('checkbox')
-        print("***************")
-        print(given_id, own)
-
-        if own == 0:
-            utils_sheet.drop_sheet(given_id)
-            return redirect("sheet:index",own='0')
-
-        print("***************")
-        utils_sheet.remove_owner(given_id)
-        return redirect("sheet:index",own='1')
+        own = p_builder.for_sheet_view(own,given_id)
+        print( f"\n------- {self.__class__.__name__}/post -------")
+        print(f"own={own}, given_id={given_id}")
+        return redirect("sheet:index",own=own)
 
 class AddSheetView(View):
     """class for page add sheet"""
     context = {'title': "Page Ajout Fiche", 'submit_btn': "Ajouter"}
     def get(self, request):
         #displays the page
-        owners = Owner.objects.all()
-        form = SheetForm(request.POST or None)
-        self.context.update({'form' : form, "owners" : owners})
+        print( f"\n------- {self.__class__.__name__}/get -------")
+        print(f"pas de paramètres")
+
+        add_context = g_builder.for_add_sheet_view(request)
+        self.context.update(add_context)
+        print( f"le server envoie :\n{self.context.keys()}\n")
         return render(request, 'sheet/form_anim.html', self.context)
 
     def post(self, request):
         #handles the form and the errors
-        owners = Owner.objects.all()
-        form = SheetForm(request.POST or None)
-        ajax_search_owner_data = {"value": ""}
-        dict_values = request.POST.dict()
-        ajax_search_owner_data.update(dict_values)
-        self.context.update({'form' : form, "owners" : owners})
-        print(ajax_search_owner_data)
-        if ajax_search_owner_data['value'] is not "":
-            print(">> ", ajax_search_owner_data)
-            response = utils_sheet.search_owner(ajax_search_owner_data)
+        print( f"\n------- {self.__class__.__name__}/post -------")
+        condition, response = p_builder.for_add_sheet_view(request)
+        self.context.update(response)
+
+        if condition == "ajax": 
             return JsonResponse({"data":response}, safe=False)
-    
-        if form.is_valid():
-            print('form is valid')
-            # print("\t1/ récupération des données ...")
-            dict_values = form.from_form()
-            # print("\t2/ affichage des données récupérées ...")
-            print(f"dict_values >{dict_values}")
-            # print("\t3/ Tentative d'enregistrement des données ...")
-            status_operation, animal = form.save_new_datas(dict_values)
-            if status_operation == 1:
-                mail_manager.has_to_send_mail('creation', [animal.owner], animal.id)
-                print(f"> un mail a été envoyé suite à cet ajout à {animal.owner.mail}")
-                return redirect("sheet:index")
-            else:
-                print('Echec, raison :')
-                context['errors'] = status_operation
-                print("j'envoie ce rapport à js : \n")
-                print("***\n\t",context['errors']['alert'],"\n***\n")
-                print(context['errors'])
-                return render(request, 'sheet/form_anim.html', context)
-        else:
-            print("form not valid")
-            context['errors'] = form.errors.items()
-            print("\n\n*** E R R O R ***\n")
-            print(form.errors.items())
-            print("\n*** E N D ***\n\n")
-            print(request.POST, 'et', request.FILES)
+        elif condition == 'form_ok': 
+            return redirect("sheet:index")
+        else: 
             return render(request, 'sheet/form_anim.html', context)
 
 class AlterSheetView(View):
@@ -289,9 +247,13 @@ class AddOwnerOpenSheetView(View):
     context = {"title" : "Nouveau Propriétaire", "submit_btn": "Ajouter"}
     def get(self, request):
         """this function handles the get request for add_owner page"""
-        print(">>>OPEN add")
-        form = JustOwnerForm()
-        self.context['form'] = form
+        print( f"\n------- {self.__class__.__name__}/get -------")
+        print("pas de paramètres")
+
+        add_context = g_builder.for_add_owner_open_sheet_view()
+        self.context.update(add_context)
+        print( f"le server envoie :\n{self.context.keys()}\n")
+        
         return render(request, "sheet/form_owner_open.html", self.context)
 
     def post(self, request):

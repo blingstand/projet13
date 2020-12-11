@@ -15,12 +15,26 @@ locale.setlocale(locale.LC_TIME,'')
 # Create your models here.
 class Mail(models.Model):
     """ manages the mail model """
+    CAS     = 1
+    CANS    = 2
+    MC      = 3
+    SA      = 4
+    E2S     = 5
+    ADS     = 6
+    CONDITIONS = (
+        (CAS, "creation animal stéril" ),
+        (CANS, "creation animal non stéril" ),
+        (MC, "modif caution" ),
+        (SA, "suppression animal" ),
+        (E2S, "envoie toute les 2 semaines" ),
+        (ADS, "animal devient stéril" ),
+        )
     mail_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100, unique=True)
     resume = models.CharField(blank=True, max_length=120)
     plain_text = models.TextField(blank=True)
     auto_send = models.BooleanField(blank=True,default=False)
-    condition = models.IntegerField(blank=True, null=True)
+    condition = models.IntegerField(choices=CONDITIONS, blank=True, null=True)
     def __str__(self):
         if self.mail_id is not None:
             return f'mail{self.mail_id} (titre: {self.title})'

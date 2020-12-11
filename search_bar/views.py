@@ -12,6 +12,6 @@ class SearchBarView(View):
 		input_value = dict_value['value']
 		list_response = utils.answering(input_value)
 		print("****")
-		print("post :", list_response)
+		print("post123 :", list_response)
 		print("****")
 		return JsonResponse({'data':list_response}, safe=False) 

@@ -242,7 +242,8 @@
 
     }
     plusIcon.onclick = () => {
-    	OpenSmallPageOwner('add')
+    	url_open = "{% url 'sheet:add_owner_open'%}"; 
+        OpenSmallPageOwner(url_open)
     }
 
     myForm.onsubmit = () => {

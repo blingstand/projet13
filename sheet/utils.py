@@ -2,6 +2,7 @@
 from datetime import datetime
 #from others apps
 from mail.utils import UtilsMail
+from mail.models import Mail
 from mail.mail_manager import MailManager
 #from current app
 from .models import Animal, Owner, Contact
@@ -51,10 +52,8 @@ class UtilsSheet():
             print(f">> {elem}")
             animal = Animal.objects.get(id=elem)
             admin, owner = animal.admin_data, animal.owner
-            print(animal, ' || ', admin, ' || ', owner)
             other_animal = Animal.objects.filter(owner=owner)
-            print(f"Ce propriétaire possède {len(other_animal)} animaux)")
-            mm.has_to_send_mail("delete", [owner], animal.id)
+            mm.has_to_send_mail(Mail.SA, [owner], animal.id)
             animal.delete()
             admin.delete()
             if len(other_animal) < 1 :
@@ -184,7 +183,7 @@ class UtilsSheet():
             can_send_mail = True
             datas = [former_owner,new_owner]
         if can_send_mail:
-            mm.has_to_send_mail("modif", datas, given_id)
+            mm.has_to_send_mail(Mail.MC, datas, given_id)
         return True, changes
         # except Exception as exc:
         #     raise exc

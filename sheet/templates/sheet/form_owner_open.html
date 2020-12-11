@@ -13,7 +13,11 @@
 	<link rel="icon" href="{% static 'spa_core/img/favicon.png'%}">
 </head>
 <body>
+	{% if animals %}
 	<section class="add-owner-open">
+	{% else %}
+	<section class="add-owner-open no-pet">
+		{% endif%}
 		<h2 class="">{{title}}</h2>
 		<form id='form' class="form-add-owner-open" action="{% url 'sheet:add_owner_open'%}" method="post" enctype="multipart/form-data">
 			{% csrf_token %}
@@ -62,7 +66,6 @@
     //###################
     //#### VARIABLES ####
     //###################
-
 	const phoneNumber = document.getElementById('id_phone')
 	const deleteAllBtn = document.getElementById('delete-all')
 	const submitBtn = document.getElementById('save')
