@@ -16,7 +16,7 @@ class Command(BaseCommand):
     def _fdon(self): 
         """drops the datas"""
         print(f"Mission du {datetime.now().date()}: ")
-        print(f"Je dois envoyer un mail à : ")
+        print(f"Je dois envoyer un mail à ... ")
         admins = AdminData.objects.filter(
             futur_date_of_neuter=datetime.now().date())
         if admins:
@@ -33,6 +33,8 @@ class Command(BaseCommand):
                         print(f'\trésumé :', mail[0].resume)
                         print(f'\tcontenu :', mail[0].modified_text(anim.id))
                         mail[0].send_auto_mail(anim.owner.mail, anim.id)
+        else:
+            print(f"... personne car aucun animal n'est devenu stérilisable aujourd'hui ")
 
     def handle(self, *args, **options):
         """throws the drop_db function"""
