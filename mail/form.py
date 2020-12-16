@@ -6,20 +6,16 @@ from django.db.utils import IntegrityError
 from .models import *
 
 
-CHOICES = Mail.str_condition_form_choices()
-class SettingsMail(forms.ModelForm):
-    class Meta: 
-        model = Mail
-        fields = ('condition', )
-        widgets = {
-        'condition': forms.RadioSelect(choices=CHOICES),
-        }
-        """form to add a new mail rule"""
-    # frequency = forms.ChoiceField(widget=forms.RadioSelect(attrs={"class":"lst-none"}), choices=CHOICES)
+
+
+class SettingsMail(forms.Form):
+    condition = forms.ChoiceField(widget=forms.RadioSelect(),
+        choices= Mail.str_condition_form_choices())
+
 
 class ContentMail(forms.Form):
     """form to add a new mail content"""
-    title = forms.CharField(max_length=100, label="titre",
+    title = forms.CharField(max_length=120, label="titre",
         widget=forms.TextInput(attrs={ 'class' : "w-100 text-center blank",
             'placeholder' : "titre du mail"}))
     resume = forms.CharField(max_length=100, label="objet", 

@@ -4,38 +4,38 @@
 
 <h2 class="">{{title}}</h2>
 <article class="form-anim">
-	<form id="my_form" class="container-full-form" action="" method="post" enctype="multipart/form-data">
-		{% csrf_token %}
-		<!-- -------------------         left part             ------------------------------ -->
-		<div class="container-form-left-part">
-			{% include "./libs/anim_part.html"%}
-		</div>
-		<!-- -------------------         right part             ------------------------------ -->
-		<div class="container-form-right-part">
+    <form id="my_form" class="container-full-form" action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!-- -------------------         left part             ------------------------------ -->
+        <div class="container-form-left-part">
+            {% include "./libs/anim_part.html"%}
+        </div>
+        <!-- -------------------         right part             ------------------------------ -->
+        <div class="container-form-right-part">
 
-			<!-- -------------------         right part top        ------------------------------ -->
-			<div class="container-form-right-part-top">
-				{% include "./libs/admin_part.html"%}
-			</div>
+            <!-- -------------------         right part top        ------------------------------ -->
+            <div class="container-form-right-part-top">
+                {% include "./libs/admin_part.html"%}
+            </div>
 
-			<!-- -------------------         right part bottom        ------------------------------ -->
-			<div class=" container-form-right-part-bottom">
-				{% include "./libs/owner_part.html"%}
-			</div>
-		</div>
-	</div>
+            <!-- -------------------         right part bottom        ------------------------------ -->
+            <div class=" container-form-right-part-bottom">
+                {% include "./libs/owner_part.html"%}
+            </div>
+        </div>
+    </div>
 </form>
 </article>
 
 
 <script type="text/javascript">
-	/* *** plan ***
-	1/ User select new or former owner
-	2/ 	A. new displays Ownerform
-	2/ 	B. former displays select with owner in option
-	3/ Client sends Ajax request to get more infos about selected owner id
-	4/ Client receives info, success > display ownerform and fill it
-	*/
+    /* *** plan ***
+    1/ User select new or former owner
+    2/  A. new displays Ownerform
+    2/  B. former displays select with owner in option
+    3/ Client sends Ajax request to get more infos about selected owner id
+    4/ Client receives info, success > display ownerform and fill it
+    */
 
 //###################
 //#### VARIABLES ####
@@ -43,21 +43,21 @@
 
     let is_neutered_button = document.getElementById("id_is_neutered_0")
     is_neutered_button.checked = true
-	// let owner_sex_button = document.getElementById("id_owner_sex_0")
-	// owner_sex_button.checked = true
-	let divNF = document.getElementsByClassName("new-former")[0]
-	let ownDivs = document.getElementsByClassName('owner_input') //div for input owner
-	let divFormer = document.getElementsByClassName("former-owner")[0] //div for button Ancien Propériétaire
-	let divNew = document.getElementsByClassName("new-owner")[0] //div for button Nouveau Propériétaire
-	let is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-	const OwnerSelector = document.getElementById('id_select_owner')
-	const url_index_add = "{% url 'sheet:add'%}"
-	const containerOwners = document.getElementById('container-owners')
-	const eyeIcon = document.getElementById('eye')
-	const plusIcon = document.getElementById('plus')
-	const myForm = document.getElementById('my_form')
-	const isModifyForm = '{{submit_btn}}' == "Modifier"
-	console.log("Je suis sur la page : {{submit_btn}}")
+    // let owner_sex_button = document.getElementById("id_owner_sex_0")
+    // owner_sex_button.checked = true
+    let divNF = document.getElementsByClassName("new-former")[0]
+    let ownDivs = document.getElementsByClassName('owner_input') //div for input owner
+    let divFormer = document.getElementsByClassName("former-owner")[0] //div for button Ancien Propériétaire
+    let divNew = document.getElementsByClassName("new-owner")[0] //div for button Nouveau Propériétaire
+    let is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+    const OwnerSelector = document.getElementById('id_select_owner')
+    const url_index_add = "{% url 'sheet:add'%}"
+    const containerOwners = document.getElementById('container-owners')
+    const eyeIcon = document.getElementById('eye')
+    const plusIcon = document.getElementById('plus')
+    const myForm = document.getElementById('my_form')
+    const isModifyForm = '{{submit_btn}}' == "Modifier"
+    console.log("Je suis sur la page : {{submit_btn}}")
 
 //###################
 //#### FUNCTIONS ####
@@ -65,269 +65,300 @@
 
     //JS code for chrome browser
     const clickSelectedOption = function(select) {
-    	if(!is_chrome) return;
-    	select.options[select.selectedIndex].click();
-    	if (select.selectedIndex == "0" || select.selectedIndex == "1") {
-    		document.getElementById("id_caution").value = 100
-    	}else{
-    		document.getElementById("id_caution").value = 200
-    	}
+        if(!is_chrome) return;
+        select.options[select.selectedIndex].click();
+        if (select.selectedIndex == "0" || select.selectedIndex == "1") {
+            document.getElementById("id_caution").value = 100
+        }else{
+            document.getElementById("id_caution").value = 200
+        }
     }
+
   
-	const FirstCheckboxChecked = () => {
-		//displays new input for checkbox 1 - removes for checkbox 3  
-		document.getElementById('id_is_neutered').value = "0"
-		is_neuter.checked = true
-		is_neuter.parentNode.innerHTML = '<input id="id_is_neutered_0" class="" type="radio" name="is_neutered" value="0" checked> stérilisé le <p>{{form.date_of_neuter}}</p>'
-		willBeNeutered.parentNode.innerHTML = '<input id="id_is_neutered_2" class="" type="radio" name="is_neutered" value="2" > sera stérilisable </input>'
-	}
-	const ThirdCheckboxChecked = () => {
-		//displays new input for checkbox 3 - removes for checkbox 1  
-		document.getElementById('id_is_neutered').value = "2"
-		willBeNeutered.checked = true
-		willBeNeutered.parentNode.innerHTML = '<input id="id_is_neutered_2" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="2" checked> sera stérilisable le </input><p>{{form.futur_date_of_neuter}}</p>'
-		is_neuter.parentNode.innerHTML = '<input id="id_is_neutered_0" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="0">stéril</input>'
-	}
+    const FirstCheckboxChecked = () => {
+        //displays new input for checkbox 1 - removes for checkbox 3  
+        document.getElementById('id_is_neutered').value = "0"
+        is_neuter.checked = true
+        is_neuter.parentNode.innerHTML = '<input id="id_is_neutered_0" class="" type="radio" name="is_neutered" value="0" checked> stérilisé le <p>{{form.date_of_neuter}}</p>'
+        willBeNeutered.parentNode.innerHTML = '<input id="id_is_neutered_2" class="" type="radio" name="is_neutered" value="2" > sera stérilisable </input>'
+    }
+    const ThirdCheckboxChecked = () => {
+        //displays new input for checkbox 3 - removes for checkbox 1  
+        document.getElementById('id_is_neutered').value = "2"
+        willBeNeutered.checked = true
+        willBeNeutered.parentNode.innerHTML = '<input id="id_is_neutered_2" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="2" checked> sera stérilisable le </input><p>{{form.futur_date_of_neuter}}</p>'
+        is_neuter.parentNode.innerHTML = '<input id="id_is_neutered_0" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="0">stéril</input>'
+    }
 
-	//create an input date for the dates of neuter
-	const appearNewDateInput = function(nb){
-		is_neuter = document.getElementById('id_is_neutered_0')
-		willBeNeutered = document.getElementById('id_is_neutered_2')
-		if (nb == "0"){
-			FirstCheckboxChecked()
-			return true
-		}
-		else if (nb == "2"){
-			ThirdCheckboxChecked()
-			return true
-		}else{
-			document.getElementById('id_is_neutered').value = "1"
-			is_neuter.checked = false
-			willBeNeutered.checked = false
-			is_neuter.parentNode.innerHTML = '<input id="id_is_neutered_0" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="0">stéril</input>'
-			willBeNeutered.parentNode.innerHTML = '<input id="id_is_neutered_2" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="2" > sera stérilisable </input>'
-		}
-	}
+    //create an input date for the dates of neuter
+    const appearNewDateInput = function(nb){
+        is_neuter = document.getElementById('id_is_neutered_0')
+        willBeNeutered = document.getElementById('id_is_neutered_2')
+        if (nb == "0"){
+            FirstCheckboxChecked()
+            return true
+        }
+        else if (nb == "2"){
+            ThirdCheckboxChecked()
+            return true
+        }else{
+            document.getElementById('id_is_neutered').value = "1"
+            is_neuter.checked = false
+            willBeNeutered.checked = false
+            is_neuter.parentNode.innerHTML = '<input id="id_is_neutered_0" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="0">stéril</input>'
+            willBeNeutered.parentNode.innerHTML = '<input id="id_is_neutered_2" class="lst-none pl-0 mb-0" type="radio" name="is_neutered" value="2" > sera stérilisable </input>'
+        }
+    }
 
-	const GiveStartValue = function(){
-		document.getElementById("id_caution").value = 100
-	}
-	
-	const getInputDate = function(){
-		const allInput = document.getElementsByTagName('input')
-		let allInputDate = []
-		for (input of allInput){
-			if (input.id.substring(0,7) == "id_date"){
-				allInputDate.push(input)
-			}else if (input.id == "id_date_of_neuter" && input.value == ''){
-				console.log('pas de date de stérilisation')
-			}
-		}
-		console.log(allInputDate)
-		return allInputDate
-	}
+    const GiveStartValue = function(){
+        document.getElementById("id_caution").value = 100
+    }
+    
+    const getInputDate = function(){
+        const allInput = document.getElementsByTagName('input')
+        let allInputDate = []
+        for (input of allInput){
+            if (input.id.substring(0,7) == "id_date"){
+                allInputDate.push(input)
+            }else if (input.id == "id_date_of_neuter" && input.value == ''){
+                console.log('pas de date de stérilisation')
+            }
+        }
+        console.log(allInputDate)
+        return allInputDate
+    }
 
-	const FormateResponse = (response) =>{
-		//formates the response in order to display it
-		console.log(response)
-		text = ""
-		for (candidate of response){
-			text += "<p id="+candidate.id+" class='candidate' onClick='DisplaySelectedOwner()'>"+candidate.str+" (id: "+ candidate.id + ")</p>"
-		}
-		console.log(text)
-		return text
-	}
-	const DisplayCandidates = (response) => {
-		//create a div with candidates to permit to user to select 1
-		visibleNewDiv = document.getElementById('container-candidates')
-		if (visibleNewDiv){ //remove div before to create new one
-			visibleNewDiv.remove()
-		}
-		if (response.length == 0){
-			return
-		}
-		let formatedResponse = FormateResponse(response)
-		newDiv = document.createElement('div')
-		newDiv.classList.add('container-candidates')
-		newDiv.id = 'container-candidates'
-		newDiv.innerHTML = formatedResponse
-		containerOwners.insertBefore(newDiv, containerOwners.children[0])
-		eyeIcon.classList.remove('d-none')
+    const FormateResponse = (response) =>{
+        //formates the response in order to display it
+        console.log(response)
+        text = ""
+        for (candidate of response){
+            text += "<p id="+candidate.id+" class='candidate' onClick='DisplaySelectedOwner()'>"+candidate.str+" (id: "+ candidate.id + ")</p>"
+        }
+        console.log(text)
+        return text
+    }
+    const DisplayCandidates = (response) => {
+        //create a div with candidates to permit to user to select 1
+        visibleNewDiv = document.getElementById('container-candidates')
+        if (visibleNewDiv){ //remove div before to create new one
+            visibleNewDiv.remove()
+        }
+        if (response.length == 0){
+            return
+        }
+        let formatedResponse = FormateResponse(response)
+        newDiv = document.createElement('div')
+        newDiv.classList.add('container-candidates')
+        newDiv.id = 'container-candidates'
+        newDiv.innerHTML = formatedResponse
+        containerOwners.insertBefore(newDiv, containerOwners.children[0])
+        eyeIcon.classList.remove('d-none')
 
-	}
+    }
 
-	const CreateSelectedCandidateP = (selectedId, content) =>{
-		newP = document.createElement('p')
-		newP.id = selectedId
-		newP.classList.add('selected-candidate')
-		newP.textContent = content
-		newP.title = 'Cliquez pour modifier le propriétaire'
-		newP.onclick = (e) => { 
-			e.target.remove() ; 
-			OwnerSelector.classList.toggle("d-none")
-			OwnerSelector.value = ""
-			eyeIcon.classList.toggle('d-none')
-		}
-		containerOwners.appendChild(newP)
-	}
-	const DisplaySelectedOwner = () =>{
-		e = window.event
-		OwnerSelector.value = e.target.id
-		OwnerSelector.classList.toggle("d-none")
-		CreateSelectedCandidateP(e.target.id, e.target.textContent)
+    const CreateSelectedCandidateP = (selectedId, content) =>{
+        newP = document.createElement('p')
+        newP.id = selectedId
+        newP.classList.add('selected-candidate')
+        newP.textContent = content
+        newP.title = 'Cliquez pour modifier le propriétaire'
+        newP.onclick = (e) => { 
+            e.target.remove() ; 
+            OwnerSelector.classList.toggle("d-none")
+            OwnerSelector.value = ""
+            eyeIcon.classList.toggle('d-none')
+        }
+        containerOwners.appendChild(newP)
+    }
+    const DisplaySelectedOwner = () =>{
+        e = window.event
+        OwnerSelector.value = e.target.id
+        OwnerSelector.classList.toggle("d-none")
+        CreateSelectedCandidateP(e.target.id, e.target.textContent)
+    }
 
-	}
+    const DisplayError = () =>{
+        //display red color on element targeted by error
+        errorZone = document.getElementsByName("{{errors.zone}}")[0]
+        errorTarget = document.getElementsByName("{{errors.target}}")[0]
+        console.log(">> " + errorZone, errorTarget)
+        console.log(errorZone)
+        errorZone.classList.toggle('error-displayed-title')
+        errorTarget.classList.toggle('error-displayed-input')
+        errorTarget.placeholder = errorTarget.value
+        errorTarget.value = ""
+    }
+    
+    //*** event 
+    document.getElementById('id_is_neutered_0').parentNode.onclick = function(e){
+        if (e.target.name == "date_of_neuter"){
+            return
+        }else{
+            appearNewDateInput("0")
+            $('#id_date_of_neuter').val(localStorage.getItem("date_of_neuter"))
+        }
+    }
+    document.getElementById('id_is_neutered_1').parentNode.onclick = function(){
 
-	const DisplayError = () =>{
-		//display red color on element targeted by error
-		errorZone = document.getElementsByName("{{errors.zone}}")[0]
-		errorTarget = document.getElementsByName("{{errors.target}}")[0]
-		console.log(">> " + errorZone, errorTarget)
-		console.log(errorZone)
-		errorZone.classList.toggle('error-displayed-title')
-		errorTarget.classList.toggle('error-displayed-input')
-		errorTarget.placeholder = errorTarget.value
-		errorTarget.value = ""
+        appearNewDateInput("1")
+    }
+    document.getElementById('id_is_neutered_2').parentNode.onclick = function(e){
+        if (e.target.name == "futur_date_of_neuter"){
+            return
+        }else{
+            appearNewDateInput("2")
+            $('#id_futur_date_of_neuter').val(localStorage.getItem("futur_date_of_neuter"))
+        }
+    }
+    const CompleteIsNeutered = (val, myDate) => {
+        document.getElementById("id_is_neutered_"+val).click()
+        if (myDate != null){
+            setTimeout(() => { 
+                document.getElementById("id_futur_date_of_neuter").value = myDate
+            }, 500);
+        }
+    }
+    //   IsFutureDate('2020-12-14')
+    const IsFutureDate = (idate) => {
+        var today = Number(new Date().toISOString().slice(0,10).replaceAll("-", ""))
+        var idate = Number(idate.replaceAll("-", "") )
+        console.log('today > ' + today)
+        console.log('idate > ' + idate)
+        resp  = "futur ? " + ((idate - today ) > 0);
+        return resp
+    }
 
-
-	}
-	
-	//*** event 
-	document.getElementById('id_is_neutered_0').parentNode.onclick = function(e){
-		if (e.target.name == "date_of_neuter"){
-			return
-		}else{
-			appearNewDateInput("0")
-			$('#id_date_of_neuter').val(localStorage.getItem("date_of_neuter"))
-		}
-	}
-	document.getElementById('id_is_neutered_1').parentNode.onclick = function(){
-
-		appearNewDateInput("1")
-	}
-	document.getElementById('id_is_neutered_2').parentNode.onclick = function(e){
-		if (e.target.name == "futur_date_of_neuter"){
-			return
-		}else{
-			appearNewDateInput("2")
-			$('#id_futur_date_of_neuter').val(localStorage.getItem("futur_date_of_neuter"))
-		}
-	}
-	const CompleteIsNeutered = (val, myDate) => {
-		document.getElementById("id_is_neutered_"+val).click()
-		if (myDate != null){
-			setTimeout(() => { 
-				document.getElementById("id_futur_date_of_neuter").value = myDate
-			}, 500);
-		}
-
-	}
+    //check whether a pb is found in the form
+    const IsFormCorrect = () => {
+        //1 will be neutered with no futur date
+        is_neutered_2 = document.getElementById("id_is_neutered_2")
+        futur_date_of_neuter = document.getElementById("id_futur_date_of_neuter")
+        console.log(Date.now())
+        if (is_neutered_2.checked){
+            console.log("date future ? " + IsFutureDate(futur_date_of_neuter.value))
+            if (futur_date_of_neuter.value == ""){
+                alert("Vous devez préciser quand l'animal sera stérilisable")
+                return false
+            } else if (!IsFutureDate(futur_date_of_neuter.value)){
+                alert("Vous devez préciser une date future")
+                futur_date_of_neuter.classList
+                return false
+            }
+        }
+        return true
+    }
 
 //###################
 //####  EVENTS   ####
 //###################
     
     eyeIcon.onclick = () => {
-    	if (OwnerSelector.value == ""){
-    		alert("Sélectionnez un propriétaire avant de cliquer sur le boutton aperçu.")
-    		return 
-    	}
-    	select_val = document.getElementById('id_select_owner').value
-    	OpenSmallPageOwner('update', select_val)
-    	document.getElementsByClassName('selected-candidate')[0].remove()
-    	OwnerSelector.classList.toggle("d-none")
-    	OwnerSelector.value = ""
-    	eyeIcon.classList.toggle('d-none')
+        if (OwnerSelector.value == ""){
+            alert("Sélectionnez un propriétaire avant de cliquer sur le boutton aperçu.")
+            return 
+        }
+        select_val = document.getElementById('id_select_owner').value
+        urlOpen = "{% url 'sheet:alter_owner_open' 123%}".replace('123', select_val)
+        OpenSmallPageOwner(urlOpen)
+        document.getElementsByClassName('selected-candidate')[0].remove()
+        OwnerSelector.classList.toggle("d-none")
+        OwnerSelector.value = ""
+        eyeIcon.classList.toggle('d-none')
 
 
     }
     plusIcon.onclick = () => {
-    	url_open = "{% url 'sheet:add_owner_open'%}"; 
+        url_open = "{% url 'sheet:add_owner_open'%}"; 
         OpenSmallPageOwner(url_open)
     }
 
     myForm.onsubmit = () => {
-    	localStorage.clear()
-    	if (isModifyForm){
-    		animalId = GetParam()
-    		myForm.setAttribute('action', "{% url 'sheet:alter' 123%}".replace('123', animalId));
-    		console.log(myForm)	
-    		return true
-    	}
-		return true; // return false to cancel form action
-	};
+        localStorage.clear()
+        if (IsFormCorrect()){
+            if (isModifyForm){
+                animalId = GetParam()
+                myForm.setAttribute('action', "{% url 'sheet:alter' 123%}".replace('123', animalId));
+                console.log(myForm) 
+                return true
+            }
+            return true; // return false to cancel form action
+        }else{
+            return false
+        }
+    };
 
-	OwnerSelector.onkeyup = function(e){
-		if (OwnerSelector.value == ""){
-			return
-		}
-		console.log('écriture en cours')
-		data = {"value" : OwnerSelector.value}
+    OwnerSelector.onkeyup = function(e){
+        if (OwnerSelector.value == ""){
+            return
+        }
+        console.log('écriture en cours')
+        data = {"value" : OwnerSelector.value}
 
-		console.log(data.value)
-		WhatToDo = function(response){
-			DisplayCandidates(response)
-		}
-		console.log("envoi à " + url_index_add)
-		sendDatasToServer(data, url_index_add, WhatToDo)
+        console.log(data.value)
+        WhatToDo = function(response){
+            DisplayCandidates(response)
+        }
+        console.log("envoi à " + url_index_add)
+        sendDatasToServer(data, url_index_add, WhatToDo)
 
-	}
+    }
 
-	document.onclick = (e) =>{
-		toRemove = document.getElementById('container-candidates')
-		if (toRemove){
-			console.log(e.target)
-			if (e.target.className.search("select_owner") == -1 || e.target.className.find("candidate") == -1){
-				toRemove.remove(); 
-			}
-		}
-	}
+    document.onclick = (e) =>{
+        toRemove = document.getElementById('container-candidates')
+        if (toRemove){
+            console.log(e.target)
+            if (e.target.className.search("select_owner") == -1 || e.target.className.find("candidate") == -1){
+                toRemove.remove(); 
+            }
+        }
+    }
 
-	window.onbeforeunload = function() {
-		for (v of variables){
-			localStorage.setItem(v, $('#id_'+v).val());
-		}
-		for (elem of ["is_neutered_0", "is_neutered_1", "is_neutered_2"]){
-			if ($('#id_'+elem).is(':checked')){
-				localStorage.setItem("is_neutered", $('#id_'+elem).val())
-			}
-		}
-	}
+    window.onbeforeunload = function() {
+        for (v of variables){
+            localStorage.setItem(v, $('#id_'+v).val());
+        }
+        for (elem of ["is_neutered_0", "is_neutered_1", "is_neutered_2"]){
+            if ($('#id_'+elem).is(':checked')){
+                localStorage.setItem("is_neutered", $('#id_'+elem).val())
+            }
+        }
+    }
 
-	window.onload = function() {
+    window.onload = function() {
 
-		for (v of variables){
-			if (v == "is_neutered"){
-				$('#id_is_neutered_'+localStorage.getItem(v)).prop( "checked", true);
-				appearNewDateInput(localStorage.getItem(v))
-			}
-			if (localStorage.getItem(v) !== null) $('#id_'+v).val(localStorage.getItem(v));
-		}
-		{% if errors %}
-			alert("{{errors.alert}}")
-			DisplayError()
-		{% endif %}
+        for (v of variables){
+            if (v == "is_neutered"){
+                $('#id_is_neutered_'+localStorage.getItem(v)).prop( "checked", true);
+                appearNewDateInput(localStorage.getItem(v))
+            }
+            if (localStorage.getItem(v) !== null) $('#id_'+v).val(localStorage.getItem(v));
+        }
+        {% if errors %}
+            alert("{{errors.alert}}")
+            DisplayError()
+        {% endif %}
 
-		if (isModifyForm){
-			//display OwnerSelector as a div with given information
-			console.log("CompleteIsNeutered with '{{given_values.is_neutered}}', '{{given_values.futur_date_of_neuter}}' ")
-			CompleteIsNeutered('{{given_values.is_neutered}}', '{{given_values.futur_date_of_neuter}}')
+        if (isModifyForm){
+            //display OwnerSelector as a div with given information
+            console.log("CompleteIsNeutered with '{{given_values.is_neutered}}', '{{given_values.futur_date_of_neuter}}' ")
+            CompleteIsNeutered('{{given_values.is_neutered}}', '{{given_values.futur_date_of_neuter}}')
 
-			OwnerSelector.classList.toggle('d-none')
-			givenId = OwnerSelector.value
-			eyeIcon.classList.toggle('d-none')
-			console.log('{{given_values|escapejs}}')
-			{% for owner in owners%}
-			if ('{{owner.id}}' == givenId){
-				CreateSelectedCandidateP(givenId, '{{owner}}')
-			}
-			{% endfor %}
+            OwnerSelector.classList.toggle('d-none')
+            givenId = OwnerSelector.value
+            eyeIcon.classList.toggle('d-none')
+            console.log('{{given_values|escapejs}}')
+            {% for owner in owners%}
+            if ('{{owner.id}}' == givenId){
+                CreateSelectedCandidateP(givenId, '{{owner}}')
+            }
+            {% endfor %}
 
-		}else{
-			GiveStartValue()
-		}
-		
-	}
+        }else{
+            GiveStartValue()
+        }
+        
+    }
 </script>
 {% endblock  %}
 

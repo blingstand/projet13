@@ -1,0 +1,21 @@
+@mixin load-container-button-cud(){
+	.container-button-cud{
+		grid-column: 2; 
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		button{
+			flex: 0 1 7rem; /*  No stretching: */
+			margin: auto 2rem;
+			@extend .btn-sheet-index;
+			&:hover{
+				background-color: $primary;
+			}
+		}
+		.owner-part{
+			&:hover{
+				background-color: $third_color;
+			}
+		}
+	}
+}

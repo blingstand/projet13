@@ -72,7 +72,6 @@
     //###################
     //#### VARIABLES ####
     //###################
-
     const trRow1 = Array.from(document.getElementsByClassName('row1'));
     const trRow2 = Array.from(document.getElementsByClassName('row2'));
     const allTr = trRow1.concat(trRow2)
@@ -85,13 +84,9 @@
 
     let title = document.getElementById('title')
 
-
-
     //###################
     //#### FUNCTIONS ####
     //###################
-
-    
 
     const Alter = (given_id=null) => {
         //throws user to update page 
@@ -127,7 +122,6 @@
             title.innerHTML="Gestion Fiches ANIMAUX"
             displayBtn.innerHTML = "Afficher PROPRIETAIRES"
         }
-        
     }
 
     const UncheckAll = function(){
@@ -153,10 +147,9 @@
     }
     const isForAnimal = () => {
         //return whether we are in the anim or owner part
+        console.log(typeof(displayBtn.textContent))
         return displayBtn.textContent == "Afficher PROPRIETAIRES"
     }
-
-
     const ChargeOwnerSide = function(){
         //check loading data to display a side // anim or owner //
         let displayOwner = ({{disp_owners}} == 1)
@@ -273,7 +266,8 @@
     }
 
     createBtn.onclick = () =>{
-        console.log('create')
+        console.log('create > Animal : ' +  isForAnimal())
+        console.log("verif " + displayBtn.textContent)
         if (isForAnimal()){
             add_page = "{% url 'sheet:add' %}" 
             window.location.href = add_page

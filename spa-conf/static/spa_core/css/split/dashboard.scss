@@ -1,0 +1,36 @@
+@mixin load-dashboard{	
+	.art-dashboard{
+		height: 100%;
+		.container-dashboard{
+			display: grid; 
+			margin-left: 10px; 
+			grid-template-columns: 60% 1fr; 
+			grid-column-gap: 10px; 
+			height: 100%; 
+
+			.graph{
+				height: 80%; 
+				border: 2px black solid; 
+				border-radius: 2rem 2rem 0 0 ;
+			}
+			.container-button{
+				height: 80%; 
+				display : grid; 
+				place-items: center; 
+				div{
+					background-color: $secondary;
+					width: 50%;
+					border: 3px white solide; 
+					text-align: center; 
+					border-radius: 2rem; 
+					&:hover{
+						background-color: $primary;
+						font-weight: bold;
+						cursor: pointer; 
+					}
+				}
+			}
+
+		}
+	}
+}

@@ -41,17 +41,15 @@ $shape_table_5: 2rem 8rem 9rem 12rem 1fr;
 				height: 50vh;
 				overflow: hidden;
 
-				.rows{
+				.row1, .row2{
 					display: grid;
 					grid-template-columns: $shape_table_5; 
 					grid-gap: 3px 5px; 
 
 					.cell{
 						@extend .content-centered; 
-						cursor: pointer;
 					}
 					.last-cell{
-						cursor: pointer;
 						text-align: justify;
 						text-indent: 1rem; 
 						padding-right: 0.5rem;
@@ -59,44 +57,7 @@ $shape_table_5: 2rem 8rem 9rem 12rem 1fr;
 				}
 				.row2{
 					background-color: lighten($primary, 50);
-				}
-				.row-editor{
-					display: grid;
-					min-height: 5rem;
-					grid-template-columns: 2rem 8rem 9rem 12rem 1fr 6rem; 
-					grid-gap: 3px 5px;
-					.cell {
-						@extend .content-centered;
-					}
-					.cell input[type="date"]{
-						border-radius: 1rem; 
-						width: 8rem;
-						height: 1.5rem; 
-						font-size: 0.7rem; 
-						text-align: center; 
-					}
-					.cell select, .cell input[type="text"]{
-						border-radius: 1rem;
-						width: 8rem;
-						height: 1.5rem; 
-						font-size: 0.7rem; 
-						text-align: center; 
-						background-color: #fff;
-					}
-					.cell input[type="text"], .cell textarea{
-						width: 100%;
-					}
-					.cell textarea{
-						border-radius: 1rem 1rem 0 0;
-						height: 4rem;
-						padding: 0.5rem;
-					}
-					.cell #submit{
-						border-radius: 1rem;
-						height: 2rem;
-						width : 5rem;
-						font-size: 0.7rem; 
-					}
+
 				}
 			}
 		}

@@ -125,6 +125,7 @@ class SettingsView(View):
         print("--- get SettingsView -----" )
         mail = ut.get_mail_from_id(mail_id)
         form = SettingsMail(initial={'condition' : mail.condition})
+        print(form.fields)
         context = {"mail": mail, "form": form}
         print("\t" , mail, "auto_send", mail.auto_send_js)
         print("\t" , mail.condition, "*****")

@@ -25,7 +25,7 @@ class UtilsSheet():
             "is_neutered" : anim.admin_data.is_neutered,
             "select_owner" : anim.owner.id,
             "mail" : anim.owner.mail,
-            "name" : anim.name,
+            "name" : anim.name.upper(),
             "nature_caution" : anim.nature_caution,
             "status" : anim.admin_data.status,
             "owner_name" : anim.owner.owner_name,
@@ -49,19 +49,19 @@ class UtilsSheet():
             4/ yes > doesn't drop it || no > drops it
         """
         for elem in given_id:
-            print(f">> {elem}")
             animal = Animal.objects.get(id=elem)
             admin, owner = animal.admin_data, animal.owner
             other_animal = Animal.objects.filter(owner=owner)
-            mm.has_to_send_mail(Mail.SA, [owner], animal.id)
             animal.delete()
             admin.delete()
+            print(f"Suppression de : {animal}, {admin} ...")
             if len(other_animal) < 1 :
                 owner.delete()
-                print(f"Suppression de : {animal}, {admin} et {owner}")
+                print("... et {owner}")
             else:
-                print(f"/!\ Atention ce propriétaire a plusieurs animaux, "\
+                print(f".../!\ Atention ce propriétaire a plusieurs animaux, "\
                     "seuls les fiches {animal} et {admin} seront effacées.")
+            return (True, [owner], animal.id)
 
     def change_date_format(self, dict_values):
         """
@@ -140,6 +140,28 @@ class UtilsSheet():
         except Exception as exc:
             return False, exc
 
+    def is_in_changes(self, changes, search_value): 
+        #reads changes and returns True if it finds search_value
+        for change in changes: 
+            if change[0] == search_value: 
+                return True
+
+    def get_mail_to_send(self, former_owner, changes, animal, given_id): #tested
+        #Prepares datas for mail_manager.has_to_send_mail
+        mail_to_send = []  
+        owner_to_contact = [animal.owner]
+        if former_owner != False:
+            mail_to_send.append(Mail.MO) #ModifyOwner
+            owner_to_contact = [former_owner,animal.owner]
+        if self.is_in_changes(changes, "caution"):
+            mail_to_send.append(Mail.MC) #ModifyCaution
+        if self.is_in_changes(changes, "is_neutered"):
+            print('is_neutered')
+            if animal.admin_data.is_neutered == "0":
+                mail_to_send.append(Mail.AHBN)
+        return (mail_to_send, owner_to_contact, given_id)
+
+
     def manage_modify_datas(self, given_id, dict_values):
         """ this function attemps to modify the db
             1/ determinates wehther we have a new owner for animal from given_id
@@ -155,17 +177,15 @@ class UtilsSheet():
             2/ gets the changes to make
             3/ makes changes
         """
-        # try:
+        owner_to_contact = ""
         animal = Animal.objects.get(id=given_id)
         is_same_owner = (dict_values['select_owner'] == str(animal.owner.id))
-        print(is_same_owner)
+        former_owner = False
         if not is_same_owner:
             former_owner = animal.owner
             if int(dict_values['select_owner']) > 0:
-                print("changement de proprio")
                 new_owner = self.change_animal_owner(animal, dict_values['select_owner'])
             elif int(dict_values['select_owner']) == 0:
-                print("case2")
                 # print("Cas 2 : J'attribue à l'animal un nouveau propriétaire.")
                 new_owner = self.create_owner(dict_values, return_owner=True)
                 animal.owner = new_owner
@@ -173,22 +193,14 @@ class UtilsSheet():
         #I search for changes
         changes = self.find_changes(given_id, dict_values)
         self.modify_datas(changes, animal, dict_values)
-        can_send_mail = False
-        if is_same_owner:
-            for change in changes:
-                if change[0] == "caution":
-                    can_send_mail = True
-                    datas = [animal.owner]
-        else:
-            can_send_mail = True
-            datas = [former_owner,new_owner]
-        if can_send_mail:
-            mm.has_to_send_mail(Mail.MC, datas, given_id)
-        return True, changes
-        # except Exception as exc:
-        #     raise exc
-        #     return False, exc
-    """ methodes for Owner """
+        ###########  Mail Manager  ###########
+        mail_to_send = []
+        mail_to_send = self.get_mail_to_send(
+            former_owner=former_owner, changes=changes, 
+            animal=animal, given_id=given_id)
+
+        return True, changes, mail_to_send #mail_to_send = list
+
 
     def remove_owner(self, given_ids):
         """this function removes 1 owner from db if the ctrl is ok"""

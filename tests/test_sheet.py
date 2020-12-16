@@ -12,6 +12,7 @@ from django.urls import reverse
 from sheet.utils import UtilsSheet #get_animals_for_template, get_animal_from_given_id
 from sheet.models import Animal, Owner, AdminData, Contact
 from sheet.form import SheetForm
+from mail.models import Mail
 #-- unit test --
 def get_one_entry():
     """ create one sheet in db and return """
@@ -66,14 +67,15 @@ def get_many_entries(number):
         animal.owner = owner
         animal.save() 
 
-def create_new_owner():
-    owner = Owner(
-        owner_name = 'name2',
-        owner_surname = 'surname2',
-        owner_sex = 0,
-        phone = '1234567891',
-        mail = 'my2@mail.com')
-    owner.save()
+def create_new_owner(nb):
+    for i in range(1, nb+1): 
+        owner = Owner(
+            owner_name = f'name{i}',
+            owner_surname = f'surname{i}',
+            owner_sex = 0,
+            phone = f'123456787{i}',
+            mail = f'my{i}@mail.com')
+        owner.save()
 
 def create_contact(qtt): 
     """ this function creates a new contact """
@@ -86,7 +88,7 @@ def create_contact(qtt):
             nature = "0",
             owner = owner)
         new_contact.save()
-
+@skip
 class RedirectView(TestCase):
     def test_redirect_index(self):
         """this function test whether the user is redirected when end url is empty"""
@@ -145,210 +147,243 @@ class UnitTest(TestCase):
         }
 
     
-    def test_get_animal_from_given_id(self):
-        ''' tests if the function returns a list of animal objects using a given id '''
+    # def test_get_animal_from_given_id(self):
+    #     ''' tests if the function returns a list of animal objects using a given id '''
         
-        list_animals = self.utils.get_animal_from_given_id(self.animal.id)
-        self.assertEqual(list_animals[0], self.animal)
+    #     list_animals = self.utils.get_animal_from_given_id(self.animal.id)
+    #     self.assertEqual(list_animals[0], self.animal)
     
-    def test_change_date_format(self):
-        """ this function tests if the format is changed when dict_values[data] is str or empty"""
-        dict_values = {}
-        keys = ('date_of_birth', 'date_of_adoption', 'date_of_neuter', 'futur_date_of_neuter')
-        values = ("1991-02-22", "1998-05-05", "", "")
-        for i in range(0, 4):
-            dict_values[keys[i]] = values[i]
-        result = self.utils.change_date_format(dict_values)
+    # def test_change_date_format(self):
+    #     """ this function tests if the format is changed when dict_values[data] is str or empty"""
+    #     dict_values = {}
+    #     keys = ('date_of_birth', 'date_of_adoption', 'date_of_neuter', 'futur_date_of_neuter')
+    #     values = ("1991-02-22", "1998-05-05", "", "")
+    #     for i in range(0, 4):
+    #         dict_values[keys[i]] = values[i]
+    #     result = self.utils.change_date_format(dict_values)
         
-        self.assertTrue(result['date_of_birth'] == datetime(1991,2,22).date())
-        self.assertTrue(result['date_of_neuter'] == None)
+    #     self.assertTrue(result['date_of_birth'] == datetime(1991,2,22).date())
+    #     self.assertTrue(result['date_of_neuter'] == None)
         
-    def test_find_changes(self):
-        """this function tests if find_change can detect 6 changes among these datas
-        """
-        given_id = Animal.objects.get(name="A").id
-        result = self.utils.find_changes(given_id, self.request_post)
-        print('*********debug ')
-        # print(len(result), result)
-        self.assertTrue(len(result) == 10)
+    # def test_find_changes(self):
+    #     """this function tests if find_change can detect 6 changes among these datas
+    #     """
+    #     given_id = Animal.objects.get(name="A").id
+    #     result = self.utils.find_changes(given_id, self.request_post)
+    #     print('*********debug ')
+    #     # print(len(result), result)
+    #     self.assertTrue(len(result) == 10)
         
-    def test_manage_modify_datas_case_1(self):
-        """this function test data modification in db when case 1 occures"""
-        animal = Animal.objects.get(name="A")
+    # def test_manage_modify_datas_case_1(self):
+    #     """this function test data modification in db when case 1 occures"""
+    #     animal = Animal.objects.get(name="A")
+    #     given_id = animal.id
+    #     create_new_owner()
+    #     owner2_id = Owner.objects.get(owner_name="name2").id
+    #     self.request_post['select_owner'] = owner2_id
+    #     self.request_post['phone'] = '1234567891'
+    #     self.request_post['mail'] = 'my@mail2.com'
+    #     result = self.utils.manage_modify_datas(given_id, self.request_post)
+    #      # self.assertTrue(animal.owner.id == 2)
+    #     self.assertTrue(result[0])
+    #     self.assertTrue(Animal.objects.get(name="A").owner.id == owner2_id)
+    
+    # def test_manage_modify_datas_case_2(self):
+    #     """this function test data modification in db when case 2 occures"""
+    #     print("test_manage_modify_datas_case_2")
+    #     print("********")
+
+    #     animal = Animal.objects.get(name="A")
+    #     given_id = animal.id
+    #     owner_id = animal.owner.id
+    #     self.request_post2['select_owner'] = "0"
+    #     result = self.utils.manage_modify_datas(given_id, self.request_post2)
+    #     #self.assertTrue(animal.owner.id == 2)
+    #     self.assertTrue(result[0])
+    #     print("1/ ", Animal.objects.get(name="A").owner.id)
+    #     print("2/ ", owner_id)
+    #     print("***************")
+    #     self.assertTrue(Animal.objects.get(name="A").owner.id == owner_id + 1 )
+    
+    # def test_manage_modify_datas_case_3(self):
+    #     """this function test data modification in db when case 3 occures"""
+    #     animal = Animal.objects.get(name="A")
+    #     given_id = animal.id
+    #     owner_id = animal.owner.id
+    #     self.request_post['select_owner'] = owner_id
+    #     result = self.utils.manage_modify_datas(given_id, self.request_post)
+    #     self.assertTrue(result[0])
+    #     self.assertTrue(Animal.objects.get(name="A").owner.id == owner_id)
+
+    
+    # def test_drop_1_data_unique_owner(self):
+    #     before = len(Animal.objects.all())
+    #     self.utils.drop_sheet((Animal.objects.all()[0].id,))
+    #     after = len(Animal.objects.all())
+
+    #     self.assertTrue(before == after + 1)
+    
+    # def test_drop_1_data_not_unique_owner(self):
+    #     """test if 1 animalsheet will be droped and owner remain 
+    #     in base because he is not unique""" 
+    #     print("test - same owner ")
+    #     get_many_entries(2)
+    #     a1, a2 = Animal.objects.all()[0:2]
+    #     same_owner = a1.owner
+    #     a2.owner = same_owner
+    #     a2.save()
+    #     self.assertTrue(a1.owner == a2.owner) hey have same owner
+    #     before_a = len(Animal.objects.all())
+    #     before = len(Owner.objects.all())
+    #     self.utils.drop_sheet((a1.id, ))
+    #     after_a = len(Animal.objects.all())
+    #     after = len(Owner.objects.all())
+
+    #     self.assertTrue(before == after)
+    #     self.assertTrue(before_a == after_a + 1)
+    
+    # def test_drop_many_data_unique_owner(self):
+    #     """ tests if sheets will be drop when anim belong to same owner """
+    #     print("test - diff owner ")
+    #     get_many_entries(3)
+    #     a1, a2, a3 = Animal.objects.all()[0:3]
+    #     before = len(Animal.objects.all())
+    #     self.utils.drop_sheet((a1.id, a2.id, a3.id))
+    #     after = len(Animal.objects.all())
+    #     print("\n\n")
+    #     print("test_drop_many_data_unique_owner before", before)
+    #     print("test_drop_many_data_unique_owner after", after)
+    #     self.assertTrue(before == after + 3)
+    
+    # def test_check_owner_values(self):
+    #     """test if this function can handles integrity pb : same phone number/same mail"""
+    #     print("test_check_owner_values")
+    #     print(Owner.objects.all()[0].phone)
+    #     print(Owner.objects.all()[0].mail)
+    #     dict_value1 = {'phone' : Owner.objects.all()[0].phone, 'mail' :"test@mail.fr"} 
+    #     dict_value2 = {'phone' : "0632313232", 'mail' : Owner.objects.all()[0].mail} 
+    #     ow_id = Owner.objects.all()[0].id
+    #     resp1 = self.utils.check_owner_values(dict_value1)
+    #     resp2 = self.utils.check_owner_values(dict_value2)
+    #     resp3 = self.utils.check_owner_values(dict_value1, ow_id, True)
+    #     resp4 = self.utils.check_owner_values(dict_value2, ow_id, True)
+    #     get_many_entries(1)
+    #     another_owner = Owner.objects.get(id=ow_id+1)
+    #     resp5 = self.utils.check_owner_values(dict_value1, another_owner.id, True)
+    #     resp6 = self.utils.check_owner_values(dict_value2, another_owner.id, True)
+        
+    #     self.assertEqual(resp1[0], False) #not a modif same value > false
+    #     self.assertEqual(resp2[0], False)
+    #     self.assertEqual(resp3[0], True) #is modif same value for same owner > true 
+    #     self.assertEqual(resp4[0], True)
+    #     self.assertEqual(resp5[0], False) #is modif same value diff owner > false
+    #     self.assertEqual(resp6[0], False)
+    
+    # def test_create_owner_with_no_return(self):
+    #     """tests the return of create_owner function"""
+        
+    #     resp = self.utils.create_owner(self.dict_values)
+    #     self.assertEqual(resp[0], True) #it works
+
+    #     self.dict_values['mail'] = 19566
+    #     resp2 = self.utils.create_owner(self.dict_values)
+    #     self.assertEqual(resp2[0], False) #it does not works
+
+    #     dict_values = {
+    #         "owner_name" : "chopin"
+    #         }
+    #     resp3 = self.utils.create_owner(dict_values)
+    #     self.assertEqual(resp3[0], False) #it raises error
+    
+    # def test_modify_owner(self):
+    #     """tests if you can mosify an owner with given id and dict_values"""
+    #     ow_id = Owner.objects.all()[0].id
+    #     resp = self.utils.modify_owner(ow_id, self.dict_values)
+    #     self.assertEqual(resp[0], True)
+
+    #     get_many_entries(1)
+    #     another_owner = Owner.objects.get(id=ow_id+1)
+    #     resp2 = self.utils.modify_owner(another_owner.id, self.dict_values)
+    #     self.assertEqual(resp2[0], False) t does not works
+
+    #     dict_values = {
+    #         "owner_name" : "chopin"
+    #         }
+    #     resp3 = self.utils.modify_owner(ow_id, dict_values)
+    #     self.assertEqual(resp3[0], False) #it raises error
+
+    # def test_remove_contact(self):
+    #     """test if contacts are delete if a list of ids is given"""
+    #     create_contact(5)
+    #     before = len(Contact.objects.all())
+    #     list_id_contact = [contact.id for contact in Contact.objects.all()]
+    #     list_id_contact = list_id_contact[0:3]
+    #     resp = self.utils.remove_contact(list_id_contact)
+    #     after = len(Contact.objects.all())
+    #     self.assertTrue(resp[0])
+    #     self.assertEqual(before, after + 3)
+    #     resp_error = self.utils.remove_contact("error")
+    #     self.assertFalse(resp_error[0])
+
+    # def test_modify_contact(self):
+    #     """test if contacts are modified when a list of ids and 
+    #     new datas are given"""
+    #     create_contact(1)
+    #     dict_values = {}
+    #     dict_values['id_modif'] = Contact.objects.all()[0].id
+    #     dict_values['resume'] = "new resume for test"
+    #     resp = self.utils.modify_contact(dict_values)
+    #     self.assertTrue(resp[0])
+
+    #     dict_values['nature'] = "error for test"
+    #     resp = self.utils.modify_contact(dict_values)
+    #     self.assertFalse(resp[0])
+        
+    # def test_remove_owner_adapt_not_list_id(self):
+    #     """tests if remove_owner can remove owner if a single id is given"""
+    #     create_new_owner()
+    #     print([owner.id for owner in Owner.objects.all().order_by("-id")])
+    #     given_id = Owner.objects.all().order_by("-id")[0].id
+    #     resp = self.utils.remove_owner(given_id)
+    #     self.assertTrue(resp[0])
+
+    #     given_id = Owner.objects.all().order_by("id")[0].id
+    #     resp = self.utils.remove_owner(given_id)
+    #     self.assertFalse(resp[0])
+
+    # def test_is_in_changes(self): 
+    #     a = ("123", 1), ("456", 2)
+    #     response = self.utils.is_in_changes(a, "123")
+    #     self.assertTrue(response)
+
+    def test_get_mail_to_send(self): 
+        """ test mail sending preparation when alter db"""
+        create_new_owner(2)
+        animal = Animal.objects.all()[0]
+        former_owner = animal.owner
         given_id = animal.id
-        create_new_owner()
-        owner2_id = Owner.objects.get(owner_name="name2").id
-        self.request_post['select_owner'] = owner2_id
-        self.request_post['phone'] = '1234567891'
-        self.request_post['mail'] = 'my@mail2.com'
-        result = self.utils.manage_modify_datas(given_id, self.request_post)
-        # self.assertTrue(animal.owner.id == 2)
-        self.assertTrue(result[0])
-        self.assertTrue(Animal.objects.get(name="A").owner.id == owner2_id)
-    
-    def test_manage_modify_datas_case_2(self):
-        """this function test data modification in db when case 2 occures"""
-        print("test_manage_modify_datas_case_2")
-        print("********")
-
-        animal = Animal.objects.get(name="A")
-        given_id = animal.id
-        owner_id = animal.owner.id
-        self.request_post2['select_owner'] = "0"
-        result = self.utils.manage_modify_datas(given_id, self.request_post2)
-        # self.assertTrue(animal.owner.id == 2)
-        self.assertTrue(result[0])
-        print("1/ ", Animal.objects.get(name="A").owner.id)
-        print("2/ ", owner_id)
-        print("***************")
-        self.assertTrue(Animal.objects.get(name="A").owner.id == owner_id + 1 )
-    
-    def test_manage_modify_datas_case_3(self):
-        """this function test data modification in db when case 3 occures"""
-        animal = Animal.objects.get(name="A")
-        given_id = animal.id
-        owner_id = animal.owner.id
-        self.request_post['select_owner'] = owner_id
-        result = self.utils.manage_modify_datas(given_id, self.request_post)
-        self.assertTrue(result[0])
-        self.assertTrue(Animal.objects.get(name="A").owner.id == owner_id)
-
-    
-    def test_drop_1_data_unique_owner(self):
-        before = len(Animal.objects.all())
-        self.utils.drop_sheet((Animal.objects.all()[0].id,))
-        after = len(Animal.objects.all())
-
-        self.assertTrue(before == after + 1)
-    
-    def test_drop_1_data_not_unique_owner(self):
-        """test if 1 animalsheet will be droped and owner remain 
-        in base because he is not unique""" 
-        print("test - same owner ")
-        get_many_entries(2)
-        a1, a2 = Animal.objects.all()[0:2]
-        same_owner = a1.owner
-        a2.owner = same_owner
-        a2.save()
-        self.assertTrue(a1.owner == a2.owner) #they have same owner
-        before_a = len(Animal.objects.all())
-        before = len(Owner.objects.all())
-        self.utils.drop_sheet((a1.id, ))
-        after_a = len(Animal.objects.all())
-        after = len(Owner.objects.all())
-
-        self.assertTrue(before == after)
-        self.assertTrue(before_a == after_a + 1)
-    
-    def test_drop_many_data_unique_owner(self):
-        """ tests if sheets will be drop when anim belong to same owner """
-        print("test - diff owner ")
-        get_many_entries(3)
-        a1, a2, a3 = Animal.objects.all()[0:3]
-        before = len(Animal.objects.all())
-        self.utils.drop_sheet((a1.id, a2.id, a3.id))
-        after = len(Animal.objects.all())
-        print("\n\n")
-        print("test_drop_many_data_unique_owner before", before)
-        print("test_drop_many_data_unique_owner after", after)
-        self.assertTrue(before == after + 3)
-    
-    def test_check_owner_values(self):
-        """test if this function can handles integrity pb : same phone number/same mail"""
-        print("test_check_owner_values")
-        print(Owner.objects.all()[0].phone)
-        print(Owner.objects.all()[0].mail)
-        dict_value1 = {'phone' : Owner.objects.all()[0].phone, 'mail' :"test@mail.fr"} 
-        dict_value2 = {'phone' : "0632313232", 'mail' : Owner.objects.all()[0].mail} 
-        ow_id = Owner.objects.all()[0].id
-        resp1 = self.utils.check_owner_values(dict_value1)
-        resp2 = self.utils.check_owner_values(dict_value2)
-        resp3 = self.utils.check_owner_values(dict_value1, ow_id, True)
-        resp4 = self.utils.check_owner_values(dict_value2, ow_id, True)
-        get_many_entries(1)
-        another_owner = Owner.objects.get(id=ow_id+1)
-        resp5 = self.utils.check_owner_values(dict_value1, another_owner.id, True)
-        resp6 = self.utils.check_owner_values(dict_value2, another_owner.id, True)
+        changes = []
+        #change owners ---- 
+        new_owner = Owner.objects.all()[1]
+        animal.owner = new_owner
         
-        self.assertEqual(resp1[0], False) #not a modif same value > false
-        self.assertEqual(resp2[0], False)
-        self.assertEqual(resp3[0], True) #is modif same value for same owner > true 
-        self.assertEqual(resp4[0], True)
-        self.assertEqual(resp5[0], False) #is modif same value diff owner > false
-        self.assertEqual(resp6[0], False)
-    
-    def test_create_owner_with_no_return(self):
-        """tests the return of create_owner function"""
+        response = self.utils.get_mail_to_send(former_owner, changes, animal, given_id)
+        self.assertEqual(response[0], [Mail.MO])
+        self.assertEqual(len(response[1]), 2)
         
-        resp = self.utils.create_owner(self.dict_values)
-        self.assertEqual(resp[0], True) #it works
-
-        self.dict_values['mail'] = 19566
-        resp2 = self.utils.create_owner(self.dict_values)
-        self.assertEqual(resp2[0], False) #it does not works
-
-        dict_values = {
-            "owner_name" : "chopin"
-            }
-        resp3 = self.utils.create_owner(dict_values)
-        self.assertEqual(resp3[0], False) #it raises error
-    
-    def test_modify_owner(self):
-        """tests if you can mosify an owner with given id and dict_values"""
-        ow_id = Owner.objects.all()[0].id
-        resp = self.utils.modify_owner(ow_id, self.dict_values)
-        self.assertEqual(resp[0], True)
-
-        get_many_entries(1)
-        another_owner = Owner.objects.get(id=ow_id+1)
-        resp2 = self.utils.modify_owner(another_owner.id, self.dict_values)
-        self.assertEqual(resp2[0], False) #it does not works
-
-        dict_values = {
-            "owner_name" : "chopin"
-            }
-        resp3 = self.utils.modify_owner(ow_id, dict_values)
-        self.assertEqual(resp3[0], False) #it raises error
-
-    def test_remove_contact(self):
-        """test if contacts are delete if a list of ids is given"""
-        create_contact(5)
-        before = len(Contact.objects.all())
-        list_id_contact = [contact.id for contact in Contact.objects.all()]
-        list_id_contact = list_id_contact[0:3]
-        resp = self.utils.remove_contact(list_id_contact)
-        after = len(Contact.objects.all())
-        self.assertTrue(resp[0])
-        self.assertEqual(before, after + 3)
-        resp_error = self.utils.remove_contact("error")
-        self.assertFalse(resp_error[0])
-
-    def test_modify_contact(self):
-        """test if contacts are modified when a list of ids and 
-        new datas are given"""
-        create_contact(1)
-        dict_values = {}
-        dict_values['id_modif'] = Contact.objects.all()[0].id
-        dict_values['resume'] = "new resume for test"
-        resp = self.utils.modify_contact(dict_values)
-        self.assertTrue(resp[0])
-
-        dict_values['nature'] = "error for test"
-        resp = self.utils.modify_contact(dict_values)
-        self.assertFalse(resp[0])
+        changes = [("caution", "120")]
+        former_owner = False
+        response = self.utils.get_mail_to_send(former_owner, changes, animal, given_id)
+        self.assertEqual(response[0], [Mail.MC])
+        self.assertEqual(len(response[1]), 1)
         
-    def test_remove_owner_adapt_not_list_id(self):
-        """tests if remove_owner can remove owner if a single id is given"""
-        create_new_owner()
-        print([owner.id for owner in Owner.objects.all().order_by("-id")])
-        given_id = Owner.objects.all().order_by("-id")[0].id
-        resp = self.utils.remove_owner(given_id)
-        self.assertTrue(resp[0])
-
-        given_id = Owner.objects.all().order_by("id")[0].id
-        resp = self.utils.remove_owner(given_id)
-        self.assertFalse(resp[0])
-
+        changes = [("is_neutered", 2)]
+        animal.admin_data.is_neutered = "2"
+        former_owner = False
+        response = self.utils.get_mail_to_send(former_owner, changes, animal, given_id)
+        self.assertEqual(response[0], [Mail.AHBN])
+        self.assertEqual(len(response[1]), 1)
+@skip
 class TestSheetForm(TestCase):  
     """ tests the methods from the class form SheetForm """
     def setUp(self):
@@ -420,7 +455,7 @@ class TestSheetForm(TestCase):
         self.assertTrue(Animal.objects.all()[0] == first_animal)
         self.assertTrue(AdminData.objects.all()[0] == first_admin)
         self.assertTrue(Owner.objects.all()[0] == first_owner)
-
+@skip
 class TestSheetViews(TestCase):
     """ test the class SheetViews for index.html """
     def setUp(self):
@@ -466,7 +501,7 @@ class TestSheetViews(TestCase):
     #     list_to_contact = list_owners[2:]
     #     self.mock_gradat.get_list_for_search.new_callable=mock.PropertyMock
     #     self.mock_gradat.get_list_for_search = list_owners, list_contacted, list_to_contact
-    #     print('test_get_act_display_search_1', self.mock_gradat.get_list_for_search)
+    #     
     #     kwargs = {"action":"display", "search":1, 'own':1}
     #     response = self.client.get(reverse("sheet:index", kwargs=kwargs),  follow=True) 
     #     self.assertEqual(response.status_code, 200)
@@ -535,7 +570,7 @@ class TestSheetViews(TestCase):
     #     self.assertEqual(len(response.context["animals"]), 1)
     #     self.assertEqual(response.context["animals"][0].name,\
     #      first_anim.name)
-
+@skip
 class TestAddSheetViews(TestCase):
 
     def setUp(self):
@@ -582,7 +617,7 @@ class TestAddSheetViews(TestCase):
         response = self.client.post(reverse("sheet:add"), follow=True)
         self.assertEqual(response.wsgi_request.get_full_path(), '/spa/sheet/index/add')
         self.assertEqual(response.status_code, 200)
-
+@skip
 class TestAlterSheetViews(TestCase): 
 
     def setUp(self):
@@ -625,7 +660,7 @@ class TestAlterSheetViews(TestCase):
             kwargs={'given_id':self.animal.id}), data=self.dict_values, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.wsgi_request.get_full_path(), f"/spa/sheet/index/alter/{self.animal.id}")
-
+@skip
 class TestAlterOwnerSheetView(TestCase): 
 
     def setUp(self):
@@ -684,8 +719,7 @@ class TestAlterOwnerSheetView(TestCase):
         owner = Owner.objects.get(id=self.owner.id)
         self.assertEqual(response.wsgi_request.get_full_path(), \
             f"/spa/sheet/index/alter_owner/{self.owner.id}/modify")
-
-
+@skip
 class TestAddOwnerSheetView(TestCase):
 
     def setUp(self):
@@ -724,7 +758,7 @@ class TestAddOwnerSheetView(TestCase):
         dict_values = { "csrfmiddlewaretoken": "123"} 
         response = self.client.post(reverse("sheet:add_owner"), data=dict_values, follow=True) 
         self.assertEqual(response.wsgi_request.get_full_path(), "/spa/sheet/index/add_owner")
-
+@skip
 class TestModelsSheet(TestCase):
     """class with tests for models methods and properties"""
     

@@ -19,9 +19,9 @@
             <div  class="col-name"><strong>{{col}}</strong></div>
             {% endfor %}
         </div>
-        <div class="scrollable-part">
+        <div id="tableContact" class="scrollable-part">
             {% for contact in contacts|dictsort:"contact_date"%}
-            <div id="tr_{{forloop.counter}}"class=" {% cycle 'row1' 'row2' %}">
+            <div id="tr_{{forloop.counter}}"class=" rows {% cycle 'row1' 'row2' %}">
                 <div class="cell"><input type="checkbox" id='id_contact_{{contact.id}}' name='checkbox' title="{{contact.id}}" value={{contact.id}}></div>
                 <div class="cell">{{contact.contact_date}}</div>
                 <div class="cell">{{contact.str_nature}}</div>
@@ -34,40 +34,55 @@
 </article>
 
 <script type="text/javascript">
-    /* plan
-    > variables,
-    > functions,
-    > events,
-    */
+    
+    //###################
+    //#### VARIABLES ####
+    //###################
+
     console.log(csrftoken)
     const trRow1 = Array.from(document.getElementsByClassName('row1'));
     const trRow2 = Array.from(document.getElementsByClassName('row2'));
     const allTr = trRow1.concat(trRow2)
-    let table = document.getElementById('histo_table')
+    let table = document.getElementById('tableContact')
+    console.log(allTr)
     const form = document.getElementById('my_form')
+    const createBtn = document.getElementById("create")    
+    const updateBtn = document.getElementById("update")  // select + CTRLD > const Alter
+    const deletionBtn = document.getElementById("delete")   // select + CTRLD > const 
+    const submitBtn = document.getElementById("submit")
+
+    //###################
+    //#### FUNCTIONS ####
+    //###################
+
 
     const BackToIndex = function(){
         window.location.href = "{% url 'sheet:index' own=1%}"
         // window.location.href = window.location.href; 
     }
+    //returns the number of lines
     const GetCounter = function(){
-        allTd = document.querySelectorAll('tr')
-        return allTd.length
+        tabRows = document.getElementsByClassName('rows')
+        return tabRows.length
     }
-    const GetDatasAndWrite = function(counter, action, idModif){
+
+    //gets data, sends them to server and refresh
+    const GetDatasAndWrite = (counter, action, idModif) => {
+        console.log('GetDatasAndWrite')
+        console.log(counter, action, idModif)
         keys = ["contact_date", "nature", "resume", "full_text"]
-        ids = ["id_date_"+counter, "id_select_"+counter, "id_title_"+counter, "id_area_"+counter]
-        console.log(ids)
+        idFromInputs = [
+            "id_date_"+counter, "id_select_"+counter, "id_title_"+counter, "id_area_"+counter
+        ]
         value = {}
-        for (id in ids){
-            value[keys[id]] = document.getElementById(ids[id]).value
+        for (i in idFromInputs){
+            console.log(keys[i] + " - " + idFromInputs[i])
+            value[keys[i]] = document.getElementById(idFromInputs[i]).value
         }
         let whatToDo = function(data){
-            console.log("Success")
             window.location.href = window.location.href  
         }
         if (action == 'add'){
-            console.log(">", value)
             sendDatasToServer(value, "{% url 'sheet:contact_owner' owner.id 'add'%}", whatToDo)
 
         }else if (action == 'modify'){
@@ -75,8 +90,8 @@
 
             sendDatasToServer(value, "{% url 'sheet:contact_owner' owner.id 'modify'%}", whatToDo)
         }
-
     }
+
     const SpecifyInput = function(tabInput, counter){
         //this function specifies the given input}
         date = tabInput[0]
@@ -108,38 +123,57 @@
         area.rows="2" 
         area.cols="33"
     }
-    const Add = function (){
-        //this function adds a new line in table
-        let counter = GetCounter()
-        let tabInput = []
 
-        tr = document.createElement('tr')
-        tr.id = "tr_" + counter
-        table.children[0].appendChild(tr)
-
-        tdCheck = document.createElement('td')
-        checkbox = document.createElement('input')
-        checkbox.type = "checkbox"
-        tr.appendChild(tdCheck)
-        tdCheck.appendChild(checkbox)
-
+    const AddCSRFTocken = (tdCheck) => {
         // add csrf_token
         csrfToken = document.createElement('input')
         csrfToken.type = "hidden"
         csrfToken.name = "csrfmiddlewaretoken"
         csrfToken.value = "{{csrf_token}}"
         tdCheck.appendChild(csrfToken)
-        
-        for (elem of ["input","select","input","textarea"]){
-            td = document.createElement('td')
-            td.classList.add('text-center')
+    }
+
+    const CreateTrPlusCheckbox = (counter, table) =>{
+        tr = document.createElement('div')
+        tr.id = "tr_" + (counter + 1)
+        tr.classList.add("bg-thrid-color") 
+        tr.classList.add("row-editor")  
+        table.appendChild(tr)
+        tdCheck = document.createElement('td')
+        checkbox = document.createElement('input')
+        checkbox.type = "checkbox"
+        tdCheck.classList.add("cell")
+        tr.appendChild(tdCheck)
+        tdCheck.appendChild(checkbox)
+        AddCSRFTocken(tdCheck)
+        return tr
+    }
+
+    const AddInputs = (listInputs, tr) => {
+        let tabInput = []
+        loop = 0
+        for (elem of listInputs){
+            loop ++
+            td = document.createElement('div')
+            td.classList.add('cell')
             input = document.createElement(elem)
+            if (loop == 3){ 
+                input.setAttribute("type", "text")
+                input.placeholder = "Emplacement pour un titre"
+            }
+            if (loop == 4){ 
+                input.placeholder = "Emplacement pour un résumé"
+            }
             tabInput.push(input)
             tr.appendChild(td) 
             td.appendChild(input)
         }
-        lastTD = document.createElement('td')
-        lastTD.classList.add('text-center')
+        return tabInput 
+    }
+
+    const AddSubmitBtn = (counter, tr) =>{
+        lastTD = document.createElement('div')
+        lastTD.classList.add('cell')
         but = document.createElement('button')
         but.innerHTML = "valider"
         but.id = "submit"
@@ -147,10 +181,21 @@
             e = event || window.event;
             e.preventDefault()
             GetDatasAndWrite(counter, 'add')
-
         }
         tr.appendChild(lastTD) 
         lastTD.appendChild(but)
+    }
+
+    const CreateContact = () => {
+        //this function adds a new line in table
+        let counter = GetCounter()
+        //create new line + checkbox input at the very last line
+        tr = CreateTrPlusCheckbox(counter, table) //params : (container)
+        console.log(tr)
+        //add inputs and textarea to this line || params : (listInputs + container)
+        tabInput = AddInputs(["input","select","input","textarea"], tr) 
+        //add submit button
+        AddSubmitBtn(counter, tr)
 
         SpecifyInput(tabInput, counter)
     }
@@ -158,17 +203,17 @@
         //this function returns an Array of selected html checkbox (not id)
         const checkboxes = document.querySelectorAll('input[type=checkbox]');
         count = 0; 
-        let toDelete = []
+        let elemCheckedList = []
         for (checkbox of checkboxes){
             if (checkbox.checked){
-                toDelete.push(checkbox)
+                elemCheckedList.push(checkbox)
                 count ++;
             }
         }
-        console.log(toDelete)
-        return [toDelete, count]
+        console.log(elemCheckedList)
+        return [elemCheckedList, count]
     }
-    const Remove = function(){
+    const DeleteContact = function(){
         let toDelete = GetChecked()[0]
         let count = GetChecked()[1]
         if (count == 0){
@@ -206,73 +251,89 @@
         console.log(values)
         return values
     }
-    const FillInput = function(values, idSelected){
+    const FillInput = function(values, elemSelected){
         //this function gets the selected input and fill it with values
-        counter = GetCounter() -1
-        ident = 'tr_'+ counter
-        tr = document.getElementById(ident)
-        tr = Array.from(tr.children)
-        for (i in tr){
-            td = tr[i]
-            td.children[0].value = values[i]
+        elemId = elemSelected.id.slice(11)
+        counter = GetCounter() - 1
+        tr = document.getElementById("tr_"+(counter + 2 ))
+        index = 0
+        for (td of tr.children){
+            console.log(td)
+            td.children[0].value = values[index]
+            index ++ 
         }
-        tr[0].children[0].id = idSelected
-        tr[0].title = idSelected
-        console.log(tr[5])
-        tr[5].children[0].onclick = function(event){
+
+        submitModifBtn = tr.children[5].children[0]
+        submitModifBtn.classList.add('curs-pointer')
+        submitModifBtn.onclick = (event) => {
             e = event || window.event;
-            console.log(e)
             e.preventDefault()
-            GetDatasAndWrite(counter, 'modify', idSelected)
+            GetDatasAndWrite(counter+1, 'modify', elemId)
         }
     }
-    const Alter = function(){
-        let elemSelected = GetChecked()[0][0]
-        count = GetChecked()[1]
-        if (count == 0){
-            alert("Vous devez sélectionner un contact !")
-            return
-        }else if (count > 1){
-            alert("Vous ne pouvez modifier qu'un seul contact à la fois !")
-            return
-        }
-        let values = []
-        let tr = elemSelected.parentElement.parentElement
-        tr.classList.add('d-none')
-        values = GetValuesFromOwner(elemSelected.id.slice(11))
-        Add()
-        FillInput(values, elemSelected.id.slice(11))
-    }
-    const activClickEvent = function(){
-        for (tr of allTr){
-            tr.style.cursor = 'pointer'; 
-            tr = Array.from(tr.children)
-            tr.splice(0,1)
-            for (child of tr){
-                child.addEventListener('click', function(e){
-                    let target = e.target.parentElement.children[0].firstChild;
-                    console.log(e.target.tagName)
-                    if (target.checked == true){
-                        target.checked=false; 
-                    }else{
-                        target.checked=true;
-                    }
-                });
-                child.addEventListener('dblclick', function(e){
-                    // this event opens alter page for animal or owner
-                    let target = e.target.parentElement.children[0].firstChild;
-                    console.log(e.target.tagName)
-                    if (target.checked != true){
-                        target.checked=true; 
-                    }
-                    Alter()
-                });
+    const Alter = function(elemSelected=null, parent=null){
+        if (elemSelected == null){
+            let elemSelected = GetChecked()[0][0]
+            count = GetChecked()[1]
+            if (count == 0){
+                alert("Vous devez sélectionner un contact !")
+                return
+            }else if (count > 1){
+                alert("Vous ne pouvez modifier qu'un seul contact à la fois !")
+                return
             }
         }
+        let tr = parent==null ? 
+        elemSelected.parentElement.parentElement : parent
+        console.log("parent : " + parent)
+        tr.classList.add('d-none')
+        values = GetValuesFromOwner(elemSelected.id.slice(11))
+        CreateContact() //generate a new line as a form
+        FillInput(values, elemSelected)
     }
-    const main = function(){
-        activClickEvent()
+
+    //###################
+    //####  EVENTS   ####
+    //###################
+
+    createBtn.onclick = () => {
+        CreateContact()
     }
-    main()
+    updateBtn.onclick = () => {
+        UpdateContact()
+    }
+    deletionBtn.onclick = () => {
+        DeleteContact()
+    }
+
+        //click and dbclick on table row
+    for (tr of allTr){
+        tr = Array.from(tr.children)
+        tr.splice(0,1)
+        for (child of tr){
+            child.onclick = function(e){
+                let target = e.target.parentElement.children[0].children[0];                
+                if (target.checked == true){
+                    target.checked=false; 
+                }else{
+                    target.checked=true;
+                }
+            };
+            child.ondblclick = function(e){
+                // this event opens alter page for animal or owner
+                let target = e.target.parentElement.children[0].children[0];
+                let parent = e.target.parentElement
+                if (target.checked == true){
+                    target.checked=false; 
+                }else{
+                    target.checked=true;
+                }
+
+                Alter(target, parent)
+                
+            };
+        }
+    }
+
 </script>
 {% endblock  %}

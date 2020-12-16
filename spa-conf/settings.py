@@ -42,7 +42,6 @@ if os.environ.get('ENV') == 'PRODUCTION':
     DEBUG = False
     ALLOWED_HOSTS = ["spa-bergerac.herokuapp.com"]
 else:
-    print("ENV = development")
     ALLOWED_HOSTS = ["*"]
     DEBUG = True
 

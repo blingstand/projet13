@@ -120,11 +120,7 @@
   padding: 1rem 0;
 }
 
-.curs-pointer {
-  cursor: pointer;
-}
-
-.content-centered, .connection .grp-connection .form-connection, .connection .grp-connection .title, .connection .grp-connection, .connection, .add-owner-open .container-animals, .add-owner-open .form-add-owner-open .container-fields .line, .add-owner-open h2, .container-overview .container-button, .container-overview .overview .field, .right-part-bottom .info .faq, .right-part-bottom .info .tuto, .right-part-bottom .info .legal-notice, .right-part-bottom .info .github-link, .right-part-bottom .info .container-about, .right-part-bottom .mail-settings .container-input, .right-part-bottom .mail-settings .wish, .right-part-bottom .mail-settings .container-top, .right-part-bottom .mail-settings .container-middle, .right-part-bottom .mail-settings .container-bot, .right-part-bottom .mail-content .right-part .container-buttons, .right-part-bottom .mail-content .right-part .container-tools .tool, .right-part-bottom .mail-content .right-part .container-tools, .right-part-bottom .mail-content .left-part .field, .right-part-bottom .cns .container-button, .right-part-bottom .mail-index .mail-table .scrollable-part .row1 .cell, .right-part-bottom .mail-index .mail-table .scrollable-part .row2 .cell, .right-part-bottom .mail-index .mail-table .mail-table-title .col-name, .right-part-bottom .historic .historic-table .scrollable-part .row-editor .cell, .right-part-bottom .historic .historic-table .scrollable-part .rows .cell, .right-part-bottom .historic .historic-table .historic-table-title .col-name, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .content-pictures, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-candidates p, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-candidates, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .selected-candidate, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-owners, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-top .part-1 .top-bottom p, .right-part-bottom .form-anim .title, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1 .container-checkbox, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 .container-checkbox, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2, .right-part-bottom .art-sheet-index form .table .row-title .col-name, .right-part-bottom .art-sheet-index form, .right-part-bottom .art-sheet-index .container-button .container-button-toggle {
+.content-centered, .connection .grp-connection .form-connection, .connection .grp-connection .title, .connection .grp-connection, .connection, .add-owner-open .container-animals, .add-owner-open .form-add-owner-open .container-fields .line, .add-owner-open h2, .container-overview .container-button, .container-overview .overview .field, .right-part-bottom .info .faq, .right-part-bottom .info .tuto, .right-part-bottom .info .legal-notice, .right-part-bottom .info .github-link, .right-part-bottom .info .container-about, .right-part-bottom .mail-settings .container-input, .right-part-bottom .mail-settings .wish, .right-part-bottom .mail-settings .container-top, .right-part-bottom .mail-settings .container-middle, .right-part-bottom .mail-settings .container-bot, .right-part-bottom .mail-content .right-part .container-buttons, .right-part-bottom .mail-content .right-part .container-tools .tool, .right-part-bottom .mail-content .right-part .container-tools, .right-part-bottom .mail-content .left-part .field, .right-part-bottom .cns .container-button, .right-part-bottom .mail-index .mail-table .scrollable-part .row1 .cell, .right-part-bottom .mail-index .mail-table .scrollable-part .row2 .cell, .right-part-bottom .mail-index .mail-table .mail-table-title .col-name, .right-part-bottom .historic .historic-table .scrollable-part .row1 .cell, .right-part-bottom .historic .historic-table .scrollable-part .row2 .cell, .right-part-bottom .historic .historic-table .historic-table-title .col-name, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .content-pictures, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-candidates p, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-candidates, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .selected-candidate, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-owners, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-top .part-1 .top-bottom p, .right-part-bottom .form-anim .title, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1 .container-checkbox, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 .container-checkbox, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2, .right-part-bottom .art-sheet-index form .table .row-title .col-name, .right-part-bottom .art-sheet-index form, .right-part-bottom .art-sheet-index .container-button .container-button-toggle {
   display: grid;
   place-items: center;
 }
@@ -665,57 +661,18 @@ nav .container-nav-button .nav-button:hover {
   height: 50vh;
   overflow: hidden;
 }
-.right-part-bottom .historic .historic-table .scrollable-part .rows {
+.right-part-bottom .historic .historic-table .scrollable-part .row1, .right-part-bottom .historic .historic-table .scrollable-part .row2 {
   display: grid;
   grid-template-columns: 2rem 8rem 9rem 12rem 1fr;
   grid-gap: 3px 5px;
 }
-.right-part-bottom .historic .historic-table .scrollable-part .rows .cell {
-  cursor: pointer;
-}
-.right-part-bottom .historic .historic-table .scrollable-part .rows .last-cell {
-  cursor: pointer;
+.right-part-bottom .historic .historic-table .scrollable-part .row1 .last-cell, .right-part-bottom .historic .historic-table .scrollable-part .row2 .last-cell {
   text-align: justify;
   text-indent: 1rem;
   padding-right: 0.5rem;
 }
 .right-part-bottom .historic .historic-table .scrollable-part .row2 {
   background-color: #b5ffff;
-}
-.right-part-bottom .historic .historic-table .scrollable-part .row-editor {
-  display: grid;
-  min-height: 5rem;
-  grid-template-columns: 2rem 8rem 9rem 12rem 1fr 6rem;
-  grid-gap: 3px 5px;
-}
-.right-part-bottom .historic .historic-table .scrollable-part .row-editor .cell input[type=date] {
-  border-radius: 1rem;
-  width: 8rem;
-  height: 1.5rem;
-  font-size: 0.7rem;
-  text-align: center;
-}
-.right-part-bottom .historic .historic-table .scrollable-part .row-editor .cell select, .right-part-bottom .historic .historic-table .scrollable-part .row-editor .cell input[type=text] {
-  border-radius: 1rem;
-  width: 8rem;
-  height: 1.5rem;
-  font-size: 0.7rem;
-  text-align: center;
-  background-color: #fff;
-}
-.right-part-bottom .historic .historic-table .scrollable-part .row-editor .cell input[type=text], .right-part-bottom .historic .historic-table .scrollable-part .row-editor .cell textarea {
-  width: 100%;
-}
-.right-part-bottom .historic .historic-table .scrollable-part .row-editor .cell textarea {
-  border-radius: 1rem 1rem 0 0;
-  height: 4rem;
-  padding: 0.5rem;
-}
-.right-part-bottom .historic .historic-table .scrollable-part .row-editor .cell #submit {
-  border-radius: 1rem;
-  height: 2rem;
-  width: 5rem;
-  font-size: 0.7rem;
 }
 .right-part-bottom .mail-index {
   display: grid;
@@ -1137,7 +1094,6 @@ nav .container-nav-button .nav-button:hover {
 .add-owner-open .container-animals {
   background-color: #ececec;
   list-style-type: none;
-  overflow-y: scroll;
 }
 .add-owner-open .container-animals li {
   font-size: 1.5rem;
@@ -1145,10 +1101,6 @@ nav .container-nav-button .nav-button:hover {
 .add-owner-open .container-animals li:hover {
   cursor: pointer;
   font-weight: bold;
-}
-
-.no-pet {
-  grid-template-rows: 5rem 1fr 4rem;
 }
 
 .connection {

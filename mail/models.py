@@ -15,19 +15,21 @@ locale.setlocale(locale.LC_TIME,'')
 # Create your models here.
 class Mail(models.Model):
     """ manages the mail model """
-    CAS     = 1
-    CANS    = 2
-    MC      = 3
-    SA      = 4
-    E2S     = 5
-    ADS     = 6
+    CAN     = 0
+    CATN    = 1
+    MC      = 2
+    DA      = 3
+    E2S     = 4
+    AHBN    = 5
+    MO      = 6
     CONDITIONS = (
-        (CAS, "creation animal stéril" ),
-        (CANS, "creation animal non stéril" ),
-        (MC, "modif caution" ),
-        (SA, "suppression animal" ),
-        (E2S, "envoie toute les 2 semaines" ),
-        (ADS, "animal devient stéril" ),
+        (CAN, "Create Animal Neutered" ),
+        (CATN, "Create Animal To Neuter" ),
+        (MC, "modif caution"),
+        (DA, "Delete Animal"),
+        (E2S, "Each 2 Weeks"),
+        (AHBN, "Animal Has Been Neutered"),
+        (MO, 'Modify Owner')
         )
     mail_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100, unique=True)
@@ -49,13 +51,14 @@ class Mail(models.Model):
     
     @staticmethod
     def str_condition_form_choices():
-        str_condition = ("à la création de la fiche,", 
-            "à la création de la fiche si l'animal n'est pas stéril,",
-            "quand je modifie la valeur de la caution,",
-            "à la suppression d'une fiche,",
-            "toutes les deux semaines,",
-            "quand l'animal devient stérilisable.")
-        list_condition = [(str(count+1), condition) for count, condition in enumerate(str_condition)]
+        str_condition = ("A la création de la fiche,", 
+            "A la création de la fiche si l'animal n'est pas stéril,",
+            "Quand je modifie la valeur de la caution,",
+            "A la suppression d'une fiche,",
+            "Toutes les deux semaines,",
+            "Quand l'animal devient stérile,", 
+            "Quand il y a un changement de propriétaire.")
+        list_condition = [(str(count), condition) for count, condition in enumerate(str_condition)]
         return tuple(list_condition)
     @property
     def get_condition(self):
@@ -132,9 +135,6 @@ class Mail(models.Model):
             modified_text = self.modified_text(given_id).split('\n')
         if self.modified_text(given_id).find('\\n'):
             modified_text = self.modified_text(given_id).split('\\n')
-        print("after split")
-        print(modified_text)
-        print(">>>>>")
         for elem in modified_text:
             if len(elem) < 1:
                 modified_text.remove(elem)
@@ -143,7 +143,6 @@ class Mail(models.Model):
         """this function sends an auto mail according to its values and param """
         modified_text = self.text_mail_template(given_id)
         html_mail = get_template('mail/mail_template.html')
-        print(">> modified text : ", modified_text)
         context = {"text" : modified_text}
         html_content = html_mail.render(context)
         try:
@@ -153,7 +152,6 @@ class Mail(models.Model):
                 from_email='blingstand@hotmail.fr',
                 recipient_list=['adrien.clupot@gmail.com'],
                 html_message=html_content, fail_silently=False)
-            print(f"send_auto_mail > mail send to {send_to}")
             print("//*protection*\\\\ : mail redirigé vers adrien.clupot@gmail.com")
         except Exception as exc:
             raise exc

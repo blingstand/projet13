@@ -1,0 +1,37 @@
+@mixin load-legal-notice{
+	.legal-notice{
+		background-color: $secondary; 
+		.title{
+			padding-left: 5rem;
+			background-color: $primary;
+			height:4rem;
+			display: grid;
+			grid-template-rows: 1rem 2rem 1rem;
+			margin: 1rem 0;
+			cursor: pointer;
+			width: 80%;
+			h1{
+				grid-row: 2;
+			}
+		}
+		.container-top, .container-mid, .container-bot{
+			.container{
+				display: none;
+			}
+			.text-content{
+				text-indent: 1rem; 
+				margin-bottom: 0.5rem;
+			}
+			ol{
+				background-color: lighten($primary, 40);
+				margin-left: 5rem; 
+				padding: 0.4rem 1rem; 
+				list-style-type: none;
+				li{
+					padding-bottom: 0.4rem; 
+				}
+			}
+
+		}
+	}		
+}

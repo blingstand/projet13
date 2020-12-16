@@ -1,0 +1,35 @@
+@mixin load_nav(){	
+	border-right: 1px black solid; 
+	display: grid;
+	height: 100vh;
+	grid-template-rows: auto 40vh auto 40vh auto; 
+	
+	.container-avatar{
+		display: grid;
+		height: 100%;
+		grid-template-rows: 80% 10% 10%; 
+		place-items: center;
+		.avatar img{
+			height: 10rem;
+		}
+		.label-avatar{}
+		.logout{
+			font-size: 2rem; 
+		}
+	}
+	.container-nav-button{
+		.nav-button{
+			border: 1px white solid; 
+			border-radius: 2rem; 
+			background-color: #fff;
+			text-align: center; 
+			width: 80%;
+			margin: 2rem auto;
+			font-size: 1.5rem; 
+			&:hover{
+				border: 3px black solid;
+				cursor: pointer;
+			}
+		}
+	}
+}
