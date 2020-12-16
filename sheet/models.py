@@ -106,7 +106,21 @@ class Owner(models.Model):
             return 'M.'
         else:
             return 'Mme'
-    
+    @property
+    def has_rdy_to_neuter_animals(self):
+        """returns all the non neutered animals that belongs to this owner """
+        anims = Animal.objects.filter(owner=self)
+        list_to_return = []
+        if anims: 
+            for anim in anims: 
+                list_to_return.append(anim) if anim.admin_data.is_neutered == "1" else None
+        list_to_return = [elem for elem in list_to_return if elem  != None]
+        return True if list_to_return else False
+    @property
+    def get_list_animal(self):
+        animal = Animal.objects.filter(owner=self)
+        return animal
+    @property
     def number_animal(self):
         """ this function returns how many animals belong to this owner """
         animal = Animal.objects.filter(owner=self)

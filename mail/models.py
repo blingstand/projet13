@@ -19,7 +19,7 @@ class Mail(models.Model):
     CATN    = 1
     MC      = 2
     DA      = 3
-    E2S     = 4
+    E2W     = 4
     AHBN    = 5
     MO      = 6
     WBN     = 7
@@ -28,7 +28,7 @@ class Mail(models.Model):
         (CATN, "Create Animal To Neuter" ),
         (MC, "modif caution"),
         (DA, "Delete Animal"),
-        (E2S, "Each 2 Weeks"),
+        (E2W, "Each 2 Weeks"),
         (AHBN, "Animal Has Been Neutered"),
         (MO, 'Modify Owner'), 
         (WBN, "Will Be Neuterable")
@@ -155,6 +155,6 @@ class Mail(models.Model):
                 from_email='blingstand@hotmail.fr',
                 recipient_list=['adrien.clupot@gmail.com'],
                 html_message=html_content, fail_silently=False)
-            print("//*protection*\\\\ : mail redirigé vers adrien.clupot@gmail.com")
+            print(f"//*protection*\\\\ : mail pour {send_to} redirigé vers adrien.clupot@gmail.com")
         except Exception as exc:
             raise exc
