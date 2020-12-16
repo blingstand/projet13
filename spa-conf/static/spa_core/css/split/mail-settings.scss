@@ -36,11 +36,16 @@
 			@extend .content-centered; 
 			padding: 1rem; 
 			cursor:pointer;
+			&:hover{
+				background-color: darken($third_color, 10);
+			}
 		}
 		.form-settings{
 			background-color: $primary;
 			width : $width - 4%;
 			display: grid;
+			max-height: 30vh; 
+			overflow-y: scroll;  
 			ul#id_condition{
 				list-style-type: none;
 				padding: 1rem 0;

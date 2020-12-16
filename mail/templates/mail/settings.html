@@ -96,7 +96,7 @@
     //choose display or remove
     wish.onclick = function () {  
         ChangeAutoSend()
-        wish.classList.toggle('bg-primary')
+        wish.classList.toggle('bg-primary-h')
     };
 
     submitBtn.onclick = () => {
@@ -113,7 +113,7 @@
         }else{
             console.log("je veux voir le form ")
             formSettings.classList.remove("d-none");
-            wish.classList.toggle('bg-primary')
+            wish.classList.toggle('bg-primary-h')
             wish.textContent = "Je souhaite envoyer ce mail automatiquement ..."
         }
     }

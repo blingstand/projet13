@@ -33,7 +33,7 @@ $shape_table_mail: 2rem 16rem 5rem 15rem 1fr;
 			}
 			.scrollable-part{
 				height: 50vh;
-				overflow: hidden;
+				overflow-y: scroll;
 
 				.row1, .row2{
 					display: grid;
@@ -45,7 +45,8 @@ $shape_table_mail: 2rem 16rem 5rem 15rem 1fr;
 						@extend .content-centered; 
 					}
 					.last-cell{
-						text-align: justify;
+						@extend .content-centered; 
+
 						text-indent: 1rem; 
 						padding-right: 0.5rem;
 					}

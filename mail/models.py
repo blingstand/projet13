@@ -22,6 +22,7 @@ class Mail(models.Model):
     E2S     = 4
     AHBN    = 5
     MO      = 6
+    WBN     = 7
     CONDITIONS = (
         (CAN, "Create Animal Neutered" ),
         (CATN, "Create Animal To Neuter" ),
@@ -29,7 +30,8 @@ class Mail(models.Model):
         (DA, "Delete Animal"),
         (E2S, "Each 2 Weeks"),
         (AHBN, "Animal Has Been Neutered"),
-        (MO, 'Modify Owner')
+        (MO, 'Modify Owner'), 
+        (WBN, "Will Be Neuterable")
         )
     mail_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100, unique=True)
@@ -57,7 +59,8 @@ class Mail(models.Model):
             "A la suppression d'une fiche,",
             "Toutes les deux semaines,",
             "Quand l'animal devient stérile,", 
-            "Quand il y a un changement de propriétaire.")
+            "Quand il y a un changement de propriétaire,",
+            "Quand l'animal devient stérilisable")
         list_condition = [(str(count), condition) for count, condition in enumerate(str_condition)]
         return tuple(list_condition)
     @property

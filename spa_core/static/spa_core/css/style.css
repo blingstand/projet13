@@ -15,6 +15,13 @@
   background-color: #00b4b5 !important;
 }
 
+.bg-primary-h {
+  background-color: #00b4b5 !important;
+}
+.bg-primary-h:hover {
+  background-color: #008182 !important;
+}
+
 .bg-thrid-color {
   background-color: tomato !important;
 }
@@ -124,7 +131,7 @@
   cursor: pointer;
 }
 
-.content-centered, .connection .grp-connection .form-connection, .connection .grp-connection .title, .connection .grp-connection, .connection, .add-owner-open .container-animals, .add-owner-open .form-add-owner-open .container-fields .line, .add-owner-open h2, .container-overview .container-button, .container-overview .overview .field, .right-part-bottom .info .faq, .right-part-bottom .info .tuto, .right-part-bottom .info .legal-notice, .right-part-bottom .info .github-link, .right-part-bottom .info .container-about, .right-part-bottom .mail-settings .container-input, .right-part-bottom .mail-settings .wish, .right-part-bottom .mail-settings .container-top, .right-part-bottom .mail-settings .container-middle, .right-part-bottom .mail-settings .container-bot, .right-part-bottom .mail-content .right-part .container-buttons, .right-part-bottom .mail-content .right-part .container-tools .tool, .right-part-bottom .mail-content .right-part .container-tools, .right-part-bottom .mail-content .left-part .field, .right-part-bottom .cns .container-button, .right-part-bottom .mail-index .mail-table .scrollable-part .row1 .cell, .right-part-bottom .mail-index .mail-table .scrollable-part .row2 .cell, .right-part-bottom .mail-index .mail-table .mail-table-title .col-name, .right-part-bottom .historic .historic-table .scrollable-part .row-editor .cell, .right-part-bottom .historic .historic-table .scrollable-part .rows .cell, .right-part-bottom .historic .historic-table .historic-table-title .col-name, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .content-pictures, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-candidates p, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-candidates, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .selected-candidate, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-owners, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-top .part-1 .top-bottom p, .right-part-bottom .form-anim .title, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1 .container-checkbox, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 .container-checkbox, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2, .right-part-bottom .art-sheet-index form .table .row-title .col-name, .right-part-bottom .art-sheet-index form, .right-part-bottom .art-sheet-index .container-button .container-button-toggle {
+.content-centered, .connection .grp-connection .form-connection, .connection .grp-connection .title, .connection .grp-connection, .connection, .add-owner-open .container-animals, .add-owner-open .form-add-owner-open .container-fields .line, .add-owner-open h2, .container-overview .container-button, .container-overview .overview .field, .right-part-bottom .info .faq, .right-part-bottom .info .tuto, .right-part-bottom .info .legal-notice, .right-part-bottom .info .github-link, .right-part-bottom .info .container-about, .right-part-bottom .mail-settings .container-input, .right-part-bottom .mail-settings .wish, .right-part-bottom .mail-settings .container-top, .right-part-bottom .mail-settings .container-middle, .right-part-bottom .mail-settings .container-bot, .right-part-bottom .mail-content .right-part .container-buttons, .right-part-bottom .mail-content .right-part .container-tools .tool, .right-part-bottom .mail-content .right-part .container-tools, .right-part-bottom .mail-content .left-part .field, .right-part-bottom .cns .container-button, .right-part-bottom .mail-index .mail-table .scrollable-part .row1 .last-cell, .right-part-bottom .mail-index .mail-table .scrollable-part .row2 .last-cell, .right-part-bottom .mail-index .mail-table .scrollable-part .row1 .cell, .right-part-bottom .mail-index .mail-table .scrollable-part .row2 .cell, .right-part-bottom .mail-index .mail-table .mail-table-title .col-name, .right-part-bottom .historic .historic-table .scrollable-part .row-editor .cell, .right-part-bottom .historic .historic-table .scrollable-part .rows .cell, .right-part-bottom .historic .historic-table .historic-table-title .col-name, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .content-pictures, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-candidates p, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-candidates, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .selected-candidate, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-bottom .last-line .container-owners, .right-part-bottom .form-anim .container-full-form .container-form-right-part .container-form-right-part-top .part-1 .top-bottom p, .right-part-bottom .form-anim .title, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1 .container-checkbox, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 .container-checkbox, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2 div, .right-part-bottom .art-sheet-index form .table .scrollable-part .row1, .right-part-bottom .art-sheet-index form .table .scrollable-part .row2, .right-part-bottom .art-sheet-index form .table .row-title .col-name, .right-part-bottom .art-sheet-index form, .right-part-bottom .art-sheet-index .container-button .container-button-toggle {
   display: grid;
   place-items: center;
 }
@@ -749,7 +756,7 @@ nav .container-nav-button .nav-button:hover {
 }
 .right-part-bottom .mail-index .mail-table .scrollable-part {
   height: 50vh;
-  overflow: hidden;
+  overflow-y: scroll;
 }
 .right-part-bottom .mail-index .mail-table .scrollable-part .row1, .right-part-bottom .mail-index .mail-table .scrollable-part .row2 {
   display: grid;
@@ -758,7 +765,6 @@ nav .container-nav-button .nav-button:hover {
   min-height: 2.5rem;
 }
 .right-part-bottom .mail-index .mail-table .scrollable-part .row1 .last-cell, .right-part-bottom .mail-index .mail-table .scrollable-part .row2 .last-cell {
-  text-align: justify;
   text-indent: 1rem;
   padding-right: 0.5rem;
 }
@@ -893,10 +899,15 @@ nav .container-nav-button .nav-button:hover {
   padding: 1rem;
   cursor: pointer;
 }
+.right-part-bottom .mail-settings .wish:hover {
+  background-color: #ff3814;
+}
 .right-part-bottom .mail-settings .form-settings {
   background-color: #00b4b5;
   width: 66%;
   display: grid;
+  max-height: 30vh;
+  overflow-y: scroll;
 }
 .right-part-bottom .mail-settings .form-settings ul#id_condition {
   list-style-type: none;

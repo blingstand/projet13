@@ -26,7 +26,7 @@ class Command(BaseCommand):
                     print(f"- {anim.owner.owner_name} {anim.owner.owner_surname} pour lui dire "\
                     f"que son/sa {anim.str_species} {anim.name} peut maintenant être stérilisé.")
                     print(f"Je vais utiliser cette adresse mail : {anim.owner.mail}")
-                    mail = Mail.objects.filter(send_when_neuterable=True, auto_send=True)
+                    mail = Mail.objects.filter(condition=Mail.WBN, auto_send=True)
                     print(mail)
                     if mail : 
                         print(f"Je vais utiliser ce modèle de mail : {mail[0].title}")
