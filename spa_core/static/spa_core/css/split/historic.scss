@@ -39,7 +39,7 @@ $shape_table_5: 2rem 8rem 9rem 12rem 1fr;
 			}
 			.scrollable-part{
 				height: 50vh;
-				overflow: hidden;
+				overflow: scroll;
 
 				.rows{
 					display: grid;
