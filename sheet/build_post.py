@@ -44,19 +44,19 @@ class BuilderPost():
     
         if form.is_valid(): #new entry + mail 
             dict_values = form.from_form()
-            status_operation, animal = form.save_new_datas(dict_values)
+            success, animal = form.save_new_datas(dict_values)
             
-            if status_operation == 1:
+            if success == 1:
                 # 2 types of mails > for anim neutered and anim not neutered
                 #make a diff
-                condition = Mail.CAS if animal.admin_data.is_neutered == 1 else Mail.CANS
+                condition = Mail.CNA if animal.admin_data.is_neutered == 0 else Mail.CATN
                 mail_manager.has_to_send_mail(condition, [animal.owner], animal.id)
                 print(f">> mail envoyé à {[animal.owner]}")
                 return "form_ok", context
             
             else:
                 print('Echec, raison :')
-                context['errors'] = status_operation
+                context['errors'] = success
                 print("j'envoie ce rapport à js : \n")
                 print("***\n\t",context['errors']['alert'],"\n***\n")
                 print(context['errors'])

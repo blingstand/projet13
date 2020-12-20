@@ -15,7 +15,7 @@ locale.setlocale(locale.LC_TIME,'')
 # Create your models here.
 class Mail(models.Model):
     """ manages the mail model """
-    CAN     = 0
+    CNA     = 0
     CATN    = 1
     MC      = 2
     DA      = 3
@@ -24,7 +24,7 @@ class Mail(models.Model):
     MO      = 6
     WBN     = 7
     CONDITIONS = (
-        (CAN, "Create Animal Neutered" ),
+        (CNA, "Create Neutered Animal " ),
         (CATN, "Create Animal To Neuter" ),
         (MC, "modif caution"),
         (DA, "Delete Animal"),

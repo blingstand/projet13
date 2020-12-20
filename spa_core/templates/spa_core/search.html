@@ -37,8 +37,8 @@
 
     const openChoice = (choices) => {
         //this function opens a div that contains choices to fill the searchbar
-        console.log(choices, choices=="0" )
-        if (choices=="0"){
+        console.log(choices, choices.length == 0 )
+        if (choices.length == 0){
             propositions.innerHTML = ""
             return
         }
@@ -76,6 +76,7 @@
     //###################
     //####  EVENTS   ####
     //###################
+
     document.onclick = (e) => {
         if (propositions.innerHTML.length >= 1){
             console.log('je click sur ' + e.target.className)

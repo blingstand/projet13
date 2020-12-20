@@ -124,6 +124,8 @@ class SheetForm(forms.Form):
         """create admin classe"""
         list_admin = [elem if elem != "None" else None for elem in dict_values['admin']]
         admin = AdminData(*list_admin)
+        now = datetime.now().date()
+        admin.futur_date_of_neuter = now if admin.is_neutered != 1 else admin.futur_date_of_neuter
         same_in_db = len(AdminData.objects.filter(file=admin.file, chip=admin.chip, tatoo=admin.tatoo)) > 0
         if same_in_db:
             mistake = self.find_mistake_for_admin(admin)
