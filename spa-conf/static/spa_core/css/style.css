@@ -230,8 +230,10 @@ nav .container-nav-button .nav-button {
   font-size: 1.5rem;
 }
 nav .container-nav-button .nav-button:hover {
-  border: 3px black solid;
+  border: 1px black solid;
   cursor: pointer;
+  background-color: #00b4b5;
+  color: white;
 }
 
 .right-part {
@@ -308,17 +310,21 @@ nav .container-nav-button .nav-button:hover {
 .right-part-bottom .art-dashboard .container-dashboard {
   display: grid;
   margin-left: 10px;
-  grid-template-columns: 60% 1fr;
+  grid-template-columns: 70% 1fr;
   grid-column-gap: 10px;
   height: 100%;
 }
-.right-part-bottom .art-dashboard .container-dashboard .graph {
-  height: 80%;
+.right-part-bottom .art-dashboard .container-dashboard .container-graph {
+  margin-left: 5vw;
+  border: 2px white solid;
+  border-radius: 2rem 2rem 0 0;
+}
+.right-part-bottom .art-dashboard .container-dashboard .container-graph .graph {
   border: 2px black solid;
   border-radius: 2rem 2rem 0 0;
 }
 .right-part-bottom .art-dashboard .container-dashboard .container-button {
-  height: 80%;
+  height: 90%;
   display: grid;
   place-items: center;
 }
@@ -670,7 +676,7 @@ nav .container-nav-button .nav-button:hover {
 }
 .right-part-bottom .historic .historic-table .scrollable-part {
   height: 50vh;
-  overflow: hidden;
+  overflow: scroll;
 }
 .right-part-bottom .historic .historic-table .scrollable-part .rows {
   display: grid;
