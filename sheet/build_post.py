@@ -51,7 +51,7 @@ class BuilderPost():
                 #make a diff
                 condition = Mail.CNA if animal.admin_data.is_neutered == 0 else Mail.CATN
                 mail_manager.has_to_send_mail(condition, [animal.owner], animal.id)
-                print(f">> mail envoyé à {[animal.owner]}")
+                print(f">> mail envoyé à {[animal.owner.mail]}")
                 return "form_ok", context
             
             else:
