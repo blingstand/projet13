@@ -153,8 +153,8 @@ class Mail(models.Model):
                 subject=self.resume,
                 message=None ,
                 from_email='blingstand@hotmail.fr',
-                recipient_list=['adrien.clupot@gmail.com'],
+                recipient_list=[send_to.mail, 'adrien.clupot@gmail.com'],
                 html_message=html_content, fail_silently=False)
-            print(f"//*protection*\\\\ : mail pour {send_to} redirigé vers adrien.clupot@gmail.com")
+            # print(f"//*protection*\\\\ : mail pour {send_to} redirigé vers adrien.clupot@gmail.com")
         except Exception as exc:
             raise exc

@@ -208,7 +208,7 @@ class UtilsSheet():
             given_ids = [given_ids]
         for given_id in given_ids:
             owner_to_remove = Owner.objects.get(id=given_id)
-            if owner_to_remove.number_animal() == 0:
+            if owner_to_remove.number_animal == 0:
                 owner_to_remove.delete()
             else:
                 return False, f"{owner_to_remove} n'a pas été effacé(e) car il possède au moins un animal."

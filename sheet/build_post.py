@@ -15,13 +15,13 @@ class BuilderPost():
         """build post response"""
         if own == 0:
             for_mail = utils_sheet.drop_sheet(given_id) #bloqué suppression
+            if for_mail[0]:
+                owner_to_contact, given_id = for_mail[1:3]
+                mail_manager.has_to_send_mail(Mail.DA, owner_to_contact, given_id) #DA = Delete Animal 
+                print(f">> mail envoyé à {owner_to_contact}")
         else:
             utils_sheet.remove_owner(given_id)
 
-        if for_mail[0]:
-            owner_to_contact, given_id = for_mail[1:3]
-            mail_manager.has_to_send_mail(Mail.DA, owner_to_contact, given_id) #DA = Delete Animal 
-            print(f">> mail envoyé à {owner_to_contact}")
 
     def for_add_sheet_view(self, request): 
         """build post response
