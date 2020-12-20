@@ -2,9 +2,9 @@
 In this page you can find context for the sheet views script
 """
 button_value = [
-{'name' : 'ajouter',    'id' : 'create'}, 
-{'name' : 'modifier',   'id' : 'update'},
-{'name' : 'supprimer',  'id' : 'delete'}
+{'name' : 'Ajouter',    'id' : 'create'}, 
+{'name' : 'Modifier',   'id' : 'update'},
+{'name' : 'Supprimer',  'id' : 'delete'}
 ]
 
 

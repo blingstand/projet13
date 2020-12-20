@@ -19,24 +19,23 @@ class Command(BaseCommand):
     def _2weeks(self): 
         """drops the datas"""
         day = datetime.now().day
-        print(f"Vérification de la date : {datetime.now().date()}: ")
+        print(f"2weeks > Vérification de la date : {datetime.now().date()}: ")
         print(f"day : {day} ")
         
         if day in recall_days: 
-        	print("C'est le jour de relance")
-        	owners = [owner for owner in Owner.objects.all() if owner.has_rdy_to_neuter_animals]
-        	print(f'Je vais contacter : {owners}')
-
-        mail = Mail.objects.get(condition=Mail.E2W, auto_send=True)
-        print(mail)
-        if mail : 
-            print(f"Je vais utiliser ce modèle de mail : {mail.title}")
-            print(f'\trésumé :', mail.resume)
-            print(f'\tcontenu :', mail.modified_text())
-            for owner in owners:
-            	for animal in owner.get_list_animal:
-            		mail.send_auto_mail(owner.mail, animal.id)
-        
+            print("C'est le jour de relance")
+            owners = [owner for owner in Owner.objects.all() if owner.has_rdy_to_neuter_animals]
+            print(f'Je vais contacter : {owners}')
+            mail = Mail.objects.get(condition=Mail.E2W, auto_send=True)
+            print(mail)
+            if mail : 
+                print(f"Je vais utiliser ce modèle de mail : {mail.title}")
+                print(f'\trésumé :', mail.resume)
+                print(f'\tcontenu :', mail.modified_text())
+                for owner in owners:
+                    for animal in owner.get_list_animal:
+                        mail.send_auto_mail(owner.mail, animal.id)
+            
 
     def handle(self, *args, **options):
         """throws the drop_db function"""

@@ -25,10 +25,10 @@
                 <div class=" {% cycle 'row1' 'row2' %}">
                     <!-- nom sexe/espece status propriétaire num-dossier num-tatoo num-puce -->
                     <div class="container-checkbox"><input type="checkbox" id='{{animal.id}}' name='checkbox' value={{animal.id}}></div>
-                    <div>{{animal.name}}</a></div>
+                    <div>{{animal.name|title}}</a></div>
                     <div>{{animal.admin_data.neuter_status}}</div>
-                    <div>{{animal.str_species}}</div>
-                    <div>{{animal.race}}</div>
+                    <div>{{animal.str_species|title}}</div>
+                    <div>{{animal.race|title}}</div>
                     <div>{{animal.owner}} </div>
                     <div>{{animal.admin_data.file}}</div>
                 </div>

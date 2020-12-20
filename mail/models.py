@@ -53,14 +53,14 @@ class Mail(models.Model):
     
     @staticmethod
     def str_condition_form_choices():
-        str_condition = ("A la création de la fiche,", 
-            "A la création de la fiche si l'animal n'est pas stéril,",
+        str_condition = ("Quand je crée une fiche,", 
+            "Quand je crée une fiche si l'animal n'est pas stéril,",
             "Quand je modifie la valeur de la caution,",
-            "A la suppression d'une fiche,",
+            "Quand je supprime une fiche,",
             "Toutes les deux semaines,",
             "Quand l'animal devient stérile,", 
             "Quand il y a un changement de propriétaire,",
-            "Quand l'animal devient stérilisable")
+            "Quand l'animal devient stérilisable.")
         list_condition = [(str(count), condition) for count, condition in enumerate(str_condition)]
         return tuple(list_condition)
     @property

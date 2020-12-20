@@ -4,17 +4,22 @@
 		.container-dashboard{
 			display: grid; 
 			margin-left: 10px; 
-			grid-template-columns: 60% 1fr; 
+			grid-template-columns: 70% 1fr; 
 			grid-column-gap: 10px; 
 			height: 100%; 
 
-			.graph{
-				height: 80%; 
-				border: 2px black solid; 
+			.container-graph{
+				margin-left: 5vw;
+				border: 2px white solid; 
 				border-radius: 2rem 2rem 0 0 ;
+				.graph{ 
+					border: 2px black solid; 
+					border-radius: 2rem 2rem 0 0 ;
+
+				}
 			}
 			.container-button{
-				height: 80%; 
+				height: 90%; 
 				display : grid; 
 				place-items: center; 
 				div{
