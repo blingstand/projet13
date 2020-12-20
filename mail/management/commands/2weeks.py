@@ -6,7 +6,7 @@ from django.db.models import Q
 """ this script drop datas from tables Category and Product"""
 from django.core.management.base import BaseCommand
 
-from sheet.models import *
+from sheet.models import  *
 from mail.models import Mail
 
 recall_days = 1, 15
