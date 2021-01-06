@@ -1,5 +1,5 @@
 #from python
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta  
 
 #from django
 from django.db import models
@@ -33,9 +33,10 @@ class GraphDatas():
         """ this functions returns a list of dict. 
         Each dict contains owner, date_of_adoption, last_contact
         """
-        print("nous sommes le : ", self.day)
-        print("relevé pour le mois de : ", self.now.strftime("%B"))
         
+        print("avec datetime : ", self.now)
+        print("relevé pour le mois de : ", self.now.strftime("%B"))
+
         list_to_contact_final, list_contacted_final = [], []
         print(len(self.owners), "propriétaires avec obligations")
         for imp_dat in self.list_imp_date: 
@@ -60,7 +61,7 @@ class GraphDatas():
         print("list_to_contact_final : ", list_to_contact_final)
         print("list_contacted_final : ", list_contacted_final)
 
-        return self.now.strftime("%B %Y"), list_to_contact_final, list_contacted_final
+        return self.now, list_to_contact_final, list_contacted_final
     @property
     def get_list_for_search(self):
         """this function returns all the owners with caution"""

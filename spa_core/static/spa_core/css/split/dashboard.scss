@@ -9,6 +9,8 @@
 			height: 100%; 
 
 			.container-graph{
+				display: grid;
+				place-items: center;
 				margin-left: 5vw;
 				border: 2px white solid; 
 				border-radius: 2rem 2rem 0 0 ;

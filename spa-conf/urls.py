@@ -24,7 +24,7 @@ if os.environ['DJANGO_SETTINGS_MODULE'] == 'spa-conf.settings.production':
 else:  #for heroku the name is spa
     urlpatterns = [
         path('spa/admin/', admin.site.urls),
-        path('', include(("mydashboard.urls", 'index'), namespace='index')),
+        path('', include(("user.urls", 'index'), namespace='index')),
         path('spa/mydashboard/', include(("mydashboard.urls", 'mydashboard'), namespace="mydashboard")),
         path('spa/spa_core/', include(("spa_core.urls", 'spa_core'), namespace="spa_core")),
         path('spa/search_bar/', include(("search_bar.urls", 'search_bar'), namespace="search_bar")),

@@ -14,7 +14,7 @@ from django.views import View
 #from current app import
 from .form import UserForm
 # from .utils import MailAgent, notify_db_fv, get_user_and_profile, add_new_user
-from .utils import add_new_user
+from .utils import manage_auth_error
 
 
 # class ConnectionView(TemplateView):
@@ -46,13 +46,17 @@ class ConnectionView(View):
             username = us_form.cleaned_data['username']
             password = us_form.cleaned_data['password']
             new_user = authenticate(username=username, password=password)
-            print(new_user)
+
             if new_user is not None:
                 login(request, new_user)
                 print("success")
                 return redirect('mydashboard:index')
-            messages.info(request, 'Pseudo ou mot de passe incorrect')
-            return redirect('user:connection')
+            
+            #-- error -- 
+            context = {'us_form': us_form}
+            context = manage_auth_error(username, context)
+            return render(request, 'user/connection.html', context)
+            
         return HttpResponse("Problème dans le formulaire !")
 
 

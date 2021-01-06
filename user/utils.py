@@ -1,14 +1,9 @@
 from django.contrib.auth.models import User
-from django.db import IntegrityError
-def add_new_user(name, password):
-    """
-    Tries to add a new user in base and return Boolean and message
-        True = Success / False = Fail
-    """
-    try:
-        new_user = User(username=name)
-        new_user.set_password(password)
-        new_user.save()
-        return True, f"Félicitation vous venez de créer : {name} !"
-    except IntegrityError:
-        return False, "Cet utilisateur existe déjà !"
+
+def manage_auth_error(username, context): 
+    does_this_user_exists = len(User.objects.filter(username=username)) > 0
+    if does_this_user_exists: #issue with user
+        context['error'] = "Cet utilisateur n'existe pas"
+    else:
+        context['error'] = "le mot de passe n'est pas bon"
+        return context
