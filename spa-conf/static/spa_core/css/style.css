@@ -1,4 +1,4 @@
-/* 123 */
+/* 1234 */
 .bg-green {
   background-color: green;
 }
@@ -315,6 +315,8 @@ nav .container-nav-button .nav-button:hover {
   height: 100%;
 }
 .right-part-bottom .art-dashboard .container-dashboard .container-graph {
+  display: grid;
+  place-items: center;
   margin-left: 5vw;
   border: 2px white solid;
   border-radius: 2rem 2rem 0 0;
