@@ -14,14 +14,14 @@ import os
 import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-# projets (1), projets/projet13 (2), projets/projet13/spa-conf (3)
+# projets (1), projets/projet13 (2), projets/projet13/spa_conf (3)
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(PROJECT_ROOT) 
 ROOT_DIR = os.path.dirname(BASE_DIR)
 
-# print("1", ROOT_DIR)
-# print("2", BASE_DIR)
-# print("3", PROJECT_ROOT)
+#print("1", ROOT_DIR)
+#print("2", BASE_DIR)
+#print("3", PROJECT_ROOT)
 
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 
@@ -79,7 +79,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
-ROOT_URLCONF = 'spa-conf.urls'
+ROOT_URLCONF = 'spa_conf.urls'
 
 TEMPLATES = [
     {
@@ -88,7 +88,7 @@ TEMPLATES = [
             # Cette ligne ajoute le dossier templates/ à la racine du projet
             os.path.join(ROOT_DIR, 'user/templates'),
             os.path.join(ROOT_DIR, 'dashboard/templates'),
-            os.path.join(ROOT_DIR, 'spa-conf/templates'),
+            os.path.join(ROOT_DIR, 'spa_conf/templates'),
             os.path.join(ROOT_DIR, 'spa_core/templates'),
         ],
         'APP_DIRS': True,
@@ -104,7 +104,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'spa-conf.wsgi.application'
+WSGI_APPLICATION = 'spa_conf.wsgi.application'
 
 
 # Database
@@ -112,11 +112,11 @@ WSGI_APPLICATION = 'spa-conf.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql', # on utilise l'adaptateur postgresql
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', # on utilise l'adaptateur postgresql
         'NAME': 'spa', # le nom de notre base de donnees creee precedemment
-        'USER': 'blingstand', # attention : remplacez par votre nom d'utilisateur
-        'PASSWORD': '',
-        'HOST': '',
+        'USER': 'adridwbs_id_rsa', # attention : remplacez par votre nom d'utilisateur
+        'PASSWORD': 'SStorngol2',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
@@ -182,24 +182,5 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     #'django.contrib.staticfiles.finders.AppDirectoriesFinder',    #causes verbose duplicate notifications in django 1.9
 )
-
-if os.environ.get('ENV') == 'PRODUCTION':
-
-    #this is for {load static} ex : {% static "jquery.js" %} => "/static/jquery.js"
-    STATIC_URL = '/static/'
-
-    #location for manage.py collectstatic
-    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
-
-    #In production collectstatic gathers the data in spa-conf/static.
-    STATICFILES_DIRS = (
-        os.path.join(PROJECT_ROOT, 'static'),
-    )
-    # Simplified static file serving.
-    # https://warehouse.python.org/project/whitenoise/
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-    db_from_env = dj_database_url.config(conn_max_age=600)
-    DATABASES['default'].update(db_from_env)
 
 # SHORT_DATE_FORMAT='d/m/Y'

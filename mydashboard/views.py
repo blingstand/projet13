@@ -18,20 +18,23 @@ class MyDashboardView(View):
         gradat = GraphDatas()
         date, list_to_contact, list_contacted = gradat.get_list_datas
         if request.user.is_authenticated:
-            owners, to_contact, contacted = gradat.get_list_for_search
-            print("*****")
-            print(f"returned : \n{owners}, \n{to_contact}, \n{contacted}")
-            context={ 
-                "date" : date,
-                'nb_owners': len(owners),
-                'nb_contacted':len(contacted),
-                'nb_to_contact':len(to_contact), 
-                'list_to_contact':list_to_contact, 
-                'list_contacted' : list_contacted,
-                }
-            print(context)
-            print("\n--- end ---")
-            return render(request, "dashboard/index.html", context)
+            try:
+                owners, to_contact, contacted = gradat.get_list_for_search
+                print("*****")
+                print(f"returned : \n{owners}, \n{to_contact}, \n{contacted}")
+                context={ 
+                    "date" : date,
+                    'nb_owners': len(owners),
+                    'nb_contacted':len(contacted),
+                    'nb_to_contact':len(to_contact), 
+                    'list_to_contact':list_to_contact, 
+                    'list_contacted' : list_contacted,
+                    }
+                print(context)
+                print("\n--- end ---")
+                return render(request, "dashboard/index.html", context)
+            except:
+                pass
         return redirect('user:connection')
     def error_404(request, exception):
         context = {}

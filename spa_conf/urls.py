@@ -10,17 +10,16 @@ from django.conf.urls.static import static
 from django.views.static import serve
 from mydashboard.views import MyDashboardView
 
-if os.environ['DJANGO_SETTINGS_MODULE'] == 'spa-conf.settings.production':
+if os.environ['DJANGO_SETTINGS_MODULE'] == 'spa_conf.settings.production':
     urlpatterns = [ #online the name is p13
         path('p13/admin/', admin.site.urls),
-        path('', include(("mydashboard.urls", 'index'), namespace='index')),
         path('p13/mydashboard/', include(("mydashboard.urls", 'mydashboard'), namespace="mydashboard")),
         path('p13/spa_core/', include(("spa_core.urls", 'spa_core'), namespace="spa_core")),
         path('p13/search_bar/', include(("search_bar.urls", 'search_bar'), namespace="search_bar")),
         path('p13/mail/', include(("mail.urls", 'mail'), namespace="mail")),
         path('p13/sheet/', include(("sheet.urls", 'sheet'), namespace="sheet")),
         path('p13/info/', include(("info.urls", 'info'), namespace="info")),
-        path('p13/user/', include(('user.urls', 'user'), namespace="user"))]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+        path('', include(('user.urls', 'user'), namespace="user"))]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 else:  #for heroku the name is spa
     urlpatterns = [
         path('spa/admin/', admin.site.urls),

@@ -20,7 +20,7 @@ class GraphDatas():
         self.day = self.now.day
         self.list_imp_date = [1, 7, 14, 21, 28]
         self.two_weeks = timedelta(days = 14)
-        self.owners = self.get_owners_with_obligations()
+        #self.owners = self.get_owners_with_obligations()
 
 
     def get_owners_with_obligations(self):
