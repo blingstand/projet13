@@ -322,6 +322,7 @@ nav .container-nav-button .nav-button:hover {
   border-radius: 2rem 2rem 0 0;
 }
 .right-part-bottom .art-dashboard .container-dashboard .container-graph .graph {
+  height: 60vh;
   border: 2px black solid;
   border-radius: 2rem 2rem 0 0;
 }

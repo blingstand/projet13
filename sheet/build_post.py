@@ -139,4 +139,3 @@ class BuilderPost():
         if success:
             return "success", {"data":f'{success}{message}'}
         context["error"] = message
-        return "error", context
