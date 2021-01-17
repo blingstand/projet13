@@ -25,9 +25,12 @@ class GraphDatas():
 
     def get_owners_with_obligations(self):
         """ returns list owners with caution"""
-        owners = [owner if owner.sum_caution > 0 else 'vide' for owner in Owner.objects.all()]
-        owners = list(filter(lambda exp: exp != "vide", owners))
-        return owners
+        try:
+            owners = [owner if owner.sum_caution > 0 else 'vide' for owner in Owner.objects.all()]
+            owners = list(filter(lambda exp: exp != "vide", owners))
+            return owners
+        except Exception as e:
+            print(e)
     @property
     def get_list_datas(self):
         """ this functions returns a list of dict. 

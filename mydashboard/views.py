@@ -14,7 +14,7 @@ from .utils import GraphDatas
 class MyDashboardView(View):
     def get(self, request):
         """display dashboard"""
-        print("--- get ---\n")
+        print("--- get ---\n") 
         gradat = GraphDatas()
         date, list_to_contact, list_contacted = gradat.get_list_datas
         if request.user.is_authenticated:

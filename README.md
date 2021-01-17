@@ -43,6 +43,12 @@ Ouvrez le terminal puis tapez
     $ source votre_version_de_python/bin/activate
     $ pip install -r requirements.txt
 ************************************************
+notes:
+Si vous rencontrez cette erreur lors du pip install : 
+    error: command 'x86_64-linux-gnu-gcc' failed with exit status 1
+
+Dans le cas d'Ubuntu 20.04, faites ceci: 
+    sudo apt install libpq-dev
 
 ## Configuration
 

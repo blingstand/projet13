@@ -37,7 +37,7 @@ EMAIL_USE_TLS = True
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '7691-0!3k#_q=4&l4s*-qs^d42+n8vi5f&6$2vedf*cc4g13fg'
 
-if os.environ.get('ENV') == 'PRODUCTION':
+if os.environ.get('ENV') == 'heroku':
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = True
     ALLOWED_HOSTS = ["spa-bergerac.herokuapp.com"]
@@ -114,8 +114,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql', # on utilise l'adaptateur postgresql
         'NAME': 'spa', # le nom de notre base de donnees creee precedemment
-        'USER': 'blingstand', # attention : remplacez par votre nom d'utilisateur
-        'PASSWORD': '',
+        'USER': 'bling', # attention : remplacez par votre nom d'utilisateur
+        'PASSWORD': '123',
         'HOST': '',
         'PORT': '5432',
     }

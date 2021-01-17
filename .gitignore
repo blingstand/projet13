@@ -6,3 +6,6 @@ secret.py
 .coverage
 p13_clupot_adrien/
 slide.odp
+mail/migrations/0008_auto_20210117_1002.py
+package.json
+spa_core/static/spa_core/css/.sass-cache/
