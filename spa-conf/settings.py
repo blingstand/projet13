@@ -37,13 +37,8 @@ EMAIL_USE_TLS = True
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '7691-0!3k#_q=4&l4s*-qs^d42+n8vi5f&6$2vedf*cc4g13fg'
 
-if os.environ.get('ENV') == 'heroku':
-    # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = True
-    ALLOWED_HOSTS = ["spa-bergerac.herokuapp.com"]
-else:
-    ALLOWED_HOSTS = ["*"]
-    DEBUG = True
+ALLOWED_HOSTS = ["*"]
+DEBUG = True
 
 
 # Application definition
@@ -182,24 +177,5 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     #'django.contrib.staticfiles.finders.AppDirectoriesFinder',    #causes verbose duplicate notifications in django 1.9
 )
-
-if os.environ.get('ENV') == 'PRODUCTION':
-
-    #this is for {load static} ex : {% static "jquery.js" %} => "/static/jquery.js"
-    STATIC_URL = '/static/'
-
-    #location for manage.py collectstatic
-    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
-
-    #In production collectstatic gathers the data in spa-conf/static.
-    STATICFILES_DIRS = (
-        os.path.join(PROJECT_ROOT, 'static'),
-    )
-    # Simplified static file serving.
-    # https://warehouse.python.org/project/whitenoise/
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-    db_from_env = dj_database_url.config(conn_max_age=600)
-    DATABASES['default'].update(db_from_env)
 
 # SHORT_DATE_FORMAT='d/m/Y'

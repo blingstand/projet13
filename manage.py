@@ -6,6 +6,8 @@ import sys
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'spa-conf.settings')
+    if os.environ['ENV'] == "heroku":
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'spa-conf.settings.heroku')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
