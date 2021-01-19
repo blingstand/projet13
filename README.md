@@ -97,7 +97,7 @@ En parcourant mon projet vous verrez plusieurs applications:
 6. [Spa-Conf](https://github.com/blingstand/projet13/tree/master/spa-conf) > elle contient le settings et les réglages de l'app.
 7. [User](https://github.com/blingstand/projet13/tree/master/user) > elle contient le nécessaire pour identifier les utilisateurs.
 
-## Tests
+## Tests (note : non opérationnels pour le moment 19/01/21)
 
 J'ai organisé mes tests de la manière suivante. Ils sont tous regroupés dans le dossier [tests](https://github.com/blingstand/projet13/tree/master/tests). Vous trouverez à l'intérieur un test pour chaque application. 
 
