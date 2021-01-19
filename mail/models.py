@@ -72,7 +72,7 @@ class Mail(models.Model):
                 return condition[1]
 
 
-    def _get_false_animal(self):
+    def get_anim_overview(self):
         """this function returns a fictif animal in order to display an overview"""
         already_exists = Animal.objects.filter(name="patatin")
         if len(already_exists)==0:
@@ -110,7 +110,7 @@ class Mail(models.Model):
         if given_id:
             anim = Animal.objects.get(id=given_id)
         else:
-            anim = self._get_false_animal()
+            anim = self.get_anim_overview()
         new_text = self.plain_text
         dict_conversion = converter_data(anim)
         for key in dict_conversion:

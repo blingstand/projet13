@@ -24,7 +24,6 @@ class MailView(View):
         {'name' : 'modifier',   'id' : 'alter', 'function' : 'Alter()'},
         {'name' : 'supprimer',  'id' : 'remove', 'function' : 'Remove()'}],
             'mails' : mails}
-        print(mails[0].get_condition)
         return render(request, 'mail/index.html', context)
         #test
     def post(self, request):
@@ -114,7 +113,7 @@ class OverviewView(View):
             "plain_text" : mail.modified_text,
         }
         form = ContentMail(initial = values)
-        animal = Animal.objects.all()[0]
+        animal = mail.get_anim_overview()
         context = {
             'form' : form, 'mail' : mail, 'animal' : animal}
         return render(request, 'mail/overview.html', context)
